@@ -28,7 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0BA6DCA02D4137B22AC7A38B /* SwiftQ.podspec */ = {isa = PBXFileReference; includeInIndex = 1; name = SwiftQ.podspec; path = ../SwiftQ.podspec; sourceTree = "<group>"; };
+		0BA6DCA02D4137B22AC7A38B /* SwiftQ.podspec */ = {isa = PBXFileReference; fileEncoding = 1; includeInIndex = 1; lastKnownFileType = text; name = SwiftQ.podspec; path = ../SwiftQ.podspec; sourceTree = "<group>"; };
 		1633041A03EE776DD04F9F89 /* Pods_SwiftQ_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftQ_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3684AE53A9A892BDE48779EC /* Pods-SwiftQ_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftQ_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftQ_Tests/Pods-SwiftQ_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		465A787048F3F6B4E34F131A /* Pods-SwiftQ_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftQ_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftQ_Example/Pods-SwiftQ_Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -45,8 +45,9 @@
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		6D34E3072BBA149755000E3D /* Pods_SwiftQ_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftQ_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		763AA2500501F282E8C07B12 /* Pods-SwiftQ_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftQ_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftQ_Tests/Pods-SwiftQ_Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		D72A06F95A94CCDB03C1F0AE /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		DF303CA46E8A70EA917EA92E /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		B02C2C211F3C7CA100F78336 /* SwiftQ.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftQ.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D72A06F95A94CCDB03C1F0AE /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		DF303CA46E8A70EA917EA92E /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 1; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +73,7 @@
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
+				B02C2C211F3C7CA100F78336 /* SwiftQ.framework */,
 				607FACF51AFB993E008FA782 /* Podspec Metadata */,
 				607FACD21AFB9204008FA782 /* Example for SwiftQ */,
 				607FACE81AFB9204008FA782 /* Tests */,
@@ -215,10 +217,12 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = YZE928P5WG;
 						LastSwiftMigration = 0820;
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = YZE928P5WG;
 						LastSwiftMigration = 0820;
 						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
@@ -496,6 +500,7 @@
 			baseConfigurationReference = 50FD815A380DC4E3727E48FF /* Pods-SwiftQ_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = YZE928P5WG;
 				INFOPLIST_FILE = SwiftQ/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
@@ -510,6 +515,7 @@
 			baseConfigurationReference = 465A787048F3F6B4E34F131A /* Pods-SwiftQ_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = YZE928P5WG;
 				INFOPLIST_FILE = SwiftQ/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
@@ -523,6 +529,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 763AA2500501F282E8C07B12 /* Pods-SwiftQ_Tests.debug.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = YZE928P5WG;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -536,6 +543,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftQ_Example.app/SwiftQ_Example";
 			};
 			name = Debug;
 		};
@@ -543,6 +551,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3684AE53A9A892BDE48779EC /* Pods-SwiftQ_Tests.release.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = YZE928P5WG;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -552,6 +561,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftQ_Example.app/SwiftQ_Example";
 			};
 			name = Release;
 		};
