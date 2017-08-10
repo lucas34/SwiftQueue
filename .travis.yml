@@ -1,7 +1,5 @@
 language: objective-c
 osx_image: xcode8.3
-xcode_workspace: SwiftQ.xcworkspace
-xcode_scheme: SwiftQ
 
 script:
     - cd Example
