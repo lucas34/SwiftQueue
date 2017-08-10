@@ -4,8 +4,8 @@ xcode_workspace: SwiftQ.xcworkspace
 xcode_scheme: SwiftQ
 
 script:
-	- cd Example
-	- pod install
+    - cd Example
+    - pod install
     - xcodebuild -workspace SwiftQ.xcworkspace -scheme SwiftQ-Example -destination 'platform=iOS Simulator,name=iPhone 7 Plus,OS=10.3.1' -enableCodeCoverage YES build test
     
 after_success:
