@@ -31,7 +31,7 @@ internal class DeadlineConstraint: JobConstraint {
     override func run(operation: JobTask) throws {
         try check(operation: operation)
     }
-    
+
     private func check(operation: JobTask) throws {
         if let deadline = operation.deadline, deadline < Date() {
             throw DeadlineError()
@@ -52,8 +52,8 @@ internal class UniqueUUIDConstraint: JobConstraint {
 
 internal class Constraints {
 
-    private static var constrains: [JobConstraint]  = [DeadlineConstraint(),
-                                                       UniqueUUIDConstraint()]
+    private static var constrains: [JobConstraint] = [DeadlineConstraint(),
+                                                      UniqueUUIDConstraint()]
 
     public static func checkConstraintsForRun(task: JobTask) throws {
         for constraint in Constraints.constrains {

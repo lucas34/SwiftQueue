@@ -45,13 +45,15 @@ public final class JobQueue: OperationQueue {
         output.reserveCapacity(array.count)
 
         for obj in array {
-            if let cast = obj as? JobTask { output.append(cast) }
+            if let cast = obj as? JobTask {
+                output.append(cast)
+            }
         }
 
         return output
     }
 
-    public init(queueName: String =  UUID().uuidString, creators: [JobCreator]? = nil, persister: JobPersister? = nil) {
+    public init(queueName: String = UUID().uuidString, creators: [JobCreator]? = nil, persister: JobPersister? = nil) {
         self.creators = creators ?? []
         self.persister = persister
 
@@ -101,7 +103,9 @@ public final class JobQueue: OperationQueue {
         if let sp = persister {
             sp.put(info: task)
         }
-        ope.completionBlock = { self.taskComplete(ope) }
+        ope.completionBlock = {
+            self.taskComplete(ope)
+        }
         super.addOperation(ope)
     }
 
@@ -113,7 +117,7 @@ public final class JobQueue: OperationQueue {
             if let sp = persister {
                 sp.remove(uuid: task.taskID)
             }
-            
+
             task.taskComplete()
         }
     }
