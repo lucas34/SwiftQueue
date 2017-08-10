@@ -176,8 +176,12 @@ Deconstruct the task to a JSON string, used to serialize the task
     }
 
     private func run() {
-        if isCancelled && !isFinished { isFinished = true }
-        if isFinished { return }
+        if isCancelled && !isFinished {
+            isFinished = true
+        }
+        if isFinished {
+            return
+        }
         // Check the constraint
         do {
             try Constraints.checkConstraintsForRun(task: self)
