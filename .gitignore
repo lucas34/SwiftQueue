@@ -35,3 +35,4 @@ Carthage/Build
 .DS_Store
 .idea
 Example/Pods
+ModuleCache

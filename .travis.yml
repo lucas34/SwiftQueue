@@ -5,8 +5,6 @@ script:
     - cd Example
     - pod install
     - cd ..
-    - xcodebuild -workspace Example/SwiftQ.xcworkspace -scheme Pods-SwiftQ_Example -destination 'platform=iOS Simulator,name=iPhone 7 Plus,OS=10.3.1' ONLY_ACTIVE_ARCH=YES VALID_ARCHS=x86_64 -enableCodeCoverage YES build test
-    - xcodebuild -workspace Example/SwiftQ.xcworkspace -scheme Pods-SwiftQ_Tests -destination 'platform=iOS Simulator,name=iPhone 7 Plus,OS=10.3.1' ONLY_ACTIVE_ARCH=YES VALID_ARCHS=x86_64 -enableCodeCoverage YES build test
     - xcodebuild -workspace Example/SwiftQ.xcworkspace -scheme SwiftQ-Example -destination 'platform=iOS Simulator,name=iPhone 7 Plus,OS=10.3.1' ONLY_ACTIVE_ARCH=YES VALID_ARCHS=x86_64 -enableCodeCoverage YES build test
 
 after_success:
