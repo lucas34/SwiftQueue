@@ -2,6 +2,7 @@ language: swift
 osx_image: xcode8.3
 
 script:
+    - xcodebuild -list
     - xcodebuild -project SwiftQueue.xcodeproj -scheme SwiftQueue -destination 'platform=iOS Simulator,name=iPhone 7 Plus,OS=10.3.1' -enableCodeCoverage YES build test
 
 after_success:
