@@ -15,6 +15,8 @@
 		B02ADA7F1F3D839200E04A95 /* JobQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02ADA7A1F3D839200E04A95 /* JobQueue.swift */; };
 		B02ADA801F3D839200E04A95 /* JobTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02ADA7B1F3D839200E04A95 /* JobTask.swift */; };
 		B02ADA811F3D839200E04A95 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02ADA7C1F3D839200E04A95 /* Utils.swift */; };
+		D0B7C6C482E2436308F7BCF3 /* ConstraintTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C639E1B939F6FC1DD50E /* ConstraintTests.swift */; };
+		D0B7C78AC61DA424381B5DE7 /* TestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C958D8ACA6DC944523AD /* TestUtils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +41,8 @@
 		B02ADA7A1F3D839200E04A95 /* JobQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JobQueue.swift; sourceTree = "<group>"; };
 		B02ADA7B1F3D839200E04A95 /* JobTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JobTask.swift; sourceTree = "<group>"; };
 		B02ADA7C1F3D839200E04A95 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		D0B7C639E1B939F6FC1DD50E /* ConstraintTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstraintTests.swift; sourceTree = "<group>"; };
+		D0B7C958D8ACA6DC944523AD /* TestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestUtils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +101,8 @@
 			children = (
 				B02ADA6C1F3D80DD00E04A95 /* SwiftQueueTests.swift */,
 				B02ADA6E1F3D80DD00E04A95 /* Info.plist */,
+				D0B7C639E1B939F6FC1DD50E /* ConstraintTests.swift */,
+				D0B7C958D8ACA6DC944523AD /* TestUtils.swift */,
 			);
 			path = SwiftQueueTests;
 			sourceTree = "<group>";
@@ -225,6 +231,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				B02ADA6D1F3D80DD00E04A95 /* SwiftQueueTests.swift in Sources */,
+				D0B7C6C482E2436308F7BCF3 /* ConstraintTests.swift in Sources */,
+				D0B7C78AC61DA424381B5DE7 /* TestUtils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
