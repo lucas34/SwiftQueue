@@ -5,7 +5,7 @@ before_script:
     - xcodebuild -list
 
 script:
-    - xcodebuild -project SwiftQueue.xcodeproj -scheme SwiftQueue -destination 'platform=iOS Simulator,name=iPhone 7 Plus,OS=10.3.1' -enableCodeCoverage YES build test
+    - xcodebuild -project SwiftQueue.xcodeproj -scheme SwiftQueue -destination 'platform=iOS Simulator,name=iPhone 7 Plus,OS=10.3.1' build test
 
 after_success:
     - bash <(curl -s https://codecov.io/bash)
