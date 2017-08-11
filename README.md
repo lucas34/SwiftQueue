@@ -2,6 +2,7 @@
 [![swift](https://img.shields.io/badge/Swift-3.0-orange.svg?style=flat)](https://swift.org")
 [![travis](https://travis-ci.org/lucas34/SwiftQ.svg?branch=master)](https://travis-ci.org/lucas34/SwiftQ)
 [![codecov](https://codecov.io/gh/lucas34/SwiftQ/branch/master/graph/badge.svg)](https://codecov.io/gh/lucas34/SwiftQ)
+[![codebeat badge](https://codebeat.co/badges/4ac05b9d-fefa-4be3-a38f-f58a4b5698cd)](https://codebeat.co/projects/github-com-lucas34-swiftq-master)
 [![licence](https://img.shields.io/badge/License-MIT-blue.svg?style=flat)](https://tldrlegal.com/license/mit-license)
     
 Powerful queue system for IOS built on top of operation and OperationQueue.
