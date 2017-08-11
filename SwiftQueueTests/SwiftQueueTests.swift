@@ -8,105 +8,6 @@ import XCTest
 import Dispatch
 @testable import SwiftQueue
 
-class MyJob: Job {
-    public static let type = "MyJob"
-
-    public let semaphore = DispatchSemaphore(value: 0)
-
-    public var result: Error?
-
-    public var onRunJobCalled = 0
-    public var onErrorCalled = 0
-    public var onCompleteCalled = 0
-    public var onCancelCalled = 0
-
-    public var params: Any?
-
-    func onRunJob(callback: JobResult) throws {
-        onRunJobCalled += 1
-        callback.onDone(error: result) // Auto complete
-    }
-
-    func onError(error: Error) -> RetryConstraint {
-        onErrorCalled += 1
-        return RetryConstraint.retry
-    }
-
-    func onComplete() {
-        onCompleteCalled += 1
-        semaphore.signal()
-    }
-
-    func onCancel() {
-        onCancelCalled += 1
-        semaphore.signal()
-    }
-
-    func await() {
-        semaphore.wait()
-    }
-}
-
-class MyCreator: JobCreator {
-    private let job: [String: Job]
-
-    public init(_ job: [String: Job]) {
-        self.job = job
-    }
-
-    func create(jobType: String, params: Any?) -> Job? {
-        if let value = job[jobType] as? MyJob {
-            value.params = params
-            return value
-        } else {
-            return job[jobType]
-        }
-    }
-}
-
-class AlwaysTrueCreator: JobCreator {
-
-    func create(jobType: String, params: Any?) -> Job? {
-        return MyJob()
-    }
-
-}
-
-class MyPersister: JobPersister {
-    var onRestore: String?
-    var onPut: JobTask?
-    var onRemoveUUID: String?
-
-    var needRestore: String?
-    var taskToRestore: String?
-
-    convenience init(needRestore: String, task: String) {
-        self.init()
-        self.needRestore = needRestore
-        self.taskToRestore = task
-    }
-
-    func restore(queueName: String) -> [String] {
-        onRestore = queueName
-        if let needRestore = needRestore, let taskToRestore = taskToRestore, needRestore == queueName {
-            return [taskToRestore]
-        }
-        return []
-    }
-
-    func put(taskId: String, data: String) {
-        onPut = JobTask(json: data, creator: [AlwaysTrueCreator()])
-    }
-
-    func remove(taskId: String) {
-        onRemoveUUID = taskId
-    }
-}
-
-private class JobError: Error {
-
-}
-
 class SwiftQueueTests: XCTestCase {
 
     func testInitialization() {
@@ -116,123 +17,7 @@ class SwiftQueueTests: XCTestCase {
         XCTAssertEqual(queue.name, expected)
     }
 
-    func testRunSucessJob() {
-        let job = MyJob()
-        let creator = MyCreator([MyJob.type: job])
-
-        let queue = JobQueue(creators: [creator])
-        JobBuilder(taskID: UUID().uuidString, jobType: MyJob.type)
-                .schedule(queue: queue)
-
-        job.await()
-
-        XCTAssertEqual(job.onRunJobCalled, 1)
-        XCTAssertEqual(job.onCompleteCalled, 1)
-        XCTAssertEqual(job.onErrorCalled, 0)
-        XCTAssertEqual(job.onCancelCalled, 0)
-    }
-
-    func testRunSucessPeriodicJob() {
-        let job = MyJob()
-        let creator = MyCreator([MyJob.type: job])
-
-        let queue = JobQueue(creators: [creator])
-        JobBuilder(taskID: UUID().uuidString, jobType: MyJob.type)
-                .periodic(count: 5)
-                .schedule(queue: queue)
-
-        job.await()
-
-        XCTAssertEqual(job.onRunJobCalled, 5)
-        XCTAssertEqual(job.onCompleteCalled, 1)
-        XCTAssertEqual(job.onErrorCalled, 0)
-        XCTAssertEqual(job.onCancelCalled, 0)
-    }
-
-    func testRunFailedJob() {
-        let job = MyJob()
-        let creator = MyCreator([MyJob.type: job])
-
-        job.result = JobError()
-
-        let queue = JobQueue(creators: [creator])
-        JobBuilder(taskID: UUID().uuidString, jobType: MyJob.type)
-                .schedule(queue: queue)
-
-        job.await()
-
-        XCTAssertEqual(job.onRunJobCalled, 1)
-        XCTAssertEqual(job.onCompleteCalled, 0)
-        XCTAssertEqual(job.onErrorCalled, 0) // Not called. Should we ?
-        XCTAssertEqual(job.onCancelCalled, 1)
-    }
-
-    func testRunFailedJobRetry() {
-        let job = MyJob()
-        let creator = MyCreator([MyJob.type: job])
-
-        job.result = JobError()
-
-        let queue = JobQueue(creators: [creator])
-        JobBuilder(taskID: UUID().uuidString, jobType: MyJob.type)
-                .retry(max: 2)
-                .schedule(queue: queue)
-
-        job.await()
-
-        XCTAssertEqual(job.onRunJobCalled, 3)
-        XCTAssertEqual(job.onCompleteCalled, 0)
-        XCTAssertEqual(job.onErrorCalled, 2)
-        XCTAssertEqual(job.onCancelCalled, 1)
-    }
-
-    func testSetParams() {
-        let expected = UUID().uuidString
-
-        let job = MyJob()
-        let creator = MyCreator([MyJob.type: job])
-
-        job.result = JobError()
-
-        let queue = JobQueue(creators: [creator])
-        JobBuilder(taskID: UUID().uuidString, jobType: MyJob.type)
-                .with(params: expected)
-                .schedule(queue: queue)
-
-        job.await()
-
-        XCTAssertEqual(job.params as? String, expected)
-    }
-
-    func testCancelWithTag() {
-        let id = UUID().uuidString
-        let tag = UUID().uuidString
-
-        let job = MyJob()
-        let creator = MyCreator([MyJob.type: job])
-
-        let persister = MyPersister()
-
-        let queue = JobQueue(creators: [creator], persister: persister)
-
-        JobBuilder(taskID: id, jobType: MyJob.type)
-                .delay(inSecond: Int.max)
-                .addTag(tag: tag)
-                .schedule(queue: queue)
-
-        queue.cancelOperation(tag: tag)
-
-        job.await()
-
-        XCTAssertEqual(job.onRunJobCalled, 0)
-        XCTAssertEqual(job.onCompleteCalled, 0)
-        XCTAssertEqual(job.onErrorCalled, 0)
-        XCTAssertEqual(job.onCancelCalled, 1)
-
-        XCTAssertEqual(id, persister.onRemoveUUID)
-    }
-
-    func testAssignEverything() {
+    func testBuilderAssignEverything() {
         let job = MyJob()
         let creator = MyCreator([MyJob.type: job])
 
@@ -265,6 +50,7 @@ class SwiftQueueTests: XCTestCase {
         XCTAssertNotNil(persister.onPut)
         let task = persister.onPut!
 
+        XCTAssertEqual(task.name, taskID)
         XCTAssertEqual(task.taskID, taskID)
         XCTAssertEqual(task.jobType, jobType)
         XCTAssertEqual(task.tags.first, tag)
@@ -278,22 +64,46 @@ class SwiftQueueTests: XCTestCase {
         XCTAssertEqual(task.interval, interval)
     }
 
+    func testRunSucessJob() {
+        let job = MyJob()
+        let creator = MyCreator([MyJob.type: job])
+
+        let queue = JobQueue(creators: [creator])
+        JobBuilder(taskID: UUID().uuidString, jobType: MyJob.type)
+                .schedule(queue: queue)
+
+        job.await()
+
+        XCTAssertEqual(job.onRunJobCalled, 1)
+        XCTAssertEqual(job.onCompleteCalled, 1)
+        XCTAssertEqual(job.onErrorCalled, 0)
+        XCTAssertEqual(job.onCancelCalled, 0)
+    }
+
     func testScheduleJobWithoutCreatorNoError() {
         let queue = JobQueue()
         JobBuilder(taskID: UUID().uuidString, jobType: UUID().uuidString)
                 .schedule(queue: queue)
     }
 
-    func testScheduleAbortTaskBecauseOfDeadline() {
+
+    func testCancelWithTag() {
+        let id = UUID().uuidString
+        let tag = UUID().uuidString
+
         let job = MyJob()
         let creator = MyCreator([MyJob.type: job])
 
-        job.result = JobError()
+        let persister = MyPersister()
 
-        let queue = JobQueue(creators: [creator])
-        JobBuilder(taskID: UUID().uuidString, jobType: MyJob.type)
-                .deadline(date: Date(timeIntervalSinceNow: TimeInterval(-10)))
+        let queue = JobQueue(creators: [creator], persister: persister)
+
+        JobBuilder(taskID: id, jobType: MyJob.type)
+                .delay(inSecond: Int.max)
+                .addTag(tag: tag)
                 .schedule(queue: queue)
+
+        queue.cancelOperation(tag: tag)
 
         job.await()
 
@@ -301,9 +111,11 @@ class SwiftQueueTests: XCTestCase {
         XCTAssertEqual(job.onCompleteCalled, 0)
         XCTAssertEqual(job.onErrorCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 1)
+
+        XCTAssertEqual(id, persister.onRemoveUUID)
     }
 
-    func testSerialiseDeserialise() throws {
+    func testSerialiseDeserialize() throws {
         let job = MyJob()
         let creator = MyCreator([MyJob.type: job])
 
@@ -346,7 +158,7 @@ class SwiftQueueTests: XCTestCase {
         XCTAssertEqual(task.interval, interval)
     }
 
-    func testLoadSerializedTask() {
+    func testLoadSerializedTaskShouldRunSuccess() {
         let queueId = UUID().uuidString
 
         let job = MyJob()

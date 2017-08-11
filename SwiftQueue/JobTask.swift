@@ -30,7 +30,6 @@ internal class JobTask: Operation, JobResult {
     var _finished: Bool = false
 
     public override var name: String? { get { return taskID } set { } }
-    public override var isAsynchronous: Bool { return true }
 
     public override var isExecuting: Bool {
         get { return _executing }
@@ -213,14 +212,6 @@ Deconstruct the task to a JSON string, used to serialize the task
 
         if let error = error {
             lastError = error
-            if error is ConstraintError {
-                // Constraint are immutable. One of the constraint canceled the job
-                // Since we cannot do anything, just notify the job
-                _ = handler.onError(error: error)
-                // Will never run anymore
-                cancel()
-                return
-            }
 
             guard retries > 0 else {
                 cancel()
