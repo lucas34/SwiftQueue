@@ -116,7 +116,7 @@ class SwiftQTests: XCTestCase {
     func testRunSucessJob() {
         let job = MyJob()
         let creator = MyCreator([MyJob.type: job])
-
+        
         let queue = JobQueue(creators: [creator])
         JobBuilder(taskID: UUID().uuidString, jobType: MyJob.type)
                 .schedule(queue: queue)
