@@ -15,20 +15,10 @@ public protocol JobPersister {
 
     func restore(queueName: String) -> [String]
 
-    func put(info: JobTask)
+    func put(taskId: String, data: String)
 
-    func remove(uuid: String)
-
-    func remove(tag: String)
-
-}
-
-internal protocol JobTicker {
-
-    func next()
-
-    func cancel(operation: JobTask)
-
+    func remove(taskId: String)
+    
 }
 
 public final class JobQueue: OperationQueue {
@@ -37,22 +27,7 @@ public final class JobQueue: OperationQueue {
     private let persister: JobPersister?
 
     internal var tasksMap = [String: JobTask]()
-
-    public var tasks: [JobTask] {
-        let array = operations
-
-        var output = [JobTask]()
-        output.reserveCapacity(array.count)
-
-        for obj in array {
-            if let cast = obj as? JobTask {
-                output.append(cast)
-            }
-        }
-
-        return output
-    }
-
+    
     public init(queueName: String = UUID().uuidString, creators: [JobCreator]? = nil, persister: JobPersister? = nil) {
         self.creators = creators ?? []
         self.persister = persister
@@ -83,7 +58,7 @@ public final class JobQueue: OperationQueue {
 
     - parameter op: A JobTask to execute on the queue
     */
-    override public func addOperation(_ ope: Operation) {
+    public override func addOperation(_ ope: Operation) {
         guard let task = ope as? JobTask else {
             // Not a job Task I don't care
             super.addOperation(ope)
@@ -100,13 +75,33 @@ public final class JobQueue: OperationQueue {
         tasksMap[task.taskID] = task
 
         // Serialize this operation
-        if let sp = persister {
-            sp.put(info: task)
+        if let sp = persister, let data = task.toJSONString() {
+            sp.put(taskId: task.taskID, data: data)
         }
         ope.completionBlock = {
             self.taskComplete(ope)
         }
         super.addOperation(ope)
+    }
+
+    public override func cancelAllOperations() {
+        operations.flatMap { operation -> JobTask? in
+            operation as? JobTask
+        }.forEach { task in
+            persister?.remove(taskId: task.taskID)
+        }
+        super.cancelAllOperations()
+    }
+
+    public func cancelOperation(tag: String) {
+        operations.flatMap { operation -> JobTask? in
+            operation as? JobTask
+        }.filter { task in
+            task.tags.contains(tag)
+        }.forEach { task in
+            persister?.remove(taskId: task.taskID)
+            task.cancel()
+        }
     }
 
     func taskComplete(_ op: Operation) {
@@ -115,7 +110,7 @@ public final class JobQueue: OperationQueue {
 
             // Remove this operation from serialization
             if let sp = persister {
-                sp.remove(uuid: task.taskID)
+                sp.remove(taskId: task.taskID)
             }
 
             task.taskComplete()
