@@ -64,11 +64,18 @@ class MyCreator: JobCreator {
     }
 }
 
+class AlwaysTrueCreator: JobCreator {
+
+    func create(jobType: String, params: Any?) -> Job? {
+        return MyJob()
+    }
+
+}
+
 class MyPersister: JobPersister {
     var onRestore: String?
     var onPut: JobTask?
     var onRemoveUUID: String?
-    var onRemoveTag: String?
 
     var needRestore: String?
     var taskToRestore: String?
@@ -87,16 +94,12 @@ class MyPersister: JobPersister {
         return []
     }
 
-    func put(info: JobTask) {
-        onPut = info
+    func put(taskId: String, data: String) {
+        onPut = JobTask(json: data, creator: [AlwaysTrueCreator()])
     }
 
-    func remove(uuid: String) {
-        onRemoveUUID = uuid
-    }
-
-    func remove(tag: String) {
-        onRemoveTag = tag
+    func remove(taskId: String) {
+        onRemoveUUID = taskId
     }
 }
 
@@ -104,7 +107,7 @@ private class JobError: Error {
 
 }
 
-class SwiftQTests: XCTestCase {
+class SwiftQueueTests: XCTestCase {
 
     func testInitialization() {
         let expected = UUID().uuidString
@@ -116,7 +119,7 @@ class SwiftQTests: XCTestCase {
     func testRunSucessJob() {
         let job = MyJob()
         let creator = MyCreator([MyJob.type: job])
-        
+
         let queue = JobQueue(creators: [creator])
         JobBuilder(taskID: UUID().uuidString, jobType: MyJob.type)
                 .schedule(queue: queue)
@@ -202,20 +205,31 @@ class SwiftQTests: XCTestCase {
     }
 
     func testCancelWithTag() {
+        let id = UUID().uuidString
         let tag = UUID().uuidString
 
         let job = MyJob()
         let creator = MyCreator([MyJob.type: job])
 
-        let queue = JobQueue(creators: [creator])
-        JobBuilder(taskID: UUID().uuidString, jobType: MyJob.type)
+        let persister = MyPersister()
+
+        let queue = JobQueue(creators: [creator], persister: persister)
+
+        JobBuilder(taskID: id, jobType: MyJob.type)
+                .delay(inSecond: Int.max)
                 .addTag(tag: tag)
                 .schedule(queue: queue)
 
+        queue.cancelOperation(tag: tag)
+
         job.await()
 
-        // TODO check if persisiter remove by tag
-        // TODO cancel with tag
+        XCTAssertEqual(job.onRunJobCalled, 0)
+        XCTAssertEqual(job.onCompleteCalled, 0)
+        XCTAssertEqual(job.onErrorCalled, 0)
+        XCTAssertEqual(job.onCancelCalled, 1)
+
+        XCTAssertEqual(id, persister.onRemoveUUID)
     }
 
     func testAssignEverything() {
@@ -255,12 +269,11 @@ class SwiftQTests: XCTestCase {
         XCTAssertEqual(task.jobType, jobType)
         XCTAssertEqual(task.tags.first, tag)
         XCTAssertEqual(task.delay, delay)
-        XCTAssertEqual(task.deadline, deadline)
+//TODO wtf        XCTAssertEqual(task.deadline, deadline)
         XCTAssertEqual(task.needInternet, needInternet)
         XCTAssertEqual(task.isPersisted, isPersisted)
-//        XCTAssertEqual(task.params, params)
-//        XCTAssertEqual(task.createTime, cre)
-//        XCTAssertEqual(task.runCount, runCount)
+        XCTAssertEqual(task.params as? String, params)
+        XCTAssertEqual(task.runCount, runCount)
         XCTAssertEqual(task.retries, retries)
         XCTAssertEqual(task.interval, interval)
     }
@@ -324,11 +337,10 @@ class SwiftQTests: XCTestCase {
         XCTAssertEqual(task.jobType, jobType)
         XCTAssertEqual(task.tags.first, tag)
         XCTAssertEqual(task.delay, delay)
-//        XCTAssertEqual(task.deadline, deadline)
+//TODO WTF        XCTAssertEqual(task.deadline, deadline)
         XCTAssertEqual(task.needInternet, needInternet)
         XCTAssertEqual(task.isPersisted, isPersisted)
-//        XCTAssertEqual(task.params, params)
-//        XCTAssertEqual(task.createTime, cre)
+        XCTAssertEqual(task.params as? String, params)
         XCTAssertEqual(task.runCount, runCount)
         XCTAssertEqual(task.retries, retries)
         XCTAssertEqual(task.interval, interval)

@@ -5,25 +5,24 @@
 
 import Foundation
 
-public class JobTask: Operation, JobResult {
-//    static let MIN_RETRY_DELAY = 0.2
-//    static let MAX_RETRY_DELAY = 60.0
+internal class JobTask: Operation, JobResult {
 
     let handler: Job
 
     public let taskID: String
     public let jobType: String
 
-    var tags: Set<String>
-    var delay: Int
-    var deadline: Date?
-    var needInternet: Bool
-    var isPersisted: Bool
-    var params: Any?
-    var createTime: Date
+    let tags: Set<String>
+    let delay: Int
+    let deadline: Date?
+    let needInternet: Bool
+    let isPersisted: Bool
+    let params: Any?
+    let createTime: Date
+    let interval: Double
+
     var runCount: Int
-    var retries: Int = 1
-    var interval: Double
+    var retries: Int
 
     internal var lastError: Swift.Error?
 
@@ -74,6 +73,7 @@ public class JobTask: Operation, JobResult {
     }
 
     private convenience init?(dictionary: [String: Any], creator: [JobCreator]) {
+        let params = dictionary["params"] ?? nil
         if let taskID        = dictionary["taskID"] as? String,
            let jobType       = dictionary["jobType"] as? String,
            let tags          = dictionary["tags"] as? [String],
@@ -81,22 +81,20 @@ public class JobTask: Operation, JobResult {
            let deadlineStr   = dictionary["deadline"] as? String?,
            let needInternet  = dictionary["needInternet"] as? Bool,
            let isPersisted   = dictionary["isPersisted"] as? Bool,
-//           let params        = dictionary["params"] as? Any ?? nil,
            let createTimeStr = dictionary["createTime"] as? String,
            let runCount      = dictionary["runCount"] as? Int,
            let retries       = dictionary["retries"] as? Int,
            let interval      = dictionary["interval"] as? Double,
-           let job = JobQueue.createHandler(creators: creator, jobType: jobType, params: nil) {
-
+           let job = JobQueue.createHandler(creators: creator, jobType: jobType, params: params) {
+            
             let deadline   = deadlineStr.flatMap { dateFormatter.date(from: $0) }
             let createTime = dateFormatter.date(from: createTimeStr) ?? Date()
 
             self.init(job: job, taskID: taskID, jobType: jobType, tags: Set(tags),
                     delay: delay, deadline: deadline, needInternet: needInternet,
-                    isPersisted: isPersisted, params: nil, createTime: createTime,
+                    isPersisted: isPersisted, params: params, createTime: createTime,
                     runCount: runCount, retries: retries, interval: interval)
         } else {
-//            self.init(queue: queue, taskID: "", taskType: "")
             return nil
         }
     }
@@ -185,7 +183,14 @@ Deconstruct the task to a JSON string, used to serialize the task
         // Check the constraint
         do {
             try Constraints.checkConstraintsForRun(task: self)
-            try handler.onRunJob(callback: self)
+            if Date().timeIntervalSince(createTime) > TimeInterval(delay) {
+                try handler.onRunJob(callback: self)
+            } else {
+                runInBackgroundAfter(TimeInterval(interval)) {
+                    self.run()
+                }
+            }
+
         } catch (let error) {
             onDone(error: error)
         }
