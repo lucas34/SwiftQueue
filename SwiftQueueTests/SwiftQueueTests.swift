@@ -6,7 +6,7 @@
 import UIKit
 import XCTest
 import Dispatch
-@testable import SwiftQ
+@testable import SwiftQueue
 
 class MyJob: Job {
     public static let type = "MyJob"
