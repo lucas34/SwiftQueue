@@ -168,7 +168,6 @@ Deconstruct the task to a JSON string, used to serialize the task
     // cancel before schedule and serialise
     internal func abort(error: Swift.Error) {
         lastError = error
-        isFinished = true
         handler.onCancel() // Need to be called manually since the task is actually not in the queue. So cannot call cancel()
     }
 
