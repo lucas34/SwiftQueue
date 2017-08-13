@@ -19,7 +19,7 @@ class MyJob: Job {
     public var onErrorCalled = 0
     public var onCompleteCalled = 0
     public var onCancelCalled = 0
-    
+
     public var retryConstraint = RetryConstraint.retry
 
     public var params: Any?
@@ -106,5 +106,5 @@ class MyPersister: JobPersister {
 }
 
 class JobError: Error {
-    
+
 }

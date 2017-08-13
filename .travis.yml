@@ -2,7 +2,7 @@ language: swift
 osx_image: xcode8.3
 
 install:
-  - ./install_swiftlint.sh
+  - brew install swiftlint
 
 script:
     - swiftlint

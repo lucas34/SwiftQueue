@@ -3,7 +3,6 @@
 // Copyright (c) 2017 lucas34. All rights reserved.
 //
 
-
 import Foundation
 
 internal class JobConstraint {
