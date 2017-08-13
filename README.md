@@ -15,42 +15,61 @@ For a thorough example see the demo project in the top level of the repository.
 // Create queue
 let queue = JobQueue(creators: [creator], persister: persister)
 
-JobBuilder(taskID: taskID, jobType: jobType)
-        .addTag(tag: tag) // To cancel base on tag
-        .delay(inSecond: delay) // delay before execution
+JobBuilder(taskID: taskID, jobType: SendTweetJob.type)
+        .addTag(tag: "tweet") // To cancel base on tag
+        .delay(inSecond: 1) // delay before execution
         .deadline(date: deadline) // Will be canceled after a certain date
-        .internet(required: true) // Only run if the device is connected
+        // TODO .internet(required: true) // Only run if the device is connected.
         .persist(required: true) // See persistence section
-        .with(params: params) // Add custom params
-        .retry(max: retries) // Number of retires if the job fail
-        .periodic(count: runCount, interval: interval) // Auto repeat job
+        .with(params: "Hellow World") // Add custom params
+        .retry(max: 5) // Number of retires if the job fail
+        .periodic(count: Int.max, interval: 5) // Auto repeat job. Wait 5 seconds between each run
         .schedule(queue: queue) // Add to queue
 ```
 
 ### Job creation
 ```swift
-class MyJob: Job {
+class SendTweetJob: Job {
     
-    public static let type = "MyJob"    
+    public static let type = "SendTweetJob"    
+
+    private let message: String
+
+    required init(message: String) {
+        self.message = message
+    }
+
 
     func onRunJob(callback: JobResult) throws {
-        // Actual task has to run here
-        callback.onDone(error: nil) // Give the error if your network call or anything failed
+        api.sendTweet(type: "TEXT", content: message)
+        .onSucess {
+            callback.onDone(error: nil)
+        }.onFail { error in
+            callback.onDone(error: error)
+        }
     }
 
     func onError(error: Error) -> RetryConstraint {
-        // Do something when the job failed
-        // Will not be called if retry count to set to default (0)
-        return RetryConstraint.retry // Ask to retry
+        // Job as failed and retry count > 0
+        // WARNING will not be called if you put .retry(count: 0) in job builder
+        // Convenient if you want to check base on the error to retry or not
+        if error is ApiError {
+            // Server rejected my message.
+            return RetryConstraint.cancel // Stop even if retry count > 0
+        } else {
+            return RetryConstraint.retry // Ask to retry
+        }
     }
 
     func onComplete() {
         // Success ! This job will never run anymore
+        // Update your UI or your database
     }
 
     func onCancel() {
         // Fail ! This job will never run anymore
         // Can be due to deadline, retry count reach limit, or RetryConstraint.cancel
+        // Update your UI or your database
     }
 }
 ```
@@ -60,8 +79,8 @@ class MyJob: Job {
 class MyCreator: JobCreator {
 
     func create(jobType: String, params: Any?) -> Job? {
-        if jobType == MyJob.type {
-            return MyJob()
+        if jobType == SendTweetJob.type, let message = params as? String  {
+            return SendTweetJob(message: message)
         } else {
             return nil
         }
