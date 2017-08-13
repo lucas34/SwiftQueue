@@ -26,24 +26,24 @@ internal class JobTask: Operation, JobResult {
 
     internal var lastError: Swift.Error?
 
-    var _executing: Bool = false
-    var _finished: Bool = false
+    var executing: Bool = false
+    var finished: Bool = false
 
     public override var name: String? { get { return taskID } set { } }
 
     public override var isExecuting: Bool {
-        get { return _executing }
+        get { return executing }
         set {
             willChangeValue(forKey: "isExecuting")
-            _executing = newValue
+            executing = newValue
             didChangeValue(forKey: "isExecuting")
         }
     }
     public override var isFinished: Bool {
-        get { return _finished }
+        get { return finished }
         set {
             willChangeValue(forKey: "isFinished")
-            _finished = newValue
+            finished = newValue
             didChangeValue(forKey: "isFinished")
         }
     }
