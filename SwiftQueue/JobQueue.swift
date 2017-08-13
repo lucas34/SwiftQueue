@@ -18,7 +18,7 @@ public protocol JobPersister {
     func put(taskId: String, data: String)
 
     func remove(taskId: String)
-    
+
 }
 
 public final class JobQueue: OperationQueue {
@@ -27,7 +27,7 @@ public final class JobQueue: OperationQueue {
     private let persister: JobPersister?
 
     internal var tasksMap = [String: JobTask]()
-    
+
     public init(queueName: String = UUID().uuidString, creators: [JobCreator]? = nil, persister: JobPersister? = nil) {
         self.creators = creators ?? []
         self.persister = persister
@@ -130,4 +130,3 @@ public final class JobQueue: OperationQueue {
         return nil
     }
 }
-

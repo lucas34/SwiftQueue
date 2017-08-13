@@ -86,7 +86,6 @@ class SwiftQueueTests: XCTestCase {
                 .schedule(queue: queue)
     }
 
-
     func testCancelWithTag() {
         let id = UUID().uuidString
         let tag = UUID().uuidString
