@@ -1,10 +1,11 @@
 language: swift
 osx_image: xcode8.3
 
-before_script:
-    - xcodebuild -list
+install:
+  - ./install_swiftlint.sh
 
 script:
+    - swiftlint
     - set -o pipefail && xcodebuild test -enableCodeCoverage YES -project SwiftQueue.xcodeproj -scheme SwiftQueue -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6S,OS=10.3.1'
 
 after_success:
