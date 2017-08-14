@@ -12,7 +12,7 @@ class ConstraintTests: XCTestCase {
         let job = MyJob()
         let creator = MyCreator([MyJob.type: job])
 
-        let queue = JobQueue(creators: [creator])
+        let queue = SwiftQueue(creators: [creator])
         JobBuilder(taskID: UUID().uuidString, jobType: MyJob.type)
                 .deadline(date: Date(timeIntervalSinceNow: TimeInterval(-10)))
                 .schedule(queue: queue)
@@ -34,7 +34,7 @@ class ConstraintTests: XCTestCase {
 
         let creator = MyCreator([type1: job1, type2: job2])
 
-        let queue = JobQueue(creators: [creator])
+        let queue = SwiftQueue(creators: [creator])
         JobBuilder(taskID: UUID().uuidString, jobType: type1)
                 .delay(inSecond: 1)
                 .schedule(queue: queue)
@@ -74,7 +74,7 @@ class ConstraintTests: XCTestCase {
 
         let persister = MyPersister(needRestore: queueId, task: task)
 
-        _ = JobQueue(queueName: queueId, creators: [creator], persister: persister)
+        _ = SwiftQueue(queueName: queueId, creators: [creator], persister: persister)
 
         XCTAssertNotNil(persister.onRestore)
 
@@ -92,7 +92,7 @@ class ConstraintTests: XCTestCase {
 
         let creator = MyCreator([type: job])
 
-        let queue = JobQueue(creators: [creator])
+        let queue = SwiftQueue(creators: [creator])
         JobBuilder(taskID: UUID().uuidString, jobType: type)
                 .periodic(count: 5)
                 .schedule(queue: queue)
@@ -114,7 +114,7 @@ class ConstraintTests: XCTestCase {
         job.result = JobError()
         job.retryConstraint = .retry
 
-        let queue = JobQueue(creators: [creator])
+        let queue = SwiftQueue(creators: [creator])
         JobBuilder(taskID: UUID().uuidString, jobType: type)
                 .retry(max: 2)
                 .schedule(queue: queue)
@@ -136,7 +136,7 @@ class ConstraintTests: XCTestCase {
         job.result = JobError()
         job.retryConstraint = .cancel
 
-        let queue = JobQueue(creators: [creator])
+        let queue = SwiftQueue(creators: [creator])
         JobBuilder(taskID: UUID().uuidString, jobType: type)
                 .retry(max: 2)
                 .schedule(queue: queue)
@@ -160,7 +160,7 @@ class ConstraintTests: XCTestCase {
 
         let creator = MyCreator([type1: job1, type2: job2])
 
-        let queue = JobQueue(creators: [creator])
+        let queue = SwiftQueue(creators: [creator])
         JobBuilder(taskID: id, jobType: type1)
                 .delay(inSecond: Int.max)
                 .schedule(queue: queue)

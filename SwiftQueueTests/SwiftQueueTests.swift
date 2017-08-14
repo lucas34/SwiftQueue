@@ -13,7 +13,7 @@ class SwiftQueueTests: XCTestCase {
     func testInitialization() {
         let expected = UUID().uuidString
 
-        let queue = JobQueue(queueName: expected)
+        let queue = SwiftQueue(queueName: expected)
         XCTAssertEqual(queue.name, expected)
     }
 
@@ -35,7 +35,7 @@ class SwiftQueueTests: XCTestCase {
 
         let persister = MyPersister()
 
-        let queue = JobQueue(creators: [creator], persister: persister)
+        let queue = SwiftQueue(creators: [creator], persister: persister)
         JobBuilder(taskID: taskID, jobType: jobType)
                 .addTag(tag: tag)
                 .delay(inSecond: delay)
@@ -68,7 +68,7 @@ class SwiftQueueTests: XCTestCase {
         let job = MyJob()
         let creator = MyCreator([MyJob.type: job])
 
-        let queue = JobQueue(creators: [creator])
+        let queue = SwiftQueue(creators: [creator])
         JobBuilder(taskID: UUID().uuidString, jobType: MyJob.type)
                 .schedule(queue: queue)
 
@@ -81,7 +81,7 @@ class SwiftQueueTests: XCTestCase {
     }
 
     func testScheduleJobWithoutCreatorNoError() {
-        let queue = JobQueue()
+        let queue = SwiftQueue()
         JobBuilder(taskID: UUID().uuidString, jobType: UUID().uuidString)
                 .schedule(queue: queue)
     }
@@ -95,7 +95,7 @@ class SwiftQueueTests: XCTestCase {
 
         let persister = MyPersister()
 
-        let queue = JobQueue(creators: [creator], persister: persister)
+        let queue = SwiftQueue(creators: [creator], persister: persister)
 
         JobBuilder(taskID: id, jobType: MyJob.type)
                 .delay(inSecond: Int.max)
@@ -172,7 +172,7 @@ class SwiftQueueTests: XCTestCase {
 
         let persister = MyPersister(needRestore: queueId, task: task)
 
-        _ = JobQueue(queueName: queueId, creators: [creator], persister: persister)
+        _ = SwiftQueue(queueName: queueId, creators: [creator], persister: persister)
 
         XCTAssertNotNil(persister.onRestore)
 
@@ -189,7 +189,7 @@ class SwiftQueueTests: XCTestCase {
     }
 
     func testAddOperationNotJobTask() {
-        let queue = JobQueue()
+        let queue = SwiftQueue()
         let operation = Operation()
         queue.addOperation(operation) // Should not crash
     }
@@ -205,7 +205,7 @@ class SwiftQueueTests: XCTestCase {
 
         let persister = MyPersister()
 
-        let queue = JobQueue(queueName: queueId, creators: [creator], persister: persister)
+        let queue = SwiftQueue(queueName: queueId, creators: [creator], persister: persister)
         JobBuilder(taskID: taskID, jobType: jobType)
                 .schedule(queue: queue)
 
@@ -234,7 +234,7 @@ class SwiftQueueTests: XCTestCase {
 
         let persister = MyPersister()
 
-        let queue = JobQueue(queueName: queueId, creators: [creator], persister: persister)
+        let queue = SwiftQueue(queueName: queueId, creators: [creator], persister: persister)
         JobBuilder(taskID: taskID, jobType: jobType)
                 .schedule(queue: queue)
 

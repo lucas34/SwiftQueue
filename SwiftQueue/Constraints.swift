@@ -7,7 +7,7 @@ import Foundation
 
 internal class JobConstraint {
 
-    func schedule(queue: JobQueue, operation: JobTask) throws {
+    func schedule(queue: SwiftQueue, operation: JobTask) throws {
 
     }
 
@@ -24,7 +24,7 @@ internal class DeadlineConstraint: JobConstraint {
 
     class DeadlineError: ConstraintError {}
 
-    override func schedule(queue: JobQueue, operation: JobTask) throws {
+    override func schedule(queue: SwiftQueue, operation: JobTask) throws {
         try check(operation: operation)
     }
 
@@ -43,7 +43,7 @@ internal class UniqueUUIDConstraint: JobConstraint {
 
     class TaskAlreadyExist: ConstraintError {}
 
-    override func schedule(queue: JobQueue, operation: JobTask) throws {
+    override func schedule(queue: SwiftQueue, operation: JobTask) throws {
         if queue.tasksMap[operation.taskID] != nil {
             throw TaskAlreadyExist()
         }
@@ -61,7 +61,7 @@ internal class Constraints {
         }
     }
 
-    public static func checkConstraintsOnSchedule(queue: JobQueue, operation: JobTask) throws {
+    public static func checkConstraintsOnSchedule(queue: SwiftQueue, operation: JobTask) throws {
         for constraint in Constraints.constrains {
             try constraint.schedule(queue: queue, operation: operation)
         }
