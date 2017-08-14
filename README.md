@@ -1,4 +1,4 @@
-## SwiftQ
+## SwiftQueue
 [![swift](https://img.shields.io/badge/Swift-3.0-orange.svg?style=flat)](https://swift.org")
 [![travis](https://travis-ci.org/lucas34/SwiftQ.svg?branch=master)](https://travis-ci.org/lucas34/SwiftQ)
 [![codecov](https://codecov.io/gh/lucas34/SwiftQ/branch/master/graph/badge.svg)](https://codecov.io/gh/lucas34/SwiftQ)
@@ -13,7 +13,7 @@ For a thorough example see the demo project in the top level of the repository.
 ### Create a queue and schedule a task
 ```swift
 // Create queue
-let queue = JobQueue(creators: [creator], persister: persister)
+let queue = SwiftQueue(creators: [creator], persister: persister)
 
 JobBuilder(taskID: taskID, jobType: SendTweetJob.type)
         .addTag(tag: "tweet") // To cancel base on tag
