@@ -21,7 +21,7 @@ public protocol JobPersister {
 
 }
 
-public final class JobQueue: OperationQueue {
+public final class SwiftQueue: OperationQueue {
 
     private let creators: [JobCreator]
     private let persister: JobPersister?
@@ -118,7 +118,7 @@ public final class JobQueue: OperationQueue {
     }
 
     func createHandler(jobType: String, params: Any?) -> Job? {
-        return JobQueue.createHandler(creators: creators, jobType: jobType, params: params)
+        return SwiftQueue.createHandler(creators: creators, jobType: jobType, params: params)
     }
 
     static func createHandler(creators: [JobCreator], jobType: String, params: Any?) -> Job? {

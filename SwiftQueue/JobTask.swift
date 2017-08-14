@@ -40,10 +40,10 @@ internal class JobTask: Operation, JobResult {
         }
     }
     public override var isFinished: Bool {
-        get { return jobIsExecuting }
+        get { return jobIsFinished }
         set {
             willChangeValue(forKey: "isFinished")
-            jobIsExecuting = newValue
+            jobIsFinished = newValue
             didChangeValue(forKey: "isFinished")
         }
     }
@@ -84,7 +84,7 @@ internal class JobTask: Operation, JobResult {
            let runCount      = dictionary["runCount"] as? Int,
            let retries       = dictionary["retries"] as? Int,
            let interval      = dictionary["interval"] as? Double,
-           let job = JobQueue.createHandler(creators: creator, jobType: jobType, params: params) {
+           let job = SwiftQueue.createHandler(creators: creator, jobType: jobType, params: params) {
 
             let deadline   = deadlineStr.flatMap { dateFormatter.date(from: $0) }
             let createTime = dateFormatter.date(from: createTimeStr) ?? Date()

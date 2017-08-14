@@ -73,7 +73,7 @@ public final class JobBuilder {
                 createTime: createTime, runCount: runCount, retries: retries, interval: interval)
     }
 
-    public func schedule(queue: JobQueue) {
+    public func schedule(queue: SwiftQueue) {
         guard let job = queue.createHandler(jobType: jobType, params: params) else {
             // TODO print error
             return
