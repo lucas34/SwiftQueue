@@ -53,11 +53,6 @@ public final class SwiftQueue: OperationQueue {
         }
     }
 
-    /**
-    Adds a JobTask to the queue and serializes it
-
-    - parameter op: A JobTask to execute on the queue
-    */
     public override func addOperation(_ ope: Operation) {
         guard let task = ope as? JobTask else {
             // Not a job Task I don't care
