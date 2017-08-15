@@ -8,40 +8,42 @@
     
 Powerful queue system for IOS built on top of operation and OperationQueue.
 
-## Example Code
-For a thorough example see the demo project in the top level of the repository.
+### Sample Code
+Schedule and send tweet with SwiftQueue
 
-### Create a queue and schedule a task
+#### Create a queue and schedule a task
 ```swift
 // Create queue
-let queue = SwiftQueue(creators: [creator], persister: persister)
+let queue = SwiftQueue(creators: [TweetJobCreator()])
 
 JobBuilder(taskID: taskID, jobType: SendTweetJob.type)
         .addTag(tag: "tweet") // To cancel base on tag
         .delay(inSecond: 1) // delay before execution
         .deadline(date: deadline) // Will be canceled after a certain date
         .persist(required: true) // See persistence section
-        .with(params: "Hellow World") // Add custom params
+        .with(params: "Hello TweetWorld") // Add custom params
         .retry(max: 5) // Number of retires if the job fail
         .periodic(count: Int.max, interval: 5) // Auto repeat job. Wait 5 seconds between each run
         .schedule(queue: queue) // Add to queue
 ```
 
-### Job creation
+#### Job creation
+
 ```swift
 class SendTweetJob: Job {
     
-    public static let type = "SendTweetJob"    
+    public static let type = "SendTweetJob"
 
-    private let message: String
+    private let tweetMessage: String
 
     required init(message: String) {
-        self.message = message
+        self.tweetMessage = message
     }
 
 
     func onRunJob(callback: JobResult) throws {
-        api.sendTweet(type: "TEXT", content: message)
+        // Actual sending is happening here
+        api.sendTweet(type: "TEXT", content: tweetMessage)
         .onSucess {
             callback.onDone(error: nil)
         }.onFail { error in
@@ -74,14 +76,18 @@ class SendTweetJob: Job {
 }
 ```
 
-### Job callback creation
+#### Link job and JobBuilder
+JobBuilder and Job are't linked due to job persistance capability. SwiftQueue will ask you to return your job implementation base on the job type.
+
 ```swift
-class MyCreator: JobCreator {
+class TweetJobCreator: JobCreator {
 
     func create(jobType: String, params: Any?) -> Job? {
+        // check for job and param types
         if jobType == SendTweetJob.type, let message = params as? String  {
             return SendTweetJob(message: message)
         } else {
+            // Nothing match
             return nil
         }
     }
