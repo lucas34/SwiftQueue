@@ -20,7 +20,6 @@ JobBuilder(taskID: taskID, jobType: SendTweetJob.type)
         .addTag(tag: "tweet") // To cancel base on tag
         .delay(inSecond: 1) // delay before execution
         .deadline(date: deadline) // Will be canceled after a certain date
-        // TODO .internet(required: true) // Only run if the device is connected.
         .persist(required: true) // See persistence section
         .with(params: "Hellow World") // Add custom params
         .retry(max: 5) // Number of retires if the job fail

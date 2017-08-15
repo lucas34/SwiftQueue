@@ -104,8 +104,8 @@ public final class SwiftQueue: OperationQueue {
         }
     }
 
-    func taskComplete(_ op: Operation) {
-        if let task = op as? JobTask {
+    func taskComplete(_ ope: Operation) {
+        if let task = ope as? JobTask {
             tasksMap.removeValue(forKey: task.taskID)
 
             // Remove this operation from serialization
