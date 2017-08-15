@@ -57,7 +57,8 @@ class SwiftQueueTests: XCTestCase {
         XCTAssertEqual(task.jobType, jobType)
         XCTAssertEqual(task.tags.first, tag)
         XCTAssertEqual(task.delay, delay)
-        XCTAssertEqual(task.deadline, deadline)
+        // Due to loss of precision need to convert
+        XCTAssertEqual(task.deadline, dateFormatter.date(from: dateFormatter.string(from: deadline)))
         XCTAssertEqual(task.needInternet, needInternet)
         XCTAssertEqual(task.isPersisted, isPersisted)
         XCTAssertEqual(task.params as? String, params)
@@ -155,7 +156,8 @@ class SwiftQueueTests: XCTestCase {
         XCTAssertEqual(task.jobType, jobType)
         XCTAssertEqual(task.tags.first, tag)
         XCTAssertEqual(task.delay, delay)
-        XCTAssertEqual(task.deadline, deadline)
+        // Due to loss of precision need to convert
+        XCTAssertEqual(task.deadline, dateFormatter.date(from: dateFormatter.string(from: deadline)))
         XCTAssertEqual(task.needInternet, needInternet)
         XCTAssertEqual(task.isPersisted, isPersisted)
         XCTAssertEqual(task.params as? String, params)
@@ -169,19 +171,19 @@ class SwiftQueueTests: XCTestCase {
 
         let job1 = MyJob()
         let type1 = UUID().uuidString
+        let job1Id = UUID().uuidString
 
         let job2 = MyJob()
         let type2 = UUID().uuidString
+        let job2Id = UUID().uuidString
 
         let creator = MyCreator([type1: job1, type2: job2])
 
-        let taskID = UUID().uuidString
-
-        let task1 = JobBuilder(taskID: taskID, jobType: type1)
+        let task1 = JobBuilder(taskID: job1Id, jobType: type1)
                 .build(job: creator.create(jobType: type1, params: nil)!)
                 .toJSONString()!
 
-        let task2 = JobBuilder(taskID: taskID, jobType: type2)
+        let task2 = JobBuilder(taskID: job2Id, jobType: type2)
                 .build(job: creator.create(jobType: type2, params: nil)!)
                 .toJSONString()!
 
