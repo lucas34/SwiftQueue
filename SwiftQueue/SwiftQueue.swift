@@ -88,6 +88,7 @@ public final class SwiftQueue: OperationQueue {
         operations.flatMap { operation -> JobTask? in
             operation as? JobTask
         }.forEach { task in
+            tasksMap.removeValue(forKey: task.taskID)
             persister?.remove(taskId: task.taskID)
         }
         super.cancelAllOperations()
@@ -99,6 +100,7 @@ public final class SwiftQueue: OperationQueue {
         }.filter { task in
             task.tags.contains(tag)
         }.forEach { task in
+            tasksMap.removeValue(forKey: task.taskID)
             persister?.remove(taskId: task.taskID)
             task.cancel()
         }
