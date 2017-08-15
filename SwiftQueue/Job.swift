@@ -75,7 +75,7 @@ public final class JobBuilder {
 
     public func schedule(queue: SwiftQueue) {
         guard let job = queue.createHandler(jobType: jobType, params: params) else {
-            // TODO print error
+            print("WARN: Not job creator associate to job type \(jobType)") // log maybe
             return
         }
         queue.addOperation(build(job: job))
