@@ -47,7 +47,7 @@ public final class SwiftQueue: OperationQueue {
         persister?.restore(queueName: name).flatMap { string -> JobTask? in
             JobTask(json: string, creator: creators)
         }.sorted { task, task1 in
-            task.createTime < task1.createTime // TODO test
+            task.createTime < task1.createTime
         }.forEach { task in
             addOperation(task)
         }

@@ -9,8 +9,6 @@ import Dispatch
 @testable import SwiftQueue
 
 class MyJob: Job {
-    public static let type = "MyJob"
-
     public let semaphore = DispatchSemaphore(value: 0)
 
     public var result: Error?
@@ -80,9 +78,9 @@ class MyPersister: JobPersister {
     var onRemoveUUID: String?
 
     var needRestore: String?
-    var taskToRestore: String?
+    var taskToRestore = [String]()
 
-    convenience init(needRestore: String, task: String) {
+    convenience init(needRestore: String, task: [String]) {
         self.init()
         self.needRestore = needRestore
         self.taskToRestore = task
@@ -90,8 +88,8 @@ class MyPersister: JobPersister {
 
     func restore(queueName: String) -> [String] {
         onRestore = queueName
-        if let needRestore = needRestore, let taskToRestore = taskToRestore, needRestore == queueName {
-            return [taskToRestore]
+        if let needRestore = needRestore, needRestore == queueName {
+            return taskToRestore
         }
         return []
     }
