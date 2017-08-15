@@ -10,10 +10,12 @@ class ConstraintTests: XCTestCase {
 
     func testDeadlineWhenSchedule() {
         let job = MyJob()
-        let creator = MyCreator([MyJob.type: job])
+        let type = UUID().uuidString
+
+        let creator = MyCreator([type: job])
 
         let queue = SwiftQueue(creators: [creator])
-        JobBuilder(taskID: UUID().uuidString, jobType: MyJob.type)
+        JobBuilder(taskID: UUID().uuidString, jobType: type)
                 .deadline(date: Date(timeIntervalSinceNow: TimeInterval(-10)))
                 .schedule(queue: queue)
 
@@ -62,17 +64,18 @@ class ConstraintTests: XCTestCase {
         let queueId = UUID().uuidString
 
         let job = MyJob()
-        let creator = MyCreator([MyJob.type: job])
+        let type = UUID().uuidString
+
+        let creator = MyCreator([type: job])
 
         let taskID = UUID().uuidString
-        let jobType = MyJob.type
 
-        let task = JobBuilder(taskID: taskID, jobType: jobType)
+        let task = JobBuilder(taskID: taskID, jobType: type)
                 .deadline(date: Date())
-                .build(job: creator.create(jobType: MyJob.type, params: nil)!)
+                .build(job: creator.create(jobType: type, params: nil)!)
                 .toJSONString()!
 
-        let persister = MyPersister(needRestore: queueId, task: task)
+        let persister = MyPersister(needRestore: queueId, task: [task])
 
         _ = SwiftQueue(queueName: queueId, creators: [creator], persister: persister)
 

@@ -19,10 +19,12 @@ class SwiftQueueTests: XCTestCase {
 
     func testBuilderAssignEverything() {
         let job = MyJob()
-        let creator = MyCreator([MyJob.type: job])
+        let type = UUID().uuidString
+
+        let creator = MyCreator([type: job])
 
         let taskID = UUID().uuidString
-        let jobType = MyJob.type
+        let jobType = type
         let tag = UUID().uuidString
         let delay = 12345
         let deadline = Date(timeIntervalSinceNow: TimeInterval(UInt64.max))
@@ -66,10 +68,12 @@ class SwiftQueueTests: XCTestCase {
 
     func testRunSucessJob() {
         let job = MyJob()
-        let creator = MyCreator([MyJob.type: job])
+        let type = UUID().uuidString
+
+        let creator = MyCreator([type: job])
 
         let queue = SwiftQueue(creators: [creator])
-        JobBuilder(taskID: UUID().uuidString, jobType: MyJob.type)
+        JobBuilder(taskID: UUID().uuidString, jobType: type)
                 .schedule(queue: queue)
 
         job.await()
@@ -89,15 +93,16 @@ class SwiftQueueTests: XCTestCase {
     func testCancelWithTag() {
         let id = UUID().uuidString
         let tag = UUID().uuidString
+        let type = UUID().uuidString
 
         let job = MyJob()
-        let creator = MyCreator([MyJob.type: job])
+        let creator = MyCreator([type: job])
 
         let persister = MyPersister()
 
         let queue = SwiftQueue(creators: [creator], persister: persister)
 
-        JobBuilder(taskID: id, jobType: MyJob.type)
+        JobBuilder(taskID: id, jobType: type)
                 .delay(inSecond: Int.max)
                 .addTag(tag: tag)
                 .schedule(queue: queue)
@@ -116,10 +121,12 @@ class SwiftQueueTests: XCTestCase {
 
     func testSerialiseDeserialize() throws {
         let job = MyJob()
-        let creator = MyCreator([MyJob.type: job])
+        let type = UUID().uuidString
+
+        let creator = MyCreator([type: job])
 
         let taskID = UUID().uuidString
-        let jobType = MyJob.type
+        let jobType = type
         let tag = UUID().uuidString
         let delay = 12345
         let deadline = Date(timeIntervalSinceNow: TimeInterval(-10))
@@ -157,31 +164,46 @@ class SwiftQueueTests: XCTestCase {
         XCTAssertEqual(task.interval, interval)
     }
 
-    func testLoadSerializedTaskShouldRunSuccess() {
+    func testLoadSerializedSortedTaskShouldRunSuccess() {
         let queueId = UUID().uuidString
 
-        let job = MyJob()
-        let creator = MyCreator([MyJob.type: job])
+        let job1 = MyJob()
+        let type1 = UUID().uuidString
+
+        let job2 = MyJob()
+        let type2 = UUID().uuidString
+
+        let creator = MyCreator([type1: job1, type2: job2])
 
         let taskID = UUID().uuidString
-        let jobType = MyJob.type
 
-        let task = JobBuilder(taskID: taskID, jobType: jobType)
-                .build(job: creator.create(jobType: MyJob.type, params: nil)!)
+        let task1 = JobBuilder(taskID: taskID, jobType: type1)
+                .build(job: creator.create(jobType: type1, params: nil)!)
                 .toJSONString()!
 
-        let persister = MyPersister(needRestore: queueId, task: task)
+        let task2 = JobBuilder(taskID: taskID, jobType: type2)
+                .build(job: creator.create(jobType: type2, params: nil)!)
+                .toJSONString()!
+
+        let persister = MyPersister(needRestore: queueId, task: [task2, task1]) // Should invert when deserialize
 
         _ = SwiftQueue(queueName: queueId, creators: [creator], persister: persister)
 
         XCTAssertNotNil(persister.onRestore)
 
-        job.await()
+        job1.await()
 
-        XCTAssertEqual(job.onRunJobCalled, 1)
-        XCTAssertEqual(job.onCompleteCalled, 1)
-        XCTAssertEqual(job.onErrorCalled, 0)
-        XCTAssertEqual(job.onCancelCalled, 0)
+        XCTAssertEqual(job1.onRunJobCalled, 1)
+        XCTAssertEqual(job1.onCompleteCalled, 1)
+        XCTAssertEqual(job1.onErrorCalled, 0)
+        XCTAssertEqual(job1.onCancelCalled, 0)
+
+        job2.await()
+
+        XCTAssertEqual(job2.onRunJobCalled, 1)
+        XCTAssertEqual(job2.onCompleteCalled, 1)
+        XCTAssertEqual(job2.onErrorCalled, 0)
+        XCTAssertEqual(job2.onCancelCalled, 0)
     }
 
     func testFailInitDoesNotCrash() {
@@ -198,15 +220,16 @@ class SwiftQueueTests: XCTestCase {
         let queueId = UUID().uuidString
 
         let job = MyJob()
-        let creator = MyCreator([MyJob.type: job])
+        let type = UUID().uuidString
+
+        let creator = MyCreator([type: job])
 
         let taskID = UUID().uuidString
-        let jobType = MyJob.type
 
         let persister = MyPersister()
 
         let queue = SwiftQueue(queueName: queueId, creators: [creator], persister: persister)
-        JobBuilder(taskID: taskID, jobType: jobType)
+        JobBuilder(taskID: taskID, jobType: type)
                 .schedule(queue: queue)
 
         job.await()
@@ -224,18 +247,18 @@ class SwiftQueueTests: XCTestCase {
         let queueId = UUID().uuidString
 
         let job = MyJob()
+        let type = UUID().uuidString
 
         job.result = JobError()
 
-        let creator = MyCreator([MyJob.type: job])
+        let creator = MyCreator([type: job])
 
         let taskID = UUID().uuidString
-        let jobType = MyJob.type
 
         let persister = MyPersister()
 
         let queue = SwiftQueue(queueName: queueId, creators: [creator], persister: persister)
-        JobBuilder(taskID: taskID, jobType: jobType)
+        JobBuilder(taskID: taskID, jobType: type)
                 .schedule(queue: queue)
 
         job.await()
