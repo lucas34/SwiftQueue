@@ -13,7 +13,7 @@ public final class JobBuilder {
     private var tags = Set<String>()
     private var delay: Int = 0
     private var deadline: Date?
-    private var needInternet: Bool = false
+    private var requireNetwork: NetworkType = NetworkType.any
     private var isPersisted: Bool = false
     private var params: Any?
     private var createTime: Date = Date()
@@ -42,8 +42,8 @@ public final class JobBuilder {
         return self
     }
 
-    public func internet(required: Bool) -> JobBuilder {
-        needInternet = required
+    public func internet(atLeast: NetworkType) -> JobBuilder {
+        requireNetwork = atLeast
         return self
     }
 
@@ -69,7 +69,7 @@ public final class JobBuilder {
 
     internal func build(job: Job) -> JobTask {
         return JobTask(job: job, taskID: taskID, jobType: jobType, tags: tags,
-                delay: delay, deadline: deadline, needInternet: needInternet, isPersisted: isPersisted, params: params,
+                delay: delay, deadline: deadline, requireNetwork: requireNetwork, isPersisted: isPersisted, params: params,
                 createTime: createTime, runCount: runCount, retries: retries, interval: interval)
     }
 
@@ -91,6 +91,12 @@ public protocol JobResult {
 public enum RetryConstraint {
     case retry
     case cancel
+}
+
+public enum NetworkType: Int {
+    case any = 0
+    case cellular =  1
+    case wifi =  2
 }
 
 public protocol Job {

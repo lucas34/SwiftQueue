@@ -4,18 +4,21 @@
 //
 
 import Foundation
+import ReachabilitySwift
 
-internal class JobTask: Operation, JobResult {
+internal final class JobTask: Operation, JobResult {
 
     let handler: Job
 
     public let taskID: String
     public let jobType: String
 
+    private let reachability = Reachability()
+    
     let tags: Set<String>
     let delay: Int
     let deadline: Date?
-    let needInternet: Bool
+    let requireNetwork: NetworkType
     let isPersisted: Bool
     let params: Any?
     let createTime: Date
@@ -49,7 +52,7 @@ internal class JobTask: Operation, JobResult {
     }
 
     internal init(job: Job, taskID: String = UUID().uuidString, jobType: String, tags: Set<String>,
-                  delay: Int, deadline: Date?, needInternet: Bool, isPersisted: Bool, params: Any?,
+                  delay: Int, deadline: Date?, requireNetwork: NetworkType, isPersisted: Bool, params: Any?,
                   createTime: Date, runCount: Int, retries: Int, interval: Double) {
         self.handler = job
         self.taskID = taskID
@@ -57,7 +60,7 @@ internal class JobTask: Operation, JobResult {
         self.tags = tags
         self.delay = delay
         self.deadline = deadline
-        self.needInternet = needInternet
+        self.requireNetwork = requireNetwork
         self.isPersisted = isPersisted
         self.params = params
         self.createTime = createTime
@@ -73,24 +76,25 @@ internal class JobTask: Operation, JobResult {
 
     private convenience init?(dictionary: [String: Any], creator: [JobCreator]) {
         let params = dictionary["params"] ?? nil
-        if let taskID        = dictionary["taskID"] as? String,
-           let jobType       = dictionary["jobType"] as? String,
-           let tags          = dictionary["tags"] as? [String],
-           let delay         = dictionary["delay"] as? Int,
-           let deadlineStr   = dictionary["deadline"] as? String?,
-           let needInternet  = dictionary["needInternet"] as? Bool,
-           let isPersisted   = dictionary["isPersisted"] as? Bool,
-           let createTimeStr = dictionary["createTime"] as? String,
-           let runCount      = dictionary["runCount"] as? Int,
-           let retries       = dictionary["retries"] as? Int,
-           let interval      = dictionary["interval"] as? Double,
+        if let taskID         = dictionary["taskID"] as? String,
+           let jobType        = dictionary["jobType"] as? String,
+           let tags           = dictionary["tags"] as? [String],
+           let delay          = dictionary["delay"] as? Int,
+           let deadlineStr    = dictionary["deadline"] as? String?,
+           let requireNetwork = dictionary["requireNetwork"] as? Int,
+           let isPersisted    = dictionary["isPersisted"] as? Bool,
+           let createTimeStr  = dictionary["createTime"] as? String,
+           let runCount       = dictionary["runCount"] as? Int,
+           let retries        = dictionary["retries"] as? Int,
+           let interval       = dictionary["interval"] as? Double,
            let job = SwiftQueue.createHandler(creators: creator, jobType: jobType, params: params) {
 
             let deadline   = deadlineStr.flatMap { dateFormatter.date(from: $0) }
             let createTime = dateFormatter.date(from: createTimeStr) ?? Date()
+            let network    = NetworkType(rawValue: requireNetwork) ?? NetworkType.any
 
             self.init(job: job, taskID: taskID, jobType: jobType, tags: Set(tags),
-                    delay: delay, deadline: deadline, needInternet: needInternet,
+                    delay: delay, deadline: deadline, requireNetwork: network,
                     isPersisted: isPersisted, params: params, createTime: createTime,
                     runCount: runCount, retries: retries, interval: interval)
         } else {
@@ -125,18 +129,18 @@ Deconstruct the task to a dictionary, used to serialize the task
 */
     private func toDictionary() -> [String: Any] {
         var dict = [String: Any]()
-        dict["taskID"]       = self.taskID
-        dict["jobType"]      = self.jobType
-        dict["tags"]         = Array(self.tags)
-        dict["delay"]        = self.delay
-        dict["deadline"]     = self.deadline.map { dateFormatter.string(from: $0) }
-        dict["needInternet"] = self.needInternet
-        dict["isPersisted"]  = self.isPersisted
-        dict["params"]       = self.params
-        dict["createTime"]   = dateFormatter.string(from: self.createTime)
-        dict["runCount"]     = self.runCount
-        dict["retries"]      = self.retries
-        dict["interval"]     = self.interval
+        dict["taskID"]         = self.taskID
+        dict["jobType"]        = self.jobType
+        dict["tags"]           = Array(self.tags)
+        dict["delay"]          = self.delay
+        dict["deadline"]       = self.deadline.map { dateFormatter.string(from: $0) }
+        dict["requireNetwork"] = self.requireNetwork.rawValue
+        dict["isPersisted"]    = self.isPersisted
+        dict["params"]         = self.params
+        dict["createTime"]     = dateFormatter.string(from: self.createTime)
+        dict["runCount"]       = self.runCount
+        dict["retries"]        = self.retries
+        dict["interval"]       = self.interval
         return dict
     }
 
@@ -182,6 +186,31 @@ Deconstruct the task to a JSON string, used to serialize the task
         // Check the constraint
         do {
             try Constraints.checkConstraintsForRun(task: self)
+            switch requireNetwork {
+            case .any:
+                break // Continue function
+            case .cellular:
+                guard let reachability = reachability, !reachability.isReachable else {
+                    break // Continue
+                }
+                reachability.whenReachable = { reachability in
+                    reachability.whenReachable = nil
+                    self.run()
+                }
+                return // Stop run function
+            case .wifi:
+                guard let reachability = reachability, !reachability.isReachableViaWiFi else {
+                    break // Continue
+
+                }
+                reachability.whenReachable = { reachability in
+                    // Change network
+                    reachability.whenReachable = nil
+                    self.run()
+                }
+                return // Stop run function
+            }
+
             if Date().timeIntervalSince(createTime) > TimeInterval(delay) {
                 try handler.onRunJob(callback: self)
             } else {
