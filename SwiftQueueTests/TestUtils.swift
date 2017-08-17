@@ -72,34 +72,32 @@ class AlwaysTrueCreator: JobCreator {
 
 }
 
-class MyPersister: JobPersister {
-    var onRestore: String?
-    var onPut: JobTask?
-    var onRemoveUUID: String?
+class PersisterTracker: UserDefaultsPersister {
+    var restoreQueueName = ""
 
-    var needRestore: String?
-    var taskToRestore = [String]()
+    var putQueueName = ""
+    var putTaskId = ""
+    var putData = ""
 
-    convenience init(needRestore: String, task: [String]) {
-        self.init()
-        self.needRestore = needRestore
-        self.taskToRestore = task
+    var removeQueueName = ""
+    var removeTaskId = ""
+
+    override func restore(queueName: String) -> [String] {
+        restoreQueueName = queueName
+        return super.restore(queueName: queueName)
     }
 
-    func restore(queueName: String) -> [String] {
-        onRestore = queueName
-        if let needRestore = needRestore, needRestore == queueName {
-            return taskToRestore
-        }
-        return []
+    override func put(queueName: String, taskId: String, data: String) {
+        putQueueName = queueName
+        putTaskId = taskId
+        putData = data
+        super.put(queueName: queueName, taskId: taskId, data: data)
     }
 
-    func put(taskId: String, data: String) {
-        onPut = JobTask(json: data, creator: [AlwaysTrueCreator()])
-    }
-
-    func remove(taskId: String) {
-        onRemoveUUID = taskId
+    override func remove(queueName: String, taskId: String) {
+        removeQueueName = queueName
+        removeTaskId = taskId
+        super.remove(queueName: queueName, taskId: taskId)
     }
 }
 

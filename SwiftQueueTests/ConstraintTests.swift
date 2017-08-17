@@ -72,14 +72,15 @@ class ConstraintTests: XCTestCase {
 
         let task = JobBuilder(taskID: taskID, jobType: type)
                 .deadline(date: Date())
-                .build(job: creator.create(jobType: type, params: nil)!)
-                .toJSONString()!
+                .build(job: job)
+                .toJSONString() ?? ""
 
-        let persister = MyPersister(needRestore: queueId, task: [task])
+        UserDefaults(suiteName: queueId)?.setValue(task, forKey: taskID)
 
+        let persister = PersisterTracker()
         _ = SwiftQueue(queueName: queueId, creators: [creator], persister: persister)
 
-        XCTAssertNotNil(persister.onRestore)
+        XCTAssertEqual(queueId, persister.restoreQueueName)
 
         job.await()
 

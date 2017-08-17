@@ -15,9 +15,9 @@ public protocol JobPersister {
 
     func restore(queueName: String) -> [String]
 
-    func put(taskId: String, data: String)
+    func put(queueName: String, taskId: String, data: String)
 
-    func remove(taskId: String)
+    func remove(queueName: String, taskId: String)
 
 }
 
@@ -28,9 +28,12 @@ public final class SwiftQueue: OperationQueue {
 
     internal var tasksMap = [String: JobTask]()
 
+    private let queueName: String
+
     public init(queueName: String = UUID().uuidString, creators: [JobCreator]? = nil, persister: JobPersister? = nil) {
         self.creators = creators ?? []
         self.persister = persister
+        self.queueName = queueName
 
         super.init()
 
@@ -71,7 +74,7 @@ public final class SwiftQueue: OperationQueue {
 
         // Serialize this operation
         if let sp = persister, let data = task.toJSONString() {
-            sp.put(taskId: task.taskID, data: data)
+            sp.put(queueName: queueName, taskId: task.taskID, data: data)
         }
         ope.completionBlock = {
             self.taskComplete(ope)
@@ -84,7 +87,7 @@ public final class SwiftQueue: OperationQueue {
             operation as? JobTask
         }.forEach { task in
             tasksMap.removeValue(forKey: task.taskID)
-            persister?.remove(taskId: task.taskID)
+            persister?.remove(queueName: queueName, taskId: task.taskID)
         }
         super.cancelAllOperations()
     }
@@ -96,7 +99,7 @@ public final class SwiftQueue: OperationQueue {
             task.tags.contains(tag)
         }.forEach { task in
             tasksMap.removeValue(forKey: task.taskID)
-            persister?.remove(taskId: task.taskID)
+            persister?.remove(queueName: queueName, taskId: task.taskID)
             task.cancel()
         }
     }
@@ -107,7 +110,7 @@ public final class SwiftQueue: OperationQueue {
 
             // Remove this operation from serialization
             if let sp = persister {
-                sp.remove(taskId: task.taskID)
+                sp.remove(queueName: queueName, taskId: task.taskID)
             }
 
             task.taskComplete()

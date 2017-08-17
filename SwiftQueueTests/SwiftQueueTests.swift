@@ -35,7 +35,7 @@ class SwiftQueueTests: XCTestCase {
         let retries = 3
         let interval: Double = 10
 
-        let persister = MyPersister()
+        let persister = PersisterTracker()
 
         let queue = SwiftQueue(creators: [creator], persister: persister)
         JobBuilder(taskID: taskID, jobType: jobType)
@@ -49,22 +49,24 @@ class SwiftQueueTests: XCTestCase {
                 .periodic(count: runCount, interval: interval)
                 .schedule(queue: queue)
 
-        XCTAssertNotNil(persister.onPut)
-        let task = persister.onPut!
+        XCTAssertEqual(taskID, persister.putTaskId)
+        XCTAssertEqual(queue.name, persister.putQueueName)
 
-        XCTAssertEqual(task.name, taskID)
-        XCTAssertEqual(task.taskID, taskID)
-        XCTAssertEqual(task.jobType, jobType)
-        XCTAssertEqual(task.tags.first, tag)
-        XCTAssertEqual(task.delay, delay)
+        let task = JobTask(json: persister.putData, creator: [creator])
+
+        XCTAssertEqual(task?.name, taskID)
+        XCTAssertEqual(task?.taskID, taskID)
+        XCTAssertEqual(task?.jobType, jobType)
+        XCTAssertEqual(task?.tags.first, tag)
+        XCTAssertEqual(task?.delay, delay)
         // Due to loss of precision need to convert
-        XCTAssertEqual(task.deadline, dateFormatter.date(from: dateFormatter.string(from: deadline)))
-        XCTAssertEqual(task.needInternet, needInternet)
-        XCTAssertEqual(task.isPersisted, isPersisted)
-        XCTAssertEqual(task.params as? String, params)
-        XCTAssertEqual(task.runCount, runCount)
-        XCTAssertEqual(task.retries, retries)
-        XCTAssertEqual(task.interval, interval)
+        XCTAssertEqual(task?.deadline, dateFormatter.date(from: dateFormatter.string(from: deadline)))
+        XCTAssertEqual(task?.needInternet, needInternet)
+        XCTAssertEqual(task?.isPersisted, isPersisted)
+        XCTAssertEqual(task?.params as? String, params)
+        XCTAssertEqual(task?.runCount, runCount)
+        XCTAssertEqual(task?.retries, retries)
+        XCTAssertEqual(task?.interval, interval)
     }
 
     func testRunSucessJob() {
@@ -99,7 +101,7 @@ class SwiftQueueTests: XCTestCase {
         let job = MyJob()
         let creator = MyCreator([type: job])
 
-        let persister = MyPersister()
+        let persister = PersisterTracker()
 
         let queue = SwiftQueue(creators: [creator], persister: persister)
 
@@ -117,7 +119,8 @@ class SwiftQueueTests: XCTestCase {
         XCTAssertEqual(job.onErrorCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 1)
 
-        XCTAssertEqual(id, persister.onRemoveUUID)
+        XCTAssertEqual(id, persister.removeTaskId)
+        XCTAssertEqual(queue.name, persister.removeQueueName)
     }
 
 //    func testCancelAll() {
@@ -177,22 +180,22 @@ class SwiftQueueTests: XCTestCase {
                 .retry(max: retries)
                 .periodic(count: runCount, interval: interval)
                 .build(job: MyJob())
-                .toJSONString()!
+                .toJSONString() ?? ""
 
-        let task = JobTask(json: json, creator: [creator])!
+        let task = JobTask(json: json, creator: [creator])
 
-        XCTAssertEqual(task.taskID, taskID)
-        XCTAssertEqual(task.jobType, jobType)
-        XCTAssertEqual(task.tags.first, tag)
-        XCTAssertEqual(task.delay, delay)
+        XCTAssertEqual(task?.taskID, taskID)
+        XCTAssertEqual(task?.jobType, jobType)
+        XCTAssertEqual(task?.tags.first, tag)
+        XCTAssertEqual(task?.delay, delay)
         // Due to loss of precision need to convert
-        XCTAssertEqual(task.deadline, dateFormatter.date(from: dateFormatter.string(from: deadline)))
-        XCTAssertEqual(task.needInternet, needInternet)
-        XCTAssertEqual(task.isPersisted, isPersisted)
-        XCTAssertEqual(task.params as? String, params)
-        XCTAssertEqual(task.runCount, runCount)
-        XCTAssertEqual(task.retries, retries)
-        XCTAssertEqual(task.interval, interval)
+        XCTAssertEqual(task?.deadline, dateFormatter.date(from: dateFormatter.string(from: deadline)))
+        XCTAssertEqual(task?.needInternet, needInternet)
+        XCTAssertEqual(task?.isPersisted, isPersisted)
+        XCTAssertEqual(task?.params as? String, params)
+        XCTAssertEqual(task?.runCount, runCount)
+        XCTAssertEqual(task?.retries, retries)
+        XCTAssertEqual(task?.interval, interval)
     }
 
     func testLoadSerializedSortedTaskShouldRunSuccess() {
@@ -209,18 +212,20 @@ class SwiftQueueTests: XCTestCase {
         let creator = MyCreator([type1: job1, type2: job2])
 
         let task1 = JobBuilder(taskID: job1Id, jobType: type1)
-                .build(job: creator.create(jobType: type1, params: nil)!)
-                .toJSONString()!
+                .build(job: job1)
+                .toJSONString() ?? ""
 
         let task2 = JobBuilder(taskID: job2Id, jobType: type2)
-                .build(job: creator.create(jobType: type2, params: nil)!)
-                .toJSONString()!
+                .build(job: job2)
+                .toJSONString() ?? ""
 
-        let persister = MyPersister(needRestore: queueId, task: [task2, task1]) // Should invert when deserialize
+        UserDefaults(suiteName: queueId)?.setValue(task2, forKey: job2Id)
+        UserDefaults(suiteName: queueId)?.setValue(task1, forKey: job1Id)  // Should invert when deserialize
 
+        let persister = PersisterTracker()
         _ = SwiftQueue(queueName: queueId, creators: [creator], persister: persister)
 
-        XCTAssertNotNil(persister.onRestore)
+        XCTAssertEqual(queueId, persister.restoreQueueName)
 
         job1.await()
 
@@ -257,7 +262,7 @@ class SwiftQueueTests: XCTestCase {
 
         let taskID = UUID().uuidString
 
-        let persister = MyPersister()
+        let persister = PersisterTracker()
 
         let queue = SwiftQueue(queueName: queueId, creators: [creator], persister: persister)
         JobBuilder(taskID: taskID, jobType: type)
@@ -270,8 +275,8 @@ class SwiftQueueTests: XCTestCase {
         XCTAssertEqual(job.onErrorCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 0)
 
-        XCTAssertNotNil(persister.onRemoveUUID)
-        XCTAssertEqual(taskID, persister.onRemoveUUID!)
+        XCTAssertNotNil(persister.removeTaskId)
+        XCTAssertNotNil(persister.removeQueueName)
     }
 
     func testCompleteFailTaskRemoveFromSerializer() {
@@ -286,7 +291,7 @@ class SwiftQueueTests: XCTestCase {
 
         let taskID = UUID().uuidString
 
-        let persister = MyPersister()
+        let persister = PersisterTracker()
 
         let queue = SwiftQueue(queueName: queueId, creators: [creator], persister: persister)
         JobBuilder(taskID: taskID, jobType: type)
@@ -299,8 +304,7 @@ class SwiftQueueTests: XCTestCase {
         XCTAssertEqual(job.onErrorCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 1)
 
-        XCTAssertNotNil(persister.onRemoveUUID)
-        XCTAssertEqual(taskID, persister.onRemoveUUID!)
+        XCTAssertEqual(taskID, persister.removeTaskId)
+        XCTAssertEqual(queueId, persister.removeQueueName)
     }
-
 }
