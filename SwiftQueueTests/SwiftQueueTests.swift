@@ -28,7 +28,7 @@ class SwiftQueueTests: XCTestCase {
         let tag = UUID().uuidString
         let delay = 12345
         let deadline = Date(timeIntervalSinceNow: TimeInterval(UInt64.max))
-        let needInternet = true
+        let requireNetwork = NetworkType.wifi
         let isPersisted = true // REquiered
         let params = UUID().uuidString
         let runCount = 5
@@ -42,7 +42,7 @@ class SwiftQueueTests: XCTestCase {
                 .addTag(tag: tag)
                 .delay(inSecond: delay)
                 .deadline(date: deadline)
-                .internet(required: true)
+                .internet(atLeast: .wifi)
                 .persist(required: true)
                 .with(params: params)
                 .retry(max: retries)
@@ -61,7 +61,7 @@ class SwiftQueueTests: XCTestCase {
         XCTAssertEqual(task?.delay, delay)
         // Due to loss of precision need to convert
         XCTAssertEqual(task?.deadline, dateFormatter.date(from: dateFormatter.string(from: deadline)))
-        XCTAssertEqual(task?.needInternet, needInternet)
+        XCTAssertEqual(task?.requireNetwork, requireNetwork)
         XCTAssertEqual(task?.isPersisted, isPersisted)
         XCTAssertEqual(task?.params as? String, params)
         XCTAssertEqual(task?.runCount, runCount)
@@ -163,7 +163,7 @@ class SwiftQueueTests: XCTestCase {
         let tag = UUID().uuidString
         let delay = 12345
         let deadline = Date(timeIntervalSinceNow: TimeInterval(-10))
-        let needInternet = true
+        let requireNetwork = NetworkType.any
         let isPersisted = true // REquiered
         let params = UUID().uuidString
         let runCount = 5
@@ -174,7 +174,7 @@ class SwiftQueueTests: XCTestCase {
                 .addTag(tag: tag)
                 .delay(inSecond: delay)
                 .deadline(date: deadline)
-                .internet(required: true)
+                .internet(atLeast: requireNetwork)
                 .persist(required: true)
                 .with(params: params) // Useless because we shortcut it
                 .retry(max: retries)
@@ -190,7 +190,7 @@ class SwiftQueueTests: XCTestCase {
         XCTAssertEqual(task?.delay, delay)
         // Due to loss of precision need to convert
         XCTAssertEqual(task?.deadline, dateFormatter.date(from: dateFormatter.string(from: deadline)))
-        XCTAssertEqual(task?.needInternet, needInternet)
+        XCTAssertEqual(task?.requireNetwork, requireNetwork)
         XCTAssertEqual(task?.isPersisted, isPersisted)
         XCTAssertEqual(task?.params as? String, params)
         XCTAssertEqual(task?.runCount, runCount)
