@@ -9,10 +9,10 @@ import XCTest
 class ConstraintTests: XCTestCase {
 
     func testDeadlineWhenSchedule() {
-        let job = MyJob()
+        let job = TestJob()
         let type = UUID().uuidString
 
-        let creator = MyCreator([type: job])
+        let creator = TestCreator([type: job])
 
         let queue = SwiftQueue(creators: [creator])
         JobBuilder(taskID: UUID().uuidString, jobType: type)
@@ -28,13 +28,13 @@ class ConstraintTests: XCTestCase {
     }
 
     func testDeadlineWhenRun() {
-        let job1 = MyJob()
+        let job1 = TestJob()
         let type1 = UUID().uuidString
 
-        let job2 = MyJob()
+        let job2 = TestJob()
         let type2 = UUID().uuidString
 
-        let creator = MyCreator([type1: job1, type2: job2])
+        let creator = TestCreator([type1: job1, type2: job2])
 
         let queue = SwiftQueue(creators: [creator])
         JobBuilder(taskID: UUID().uuidString, jobType: type1)
@@ -63,17 +63,17 @@ class ConstraintTests: XCTestCase {
     func testDeadlineWhenDeserialize() {
         let queueId = UUID().uuidString
 
-        let job = MyJob()
+        let job = TestJob()
         let type = UUID().uuidString
 
-        let creator = MyCreator([type: job])
+        let creator = TestCreator([type: job])
 
         let taskID = UUID().uuidString
 
         let task = JobBuilder(taskID: taskID, jobType: type)
                 .deadline(date: Date())
                 .build(job: job)
-                .toJSONString() ?? ""
+                .toJSONString()!
 
         UserDefaults(suiteName: queueId)?.setValue(task, forKey: taskID)
 
@@ -91,10 +91,10 @@ class ConstraintTests: XCTestCase {
     }
 
     func testPeriodicJob() {
-        let job = MyJob()
+        let job = TestJob()
         let type = UUID().uuidString
 
-        let creator = MyCreator([type: job])
+        let creator = TestCreator([type: job])
 
         let queue = SwiftQueue(creators: [creator])
         JobBuilder(taskID: UUID().uuidString, jobType: type)
@@ -110,10 +110,10 @@ class ConstraintTests: XCTestCase {
     }
 
     func testRetryFailJobWithRetryConstraint() {
-        let job = MyJob()
+        let job = TestJob()
         let type = UUID().uuidString
 
-        let creator = MyCreator([type: job])
+        let creator = TestCreator([type: job])
 
         job.result = JobError()
         job.retryConstraint = .retry
@@ -132,10 +132,10 @@ class ConstraintTests: XCTestCase {
     }
 
     func testRetryFailJobWithCancelConstraint() {
-        let job = MyJob()
+        let job = TestJob()
         let type = UUID().uuidString
 
-        let creator = MyCreator([type: job])
+        let creator = TestCreator([type: job])
 
         job.result = JobError()
         job.retryConstraint = .cancel
@@ -156,13 +156,13 @@ class ConstraintTests: XCTestCase {
     func testUniqueIdConstraintShouldCancelTheSecond() {
         let id = UUID().uuidString
 
-        let job1 = MyJob()
+        let job1 = TestJob()
         let type1 = UUID().uuidString
 
-        let job2 = MyJob()
+        let job2 = TestJob()
         let type2 = UUID().uuidString
 
-        let creator = MyCreator([type1: job1, type2: job2])
+        let creator = TestCreator([type1: job1, type2: job2])
 
         let queue = SwiftQueue(creators: [creator])
         JobBuilder(taskID: id, jobType: type1)
