@@ -123,34 +123,35 @@ class SwiftQueueTests: XCTestCase {
         XCTAssertEqual(queue.name, persister.removeQueueName)
     }
 
-//    func testCancelAll() {
-//        let id = UUID().uuidString
-//        let tag = UUID().uuidString
-//        let type = UUID().uuidString
-//
-//        let job = MyJob()
-//        let creator = MyCreator([type: job])
-//
-//        let persister = MyPersister()
-//
-//        let queue = SwiftQueue(creators: [creator], persister: persister)
-//
-//        JobBuilder(taskID: id, jobType: type)
-//                .delay(inSecond: Int.max)
-//                .addTag(tag: tag)
-//                .schedule(queue: queue)
-//
-//        queue.cancelAllOperations()
-//
-//        job.await()
-//
-//        XCTAssertEqual(job.onRunJobCalled, 0)
-//        XCTAssertEqual(job.onCompleteCalled, 0)
-//        XCTAssertEqual(job.onErrorCalled, 0)
-//        XCTAssertEqual(job.onCancelCalled, 1)
-//
-//        XCTAssertEqual(id, persister.onRemoveUUID)
-//    }
+    func testCancelAll() {
+        let id = UUID().uuidString
+        let tag = UUID().uuidString
+        let type = UUID().uuidString
+
+        let job = MyJob()
+        let creator = MyCreator([type: job])
+
+        let persister = PersisterTracker()
+
+        let queue = SwiftQueue(creators: [creator], persister: persister)
+
+        JobBuilder(taskID: id, jobType: type)
+                .delay(inSecond: Int.max)
+                .addTag(tag: tag)
+                .schedule(queue: queue)
+
+        queue.cancelAllOperations()
+
+        job.await()
+
+        XCTAssertEqual(job.onRunJobCalled, 0)
+        XCTAssertEqual(job.onCompleteCalled, 0)
+        XCTAssertEqual(job.onErrorCalled, 0)
+        XCTAssertEqual(job.onCancelCalled, 1)
+
+        XCTAssertEqual(id, persister.removeTaskId)
+        XCTAssertEqual(queue.name, persister.removeQueueName)
+    }
 
     func testSerialiseDeserialize() throws {
         let job = MyJob()
@@ -164,7 +165,7 @@ class SwiftQueueTests: XCTestCase {
         let delay = 12345
         let deadline = Date(timeIntervalSinceNow: TimeInterval(-10))
         let requireNetwork = NetworkType.any
-        let isPersisted = true // REquiered
+        let isPersisted = true // Required
         let params = UUID().uuidString
         let runCount = 5
         let retries = 3
