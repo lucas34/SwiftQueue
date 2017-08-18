@@ -14,7 +14,7 @@ internal final class JobTask: Operation, JobResult {
     public let jobType: String
 
     private let reachability = Reachability()
-    
+
     let tags: Set<String>
     let delay: Int
     let deadline: Date?
