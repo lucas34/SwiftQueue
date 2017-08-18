@@ -7,21 +7,40 @@ import UIKit
 import Foundation
 
 public class UserDefaultsPersister: JobPersister {
+    
+    private let key = "SwiftQueueInfo"
+
+    // Structure as follow
+    // [group:[id:data]]
+    public func restore() -> [String] {
+        let store = UserDefaults()
+        let values: [String: Any] = store.value(forKey: key) as? [String: Any] ?? [:]
+        return Array(values.keys)
+    }
 
     public func restore(queueName: String) -> [String] {
-        let store = UserDefaults(suiteName: queueName)
-        return store?.dictionaryRepresentation().values.flatMap {
-            return $0 as? String
-        } ?? []
+        let store = UserDefaults()
+        let values: [String: [String: String]] = store.value(forKey: key) as? [String: [String: String]] ?? [:]
+        let tasks: [String: String] = values[queueName] ?? [:]
+        return Array(tasks.values)
     }
 
     public func put(queueName: String, taskId: String, data: String) {
-        let store = UserDefaults(suiteName: queueName)
-        store?.setValue(data, forKey: taskId)
+        let store = UserDefaults()
+        var values: [String: [String: String]] = store.value(forKey: key) as? [String: [String: String]] ?? [:]
+        if var queue = values[queueName] {
+            queue[taskId] = data
+        } else {
+            values[queueName] = [taskId: data]
+        }
+        store.setValue(values, forKey: key)
     }
 
     public func remove(queueName: String, taskId: String) {
-        let store = UserDefaults(suiteName: queueName)
-        store?.removeObject(forKey: taskId)
+        let store = UserDefaults()
+        var values: [String: [String: String]] = store.value(forKey: key) as? [String: [String: String]] ?? [:]
+        values[queueName]?.removeValue(forKey: taskId)
+        store.setValue(values, forKey: key)
     }
+
 }

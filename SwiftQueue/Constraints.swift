@@ -7,11 +7,11 @@ import Foundation
 
 internal class JobConstraint {
 
-    func schedule(queue: SwiftQueue, operation: JobTask) throws {
+    func schedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
 
     }
 
-    func run(operation: JobTask) throws {
+    func run(operation: SwiftQueueJob) throws {
 
     }
 
@@ -24,15 +24,15 @@ internal class DeadlineConstraint: JobConstraint {
 
     class DeadlineError: ConstraintError {}
 
-    override func schedule(queue: SwiftQueue, operation: JobTask) throws {
+    override func schedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
         try check(operation: operation)
     }
 
-    override func run(operation: JobTask) throws {
+    override func run(operation: SwiftQueueJob) throws {
         try check(operation: operation)
     }
 
-    private func check(operation: JobTask) throws {
+    private func check(operation: SwiftQueueJob) throws {
         if let deadline = operation.deadline, deadline < Date() {
             throw DeadlineError()
         }
@@ -43,7 +43,7 @@ internal class UniqueUUIDConstraint: JobConstraint {
 
     class TaskAlreadyExist: ConstraintError {}
 
-    override func schedule(queue: SwiftQueue, operation: JobTask) throws {
+    override func schedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
         if queue.tasksMap[operation.taskID] != nil {
             throw TaskAlreadyExist()
         }
@@ -55,13 +55,13 @@ internal class Constraints {
     private static var constrains: [JobConstraint] = [DeadlineConstraint(),
                                                       UniqueUUIDConstraint()]
 
-    public static func checkConstraintsForRun(task: JobTask) throws {
+    public static func checkConstraintsForRun(task: SwiftQueueJob) throws {
         for constraint in Constraints.constrains {
             try constraint.run(operation: task)
         }
     }
 
-    public static func checkConstraintsOnSchedule(queue: SwiftQueue, operation: JobTask) throws {
+    public static func checkConstraintsOnSchedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
         for constraint in Constraints.constrains {
             try constraint.schedule(queue: queue, operation: operation)
         }

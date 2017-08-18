@@ -7,9 +7,10 @@ import Foundation
 
 public final class JobBuilder {
 
-    private let taskID: String
-    private let jobType: String
+    private let type: String
 
+    private var taskID: String =  UUID().uuidString
+    private var group: String = "GLOBAL"
     private var tags = Set<String>()
     private var delay: Int = 0
     private var deadline: Date?
@@ -21,9 +22,18 @@ public final class JobBuilder {
     private var retries: Int = 0
     private var interval: Double = -1.0
 
-    public init(taskID: String = UUID().uuidString, jobType: String) {
-        self.taskID = taskID
-        self.jobType = jobType
+    public init(type: String) {
+        self.type = type
+    }
+
+    public func singleInstance(forId: String) -> JobBuilder {
+        self.taskID = forId
+        return self
+    }
+
+    public func group(name: String) -> JobBuilder {
+        self.group = name
+        return self
     }
 
     public func delay(inSecond: Int) -> JobBuilder {
@@ -67,15 +77,16 @@ public final class JobBuilder {
         return self
     }
 
-    internal func build(job: Job) -> JobTask {
-        return JobTask(job: job, taskID: taskID, jobType: jobType, tags: tags,
+    internal func build(job: Job) -> SwiftQueueJob {
+        return SwiftQueueJob(job: job, taskID: taskID, type: type, group: group, tags: tags,
                 delay: delay, deadline: deadline, requireNetwork: requireNetwork, isPersisted: isPersisted, params: params,
                 createTime: createTime, runCount: runCount, retries: retries, interval: interval)
     }
 
-    public func schedule(queue: SwiftQueue) {
-        guard let job = queue.createHandler(jobType: jobType, params: params) else {
-            print("WARN: No job creator associate to job type \(jobType)") // log maybe
+    public func schedule(manager: SwiftQueueManager) {
+        let queue = manager.getQueue(name: group)
+        guard let job = queue.createHandler(type: type, params: params) else {
+            print("WARN: No job creator associate to job type \(type)") // log maybe
             return
         }
         queue.addOperation(build(job: job))
