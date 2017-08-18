@@ -72,6 +72,12 @@ internal final class JobTask: Operation, JobResult {
 
         self.queuePriority = .normal
         self.qualityOfService = .utility
+
+        try? reachability?.startNotifier()
+    }
+    
+    deinit {
+        reachability?.stopNotifier()
     }
 
     private convenience init?(dictionary: [String: Any], creator: [JobCreator]) {
