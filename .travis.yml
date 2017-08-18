@@ -5,6 +5,7 @@ install:
   - brew install swiftlint
 
 script:
+    - pod install
     - swiftlint
     - set -o pipefail && xcodebuild test -enableCodeCoverage YES -project SwiftQueue.xcodeproj -scheme SwiftQueue -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6S,OS=10.3.1'
 
