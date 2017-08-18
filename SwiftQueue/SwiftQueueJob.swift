@@ -6,12 +6,13 @@
 import Foundation
 import ReachabilitySwift
 
-internal final class JobTask: Operation, JobResult {
+internal final class SwiftQueueJob: Operation, JobResult {
 
     let handler: Job
 
     public let taskID: String
-    public let jobType: String
+    public let type: String
+    public let group: String
 
     private let reachability = Reachability()
 
@@ -51,12 +52,13 @@ internal final class JobTask: Operation, JobResult {
         }
     }
 
-    internal init(job: Job, taskID: String = UUID().uuidString, jobType: String, tags: Set<String>,
+    internal init(job: Job, taskID: String = UUID().uuidString, type: String, group: String, tags: Set<String>,
                   delay: Int, deadline: Date?, requireNetwork: NetworkType, isPersisted: Bool, params: Any?,
                   createTime: Date, runCount: Int, retries: Int, interval: Double) {
         self.handler = job
         self.taskID = taskID
-        self.jobType = jobType
+        self.type = type
+        self.group = group
         self.tags = tags
         self.delay = delay
         self.deadline = deadline
@@ -83,7 +85,8 @@ internal final class JobTask: Operation, JobResult {
     private convenience init?(dictionary: [String: Any], creator: [JobCreator]) {
         let params = dictionary["params"] ?? nil
         if let taskID         = dictionary["taskID"] as? String,
-           let jobType        = dictionary["jobType"] as? String,
+           let type           = dictionary["type"] as? String,
+           let group          = dictionary["group"] as? String,
            let tags           = dictionary["tags"] as? [String],
            let delay          = dictionary["delay"] as? Int,
            let deadlineStr    = dictionary["deadline"] as? String?,
@@ -93,13 +96,13 @@ internal final class JobTask: Operation, JobResult {
            let runCount       = dictionary["runCount"] as? Int,
            let retries        = dictionary["retries"] as? Int,
            let interval       = dictionary["interval"] as? Double,
-           let job = SwiftQueue.createHandler(creators: creator, jobType: jobType, params: params) {
+           let job = SwiftQueue.createHandler(creators: creator, type: type, params: params) {
 
             let deadline   = deadlineStr.flatMap { dateFormatter.date(from: $0) }
             let createTime = dateFormatter.date(from: createTimeStr) ?? Date()
             let network    = NetworkType(rawValue: requireNetwork) ?? NetworkType.any
 
-            self.init(job: job, taskID: taskID, jobType: jobType, tags: Set(tags),
+            self.init(job: job, taskID: taskID, type: type, group: group, tags: Set(tags),
                     delay: delay, deadline: deadline, requireNetwork: network,
                     isPersisted: isPersisted, params: params, createTime: createTime,
                     runCount: runCount, retries: retries, interval: interval)
@@ -136,7 +139,8 @@ Deconstruct the task to a dictionary, used to serialize the task
     private func toDictionary() -> [String: Any] {
         var dict = [String: Any]()
         dict["taskID"]         = self.taskID
-        dict["jobType"]        = self.jobType
+        dict["type"]        = self.type
+        dict["group"]          = self.group
         dict["tags"]           = Array(self.tags)
         dict["delay"]          = self.delay
         dict["deadline"]       = self.deadline.map { dateFormatter.string(from: $0) }
