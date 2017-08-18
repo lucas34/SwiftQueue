@@ -8,7 +8,7 @@ import XCTest
 import Dispatch
 @testable import SwiftQueue
 
-class MyJob: Job {
+class TestJob: Job {
     public let semaphore = DispatchSemaphore(value: 0)
 
     public var result: Error?
@@ -47,7 +47,7 @@ class MyJob: Job {
     }
 }
 
-class MyCreator: JobCreator {
+class TestCreator: JobCreator {
     private let job: [String: Job]
 
     public init(_ job: [String: Job]) {
@@ -55,21 +55,13 @@ class MyCreator: JobCreator {
     }
 
     func create(jobType: String, params: Any?) -> Job? {
-        if let value = job[jobType] as? MyJob {
+        if let value = job[jobType] as? TestJob {
             value.params = params
             return value
         } else {
             return job[jobType]
         }
     }
-}
-
-class AlwaysTrueCreator: JobCreator {
-
-    func create(jobType: String, params: Any?) -> Job? {
-        return MyJob()
-    }
-
 }
 
 class PersisterTracker: UserDefaultsPersister {

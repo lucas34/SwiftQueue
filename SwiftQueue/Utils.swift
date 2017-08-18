@@ -16,11 +16,8 @@ func toJSON(_ obj: Any) throws -> String? {
 }
 
 func fromJSON(_ str: String) throws -> Any? {
-    if let json = str.data(using: String.Encoding.utf8, allowLossyConversion: false) {
-        let obj: Any = try JSONSerialization.jsonObject(with: json, options: .allowFragments) as Any
-        return obj
-    }
-    return nil
+    return str.data(using: String.Encoding.utf8, allowLossyConversion: false)
+            .flatMap { try? JSONSerialization.jsonObject(with: $0, options: .allowFragments)  }
 }
 
 let dateFormatter: DateFormatter = {

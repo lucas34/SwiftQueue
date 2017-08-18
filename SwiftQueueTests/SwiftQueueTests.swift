@@ -18,10 +18,10 @@ class SwiftQueueTests: XCTestCase {
     }
 
     func testBuilderAssignEverything() {
-        let job = MyJob()
+        let job = TestJob()
         let type = UUID().uuidString
 
-        let creator = MyCreator([type: job])
+        let creator = TestCreator([type: job])
 
         let taskID = UUID().uuidString
         let jobType = type
@@ -70,10 +70,10 @@ class SwiftQueueTests: XCTestCase {
     }
 
     func testRunSucessJob() {
-        let job = MyJob()
+        let job = TestJob()
         let type = UUID().uuidString
 
-        let creator = MyCreator([type: job])
+        let creator = TestCreator([type: job])
 
         let queue = SwiftQueue(creators: [creator])
         JobBuilder(taskID: UUID().uuidString, jobType: type)
@@ -98,8 +98,8 @@ class SwiftQueueTests: XCTestCase {
         let tag = UUID().uuidString
         let type = UUID().uuidString
 
-        let job = MyJob()
-        let creator = MyCreator([type: job])
+        let job = TestJob()
+        let creator = TestCreator([type: job])
 
         let persister = PersisterTracker()
 
@@ -128,8 +128,8 @@ class SwiftQueueTests: XCTestCase {
         let tag = UUID().uuidString
         let type = UUID().uuidString
 
-        let job = MyJob()
-        let creator = MyCreator([type: job])
+        let job = TestJob()
+        let creator = TestCreator([type: job])
 
         let persister = PersisterTracker()
 
@@ -154,10 +154,10 @@ class SwiftQueueTests: XCTestCase {
     }
 
     func testSerialiseDeserialize() throws {
-        let job = MyJob()
+        let job = TestJob()
         let type = UUID().uuidString
 
-        let creator = MyCreator([type: job])
+        let creator = TestCreator([type: job])
 
         let taskID = UUID().uuidString
         let jobType = type
@@ -180,8 +180,8 @@ class SwiftQueueTests: XCTestCase {
                 .with(params: params) // Useless because we shortcut it
                 .retry(max: retries)
                 .periodic(count: runCount, interval: interval)
-                .build(job: MyJob())
-                .toJSONString() ?? ""
+                .build(job: TestJob())
+                .toJSONString()!
 
         let task = JobTask(json: json, creator: [creator])
 
@@ -202,23 +202,23 @@ class SwiftQueueTests: XCTestCase {
     func testLoadSerializedSortedTaskShouldRunSuccess() {
         let queueId = UUID().uuidString
 
-        let job1 = MyJob()
+        let job1 = TestJob()
         let type1 = UUID().uuidString
         let job1Id = UUID().uuidString
 
-        let job2 = MyJob()
+        let job2 = TestJob()
         let type2 = UUID().uuidString
         let job2Id = UUID().uuidString
 
-        let creator = MyCreator([type1: job1, type2: job2])
+        let creator = TestCreator([type1: job1, type2: job2])
 
         let task1 = JobBuilder(taskID: job1Id, jobType: type1)
                 .build(job: job1)
-                .toJSONString() ?? ""
+                .toJSONString()!
 
         let task2 = JobBuilder(taskID: job2Id, jobType: type2)
                 .build(job: job2)
-                .toJSONString() ?? ""
+                .toJSONString()!
 
         UserDefaults(suiteName: queueId)?.setValue(task2, forKey: job2Id)
         UserDefaults(suiteName: queueId)?.setValue(task1, forKey: job1Id)  // Should invert when deserialize
@@ -256,10 +256,10 @@ class SwiftQueueTests: XCTestCase {
     func testCompleteTaskRemoveFromSerializer() {
         let queueId = UUID().uuidString
 
-        let job = MyJob()
+        let job = TestJob()
         let type = UUID().uuidString
 
-        let creator = MyCreator([type: job])
+        let creator = TestCreator([type: job])
 
         let taskID = UUID().uuidString
 
@@ -283,12 +283,12 @@ class SwiftQueueTests: XCTestCase {
     func testCompleteFailTaskRemoveFromSerializer() {
         let queueId = UUID().uuidString
 
-        let job = MyJob()
+        let job = TestJob()
         let type = UUID().uuidString
 
         job.result = JobError()
 
-        let creator = MyCreator([type: job])
+        let creator = TestCreator([type: job])
 
         let taskID = UUID().uuidString
 
