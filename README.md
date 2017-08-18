@@ -18,6 +18,7 @@ let queue = SwiftQueue(creators: [TweetJobCreator()])
 
 JobBuilder(taskID: taskID, jobType: SendTweetJob.type)
         .addTag(tag: "tweet") // To cancel base on tag
+        .internet(atLeast: .cellular) // .any : No internet required; .cellular: Need connection; .wifi: Require wifi
         .delay(inSecond: 1) // delay before execution
         .deadline(date: deadline) // Will be canceled after a certain date
         .persist(required: true) // See persistence section
@@ -39,7 +40,6 @@ class SendTweetJob: Job {
     required init(message: String) {
         self.tweetMessage = message
     }
-
 
     func onRunJob(callback: JobResult) throws {
         // Actual sending is happening here
