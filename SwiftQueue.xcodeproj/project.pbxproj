@@ -19,6 +19,7 @@
 		CF8E8786256500BE5F38B99C /* Pods_SwiftQueue.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D2699F05A7071DC62800CA0 /* Pods_SwiftQueue.framework */; };
 		D0B7C09AD4F91884A41D1BB7 /* SwiftQueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C851E5F77817B281B7BE /* SwiftQueueManager.swift */; };
 		D0B7C476CF7FB5D47A93773E /* UserDefaultsPerisister.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C4FD1D52ED28898EB8E8 /* UserDefaultsPerisister.swift */; };
+		D0B7C628989309FE0EE27139 /* TestReadMeSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C992A3D1543A5DB1CA66 /* TestReadMeSample.swift */; };
 		D0B7C6C482E2436308F7BCF3 /* ConstraintTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C639E1B939F6FC1DD50E /* ConstraintTests.swift */; };
 		D0B7C78AC61DA424381B5DE7 /* TestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C958D8ACA6DC944523AD /* TestUtils.swift */; };
 /* End PBXBuildFile section */
@@ -52,6 +53,7 @@
 		D0B7C639E1B939F6FC1DD50E /* ConstraintTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstraintTests.swift; sourceTree = "<group>"; };
 		D0B7C851E5F77817B281B7BE /* SwiftQueueManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftQueueManager.swift; sourceTree = "<group>"; };
 		D0B7C958D8ACA6DC944523AD /* TestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestUtils.swift; sourceTree = "<group>"; };
+		D0B7C992A3D1543A5DB1CA66 /* TestReadMeSample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestReadMeSample.swift; sourceTree = "<group>"; };
 		D0C1BF8D9DF6AC61D0514F17 /* Pods_SwiftQueueTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftQueueTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB0CA719EAEC754EA551E467 /* Pods-SwiftQueue.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftQueue.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftQueue/Pods-SwiftQueue.debug.xcconfig"; sourceTree = "<group>"; };
 		F66345E2FAC4C93CD099A3FB /* Pods-SwiftQueueTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftQueueTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftQueueTests/Pods-SwiftQueueTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 				B02ADA6E1F3D80DD00E04A95 /* Info.plist */,
 				D0B7C639E1B939F6FC1DD50E /* ConstraintTests.swift */,
 				D0B7C958D8ACA6DC944523AD /* TestUtils.swift */,
+				D0B7C992A3D1543A5DB1CA66 /* TestReadMeSample.swift */,
 			);
 			path = SwiftQueueTests;
 			sourceTree = "<group>";
@@ -367,6 +370,7 @@
 				B02ADA6D1F3D80DD00E04A95 /* SwiftQueueTests.swift in Sources */,
 				D0B7C6C482E2436308F7BCF3 /* ConstraintTests.swift in Sources */,
 				D0B7C78AC61DA424381B5DE7 /* TestUtils.swift in Sources */,
+				D0B7C628989309FE0EE27139 /* TestReadMeSample.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
