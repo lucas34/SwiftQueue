@@ -17,7 +17,7 @@ public final class SwiftQueueManager {
         self.persister = persister
 
         persister?.restore().forEach {
-            createQueue(name: $0)
+            manage[$0] = SwiftQueue(queueName: $0, creators: creators, persister: persister)
         }
     }
 
