@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "SwiftQueue"
-  s.version          = "0.0.2"
+  s.version          = "0.0.3"
   s.summary          = "SwiftQueue"
   s.description      = "Better queue system for IOS"
   s.homepage         = "https://github.com/lucas34/SwiftQueue"
