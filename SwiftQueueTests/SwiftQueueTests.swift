@@ -9,11 +9,17 @@ import Dispatch
 @testable import SwiftQueue
 
 class SwiftQueueManagerTests: XCTestCase {
-    
+
     override class func setUp() {
         super.setUp()
+        UserDefaults().set(nil, forKey: "SwiftQueueInfo")
+        UserDefaults().synchronize()
+    }
 
-        UserDefaults().setValue(nil, forKey: "SwiftQueueInfo")
+    override func tearDown() {
+        UserDefaults().set(nil, forKey: "SwiftQueueInfo")
+        UserDefaults().synchronize()
+        super.tearDown()
     }
 
     func testBuilderAssignEverything() {
@@ -212,6 +218,7 @@ class SwiftQueueManagerTests: XCTestCase {
     }
 
     func testLoadSerializedSortedTaskShouldRunSuccess() {
+        UserDefaults().set(nil, forKey: "SwiftQueueInfo") // Force reset
         let queueId = UUID().uuidString
 
         let job1 = TestJob()
@@ -239,7 +246,12 @@ class SwiftQueueManagerTests: XCTestCase {
         // Should invert when deserialize
         let persister = PersisterTracker()
         persister.put(queueName: queueId, taskId: job2Id, data: task2)
+        XCTAssertEqual(persister.restore().count, 1)
+        XCTAssertEqual(persister.restore()[0], queueId)
+        
         persister.put(queueName: queueId, taskId: job1Id, data: task1)
+        XCTAssertEqual(persister.restore().count, 1)
+        XCTAssertEqual(persister.restore()[0], queueId)
 
         _ = SwiftQueueManager(creators: [creator], persister: persister)
 
