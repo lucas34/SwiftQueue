@@ -11,7 +11,14 @@ class ConstraintTests: XCTestCase {
     override class func setUp() {
         super.setUp()
 
-        UserDefaults().setValue(nil, forKey: "SwiftQueueInfo")
+        UserDefaults().set(nil, forKey: "SwiftQueueInfo")
+        UserDefaults().synchronize()
+    }
+
+    override func tearDown() {
+        UserDefaults().set(nil, forKey: "SwiftQueueInfo")
+        UserDefaults().synchronize()
+        super.tearDown()
     }
 
     func testDeadlineWhenSchedule() {
@@ -67,6 +74,7 @@ class ConstraintTests: XCTestCase {
     }
 
     func testDeadlineWhenDeserialize() {
+        UserDefaults().set(nil, forKey: "SwiftQueueInfo")
         let group = UUID().uuidString
 
         let job = TestJob()

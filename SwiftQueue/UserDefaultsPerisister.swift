@@ -28,12 +28,13 @@ public class UserDefaultsPersister: JobPersister {
     public func put(queueName: String, taskId: String, data: String) {
         let store = UserDefaults()
         var values: [String: [String: String]] = store.value(forKey: key) as? [String: [String: String]] ?? [:]
-        if var queue = values[queueName] {
-            queue[taskId] = data
+        if values[queueName] != nil {
+            values[queueName]?[taskId] = data
         } else {
             values[queueName] = [taskId: data]
         }
         store.setValue(values, forKey: key)
+        store.synchronize()
     }
 
     public func remove(queueName: String, taskId: String) {
@@ -41,6 +42,7 @@ public class UserDefaultsPersister: JobPersister {
         var values: [String: [String: String]] = store.value(forKey: key) as? [String: [String: String]] ?? [:]
         values[queueName]?.removeValue(forKey: taskId)
         store.setValue(values, forKey: key)
+        store.synchronize()
     }
 
 }
