@@ -8,16 +8,29 @@ import XCTest
 
 class ConstraintTests: XCTestCase {
 
+    override class func setUp() {
+        super.setUp()
+
+        UserDefaults().set(nil, forKey: "SwiftQueueInfo")
+        UserDefaults().synchronize()
+    }
+
+    override func tearDown() {
+        UserDefaults().set(nil, forKey: "SwiftQueueInfo")
+        UserDefaults().synchronize()
+        super.tearDown()
+    }
+
     func testDeadlineWhenSchedule() {
         let job = TestJob()
         let type = UUID().uuidString
 
         let creator = TestCreator([type: job])
 
-        let queue = SwiftQueue(creators: [creator])
-        JobBuilder(taskID: UUID().uuidString, jobType: type)
+        let manager = SwiftQueueManager(creators: [creator])
+        JobBuilder(type: type)
                 .deadline(date: Date(timeIntervalSinceNow: TimeInterval(-10)))
-                .schedule(queue: queue)
+                .schedule(manager: manager)
 
         job.await()
 
@@ -36,14 +49,14 @@ class ConstraintTests: XCTestCase {
 
         let creator = TestCreator([type1: job1, type2: job2])
 
-        let queue = SwiftQueue(creators: [creator])
-        JobBuilder(taskID: UUID().uuidString, jobType: type1)
+        let manager = SwiftQueueManager(creators: [creator])
+        JobBuilder(type: type1)
                 .delay(inSecond: 1)
-                .schedule(queue: queue)
+                .schedule(manager: manager)
 
-        JobBuilder(taskID: UUID().uuidString, jobType: type2)
+        JobBuilder(type: type2)
                 .deadline(date: Date()) // After 1 second should fail
-                .schedule(queue: queue)
+                .schedule(manager: manager)
 
         job1.await()
 
@@ -61,7 +74,8 @@ class ConstraintTests: XCTestCase {
     }
 
     func testDeadlineWhenDeserialize() {
-        let queueId = UUID().uuidString
+        UserDefaults().set(nil, forKey: "SwiftQueueInfo")
+        let group = UUID().uuidString
 
         let job = TestJob()
         let type = UUID().uuidString
@@ -70,17 +84,18 @@ class ConstraintTests: XCTestCase {
 
         let taskID = UUID().uuidString
 
-        let task = JobBuilder(taskID: taskID, jobType: type)
+        let task = JobBuilder(type: type)
+                .group(name: group)
                 .deadline(date: Date())
                 .build(job: job)
                 .toJSONString()!
 
-        UserDefaults(suiteName: queueId)?.setValue(task, forKey: taskID)
-
         let persister = PersisterTracker()
-        _ = SwiftQueue(queueName: queueId, creators: [creator], persister: persister)
+        persister.put(queueName: group, taskId: taskID, data: task)
 
-        XCTAssertEqual(queueId, persister.restoreQueueName)
+        _ = SwiftQueueManager(creators: [creator], persister: persister)
+
+        XCTAssertEqual(group, persister.restoreQueueName)
 
         job.await()
 
@@ -96,10 +111,10 @@ class ConstraintTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let queue = SwiftQueue(creators: [creator])
-        JobBuilder(taskID: UUID().uuidString, jobType: type)
+        let manager = SwiftQueueManager(creators: [creator])
+        JobBuilder(type: type)
                 .periodic(count: 5)
-                .schedule(queue: queue)
+                .schedule(manager: manager)
 
         job.await()
 
@@ -118,10 +133,10 @@ class ConstraintTests: XCTestCase {
         job.result = JobError()
         job.retryConstraint = .retry
 
-        let queue = SwiftQueue(creators: [creator])
-        JobBuilder(taskID: UUID().uuidString, jobType: type)
+        let manager = SwiftQueueManager(creators: [creator])
+        JobBuilder(type: type)
                 .retry(max: 2)
-                .schedule(queue: queue)
+                .schedule(manager: manager)
 
         job.await()
 
@@ -140,10 +155,10 @@ class ConstraintTests: XCTestCase {
         job.result = JobError()
         job.retryConstraint = .cancel
 
-        let queue = SwiftQueue(creators: [creator])
-        JobBuilder(taskID: UUID().uuidString, jobType: type)
+        let manager = SwiftQueueManager(creators: [creator])
+        JobBuilder(type: type)
                 .retry(max: 2)
-                .schedule(queue: queue)
+                .schedule(manager: manager)
 
         job.await()
 
@@ -164,12 +179,13 @@ class ConstraintTests: XCTestCase {
 
         let creator = TestCreator([type1: job1, type2: job2])
 
-        let queue = SwiftQueue(creators: [creator])
-        JobBuilder(taskID: id, jobType: type1)
+        let manager = SwiftQueueManager(creators: [creator])
+        JobBuilder(type: type1)
+                .singleInstance(forId: id)
                 .delay(inSecond: Int.max)
-                .schedule(queue: queue)
+                .schedule(manager: manager)
 
-        JobBuilder(taskID: id, jobType: type2).schedule(queue: queue)
+        JobBuilder(type: type2).singleInstance(forId: id).schedule(manager: manager)
 
         job2.await()
 

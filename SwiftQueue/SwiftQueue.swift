@@ -7,12 +7,14 @@ import Foundation
 
 public protocol JobCreator {
 
-    func create(jobType: String, params: Any?) -> Job?
+    func create(type: String, params: Any?) -> Job?
 
 }
 
 public protocol JobPersister {
 
+    func restore() -> [String]
+    
     func restore(queueName: String) -> [String]
 
     func put(queueName: String, taskId: String, data: String)
@@ -21,17 +23,17 @@ public protocol JobPersister {
 
 }
 
-public final class SwiftQueue: OperationQueue {
+internal final class SwiftQueue: OperationQueue {
 
     private let creators: [JobCreator]
     private let persister: JobPersister?
 
-    internal var tasksMap = [String: JobTask]()
+    internal var tasksMap = [String: SwiftQueueJob]()
 
     private let queueName: String
 
-    public init(queueName: String = UUID().uuidString, creators: [JobCreator]? = nil, persister: JobPersister? = nil) {
-        self.creators = creators ?? []
+    init(queueName: String, creators: [JobCreator], persister: JobPersister? = nil) {
+        self.creators = creators
         self.persister = persister
         self.queueName = queueName
 
@@ -47,8 +49,8 @@ public final class SwiftQueue: OperationQueue {
     Deserializes tasks that were serialized (persisted)
     */
     private func loadSerializedTasks(name: String) {
-        persister?.restore(queueName: name).flatMap { string -> JobTask? in
-            JobTask(json: string, creator: creators)
+        persister?.restore(queueName: name).flatMap { string -> SwiftQueueJob? in
+            SwiftQueueJob(json: string, creator: creators)
         }.sorted { task, task1 in
             task.createTime < task1.createTime
         }.forEach { task in
@@ -57,7 +59,7 @@ public final class SwiftQueue: OperationQueue {
     }
 
     public override func addOperation(_ ope: Operation) {
-        guard let task = ope as? JobTask else {
+        guard let task = ope as? SwiftQueueJob else {
             // Not a job Task I don't care
             super.addOperation(ope)
             return
@@ -83,8 +85,8 @@ public final class SwiftQueue: OperationQueue {
     }
 
     public override func cancelAllOperations() {
-        operations.flatMap { operation -> JobTask? in
-            operation as? JobTask
+        operations.flatMap { operation -> SwiftQueueJob? in
+            operation as? SwiftQueueJob
         }.forEach { task in
             tasksMap.removeValue(forKey: task.taskID)
             persister?.remove(queueName: queueName, taskId: task.taskID)
@@ -92,9 +94,9 @@ public final class SwiftQueue: OperationQueue {
         super.cancelAllOperations()
     }
 
-    public func cancelOperation(tag: String) {
-        operations.flatMap { operation -> JobTask? in
-            operation as? JobTask
+    public func cancelOperations(tag: String) {
+        operations.flatMap { operation -> SwiftQueueJob? in
+            operation as? SwiftQueueJob
         }.filter { task in
             task.tags.contains(tag)
         }.forEach { task in
@@ -105,7 +107,7 @@ public final class SwiftQueue: OperationQueue {
     }
 
     func taskComplete(_ ope: Operation) {
-        if let task = ope as? JobTask {
+        if let task = ope as? SwiftQueueJob {
             tasksMap.removeValue(forKey: task.taskID)
 
             // Remove this operation from serialization
@@ -117,13 +119,13 @@ public final class SwiftQueue: OperationQueue {
         }
     }
 
-    func createHandler(jobType: String, params: Any?) -> Job? {
-        return SwiftQueue.createHandler(creators: creators, jobType: jobType, params: params)
+    func createHandler(type: String, params: Any?) -> Job? {
+        return SwiftQueue.createHandler(creators: creators, type: type, params: params)
     }
 
-    static func createHandler(creators: [JobCreator], jobType: String, params: Any?) -> Job? {
+    static func createHandler(creators: [JobCreator], type: String, params: Any?) -> Job? {
         for creator in creators {
-            if let job = creator.create(jobType: jobType, params: params) {
+            if let job = creator.create(type: type, params: params) {
                 return job
             }
         }
