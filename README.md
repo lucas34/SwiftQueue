@@ -14,9 +14,11 @@ Schedule and send tweet with SwiftQueue
 #### Create a queue and schedule a task
 ```swift
 // Create queue
-let queue = SwiftQueue(creators: [TweetJobCreator()])
+let manager = SwiftQueueManager(creators: [TweetJobCreator()])
 
-JobBuilder(taskID: taskID, jobType: SendTweetJob.type)
+JobBuilder(type: SendTweetJob.type)
+        .singleInstance(forId: taskID)
+        .group(name: "tweet") // Other groups will run in parallel
         .addTag(tag: "tweet") // To cancel base on tag
         .internet(atLeast: .cellular) // .any : No internet required; .cellular: Need connection; .wifi: Require wifi
         .delay(inSecond: 1) // delay before execution
@@ -25,7 +27,7 @@ JobBuilder(taskID: taskID, jobType: SendTweetJob.type)
         .with(params: "Hello TweetWorld") // Add custom params
         .retry(max: 5) // Number of retires if the job fail
         .periodic(count: Int.max, interval: 5) // Auto repeat job. Wait 5 seconds between each run
-        .schedule(queue: queue) // Add to queue
+        .schedule(manager: manager) // Add to queue
 ```
 
 #### Job creation
@@ -82,9 +84,9 @@ JobBuilder and Job are't linked due to job persistance capability. SwiftQueue wi
 ```swift
 class TweetJobCreator: JobCreator {
 
-    func create(jobType: String, params: Any?) -> Job? {
+    func create(type: String, params: Any?) -> Job? {
         // check for job and param types
-        if jobType == SendTweetJob.type, let message = params as? String  {
+        if type == SendTweetJob.type, let message = params as? String  {
             return SendTweetJob(message: message)
         } else {
             // Nothing match
