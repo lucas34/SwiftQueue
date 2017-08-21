@@ -14,7 +14,7 @@ public protocol JobCreator {
 public protocol JobPersister {
 
     func restore() -> [String]
-    
+
     func restore(queueName: String) -> [String]
 
     func put(queueName: String, taskId: String, data: String)
@@ -27,8 +27,6 @@ internal final class SwiftQueue: OperationQueue {
 
     private let creators: [JobCreator]
     private let persister: JobPersister?
-
-    internal var tasksMap = [String: SwiftQueueJob]()
 
     private let queueName: String
 
@@ -45,41 +43,34 @@ internal final class SwiftQueue: OperationQueue {
         loadSerializedTasks(name: queueName)
     }
 
-    /**
-    Deserializes tasks that were serialized (persisted)
-    */
     private func loadSerializedTasks(name: String) {
         persister?.restore(queueName: name).flatMap { string -> SwiftQueueJob? in
             SwiftQueueJob(json: string, creator: creators)
-        }.sorted { task, task1 in
-            task.createTime < task1.createTime
-        }.forEach { task in
-            addOperation(task)
-        }
+        }.sorted {
+            $0.createTime < $1.createTime
+        }.forEach(addOperation)
     }
 
     public override func addOperation(_ ope: Operation) {
-        guard let task = ope as? SwiftQueueJob else {
+        guard let job = ope as? SwiftQueueJob else {
             // Not a job Task I don't care
             super.addOperation(ope)
             return
         }
 
         do {
-            try Constraints.checkConstraintsOnSchedule(queue: self, operation: task)
+            try Constraints.checkConstraintsOnSchedule(queue: self, operation: job)
         } catch (let error) {
-            task.abort(error: error)
+            job.abort(error: error)
             return
         }
 
-        tasksMap[task.taskID] = task
-
         // Serialize this operation
-        if let sp = persister, let data = task.toJSONString() {
-            sp.put(queueName: queueName, taskId: task.taskID, data: data)
+        if let sp = persister, let data = job.toJSONString() {
+            sp.put(queueName: queueName, taskId: job.uuid, data: data)
         }
         ope.completionBlock = {
-            self.taskComplete(ope)
+            self.completed(ope)
         }
         super.addOperation(ope)
     }
@@ -87,9 +78,8 @@ internal final class SwiftQueue: OperationQueue {
     public override func cancelAllOperations() {
         operations.flatMap { operation -> SwiftQueueJob? in
             operation as? SwiftQueueJob
-        }.forEach { task in
-            tasksMap.removeValue(forKey: task.taskID)
-            persister?.remove(queueName: queueName, taskId: task.taskID)
+        }.forEach {
+            persister?.remove(queueName: queueName, taskId: $0.uuid)
         }
         super.cancelAllOperations()
     }
@@ -97,25 +87,22 @@ internal final class SwiftQueue: OperationQueue {
     public func cancelOperations(tag: String) {
         operations.flatMap { operation -> SwiftQueueJob? in
             operation as? SwiftQueueJob
-        }.filter { task in
-            task.tags.contains(tag)
-        }.forEach { task in
-            tasksMap.removeValue(forKey: task.taskID)
-            persister?.remove(queueName: queueName, taskId: task.taskID)
-            task.cancel()
+        }.filter {
+            $0.tags.contains(tag)
+        }.forEach {
+            persister?.remove(queueName: queueName, taskId: $0.uuid)
+            $0.cancel()
         }
     }
 
-    func taskComplete(_ ope: Operation) {
-        if let task = ope as? SwiftQueueJob {
-            tasksMap.removeValue(forKey: task.taskID)
-
+    func completed(_ ope: Operation) {
+        if let job = ope as? SwiftQueueJob {
             // Remove this operation from serialization
             if let sp = persister {
-                sp.remove(queueName: queueName, taskId: task.taskID)
+                sp.remove(queueName: queueName, taskId: job.uuid)
             }
 
-            task.taskComplete()
+            job.completed()
         }
     }
 

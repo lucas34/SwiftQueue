@@ -59,22 +59,22 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertEqual(taskID, persister.putTaskId)
         XCTAssertEqual(group, persister.putQueueName)
 
-        let task = SwiftQueueJob(json: persister.putData, creator: [creator])
+        let jobInfo = SwiftQueueJob(json: persister.putData, creator: [creator])
 
-        XCTAssertEqual(task?.name, taskID)
-        XCTAssertEqual(task?.taskID, taskID)
-        XCTAssertEqual(task?.type, type)
-        XCTAssertEqual(task?.group, group)
-        XCTAssertEqual(task?.tags.first, tag)
-        XCTAssertEqual(task?.delay, delay)
+        XCTAssertEqual(jobInfo?.name, taskID)
+        XCTAssertEqual(jobInfo?.uuid, taskID)
+        XCTAssertEqual(jobInfo?.type, type)
+        XCTAssertEqual(jobInfo?.group, group)
+        XCTAssertEqual(jobInfo?.tags.first, tag)
+        XCTAssertEqual(jobInfo?.delay, delay)
         // Due to loss of precision need to convert
-        XCTAssertEqual(task?.deadline, dateFormatter.date(from: dateFormatter.string(from: deadline)))
-        XCTAssertEqual(task?.requireNetwork, requireNetwork)
-        XCTAssertEqual(task?.isPersisted, isPersisted)
-        XCTAssertEqual(task?.params as? String, params)
-        XCTAssertEqual(task?.runCount, runCount)
-        XCTAssertEqual(task?.retries, retries)
-        XCTAssertEqual(task?.interval, interval)
+        XCTAssertEqual(jobInfo?.deadline, dateFormatter.date(from: dateFormatter.string(from: deadline)))
+        XCTAssertEqual(jobInfo?.requireNetwork, requireNetwork)
+        XCTAssertEqual(jobInfo?.isPersisted, isPersisted)
+        XCTAssertEqual(jobInfo?.params as? String, params)
+        XCTAssertEqual(jobInfo?.runCount, runCount)
+        XCTAssertEqual(jobInfo?.retries, retries)
+        XCTAssertEqual(jobInfo?.interval, interval)
     }
 
     func testRunSucessJob() {
@@ -131,7 +131,7 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertEqual(job.onErrorCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 1)
 
-        XCTAssertEqual(id, persister.removeTaskId)
+        XCTAssertEqual(id, persister.removeJobId)
         XCTAssertEqual(group, persister.removeQueueName)
     }
 
@@ -164,7 +164,7 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertEqual(job.onErrorCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 1)
 
-        XCTAssertEqual(id, persister.removeTaskId)
+        XCTAssertEqual(id, persister.removeJobId)
         XCTAssertEqual(group, persister.removeQueueName)
     }
 
@@ -200,21 +200,21 @@ class SwiftQueueManagerTests: XCTestCase {
 //                .build(job: job)
 //                .toJSONString()!
 //
-//        let task = SwiftQueueJob(json: json, creator: [creator])
+//        let job = SwiftQueueJob(json: json, creator: [creator])
 //
-//        XCTAssertEqual(task?.taskID, taskID)
-//        XCTAssertEqual(task?.type, type)
-//        XCTAssertEqual(task?.group, group)
-//        XCTAssertEqual(task?.tags.first, tag)
-//        XCTAssertEqual(task?.delay, delay)
+//        XCTAssertEqual(job?.taskID, taskID)
+//        XCTAssertEqual(job?.type, type)
+//        XCTAssertEqual(job?.group, group)
+//        XCTAssertEqual(job?.tags.first, tag)
+//        XCTAssertEqual(job?.delay, delay)
 //        // Due to loss of precision need to convert
-//        XCTAssertEqual(task?.deadline, dateFormatter.date(from: dateFormatter.string(from: deadline)))
-//        XCTAssertEqual(task?.requireNetwork, requireNetwork)
-//        XCTAssertEqual(task?.isPersisted, isPersisted)
-//        XCTAssertEqual(task?.params as? String, params)
-//        XCTAssertEqual(task?.runCount, runCount)
-//        XCTAssertEqual(task?.retries, retries)
-//        XCTAssertEqual(task?.interval, interval)
+//        XCTAssertEqual(job?.deadline, dateFormatter.date(from: dateFormatter.string(from: deadline)))
+//        XCTAssertEqual(job?.requireNetwork, requireNetwork)
+//        XCTAssertEqual(job?.isPersisted, isPersisted)
+//        XCTAssertEqual(job?.params as? String, params)
+//        XCTAssertEqual(job?.runCount, runCount)
+//        XCTAssertEqual(job?.retries, retries)
+//        XCTAssertEqual(job?.interval, interval)
 //    }
 
     func testLoadSerializedSortedTaskShouldRunSuccess() {
@@ -305,7 +305,7 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertEqual(job.onErrorCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 0)
 
-        XCTAssertNotNil(persister.removeTaskId)
+        XCTAssertNotNil(persister.removeJobId)
         XCTAssertNotNil(persister.removeQueueName)
     }
 
@@ -336,7 +336,7 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertEqual(job.onErrorCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 1)
 
-        XCTAssertEqual(taskID, persister.removeTaskId)
+        XCTAssertEqual(taskID, persister.removeJobId)
         XCTAssertEqual(queueId, persister.removeQueueName)
     }
 }

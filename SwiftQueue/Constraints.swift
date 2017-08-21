@@ -44,7 +44,13 @@ internal class UniqueUUIDConstraint: JobConstraint {
     class TaskAlreadyExist: ConstraintError {}
 
     override func schedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
-        if queue.tasksMap[operation.taskID] != nil {
+        let first = queue.operations.first {
+            if let op = $0 as? SwiftQueueJob {
+                return op.uuid == operation.uuid
+            }
+            return false
+        }
+        if first != nil {
             throw TaskAlreadyExist()
         }
     }
@@ -55,9 +61,9 @@ internal class Constraints {
     private static var constrains: [JobConstraint] = [DeadlineConstraint(),
                                                       UniqueUUIDConstraint()]
 
-    public static func checkConstraintsForRun(task: SwiftQueueJob) throws {
+    public static func checkConstraintsForRun(job: SwiftQueueJob) throws {
         for constraint in Constraints.constrains {
-            try constraint.run(operation: task)
+            try constraint.run(operation: job)
         }
     }
 

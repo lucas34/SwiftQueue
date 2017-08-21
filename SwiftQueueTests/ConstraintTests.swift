@@ -82,16 +82,16 @@ class ConstraintTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let taskID = UUID().uuidString
+        let taskId = UUID().uuidString
 
-        let task = JobBuilder(type: type)
+        let json = JobBuilder(type: type)
                 .group(name: group)
                 .deadline(date: Date())
                 .build(job: job)
                 .toJSONString()!
 
         let persister = PersisterTracker()
-        persister.put(queueName: group, taskId: taskID, data: task)
+        persister.put(queueName: group, taskId: taskId, data: json)
 
         _ = SwiftQueueManager(creators: [creator], persister: persister)
 
