@@ -197,7 +197,7 @@ class SwiftQueueManagerTests: XCTestCase {
                 .with(params: params) // Useless because we shortcut it
                 .retry(max: retries)
                 .periodic(count: runCount, interval: interval)
-                .build(job: TestJob())
+                .build(job: job)
                 .toJSONString()!
 
         let task = SwiftQueueJob(json: json, creator: [creator])
