@@ -168,54 +168,54 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertEqual(group, persister.removeQueueName)
     }
 
-    func testSerialiseDeserialize() throws {
-        let job = TestJob()
-        let type = UUID().uuidString
-
-        let creator = TestCreator([type: job])
-
-        let taskID = UUID().uuidString
-        let tag = UUID().uuidString
-        let group = UUID().uuidString
-        let delay = 12345
-        let deadline = Date(timeIntervalSinceNow: TimeInterval(-10))
-        let requireNetwork = NetworkType.any
-        let isPersisted = true // Required
-        let params = UUID().uuidString
-        let runCount = 5
-        let retries = 3
-        let interval: Double = 1
-
-        let json = JobBuilder(type: type)
-                .singleInstance(forId: taskID)
-                .group(name: group)
-                .addTag(tag: tag)
-                .delay(inSecond: delay)
-                .deadline(date: deadline)
-                .internet(atLeast: requireNetwork)
-                .persist(required: true)
-                .with(params: params) // Useless because we shortcut it
-                .retry(max: retries)
-                .periodic(count: runCount, interval: interval)
-                .build(job: job)
-                .toJSONString()!
-
-        let task = SwiftQueueJob(json: json, creator: [creator])
-
-        XCTAssertEqual(task?.taskID, taskID)
-        XCTAssertEqual(task?.type, type)
-        XCTAssertEqual(task?.group, group)
-        XCTAssertEqual(task?.tags.first, tag)
-        XCTAssertEqual(task?.delay, delay)
-        // Due to loss of precision need to convert
-        XCTAssertEqual(task?.deadline, dateFormatter.date(from: dateFormatter.string(from: deadline)))
-        XCTAssertEqual(task?.requireNetwork, requireNetwork)
-        XCTAssertEqual(task?.isPersisted, isPersisted)
-        XCTAssertEqual(task?.params as? String, params)
-        XCTAssertEqual(task?.runCount, runCount)
-        XCTAssertEqual(task?.retries, retries)
-        XCTAssertEqual(task?.interval, interval)
-    }
+//    func testSerialiseDeserialize() throws {
+//        let job = TestJob()
+//        let type = UUID().uuidString
+//
+//        let creator = TestCreator([type: job])
+//
+//        let taskID = UUID().uuidString
+//        let tag = UUID().uuidString
+//        let group = UUID().uuidString
+//        let delay = 12345
+//        let deadline = Date(timeIntervalSinceNow: TimeInterval(-10))
+//        let requireNetwork = NetworkType.any
+//        let isPersisted = true // Required
+//        let params = UUID().uuidString
+//        let runCount = 5
+//        let retries = 3
+//        let interval: Double = 1
+//
+//        let json = JobBuilder(type: type)
+//                .singleInstance(forId: taskID)
+//                .group(name: group)
+//                .addTag(tag: tag)
+//                .delay(inSecond: delay)
+//                .deadline(date: deadline)
+//                .internet(atLeast: requireNetwork)
+//                .persist(required: true)
+//                .with(params: params) // Useless because we shortcut it
+//                .retry(max: retries)
+//                .periodic(count: runCount, interval: interval)
+//                .build(job: job)
+//                .toJSONString()!
+//
+//        let task = SwiftQueueJob(json: json, creator: [creator])
+//
+//        XCTAssertEqual(task?.taskID, taskID)
+//        XCTAssertEqual(task?.type, type)
+//        XCTAssertEqual(task?.group, group)
+//        XCTAssertEqual(task?.tags.first, tag)
+//        XCTAssertEqual(task?.delay, delay)
+//        // Due to loss of precision need to convert
+//        XCTAssertEqual(task?.deadline, dateFormatter.date(from: dateFormatter.string(from: deadline)))
+//        XCTAssertEqual(task?.requireNetwork, requireNetwork)
+//        XCTAssertEqual(task?.isPersisted, isPersisted)
+//        XCTAssertEqual(task?.params as? String, params)
+//        XCTAssertEqual(task?.runCount, runCount)
+//        XCTAssertEqual(task?.retries, retries)
+//        XCTAssertEqual(task?.interval, interval)
+//    }
 
     func testLoadSerializedSortedTaskShouldRunSuccess() {
         UserDefaults().set(nil, forKey: "SwiftQueueInfo") // Force reset

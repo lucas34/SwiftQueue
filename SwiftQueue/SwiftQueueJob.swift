@@ -187,7 +187,6 @@ Deconstruct the task to a JSON string, used to serialize the task
     }
 
     private func run() {
-        guard self.isExecuting else { return }
         if isCancelled && !isFinished {
             isFinished = true
         }
