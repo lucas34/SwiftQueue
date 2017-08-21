@@ -14,10 +14,12 @@
 		B02ADA7D1F3D839200E04A95 /* Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02ADA781F3D839200E04A95 /* Constraints.swift */; };
 		B02ADA7E1F3D839200E04A95 /* Job.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02ADA791F3D839200E04A95 /* Job.swift */; };
 		B02ADA7F1F3D839200E04A95 /* SwiftQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02ADA7A1F3D839200E04A95 /* SwiftQueue.swift */; };
-		B02ADA801F3D839200E04A95 /* JobTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02ADA7B1F3D839200E04A95 /* JobTask.swift */; };
+		B02ADA801F3D839200E04A95 /* SwiftQueueJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02ADA7B1F3D839200E04A95 /* SwiftQueueJob.swift */; };
 		B02ADA811F3D839200E04A95 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02ADA7C1F3D839200E04A95 /* Utils.swift */; };
 		CF8E8786256500BE5F38B99C /* Pods_SwiftQueue.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D2699F05A7071DC62800CA0 /* Pods_SwiftQueue.framework */; };
+		D0B7C09AD4F91884A41D1BB7 /* SwiftQueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C851E5F77817B281B7BE /* SwiftQueueManager.swift */; };
 		D0B7C476CF7FB5D47A93773E /* UserDefaultsPerisister.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C4FD1D52ED28898EB8E8 /* UserDefaultsPerisister.swift */; };
+		D0B7C628989309FE0EE27139 /* TestReadMeSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C992A3D1543A5DB1CA66 /* TestReadMeSample.swift */; };
 		D0B7C6C482E2436308F7BCF3 /* ConstraintTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C639E1B939F6FC1DD50E /* ConstraintTests.swift */; };
 		D0B7C78AC61DA424381B5DE7 /* TestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C958D8ACA6DC944523AD /* TestUtils.swift */; };
 /* End PBXBuildFile section */
@@ -44,12 +46,14 @@
 		B02ADA781F3D839200E04A95 /* Constraints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constraints.swift; sourceTree = "<group>"; };
 		B02ADA791F3D839200E04A95 /* Job.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Job.swift; sourceTree = "<group>"; };
 		B02ADA7A1F3D839200E04A95 /* SwiftQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftQueue.swift; sourceTree = "<group>"; };
-		B02ADA7B1F3D839200E04A95 /* JobTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JobTask.swift; sourceTree = "<group>"; };
+		B02ADA7B1F3D839200E04A95 /* SwiftQueueJob.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftQueueJob.swift; sourceTree = "<group>"; };
 		B02ADA7C1F3D839200E04A95 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		CA2A21C16D2CF8639C95000B /* Pods-SwiftQueue.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftQueue.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftQueue/Pods-SwiftQueue.release.xcconfig"; sourceTree = "<group>"; };
 		D0B7C4FD1D52ED28898EB8E8 /* UserDefaultsPerisister.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsPerisister.swift; sourceTree = "<group>"; };
 		D0B7C639E1B939F6FC1DD50E /* ConstraintTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstraintTests.swift; sourceTree = "<group>"; };
+		D0B7C851E5F77817B281B7BE /* SwiftQueueManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftQueueManager.swift; sourceTree = "<group>"; };
 		D0B7C958D8ACA6DC944523AD /* TestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestUtils.swift; sourceTree = "<group>"; };
+		D0B7C992A3D1543A5DB1CA66 /* TestReadMeSample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestReadMeSample.swift; sourceTree = "<group>"; };
 		D0C1BF8D9DF6AC61D0514F17 /* Pods_SwiftQueueTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftQueueTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB0CA719EAEC754EA551E467 /* Pods-SwiftQueue.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftQueue.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftQueue/Pods-SwiftQueue.debug.xcconfig"; sourceTree = "<group>"; };
 		F66345E2FAC4C93CD099A3FB /* Pods-SwiftQueueTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftQueueTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftQueueTests/Pods-SwiftQueueTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -122,11 +126,12 @@
 				B02ADA781F3D839200E04A95 /* Constraints.swift */,
 				B02ADA791F3D839200E04A95 /* Job.swift */,
 				B02ADA7A1F3D839200E04A95 /* SwiftQueue.swift */,
-				B02ADA7B1F3D839200E04A95 /* JobTask.swift */,
+				B02ADA7B1F3D839200E04A95 /* SwiftQueueJob.swift */,
 				B02ADA7C1F3D839200E04A95 /* Utils.swift */,
 				B02ADA611F3D80DD00E04A95 /* SwiftQueue.h */,
 				B02ADA621F3D80DD00E04A95 /* Info.plist */,
 				D0B7C4FD1D52ED28898EB8E8 /* UserDefaultsPerisister.swift */,
+				D0B7C851E5F77817B281B7BE /* SwiftQueueManager.swift */,
 			);
 			path = SwiftQueue;
 			sourceTree = "<group>";
@@ -138,6 +143,7 @@
 				B02ADA6E1F3D80DD00E04A95 /* Info.plist */,
 				D0B7C639E1B939F6FC1DD50E /* ConstraintTests.swift */,
 				D0B7C958D8ACA6DC944523AD /* TestUtils.swift */,
+				D0B7C992A3D1543A5DB1CA66 /* TestReadMeSample.swift */,
 			);
 			path = SwiftQueueTests;
 			sourceTree = "<group>";
@@ -350,9 +356,10 @@
 				B02ADA811F3D839200E04A95 /* Utils.swift in Sources */,
 				B02ADA7D1F3D839200E04A95 /* Constraints.swift in Sources */,
 				B02ADA7E1F3D839200E04A95 /* Job.swift in Sources */,
-				B02ADA801F3D839200E04A95 /* JobTask.swift in Sources */,
+				B02ADA801F3D839200E04A95 /* SwiftQueueJob.swift in Sources */,
 				B02ADA7F1F3D839200E04A95 /* SwiftQueue.swift in Sources */,
 				D0B7C476CF7FB5D47A93773E /* UserDefaultsPerisister.swift in Sources */,
+				D0B7C09AD4F91884A41D1BB7 /* SwiftQueueManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,6 +370,7 @@
 				B02ADA6D1F3D80DD00E04A95 /* SwiftQueueTests.swift in Sources */,
 				D0B7C6C482E2436308F7BCF3 /* ConstraintTests.swift in Sources */,
 				D0B7C78AC61DA424381B5DE7 /* TestUtils.swift in Sources */,
+				D0B7C628989309FE0EE27139 /* TestReadMeSample.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
