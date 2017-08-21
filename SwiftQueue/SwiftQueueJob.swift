@@ -10,7 +10,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
 
     let handler: Job
 
-    public let taskID: String
+    public let uuid: String
     public let type: String
     public let group: String
 
@@ -33,7 +33,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
     var jobIsExecuting: Bool = false
     var jobIsFinished: Bool = false
 
-    public override var name: String? { get { return taskID } set { } }
+    public override var name: String? { get { return uuid } set { } }
 
     public override var isExecuting: Bool {
         get { return jobIsExecuting }
@@ -52,11 +52,11 @@ internal final class SwiftQueueJob: Operation, JobResult {
         }
     }
 
-    internal init(job: Job, taskID: String = UUID().uuidString, type: String, group: String, tags: Set<String>,
+    internal init(job: Job, uuid: String = UUID().uuidString, type: String, group: String, tags: Set<String>,
                   delay: Int, deadline: Date?, requireNetwork: NetworkType, isPersisted: Bool, params: Any?,
                   createTime: Date, runCount: Int, retries: Int, interval: Double) {
         self.handler = job
-        self.taskID = taskID
+        self.uuid = uuid
         self.type = type
         self.group = group
         self.tags = tags
@@ -102,7 +102,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
             let createTime = dateFormatter.date(from: createTimeStr) ?? Date()
             let network    = NetworkType(rawValue: requireNetwork) ?? NetworkType.any
 
-            self.init(job: job, taskID: taskID, type: type, group: group, tags: Set(tags),
+            self.init(job: job, uuid: taskID, type: type, group: group, tags: Set(tags),
                     delay: delay, deadline: deadline, requireNetwork: network,
                     isPersisted: isPersisted, params: params, createTime: createTime,
                     runCount: runCount, retries: retries, interval: interval)
@@ -111,14 +111,6 @@ internal final class SwiftQueueJob: Operation, JobResult {
         }
     }
 
-/**
-Initializes a JobQueueTask from JSON
-
-- parameter json:    JSON from which the reconstruct the task
-- parameter queue:   The queue that the task will execute on
-
-- returns: A new JobQueueTask
-*/
     internal convenience init?(json: String, creator: [JobCreator]) {
         do {
             if let dict = try fromJSON(json) as? [String: AnyObject] {
@@ -131,14 +123,9 @@ Initializes a JobQueueTask from JSON
         }
     }
 
-/**
-Deconstruct the task to a dictionary, used to serialize the task
-
-- returns: A Dictionary representation of the task
-*/
     private func toDictionary() -> [String: Any] {
         var dict = [String: Any]()
-        dict["taskID"]         = self.taskID
+        dict["taskID"]         = self.uuid
         dict["type"]        = self.type
         dict["group"]          = self.group
         dict["tags"]           = Array(self.tags)
@@ -154,11 +141,6 @@ Deconstruct the task to a dictionary, used to serialize the task
         return dict
     }
 
-/**
-Deconstruct the task to a JSON string, used to serialize the task
-
-- returns: A JSON string representation of the task
-*/
     public func toJSONString() -> String? {
         do {
             return try toJSON(obj: toDictionary())
@@ -195,7 +177,7 @@ Deconstruct the task to a JSON string, used to serialize the task
         }
         // Check the constraint
         do {
-            try Constraints.checkConstraintsForRun(task: self)
+            try Constraints.checkConstraintsForRun(job: self)
             switch requireNetwork {
             case .any:
                 break // Continue function
@@ -233,8 +215,8 @@ Deconstruct the task to a JSON string, used to serialize the task
             onDone(error: error)
         }
     }
-
-    internal func taskComplete() {
+    
+    internal func completed() {
         if lastError == nil {
             handler.onComplete()
         } else {

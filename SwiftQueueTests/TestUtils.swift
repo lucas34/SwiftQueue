@@ -72,7 +72,7 @@ class PersisterTracker: UserDefaultsPersister {
     var putData = ""
 
     var removeQueueName = ""
-    var removeTaskId = ""
+    var removeJobId = ""
 
     override func restore(queueName: String) -> [String] {
         restoreQueueName = queueName
@@ -88,7 +88,7 @@ class PersisterTracker: UserDefaultsPersister {
 
     override func remove(queueName: String, taskId: String) {
         removeQueueName = queueName
-        removeTaskId = taskId
+        removeJobId = taskId
         super.remove(queueName: queueName, taskId: taskId)
     }
 }

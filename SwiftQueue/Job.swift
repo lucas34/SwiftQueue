@@ -9,7 +9,7 @@ public final class JobBuilder {
 
     private let type: String
 
-    private var taskID: String =  UUID().uuidString
+    private var uuid: String =  UUID().uuidString
     private var group: String = "GLOBAL"
     private var tags = Set<String>()
     private var delay: Int = 0
@@ -27,7 +27,7 @@ public final class JobBuilder {
     }
 
     public func singleInstance(forId: String) -> JobBuilder {
-        self.taskID = forId
+        self.uuid = forId
         return self
     }
 
@@ -78,7 +78,7 @@ public final class JobBuilder {
     }
 
     internal func build(job: Job) -> SwiftQueueJob {
-        return SwiftQueueJob(job: job, taskID: taskID, type: type, group: group, tags: tags,
+        return SwiftQueueJob(job: job, uuid: uuid, type: type, group: group, tags: tags,
                 delay: delay, deadline: deadline, requireNetwork: requireNetwork, isPersisted: isPersisted, params: params,
                 createTime: createTime, runCount: runCount, retries: retries, interval: interval)
     }
