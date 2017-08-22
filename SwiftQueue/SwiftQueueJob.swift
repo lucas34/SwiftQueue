@@ -77,7 +77,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
 
         try? reachability?.startNotifier()
     }
-    
+
     deinit {
         reachability?.stopNotifier()
     }
@@ -215,7 +215,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
             onDone(error: error)
         }
     }
-    
+
     internal func completed() {
         if lastError == nil {
             handler.onComplete()

@@ -79,8 +79,8 @@ public final class JobBuilder {
 
     internal func build(job: Job) -> SwiftQueueJob {
         return SwiftQueueJob(job: job, uuid: uuid, type: type, group: group, tags: tags,
-                delay: delay, deadline: deadline, requireNetwork: requireNetwork, isPersisted: isPersisted, params: params,
-                createTime: createTime, runCount: runCount, retries: retries, interval: interval)
+                delay: delay, deadline: deadline, requireNetwork: requireNetwork, isPersisted: isPersisted,
+                params: params, createTime: createTime, runCount: runCount, retries: retries, interval: interval)
     }
 
     public func schedule(manager: SwiftQueueManager) {
