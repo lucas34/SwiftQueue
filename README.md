@@ -19,7 +19,7 @@ let manager = SwiftQueueManager(creators: [TweetJobCreator()])
 class TweetJobCreator: JobCreator {
 
     func create(type: String, params: Any?) -> Job? {
-        // check for job and param types
+        // check for job and params type
         if type == SendTweetJob.type, let message = params as? String  {
             return SendTweetJob(message: message)
         } else {
@@ -52,19 +52,18 @@ class SendTweetJob: Job {
     }
 
     func onRun(callback: JobResult) throws {
-        // Actual sending is happening here
-        // run your job here
+        // Run your job here
         callback.onDone(error: nil)
     }
 
     func onRetry(error: Error) -> RetryConstraint {
-        // Check if there the error is not fatal.
+        // Check if error is non fatal
         return error is ApiError ? RetryConstraint.cancel : RetryConstraint.retry
     }
 
     func onRemove(error: Error?) {
         // This job will never run anymore  
-        // Success is error is nil. Failed otherwise
+        // Success if error is nil. fail otherwise
     }
 }
 ```
