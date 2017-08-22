@@ -85,4 +85,17 @@ class TweetJobCreator: JobCreator {
 }
 
 enum ApiError: Error {
+    case whatever
+}
+
+enum CustomError: Error {
+    case fail
+}
+
+func testCall() throws {
+    let job = SendTweetJob(message: "")
+    job.onRemove(error: nil)
+    job.onRemove(error: ApiError.whatever)
+    job.onRetry(error: ApiError.whatever)
+    job.onRetry(error: CustomError.fail)
 }
