@@ -21,7 +21,7 @@ class TestReadMeSample: XCTestCase {
                 .singleInstance(forId: taskID)
                 .group(name: "tweet") // Other groups will run in parallel
                 .addTag(tag: "tweet") // To cancel base on tag
-                .internet(atLeast: .cellular) // .any : No internet required; .cellular: Need connection; .wifi: Require wifi
+                .internet(atLeast: .cellular)
                 .delay(inSecond: 1) // delay before execution
                 .deadline(date: deadline) // Will be canceled after a certain date
                 .persist(required: true) // See persistence section
@@ -82,7 +82,7 @@ class TweetJobCreator: JobCreator {
 
     func create(type: String, params: Any?) -> Job? {
         // check for job and param types
-        if type == SendTweetJob.type, let message = params as? String  {
+        if type == SendTweetJob.type, let message = params as? String {
             return SendTweetJob(message: message)
         } else {
             // Nothing match

@@ -248,7 +248,7 @@ class SwiftQueueManagerTests: XCTestCase {
         persister.put(queueName: queueId, taskId: job2Id, data: task2)
         XCTAssertEqual(persister.restore().count, 1)
         XCTAssertEqual(persister.restore()[0], queueId)
-        
+
         persister.put(queueName: queueId, taskId: job1Id, data: task1)
         XCTAssertEqual(persister.restore().count, 1)
         XCTAssertEqual(persister.restore()[0], queueId)
