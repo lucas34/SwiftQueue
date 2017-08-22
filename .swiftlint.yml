@@ -1,2 +1,6 @@
 excluded:
   - Pods
+  
+function_body_length:
+  - 50 # warning
+  - 70 # error
