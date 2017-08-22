@@ -102,6 +102,7 @@ public protocol JobResult {
 public enum RetryConstraint {
     case retry
     case cancel
+    case exponential(initial: Double)
 }
 
 public enum NetworkType: Int {
