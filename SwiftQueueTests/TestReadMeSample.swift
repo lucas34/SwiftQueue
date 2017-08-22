@@ -56,19 +56,18 @@ class SendTweetJob: Job {
     }
 
     func onRun(callback: JobResult) throws {
-        // Actual sending is happening here
-        // run your job here
+        // Run your job here
         callback.onDone(error: nil)
     }
 
     func onRetry(error: Error) -> RetryConstraint {
-        // Check if there the error is not fatal.
+        // Check if error is non fatal
         return error is ApiError ? RetryConstraint.cancel : RetryConstraint.retry
     }
 
     func onRemove(error: Error?) {
         // This job will never run anymore  
-        // Success is error is nil. Failed otherwise
+        // Success if error is nil. fail otherwise
     }
 }
 

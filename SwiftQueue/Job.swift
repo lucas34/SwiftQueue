@@ -112,7 +112,7 @@ public enum NetworkType: Int {
 }
 
 public protocol Job {
-    
+
     func onRun(callback: JobResult) throws
 
     func onRetry(error: Swift.Error) -> RetryConstraint
