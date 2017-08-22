@@ -11,70 +11,64 @@ import Dispatch
 class TestReadMeSample: XCTestCase {
 
     public func testBuilder() {
-        let taskID = UUID().uuidString
         let deadline = Date()
 
         // Create queue
         let manager = SwiftQueueManager(creators: [TweetJobCreator()])
 
         JobBuilder(type: SendTweetJob.type)
-                .singleInstance(forId: taskID)
-                .group(name: "tweet") // Other groups will run in parallel
-                .addTag(tag: "tweet") // To cancel base on tag
+                // Job with same id will not run
+                .singleInstance(forId: "tweet1")
+                // Other groups will run in parallel
+                .group(name: "tweet")
+                // To cancel base on tag
+                .addTag(tag: "tweet")
+                // Job requires internet
+                // .any : No internet required
+                // .cellular : Need connection (3G, 4G, Wifi, ...)
+                // .wifi : Requires wifi
                 .internet(atLeast: .cellular)
-                .delay(inSecond: 1) // delay before execution
-                .deadline(date: deadline) // Will be canceled after a certain date
-                .persist(required: true) // See persistence section
-                .with(params: "Hello TweetWorld") // Add custom params
-                .retry(max: 5) // Number of retires if the job fail
-                .periodic(count: Int.max, interval: 5) // Auto repeat job. Wait 5 seconds between each run
-                .schedule(manager: manager) // Add to queue
+                // Wait before execution
+                .delay(inSecond: 1)
+                // Cancel after a certain date
+                .deadline(date: deadline)
+                // Persist job in database
+                .persist(required: true)
+                // Custom params to your job
+                .with(params: "Hello TweetWorld")
+                // Max number of retries
+                .retry(max: 5)
+                // Run two times with at least 5 seconds interval.
+                .periodic(count: 2, interval: 5) // Auto repeat job. Wait 5 seconds between each run
+                // Add to Operation Queue
+                .schedule(manager: manager)
     }
 
 }
 
 class SendTweetJob: Job {
 
-    public static let type = "SendTweetJob"
-
+    static let type = "SendTweetJob"
     private let tweetMessage: String
 
     required init(message: String) {
         self.tweetMessage = message
     }
 
-    func onRunJob(callback: JobResult) throws {
+    func onRun(callback: JobResult) throws {
         // Actual sending is happening here
-        //api.sendTweet(type: "TEXT", content: tweetMessage)
-        //        .onSucess {
-        //            callback.onDone(error: nil)
-        //        }.onFail { error in
-        //            callback.onDone(error: error)
-        //        }
+        // run your job here
+        callback.onDone(error: nil)
     }
 
-    func onError(error: Error) -> RetryConstraint {
-        // Job as failed and retry count > 0
-        // WARNING will not be called if you put .retry(count: 0) in job builder
-        // Convenient if you want to check base on the error to retry or not
-        // if error is ApiError {
-        //     // Server rejected my message.
-        //     return RetryConstraint.cancel // Stop even if retry count > 0
-        // } else {
-        //     return RetryConstraint.retry // Ask to retry
-        // }
-        return RetryConstraint.cancel
+    func onRetry(error: Error) -> RetryConstraint {
+        // Check if there the error is not fatal.
+        return error is ApiError ? RetryConstraint.cancel : RetryConstraint.retry
     }
 
-    func onComplete() {
-        // Success ! This job will never run anymore
-        // Update your UI or your database
-    }
-
-    func onCancel() {
-        // Fail ! This job will never run anymore
-        // Can be due to deadline, retry count reach limit, or RetryConstraint.cancel
-        // Update your UI or your database
+    func onRemove(error: Error?) {
+        // This job will never run anymore  
+        // Success is error is nil. Failed otherwise
     }
 }
 
@@ -89,4 +83,7 @@ class TweetJobCreator: JobCreator {
             return nil
         }
     }
+}
+
+enum ApiError: Error {
 }

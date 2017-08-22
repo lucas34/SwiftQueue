@@ -112,12 +112,11 @@ public enum NetworkType: Int {
 }
 
 public protocol Job {
+    
+    func onRun(callback: JobResult) throws
 
-    func onRunJob(callback: JobResult) throws
+    func onRetry(error: Swift.Error) -> RetryConstraint
 
-    func onError(error: Swift.Error) -> RetryConstraint
+    func onRemove(error: Swift.Error?)
 
-    func onComplete() // Job removed
-
-    func onCancel() // Job removed
 }

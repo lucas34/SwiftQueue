@@ -14,7 +14,7 @@ class TestJob: Job {
     public var result: Error?
 
     public var onRunJobCalled = 0
-    public var onErrorCalled = 0
+    public var onRetryCalled = 0
     public var onCompleteCalled = 0
     public var onCancelCalled = 0
 
@@ -22,24 +22,24 @@ class TestJob: Job {
 
     public var params: Any?
 
-    func onRunJob(callback: JobResult) throws {
+    func onRun(callback: JobResult) throws {
         onRunJobCalled += 1
         callback.onDone(error: result) // Auto complete
     }
 
-    func onError(error: Error) -> RetryConstraint {
-        onErrorCalled += 1
+    func onRetry(error: Error) -> RetryConstraint {
+        onRetryCalled += 1
         return retryConstraint
     }
 
-    func onComplete() {
-        onCompleteCalled += 1
-        semaphore.signal()
-    }
-
-    func onCancel() {
-        onCancelCalled += 1
-        semaphore.signal()
+    func onRemove(error: Error?) {
+        if error == nil {
+            onCompleteCalled += 1
+            semaphore.signal()
+        } else {
+            onCancelCalled += 1
+            semaphore.signal()
+        }
     }
 
     func await() {

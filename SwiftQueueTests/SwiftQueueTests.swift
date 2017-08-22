@@ -92,7 +92,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         XCTAssertEqual(job.onRunJobCalled, 1)
         XCTAssertEqual(job.onCompleteCalled, 1)
-        XCTAssertEqual(job.onErrorCalled, 0)
+        XCTAssertEqual(job.onRetryCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 0)
     }
 
@@ -128,7 +128,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         XCTAssertEqual(job.onRunJobCalled, 0)
         XCTAssertEqual(job.onCompleteCalled, 0)
-        XCTAssertEqual(job.onErrorCalled, 0)
+        XCTAssertEqual(job.onRetryCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 1)
 
         XCTAssertEqual(id, persister.removeJobId)
@@ -161,7 +161,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         XCTAssertEqual(job.onRunJobCalled, 0)
         XCTAssertEqual(job.onCompleteCalled, 0)
-        XCTAssertEqual(job.onErrorCalled, 0)
+        XCTAssertEqual(job.onRetryCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 1)
 
         XCTAssertEqual(id, persister.removeJobId)
@@ -261,14 +261,14 @@ class SwiftQueueManagerTests: XCTestCase {
 
         XCTAssertEqual(job1.onRunJobCalled, 1)
         XCTAssertEqual(job1.onCompleteCalled, 1)
-        XCTAssertEqual(job1.onErrorCalled, 0)
+        XCTAssertEqual(job1.onRetryCalled, 0)
         XCTAssertEqual(job1.onCancelCalled, 0)
 
         job2.await()
 
         XCTAssertEqual(job2.onRunJobCalled, 1)
         XCTAssertEqual(job2.onCompleteCalled, 1)
-        XCTAssertEqual(job2.onErrorCalled, 0)
+        XCTAssertEqual(job2.onRetryCalled, 0)
         XCTAssertEqual(job2.onCancelCalled, 0)
     }
 
@@ -302,7 +302,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         XCTAssertEqual(job.onRunJobCalled, 1)
         XCTAssertEqual(job.onCompleteCalled, 1)
-        XCTAssertEqual(job.onErrorCalled, 0)
+        XCTAssertEqual(job.onRetryCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 0)
 
         XCTAssertNotNil(persister.removeJobId)
@@ -333,7 +333,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         XCTAssertEqual(job.onRunJobCalled, 1)
         XCTAssertEqual(job.onCompleteCalled, 0)
-        XCTAssertEqual(job.onErrorCalled, 0)
+        XCTAssertEqual(job.onRetryCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 1)
 
         XCTAssertEqual(taskID, persister.removeJobId)

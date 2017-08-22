@@ -165,7 +165,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
     internal func abort(error: Swift.Error) {
         lastError = error
         // Need to be called manually since the task is actually not in the queue. So cannot call cancel()
-        handler.onCancel()
+        handler.onRemove(error: error)
     }
 
     private func run() {
@@ -204,7 +204,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
             }
 
             if Date().timeIntervalSince(createTime) > TimeInterval(delay) {
-                try handler.onRunJob(callback: self)
+                try handler.onRun(callback: self)
             } else {
                 runInBackgroundAfter(TimeInterval(interval)) {
                     self.run()
@@ -217,11 +217,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
     }
 
     internal func completed() {
-        if lastError == nil {
-            handler.onComplete()
-        } else {
-            handler.onCancel()
-        }
+        handler.onRemove(error: lastError)
     }
 
     public func onDone(error: Swift.Error?) {
@@ -239,7 +235,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
                 return
             }
 
-            let retry = handler.onError(error: error)
+            let retry = handler.onRetry(error: error)
             switch retry {
             case .cancel:
                 cancel()
