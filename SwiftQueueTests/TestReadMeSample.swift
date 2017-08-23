@@ -44,6 +44,14 @@ class TestReadMeSample: XCTestCase {
                 .schedule(manager: manager)
     }
 
+    func testCall() throws {
+        let job = SendTweetJob(message: "")
+        job.onRemove(error: nil)
+        job.onRemove(error: ApiError.whatever)
+        job.onRetry(error: ApiError.whatever)
+        job.onRetry(error: CustomError.fail)
+    }
+
 }
 
 class SendTweetJob: Job {
@@ -90,12 +98,4 @@ enum ApiError: Error {
 
 enum CustomError: Error {
     case fail
-}
-
-func testCall() throws {
-    let job = SendTweetJob(message: "")
-    job.onRemove(error: nil)
-    job.onRemove(error: ApiError.whatever)
-    job.onRetry(error: ApiError.whatever)
-    job.onRetry(error: CustomError.fail)
 }
