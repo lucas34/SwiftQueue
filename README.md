@@ -1,54 +1,57 @@
 # SwiftQueue
-[![pod](https://img.shields.io/cocoapods/v/SwiftQueue.svg?style=flat)](https://github.com/lucas34/SwiftQueue)
+> Schedule tasks with constraints made easy.
+
 [![swift](https://img.shields.io/badge/Swift-3.0-orange.svg?style=flat)](https://swift.org)
 [![travis](https://travis-ci.org/lucas34/SwiftQueue.svg?branch=master)](https://travis-ci.org/lucas34/SwiftQueue)
+[![licence](https://img.shields.io/badge/License-MIT-blue.svg?style=flat)](https://tldrlegal.com/license/mit-license)
+[![pod](https://img.shields.io/cocoapods/v/SwiftQueue.svg?style=flat)](https://cocoapods.org/pods/SwiftQueue)
+[![Platform](https://img.shields.io/cocoapods/p/LFAlertController.svg?style=flat)](http://cocoapods.org/pods/LFAlertController)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
 [![codecov](https://codecov.io/gh/lucas34/SwiftQ/branch/master/graph/badge.svg)](https://codecov.io/gh/lucas34/SwiftQueue)
 [![codebeat badge](https://codebeat.co/badges/4ac05b9d-fefa-4be3-a38f-f58a4b5698cd)](https://codebeat.co/projects/github-com-lucas34-swiftq-master)
-[![licence](https://img.shields.io/badge/License-MIT-blue.svg?style=flat)](https://tldrlegal.com/license/mit-license)
-    
-Queue manager built on top of Operation and OperationQueue. Support multiple queues with concurrent run, failure/retry, persistence and more.
 
-## How to use
+SwiftQueue is a job scheduler for Ios inspired by popular android libraries like *android-priority-jobqueue* or *android-job*. It allows you to run your tasks with run and retry constraints. 
 
-Don't forget to check our [**WIKI**](https://github.com/lucas34/SwiftQueue/wiki). 
+Library will rely on *Operation* and *OperationQueue* to make sure all tasks will run in order. Don't forget to check our [**WIKI**](https://github.com/lucas34/SwiftQueue/wiki). 
 
-### Sample
-Schedule and send tweets with SwiftQueue.
+## Features
 
-#### Create a queue and schedule a task
+- [x] Sequential execution
+- [x] Concurrent run
+- [x] Persistence
+- [x] Cancel all or by tag
+- [x] Delay
+- [x] Deadline
+- [x] Internet constraint
+- [x] Single instance in queue
+- [x] Retry: Max count, exponential backoff
+- [x] Periodic: Max run, interval delay
+- [ ] Start / Stop queue
 
-```swift
-// Create my Queue manager
-let manager = SwiftQueueManager(creators: [TweetJobCreator()])
+## Requirements
 
-class TweetJobCreator: JobCreator {
+- iOS 8.0+
+- Xcode 7.3
 
-    // Base on type, return the actual job implementation
-    func create(type: String, params: Any?) -> Job? {
-        // check for job and params type
-        if type == SendTweetJob.type, let message = params as? String  {
-            return SendTweetJob(message: message)
-        } else {
-            // Nothing match
-            return nil
-        }
-    }
-}
+## Installation
+
+#### CocoaPods
+You can use [CocoaPods](https://cocoapods.org/pods/SwiftQueue) to install `SwiftQueue` by adding it to your `Podfile`:
+
+```ruby
+platform :ios, '8.0'
+use_frameworks!
+pod 'SwiftQueue'
 ```
 
-After that you can start scheduling jobs.
+In your application, simply import the library
 
-```swift
-// type I'll receive in JobCreator
-JobBuilder(type: SendTweetJob.type)
-        // params of my job
-        .with(params: "Hello TweetWorld")
-        // Add to queue manager
-        .schedule(manager: manager)
+``` swift
+import SwiftQueue
 ```
+## Usage example
 
-#### Job creation
-
+This short example will shows you how to schedule a task that send tweets. First, you will need to extend `Job` and implement `onRun`, `onRetry` and `onRemove` callbacks.
 
 ```swift
 // A job to send a tweet
@@ -81,42 +84,48 @@ class SendTweetJob: Job {
 }
 ```
 
-### Advanced
-JobBuilder has many extra options.
+The class `SwiftQueueManager` serves as entry point. Your jobs need to extend the class `Job`. Specify run and retry constraints with `JobBuilder` and schedule by giving `SwiftQueueManager` 
+
+```swift
+let manager = SwiftQueueManager(creators: [TweetJobCreator()])
+```
+
+Schedule a job with type, parameters and constraints.
+
 ```swift
 JobBuilder(type: SendTweetJob.type)
-        // Job with same id will not run
-        .singleInstance(forId: "tweet1")
-        // Other groups will run in parallel
-        .group(name: "tweet")
-        // To cancel base on tag
-        .addTag(tag: "tweet")
-        // Job requires internet
-        // .any : No internet required
-        // .cellular : Need connection (3G, 4G, Wifi, ...)
-        // .wifi : Requires wifi
-        .internet(atLeast: .cellular)
-        // Wait before execution
-        .delay(inSecond: 1)
-        // Cancel after a certain date
-        .deadline(date: deadline)
-        // Persist job in database
-        .persist(required: true)
-        // Custom params to your job
+        // params of my job
         .with(params: "Hello TweetWorld")
-        // Max number of retries
-        .retry(max: 5)
-        // Run two times with at least 5 seconds interval.
-        .periodic(count: 2, interval: 5) // Auto repeat job. Wait 5 seconds between each run
-        // Add to Operation Queue
+        // Add to queue manager
         .schedule(manager: manager)
 ```
 
+The `JobCreator` maps a job type to a specific `job` class. You will receive parameters you specified in `JobBuilder`.
+
+```swift
+class TweetJobCreator: JobCreator {
+
+    // Base on type, return the actual job implementation
+    func create(type: String, params: Any?) -> Job? {
+        // check for job and params type
+        if type == SendTweetJob.type, let message = params as? String  {
+            return SendTweetJob(message: message)
+        } else {
+            // Nothing match
+            return nil
+        }
+    }
+}
+```
+
+That's it. We haven't specify any constraint so the job will run immediately. Check the [**WIKI**](https://github.com/lucas34/SwiftQueue/wiki) for a more detailed example.
+
 ## Contributors
 
-* [Lucas Nelaupe](http://www.lucas-nelaupe.fr/) - <https://github.com/lucas34>
-* Feel free to contribute, All suggestions are welcome :-)
+We would love you for the contribution to **SwiftQueue**, check the ``LICENSE`` file for more info.
 
-## License
+* [Lucas Nelaupe](http://www.lucas-nelaupe.fr/) - [@lucas34990](https://twitter.com/lucas34990)
 
-Licensed under the [MIT License](https://github.com/lucas34/SwiftQueue/blob/master/LICENSE)
+## Licence
+
+Distributed under the MIT license. See ``LICENSE`` for more information.
