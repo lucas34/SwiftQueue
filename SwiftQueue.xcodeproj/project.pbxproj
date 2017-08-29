@@ -19,6 +19,7 @@
 		CF8E8786256500BE5F38B99C /* Pods_SwiftQueue.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D2699F05A7071DC62800CA0 /* Pods_SwiftQueue.framework */; };
 		D0B7C09AD4F91884A41D1BB7 /* SwiftQueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C851E5F77817B281B7BE /* SwiftQueueManager.swift */; };
 		D0B7C476CF7FB5D47A93773E /* UserDefaultsPerisister.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C4FD1D52ED28898EB8E8 /* UserDefaultsPerisister.swift */; };
+		D0B7C55A4FD2CF987A9AFE4B /* StartStopTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C743A3FF41B1A3AE2CAB /* StartStopTests.swift */; };
 		D0B7C628989309FE0EE27139 /* TestReadMeSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C992A3D1543A5DB1CA66 /* TestReadMeSample.swift */; };
 		D0B7C6C482E2436308F7BCF3 /* ConstraintTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C639E1B939F6FC1DD50E /* ConstraintTests.swift */; };
 		D0B7C78AC61DA424381B5DE7 /* TestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C958D8ACA6DC944523AD /* TestUtils.swift */; };
@@ -51,6 +52,7 @@
 		CA2A21C16D2CF8639C95000B /* Pods-SwiftQueue.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftQueue.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftQueue/Pods-SwiftQueue.release.xcconfig"; sourceTree = "<group>"; };
 		D0B7C4FD1D52ED28898EB8E8 /* UserDefaultsPerisister.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsPerisister.swift; sourceTree = "<group>"; };
 		D0B7C639E1B939F6FC1DD50E /* ConstraintTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstraintTests.swift; sourceTree = "<group>"; };
+		D0B7C743A3FF41B1A3AE2CAB /* StartStopTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartStopTests.swift; sourceTree = "<group>"; };
 		D0B7C851E5F77817B281B7BE /* SwiftQueueManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftQueueManager.swift; sourceTree = "<group>"; };
 		D0B7C958D8ACA6DC944523AD /* TestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestUtils.swift; sourceTree = "<group>"; };
 		D0B7C992A3D1543A5DB1CA66 /* TestReadMeSample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestReadMeSample.swift; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 				D0B7C639E1B939F6FC1DD50E /* ConstraintTests.swift */,
 				D0B7C958D8ACA6DC944523AD /* TestUtils.swift */,
 				D0B7C992A3D1543A5DB1CA66 /* TestReadMeSample.swift */,
+				D0B7C743A3FF41B1A3AE2CAB /* StartStopTests.swift */,
 			);
 			path = SwiftQueueTests;
 			sourceTree = "<group>";
@@ -371,6 +374,7 @@
 				D0B7C6C482E2436308F7BCF3 /* ConstraintTests.swift in Sources */,
 				D0B7C78AC61DA424381B5DE7 /* TestUtils.swift in Sources */,
 				D0B7C628989309FE0EE27139 /* TestReadMeSample.swift in Sources */,
+				D0B7C55A4FD2CF987A9AFE4B /* StartStopTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
