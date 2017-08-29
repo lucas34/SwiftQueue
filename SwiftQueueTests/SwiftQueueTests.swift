@@ -59,7 +59,7 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertEqual(taskID, persister.putTaskId)
         XCTAssertEqual(group, persister.putQueueName)
 
-        let jobInfo = SwiftQueueJob(json: persister.putData, creator: [creator])
+        let jobInfo = SwiftQueueJob(json: persister.putData ?? "", creator: [creator])
 
         XCTAssertEqual(jobInfo?.name, taskID)
         XCTAssertEqual(jobInfo?.uuid, taskID)
@@ -131,6 +131,44 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertEqual(job.onRetryCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 1)
 
+        XCTAssertNil(persister.putQueueName)
+        XCTAssertNil(persister.putTaskId)
+        XCTAssertNil(persister.putData)
+
+        XCTAssertNil(persister.removeJobId)
+        XCTAssertNil(persister.removeQueueName)
+    }
+
+    func testCancelWithTagShouldRemoveFromPersister() {
+        let id = UUID().uuidString
+        let tag = UUID().uuidString
+        let type = UUID().uuidString
+        let group = UUID().uuidString
+
+        let job = TestJob()
+        let creator = TestCreator([type: job])
+
+        let persister = PersisterTracker()
+
+        let manager = SwiftQueueManager(creators: [creator], persister: persister)
+
+        JobBuilder(type: type)
+                .singleInstance(forId: id)
+                .group(name: group)
+                .delay(inSecond: Int.max)
+                .addTag(tag: tag)
+                .persist(required: true)
+                .schedule(manager: manager)
+
+        manager.cancelOperations(tag: tag)
+
+        job.await()
+
+        XCTAssertEqual(job.onRunJobCalled, 0)
+        XCTAssertEqual(job.onCompleteCalled, 0)
+        XCTAssertEqual(job.onRetryCalled, 0)
+        XCTAssertEqual(job.onCancelCalled, 1)
+
         XCTAssertEqual(id, persister.removeJobId)
         XCTAssertEqual(group, persister.removeQueueName)
     }
@@ -164,58 +202,47 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertEqual(job.onRetryCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 1)
 
+        XCTAssertNil(persister.putQueueName)
+        XCTAssertNil(persister.putTaskId)
+        XCTAssertNil(persister.putData)
+
+        XCTAssertNil(persister.removeJobId)
+        XCTAssertNil(persister.removeQueueName)
+    }
+
+    func testCancelAllShouldRemoveFromPersister() {
+        let id = UUID().uuidString
+        let tag = UUID().uuidString
+        let type = UUID().uuidString
+        let group = UUID().uuidString
+
+        let job = TestJob()
+        let creator = TestCreator([type: job])
+
+        let persister = PersisterTracker()
+
+        let manager = SwiftQueueManager(creators: [creator], persister: persister)
+
+        JobBuilder(type: type)
+                .singleInstance(forId: id)
+                .group(name: group)
+                .delay(inSecond: Int.max)
+                .addTag(tag: tag)
+                .persist(required: true)
+                .schedule(manager: manager)
+
+        manager.cancelAllOperations()
+
+        job.await()
+
+        XCTAssertEqual(job.onRunJobCalled, 0)
+        XCTAssertEqual(job.onCompleteCalled, 0)
+        XCTAssertEqual(job.onRetryCalled, 0)
+        XCTAssertEqual(job.onCancelCalled, 1)
+
         XCTAssertEqual(id, persister.removeJobId)
         XCTAssertEqual(group, persister.removeQueueName)
     }
-
-//    func testSerialiseDeserialize() throws {
-//        let job = TestJob()
-//        let type = UUID().uuidString
-//
-//        let creator = TestCreator([type: job])
-//
-//        let taskID = UUID().uuidString
-//        let tag = UUID().uuidString
-//        let group = UUID().uuidString
-//        let delay = 12345
-//        let deadline = Date(timeIntervalSinceNow: TimeInterval(-10))
-//        let requireNetwork = NetworkType.any
-//        let isPersisted = true // Required
-//        let params = UUID().uuidString
-//        let runCount = 5
-//        let retries = 3
-//        let interval: Double = 1
-//
-//        let json = JobBuilder(type: type)
-//                .singleInstance(forId: taskID)
-//                .group(name: group)
-//                .addTag(tag: tag)
-//                .delay(inSecond: delay)
-//                .deadline(date: deadline)
-//                .internet(atLeast: requireNetwork)
-//                .persist(required: true)
-//                .with(params: params) // Useless because we shortcut it
-//                .retry(max: retries)
-//                .periodic(count: runCount, interval: interval)
-//                .build(job: job)
-//                .toJSONString()!
-//
-//        let job = SwiftQueueJob(json: json, creator: [creator])
-//
-//        XCTAssertEqual(job?.taskID, taskID)
-//        XCTAssertEqual(job?.type, type)
-//        XCTAssertEqual(job?.group, group)
-//        XCTAssertEqual(job?.tags.first, tag)
-//        XCTAssertEqual(job?.delay, delay)
-//        // Due to loss of precision need to convert
-//        XCTAssertEqual(job?.deadline, dateFormatter.date(from: dateFormatter.string(from: deadline)))
-//        XCTAssertEqual(job?.requireNetwork, requireNetwork)
-//        XCTAssertEqual(job?.isPersisted, isPersisted)
-//        XCTAssertEqual(job?.params as? String, params)
-//        XCTAssertEqual(job?.runCount, runCount)
-//        XCTAssertEqual(job?.retries, retries)
-//        XCTAssertEqual(job?.interval, interval)
-//    }
 
     func testLoadSerializedSortedTaskShouldRunSuccess() {
         UserDefaults().set(nil, forKey: "SwiftQueueInfo") // Force reset
@@ -296,6 +323,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         let manager = SwiftQueueManager(creators: [creator], persister: persister)
         JobBuilder(type: type)
+                .persist(required: true)
                 .schedule(manager: manager)
 
         job.await()
@@ -327,6 +355,7 @@ class SwiftQueueManagerTests: XCTestCase {
         JobBuilder(type: type)
                 .singleInstance(forId: taskID)
                 .group(name: queueId)
+                .persist(required: true)
                 .schedule(manager: manager)
 
         job.await()
