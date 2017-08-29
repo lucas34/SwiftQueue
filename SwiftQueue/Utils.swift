@@ -12,7 +12,7 @@ func runInBackgroundAfter(_ seconds: TimeInterval, callback: @escaping () -> Voi
 
 func toJSON(_ obj: Any) -> String? {
     let json = try? JSONSerialization.data(withJSONObject: obj, options: .prettyPrinted)
-    return json.flatMap { NSString(data: $0, encoding: String.Encoding.utf8.rawValue) as? String }
+    return json.flatMap { NSString(data: $0, encoding: String.Encoding.utf8.rawValue) as String? }
 }
 
 func fromJSON(_ str: String) -> Any? {
