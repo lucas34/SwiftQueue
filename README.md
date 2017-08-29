@@ -7,8 +7,8 @@
 [![pod](https://img.shields.io/cocoapods/v/SwiftQueue.svg?style=flat)](https://cocoapods.org/pods/SwiftQueue)
 [![Platform](https://img.shields.io/cocoapods/p/LFAlertController.svg?style=flat)](http://cocoapods.org/pods/LFAlertController)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
-[![codecov](https://codecov.io/gh/lucas34/SwiftQ/branch/master/graph/badge.svg)](https://codecov.io/gh/lucas34/SwiftQueue)
-[![codebeat badge](https://codebeat.co/badges/4ac05b9d-fefa-4be3-a38f-f58a4b5698cd)](https://codebeat.co/projects/github-com-lucas34-swiftq-master)
+[![codecov](https://codecov.io/gh/lucas34/SwiftQueue/branch/master/graph/badge.svg)](https://codecov.io/gh/lucas34/SwiftQueue)
+[![codebeat badge](https://codebeat.co/badges/3d446d9e-3e7a-435c-85fc-aa626d4f7652)](https://codebeat.co/projects/github-com-lucas34-swiftqueue-master)
 
 SwiftQueue is a job scheduler for Ios inspired by popular android libraries like *android-priority-jobqueue* or *android-job*. It allows you to run your tasks with run and retry constraints. 
 
@@ -26,7 +26,7 @@ Library will rely on *Operation* and *OperationQueue* to make sure all tasks wil
 - [x] Single instance in queue
 - [x] Retry: Max count, exponential backoff
 - [x] Periodic: Max run, interval delay
-- [ ] Start / Stop queue
+- [x] Start / Stop queue
 
 ## Requirements
 
