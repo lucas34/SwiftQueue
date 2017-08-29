@@ -10,12 +10,12 @@ func runInBackgroundAfter(_ seconds: TimeInterval, callback: @escaping () -> Voi
     DispatchQueue.global(qos: DispatchQoS.QoSClass.background).asyncAfter(deadline: delta, execute: callback)
 }
 
-func toJSON(_ obj: Any) throws -> String? {
-    let json = try JSONSerialization.data(withJSONObject: obj, options: .prettyPrinted)
-    return NSString(data: json, encoding: String.Encoding.utf8.rawValue) as String?
+func toJSON(_ obj: Any) -> String? {
+    let json = try? JSONSerialization.data(withJSONObject: obj, options: .prettyPrinted)
+    return json.flatMap { NSString(data: $0, encoding: String.Encoding.utf8.rawValue) as? String }
 }
 
-func fromJSON(_ str: String) throws -> Any? {
+func fromJSON(_ str: String) -> Any? {
     return str.data(using: String.Encoding.utf8, allowLossyConversion: false)
             .flatMap { try? JSONSerialization.jsonObject(with: $0, options: .allowFragments)  }
 }

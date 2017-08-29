@@ -112,13 +112,9 @@ internal final class SwiftQueueJob: Operation, JobResult {
     }
 
     internal convenience init?(json: String, creator: [JobCreator]) {
-        do {
-            if let dict = try fromJSON(json) as? [String: AnyObject] {
-                self.init(dictionary: dict, creator: creator)
-            } else {
-                return nil
-            }
-        } catch {
+        if let dict = fromJSON(json) as? [String: AnyObject] {
+            self.init(dictionary: dict, creator: creator)
+        } else {
             return nil
         }
     }
@@ -142,11 +138,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
     }
 
     public func toJSONString() -> String? {
-        do {
-            return try toJSON(obj: toDictionary())
-        } catch {
-            return nil
-        }
+        return toJSON(obj: toDictionary())
     }
 
     public override func start() {
