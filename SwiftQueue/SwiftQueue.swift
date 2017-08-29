@@ -70,7 +70,7 @@ internal final class SwiftQueue: OperationQueue {
         }
 
         // Serialize this operation
-        if let sp = persister, let data = job.toJSONString() {
+        if job.isPersisted, let sp = persister, let data = job.toJSONString() {
             sp.put(queueName: queueName, taskId: job.uuid, data: data)
         }
         ope.completionBlock = {
@@ -82,7 +82,9 @@ internal final class SwiftQueue: OperationQueue {
     public override func cancelAllOperations() {
         operations.flatMap { operation -> SwiftQueueJob? in
             operation as? SwiftQueueJob
-        }.forEach {
+        }.filter { job in
+            job.isPersisted
+         }.forEach {
             persister?.remove(queueName: queueName, taskId: $0.uuid)
         }
         super.cancelAllOperations()
@@ -94,7 +96,9 @@ internal final class SwiftQueue: OperationQueue {
         }.filter {
             $0.tags.contains(tag)
         }.forEach {
-            persister?.remove(queueName: queueName, taskId: $0.uuid)
+            if $0.isPersisted {
+                persister?.remove(queueName: queueName, taskId: $0.uuid)
+            }
             $0.cancel()
         }
     }
@@ -102,7 +106,7 @@ internal final class SwiftQueue: OperationQueue {
     func completed(_ ope: Operation) {
         if let job = ope as? SwiftQueueJob {
             // Remove this operation from serialization
-            if let sp = persister {
+            if job.isPersisted, let sp = persister {
                 sp.remove(queueName: queueName, taskId: job.uuid)
             }
 

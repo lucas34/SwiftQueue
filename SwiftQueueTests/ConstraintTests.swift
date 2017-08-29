@@ -217,4 +217,34 @@ class ConstraintTests: XCTestCase {
         XCTAssertEqual(job2.onCancelCalled, 1)
     }
 
+    func testNonPersistedJobShouldNotBePersisted() {
+        let queueId = UUID().uuidString
+
+        let job = TestJob()
+        let type = UUID().uuidString
+
+        let creator = TestCreator([type: job])
+
+        let taskID = UUID().uuidString
+
+        let persister = PersisterTracker()
+
+        let manager = SwiftQueueManager(creators: [creator], persister: persister)
+        JobBuilder(type: type)
+                .schedule(manager: manager)
+
+        job.await()
+
+        XCTAssertEqual(job.onRunJobCalled, 1)
+        XCTAssertEqual(job.onCompleteCalled, 1)
+        XCTAssertEqual(job.onRetryCalled, 0)
+        XCTAssertEqual(job.onCancelCalled, 0)
+
+        XCTAssertNil(persister.putQueueName)
+        XCTAssertNil(persister.putTaskId)
+        XCTAssertNil(persister.putData)
+        XCTAssertNil(persister.removeQueueName)
+        XCTAssertNil(persister.removeJobId)
+    }
+
 }

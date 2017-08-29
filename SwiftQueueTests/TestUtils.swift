@@ -68,12 +68,12 @@ class TestCreator: JobCreator {
 class PersisterTracker: UserDefaultsPersister {
     var restoreQueueName = ""
 
-    var putQueueName = ""
-    var putTaskId = ""
-    var putData = ""
+    var putQueueName: String?
+    var putTaskId: String?
+    var putData: String?
 
-    var removeQueueName = ""
-    var removeJobId = ""
+    var removeQueueName: String?
+    var removeJobId: String?
 
     override func restore(queueName: String) -> [String] {
         restoreQueueName = queueName
