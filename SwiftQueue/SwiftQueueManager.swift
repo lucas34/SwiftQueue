@@ -12,12 +12,29 @@ public final class SwiftQueueManager {
 
     private var manage = [String: SwiftQueue]()
 
+    private var isPaused = true
+
     public init(creators: [JobCreator], persister: JobPersister? = nil) {
         self.creators = creators
         self.persister = persister
 
         persister?.restore().forEach {
-            manage[$0] = SwiftQueue(queueName: $0, creators: creators, persister: persister)
+            manage[$0] = SwiftQueue(queueName: $0, creators: creators, persister: persister, isPaused: isPaused)
+        }
+        start()
+    }
+
+    public func start() {
+        isPaused = false
+        manage.values.forEach { element in
+            element.start()
+        }
+    }
+
+    public func pause() {
+        isPaused = true
+        manage.values.forEach { element in
+            element.pause()
         }
     }
 
@@ -30,7 +47,7 @@ public final class SwiftQueueManager {
     }
 
     private func createQueue(name: String) -> SwiftQueue {
-        let queue = SwiftQueue(queueName: name, creators: creators, persister: persister)
+        let queue = SwiftQueue(queueName: name, creators: creators, persister: persister, isPaused: isPaused)
         manage[name] = queue
         return queue
     }

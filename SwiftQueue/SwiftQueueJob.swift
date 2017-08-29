@@ -30,11 +30,9 @@ internal final class SwiftQueueJob: Operation, JobResult {
 
     internal var lastError: Swift.Error?
 
-    var jobIsExecuting: Bool = false
-    var jobIsFinished: Bool = false
-
     public override var name: String? { get { return uuid } set { } }
 
+    var jobIsExecuting: Bool = false
     public override var isExecuting: Bool {
         get { return jobIsExecuting }
         set {
@@ -43,6 +41,8 @@ internal final class SwiftQueueJob: Operation, JobResult {
             didChangeValue(forKey: "isExecuting")
         }
     }
+
+    var jobIsFinished: Bool = false
     public override var isFinished: Bool {
         get { return jobIsFinished }
         set {
@@ -52,9 +52,20 @@ internal final class SwiftQueueJob: Operation, JobResult {
         }
     }
 
+    var jobIsPaused: Bool = false
+    public var isPaused: Bool {
+        get { return jobIsPaused }
+        set {
+            jobIsPaused = newValue
+            if isExecuting && !jobIsPaused {
+                run()
+            }
+        }
+    }
+
     internal init(job: Job, uuid: String = UUID().uuidString, type: String, group: String, tags: Set<String>,
                   delay: Int, deadline: Date?, requireNetwork: NetworkType, isPersisted: Bool, params: Any?,
-                  createTime: Date, runCount: Int, retries: Int, interval: Double) {
+                  createTime: Date, runCount: Int, retries: Int, interval: Double, isPaused: Bool) {
         self.handler = job
         self.uuid = uuid
         self.type = type
@@ -71,6 +82,8 @@ internal final class SwiftQueueJob: Operation, JobResult {
         self.interval = interval
 
         super.init()
+
+        self.isPaused = isPaused
 
         self.queuePriority = .normal
         self.qualityOfService = .utility
@@ -105,7 +118,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
             self.init(job: job, uuid: taskID, type: type, group: group, tags: Set(tags),
                     delay: delay, deadline: deadline, requireNetwork: network,
                     isPersisted: isPersisted, params: params, createTime: createTime,
-                    runCount: runCount, retries: retries, interval: interval)
+                    runCount: runCount, retries: retries, interval: interval, isPaused: true)
         } else {
             return nil
         }
@@ -167,6 +180,13 @@ internal final class SwiftQueueJob: Operation, JobResult {
         if isFinished {
             return
         }
+
+        if isPaused {
+            // Stop execution here.
+            // Will call run again later
+            return
+        }
+
         // Check the constraint
         do {
             try Constraints.checkConstraintsForRun(job: self)
