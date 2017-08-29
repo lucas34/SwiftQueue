@@ -77,10 +77,11 @@ public final class JobBuilder {
         return self
     }
 
-    internal func build(job: Job) -> SwiftQueueJob {
+    internal func build(job: Job, isPaused: Bool = false) -> SwiftQueueJob {
         return SwiftQueueJob(job: job, uuid: uuid, type: type, group: group, tags: tags,
                 delay: delay, deadline: deadline, requireNetwork: requireNetwork, isPersisted: isPersisted,
-                params: params, createTime: createTime, runCount: runCount, retries: retries, interval: interval)
+                params: params, createTime: createTime, runCount: runCount,
+                retries: retries, interval: interval, isPaused: isPaused)
     }
 
     public func schedule(manager: SwiftQueueManager) {
@@ -89,7 +90,7 @@ public final class JobBuilder {
             print("WARN: No job creator associate to job type \(type)") // log maybe
             return
         }
-        queue.addOperation(build(job: job))
+        queue.addOperation(build(job: job, isPaused: queue.isPaused))
     }
 }
 

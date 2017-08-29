@@ -30,10 +30,14 @@ internal final class SwiftQueue: OperationQueue {
 
     private let queueName: String
 
-    init(queueName: String, creators: [JobCreator], persister: JobPersister? = nil) {
+    internal var isPaused: Bool
+
+    init(queueName: String, creators: [JobCreator], persister: JobPersister? = nil, isPaused: Bool = false) {
         self.creators = creators
         self.persister = persister
         self.queueName = queueName
+
+        self.isPaused = isPaused
 
         super.init()
 
@@ -110,12 +114,27 @@ internal final class SwiftQueue: OperationQueue {
         return SwiftQueue.createHandler(creators: creators, type: type, params: params)
     }
 
-    static func createHandler(creators: [JobCreator], type: String, params: Any?) -> Job? {
-        for creator in creators {
-            if let job = creator.create(type: type, params: params) {
-                return job
-            }
+    func start() {
+        isPaused = false
+        updatePauseStatue()
+    }
+
+    func pause() {
+        isPaused = true
+        updatePauseStatue()
+    }
+
+    private func updatePauseStatue() {
+        operations.flatMap { operation -> SwiftQueueJob? in
+            operation as? SwiftQueueJob
+        }.forEach {
+            $0.isPaused = isPaused
         }
-        return nil
+    }
+
+    static func createHandler(creators: [JobCreator], type: String, params: Any?) -> Job? {
+        return creators.flatMap {
+            $0.create(type: type, params: params)
+        }.first
     }
 }
