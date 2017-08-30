@@ -84,7 +84,7 @@ internal final class SwiftQueue: OperationQueue {
             operation as? SwiftQueueJob
         }.filter { job in
             job.isPersisted
-         }.forEach {
+        }.forEach {
             persister?.remove(queueName: queueName, taskId: $0.uuid)
         }
         super.cancelAllOperations()
