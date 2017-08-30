@@ -235,12 +235,6 @@ internal final class SwiftQueueJob: Operation, JobResult {
     }
 
     public func onDone(error: Swift.Error?) {
-        // Check to make sure we're even executing, if not
-        // just ignore the completed call
-        if !isExecuting {
-            return
-        }
-
         if let error = error {
             lastError = error
 
