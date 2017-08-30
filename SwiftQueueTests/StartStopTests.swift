@@ -33,8 +33,6 @@ class StartStopTests: XCTestCase {
 
         JobBuilder(type: type).schedule(manager: manager)
 
-        job.await(TimeInterval(1)) // Wait for timeout
-
         // No run
         XCTAssertEqual(job.onRunJobCalled, 0)
         XCTAssertEqual(job.onCompleteCalled, 0)
@@ -58,11 +56,11 @@ class StartStopTests: XCTestCase {
 
         let manager = SwiftQueueManager(creators: [creator])
 
-        JobBuilder(type: type).delay(inSecond: 2).schedule(manager: manager)
+        JobBuilder(type: type).delay(inSecond: 1).schedule(manager: manager)
 
         manager.pause()
 
-        job.await(TimeInterval(3)) // Wait for timeout
+        job.await(TimeInterval(2)) // Wait for timeout
 
         // No run
         XCTAssertEqual(job.onRunJobCalled, 0)
@@ -70,6 +68,8 @@ class StartStopTests: XCTestCase {
         XCTAssertEqual(job.onRetryCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 0)
 
+        manager.start()
+        manager.start()
         manager.start()
         job.await()
 
@@ -90,8 +90,6 @@ class StartStopTests: XCTestCase {
         manager.pause()
 
         JobBuilder(type: type).periodic(count: 4, interval: 0).schedule(manager: manager)
-
-        job.await()
 
         // No run
         XCTAssertEqual(job.onRunJobCalled, 0)
