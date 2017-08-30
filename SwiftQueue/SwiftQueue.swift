@@ -73,8 +73,8 @@ internal final class SwiftQueue: OperationQueue {
         if job.isPersisted, let sp = persister, let data = job.toJSONString() {
             sp.put(queueName: queueName, taskId: job.uuid, data: data)
         }
-        ope.completionBlock = {
-            self.completed(ope)
+        job.completionBlock = {
+            self.completed(job)
         }
         super.addOperation(ope)
     }
@@ -103,15 +103,13 @@ internal final class SwiftQueue: OperationQueue {
         }
     }
 
-    func completed(_ ope: Operation) {
-        if let job = ope as? SwiftQueueJob {
-            // Remove this operation from serialization
-            if job.isPersisted, let sp = persister {
-                sp.remove(queueName: queueName, taskId: job.uuid)
-            }
-
-            job.completed()
+    func completed(_ job: SwiftQueueJob) {
+        // Remove this operation from serialization
+        if job.isPersisted, let sp = persister {
+            sp.remove(queueName: queueName, taskId: job.uuid)
         }
+
+        job.completed()
     }
 
     func createHandler(type: String, params: Any?) -> Job? {
