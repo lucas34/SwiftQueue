@@ -128,11 +128,8 @@ internal final class SwiftQueueJob: Operation, JobResult {
     }
 
     internal convenience init?(json: String, creator: [JobCreator]) {
-        if let dict = fromJSON(json) as? [String: AnyObject] {
-            self.init(dictionary: dict, creator: creator)
-        } else {
-            return nil
-        }
+        let dict = fromJSON(json) as? [String: Any] ?? [:]
+        self.init(dictionary: dict, creator: creator)
     }
 
     private func toDictionary() -> [String: Any] {
