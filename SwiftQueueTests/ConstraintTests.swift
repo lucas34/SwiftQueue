@@ -218,14 +218,10 @@ class ConstraintTests: XCTestCase {
     }
 
     func testNonPersistedJobShouldNotBePersisted() {
-        let queueId = UUID().uuidString
-
         let job = TestJob()
         let type = UUID().uuidString
 
         let creator = TestCreator([type: job])
-
-        let taskID = UUID().uuidString
 
         let persister = PersisterTracker()
 
