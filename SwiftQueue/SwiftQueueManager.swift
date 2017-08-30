@@ -39,11 +39,7 @@ public final class SwiftQueueManager {
     }
 
     internal func getQueue(name: String) -> SwiftQueue {
-        if let queue = manage[name] {
-            return queue
-        } else {
-            return createQueue(name: name)
-        }
+        return manage[name] ?? createQueue(name: name)
     }
 
     private func createQueue(name: String) -> SwiftQueue {
