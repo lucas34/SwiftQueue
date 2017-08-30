@@ -175,7 +175,7 @@ class ConstraintTests: XCTestCase {
         let creator = TestCreator([type: job])
 
         job.result = JobError()
-        job.retryConstraint = .exponential(initial: 1)
+        job.retryConstraint = .exponential(initial: 0)
 
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type)
@@ -240,11 +240,11 @@ class ConstraintTests: XCTestCase {
         XCTAssertEqual(job.onRetryCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 0)
 
-        XCTAssertNil(persister.putQueueName)
-        XCTAssertNil(persister.putTaskId)
-        XCTAssertNil(persister.putData)
-        XCTAssertNil(persister.removeQueueName)
-        XCTAssertNil(persister.removeJobId)
+        XCTAssertEqual(0, persister.putQueueName.count)
+        XCTAssertEqual(0, persister.putTaskId.count)
+        XCTAssertEqual(0, persister.putData.count)
+        XCTAssertEqual(0, persister.removeQueueName.count)
+        XCTAssertEqual(0, persister.removeJobId.count)
     }
 
 }

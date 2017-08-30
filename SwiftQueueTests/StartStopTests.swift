@@ -91,7 +91,7 @@ class StartStopTests: XCTestCase {
 
         JobBuilder(type: type).periodic(count: 4, interval: 0).schedule(manager: manager)
 
-        job.await(TimeInterval(1)) // Wait for timeout
+        job.await()
 
         // No run
         XCTAssertEqual(job.onRunJobCalled, 0)

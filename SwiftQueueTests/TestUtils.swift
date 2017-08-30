@@ -68,12 +68,12 @@ class TestCreator: JobCreator {
 class PersisterTracker: UserDefaultsPersister {
     var restoreQueueName = ""
 
-    var putQueueName: String?
-    var putTaskId: String?
-    var putData: String?
+    var putQueueName: [String] = [String]()
+    var putTaskId: [String] = [String]()
+    var putData: [String] = [String]()
 
-    var removeQueueName: String?
-    var removeJobId: String?
+    var removeQueueName: [String] = [String]()
+    var removeJobId: [String] = [String]()
 
     override func restore(queueName: String) -> [String] {
         restoreQueueName = queueName
@@ -81,15 +81,15 @@ class PersisterTracker: UserDefaultsPersister {
     }
 
     override func put(queueName: String, taskId: String, data: String) {
-        putQueueName = queueName
-        putTaskId = taskId
-        putData = data
+        putQueueName.append(queueName)
+        putTaskId.append(taskId)
+        putData.append(data)
         super.put(queueName: queueName, taskId: taskId, data: data)
     }
 
     override func remove(queueName: String, taskId: String) {
-        removeQueueName = queueName
-        removeJobId = taskId
+        removeQueueName.append(queueName)
+        removeJobId.append(taskId)
         super.remove(queueName: queueName, taskId: taskId)
     }
 }
