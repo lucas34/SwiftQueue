@@ -14,7 +14,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
     public let type: String
     public let group: String
 
-    private let reachability = Reachability()
+    private let reachability: Reachability?
 
     let tags: Set<String>
     let delay: Int
@@ -80,6 +80,8 @@ internal final class SwiftQueueJob: Operation, JobResult {
         self.runCount = runCount
         self.retries = retries
         self.interval = interval
+
+        self.reachability = requireNetwork.rawValue > NetworkType.any.rawValue ? Reachability() : nil
 
         super.init()
 
