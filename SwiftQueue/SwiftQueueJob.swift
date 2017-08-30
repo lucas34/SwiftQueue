@@ -165,7 +165,9 @@ internal final class SwiftQueueJob: Operation, JobResult {
 
     public override func cancel() {
         lastError = lastError ?? Canceled()
-        isFinished = true
+        if isExecuting {
+            isFinished = true
+        }
         super.cancel()
     }
 
