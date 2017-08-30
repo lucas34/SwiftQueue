@@ -78,27 +78,13 @@ internal final class SwiftQueue: OperationQueue {
         }
         super.addOperation(ope)
     }
-
-    public override func cancelAllOperations() {
-        operations.flatMap { operation -> SwiftQueueJob? in
-            operation as? SwiftQueueJob
-        }.filter { job in
-            job.isPersisted
-        }.forEach {
-            persister?.remove(queueName: queueName, taskId: $0.uuid)
-        }
-        super.cancelAllOperations()
-    }
-
+    
     public func cancelOperations(tag: String) {
         operations.flatMap { operation -> SwiftQueueJob? in
             operation as? SwiftQueueJob
         }.filter {
             $0.tags.contains(tag)
         }.forEach {
-            if $0.isPersisted {
-                persister?.remove(queueName: queueName, taskId: $0.uuid)
-            }
             $0.cancel()
         }
     }

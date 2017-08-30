@@ -56,10 +56,11 @@ class SwiftQueueManagerTests: XCTestCase {
                 .periodic(count: runCount, interval: interval)
                 .schedule(manager: manager)
 
-        XCTAssertEqual(taskID, persister.putTaskId)
-        XCTAssertEqual(group, persister.putQueueName)
+        XCTAssertEqual([taskID], persister.putTaskId)
+        XCTAssertEqual([group], persister.putQueueName)
+        XCTAssertEqual(1, persister.putData.count)
 
-        let jobInfo = SwiftQueueJob(json: persister.putData ?? "", creator: [creator])
+        let jobInfo = SwiftQueueJob(json: persister.putData[0], creator: [creator])
 
         XCTAssertEqual(jobInfo?.name, taskID)
         XCTAssertEqual(jobInfo?.uuid, taskID)
@@ -131,12 +132,12 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertEqual(job.onRetryCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 1)
 
-        XCTAssertNil(persister.putQueueName)
-        XCTAssertNil(persister.putTaskId)
-        XCTAssertNil(persister.putData)
+        XCTAssertEqual(0, persister.putQueueName.count)
+        XCTAssertEqual(0, persister.putTaskId.count)
+        XCTAssertEqual(0, persister.putData.count)
 
-        XCTAssertNil(persister.removeJobId)
-        XCTAssertNil(persister.removeQueueName)
+        XCTAssertEqual(0, persister.removeJobId.count)
+        XCTAssertEqual(0, persister.removeQueueName.count)
     }
 
     func testCancelWithTagShouldRemoveFromPersister() {
@@ -169,8 +170,8 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertEqual(job.onRetryCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 1)
 
-        XCTAssertEqual(id, persister.removeJobId)
-        XCTAssertEqual(group, persister.removeQueueName)
+        XCTAssertEqual([id], persister.removeJobId)
+        XCTAssertEqual([group], persister.removeQueueName)
     }
 
     func testCancelAll() {
@@ -202,46 +203,62 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertEqual(job.onRetryCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 1)
 
-        XCTAssertNil(persister.putQueueName)
-        XCTAssertNil(persister.putTaskId)
-        XCTAssertNil(persister.putData)
+        XCTAssertEqual(0, persister.putQueueName.count)
+        XCTAssertEqual(0, persister.putTaskId.count)
+        XCTAssertEqual(0, persister.putData.count)
 
-        XCTAssertNil(persister.removeJobId)
-        XCTAssertNil(persister.removeQueueName)
+        XCTAssertEqual(0, persister.removeJobId.count)
+        XCTAssertEqual(0, persister.removeQueueName.count)
     }
 
     func testCancelAllShouldRemoveFromPersister() {
-        let id = UUID().uuidString
-        let tag = UUID().uuidString
-        let type = UUID().uuidString
         let group = UUID().uuidString
+        
+        let id1 = UUID().uuidString
+        let type1 = UUID().uuidString
+        let job1 = TestJob()
 
-        let job = TestJob()
-        let creator = TestCreator([type: job])
+        let id2 = UUID().uuidString
+        let type2 = UUID().uuidString
+        let job2 = TestJob()
+        
+        let creator = TestCreator([type1: job1, type2: job2])
 
         let persister = PersisterTracker()
 
         let manager = SwiftQueueManager(creators: [creator], persister: persister)
 
-        JobBuilder(type: type)
-                .singleInstance(forId: id)
+        JobBuilder(type: type1)
+                .singleInstance(forId: id1)
                 .group(name: group)
                 .delay(inSecond: Int.max)
-                .addTag(tag: tag)
+                .persist(required: true)
+                .schedule(manager: manager)
+
+        JobBuilder(type: type2)
+                .singleInstance(forId: id2)
+                .group(name: group)
+                .delay(inSecond: Int.max)
                 .persist(required: true)
                 .schedule(manager: manager)
 
         manager.cancelAllOperations()
 
-        job.await()
+        job1.await()
+        job2.await()
 
-        XCTAssertEqual(job.onRunJobCalled, 0)
-        XCTAssertEqual(job.onCompleteCalled, 0)
-        XCTAssertEqual(job.onRetryCalled, 0)
-        XCTAssertEqual(job.onCancelCalled, 1)
+        XCTAssertEqual(job1.onRunJobCalled, 0)
+        XCTAssertEqual(job1.onCompleteCalled, 0)
+        XCTAssertEqual(job1.onRetryCalled, 0)
+        XCTAssertEqual(job1.onCancelCalled, 1)
 
-        XCTAssertEqual(id, persister.removeJobId)
-        XCTAssertEqual(group, persister.removeQueueName)
+        XCTAssertEqual(job2.onRunJobCalled, 0)
+        XCTAssertEqual(job2.onCompleteCalled, 0)
+        XCTAssertEqual(job2.onRetryCalled, 0)
+        XCTAssertEqual(job2.onCancelCalled, 1)
+
+        XCTAssertEqual([id1, id2], persister.removeJobId)
+        XCTAssertEqual([group, group], persister.removeQueueName)
     }
 
     func testLoadSerializedSortedTaskShouldRunSuccess() {
@@ -323,6 +340,8 @@ class SwiftQueueManagerTests: XCTestCase {
 
         let manager = SwiftQueueManager(creators: [creator], persister: persister)
         JobBuilder(type: type)
+                .singleInstance(forId: taskID)
+                .group(name: queueId)
                 .persist(required: true)
                 .schedule(manager: manager)
 
@@ -333,8 +352,8 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertEqual(job.onRetryCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 0)
 
-        XCTAssertNotNil(persister.removeJobId)
-        XCTAssertNotNil(persister.removeQueueName)
+        XCTAssertEqual([taskID], persister.removeJobId)
+        XCTAssertEqual([queueId], persister.removeQueueName)
     }
 
     func testCompleteFailTaskRemoveFromSerializer() {
@@ -365,7 +384,7 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertEqual(job.onRetryCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 1)
 
-        XCTAssertEqual(taskID, persister.removeJobId)
-        XCTAssertEqual(queueId, persister.removeQueueName)
+        XCTAssertEqual([taskID], persister.removeJobId)
+        XCTAssertEqual([queueId], persister.removeQueueName)
     }
 }
