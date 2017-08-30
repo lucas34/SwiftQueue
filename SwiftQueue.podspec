@@ -1,8 +1,8 @@
 Pod::Spec.new do |s|
   s.name             = "SwiftQueue"
-  s.version          = "0.0.6"
+  s.version          = "0.0.7"
   s.summary          = "SwiftQueue"
-  s.description      = "Better queue system for IOS"
+  s.description      = "Job Scheduler for IOS with Concurrent run, failure/retry, persistence, repeat, delay and more"
   s.homepage         = "https://github.com/lucas34/SwiftQueue"
   s.license          = 'MIT'
   s.author           = { "Lucas Nelaupe" => "lucas.nelaupe@gmail.com" }
