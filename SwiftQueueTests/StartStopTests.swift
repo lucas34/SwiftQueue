@@ -79,4 +79,39 @@ class StartStopTests: XCTestCase {
         XCTAssertEqual(job.onCancelCalled, 0)
     }
 
+    func testSchedulePeriodicJobThenStart() {
+        let job = TestJob()
+        let type = UUID().uuidString
+
+        let creator = TestCreator([type: job])
+
+        let manager = SwiftQueueManager(creators: [creator])
+
+        manager.pause()
+
+        JobBuilder(type: type).periodic(count: 4, interval: 0).schedule(manager: manager)
+
+        job.await(TimeInterval(1)) // Wait for timeout
+
+        // No run
+        XCTAssertEqual(job.onRunJobCalled, 0)
+        XCTAssertEqual(job.onCompleteCalled, 0)
+        XCTAssertEqual(job.onRetryCalled, 0)
+        XCTAssertEqual(job.onCancelCalled, 0)
+
+        manager.start()
+        manager.start()
+        manager.start()
+        manager.start()
+        manager.start()
+        manager.start()
+        manager.start()
+        job.await()
+
+        XCTAssertEqual(job.onRunJobCalled, 4)
+        XCTAssertEqual(job.onCompleteCalled, 1)
+        XCTAssertEqual(job.onRetryCalled, 0)
+        XCTAssertEqual(job.onCancelCalled, 0)
+    }
+
 }

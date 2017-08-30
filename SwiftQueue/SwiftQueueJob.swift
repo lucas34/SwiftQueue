@@ -56,8 +56,9 @@ internal final class SwiftQueueJob: Operation, JobResult {
     public var isPaused: Bool {
         get { return jobIsPaused }
         set {
+            let callRun = jobIsPaused && !newValue && isExecuting
             jobIsPaused = newValue
-            if isExecuting && !jobIsPaused {
+            if callRun {
                 run()
             }
         }
