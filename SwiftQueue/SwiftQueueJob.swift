@@ -26,6 +26,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
     let interval: Double
 
     var runCount: Int
+    var maxRun: Int
     var retries: Int
 
     internal var lastError: Swift.Error?
@@ -66,7 +67,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
 
     internal init(job: Job, uuid: String = UUID().uuidString, type: String, group: String, tags: Set<String>,
                   delay: Int, deadline: Date?, requireNetwork: NetworkType, isPersisted: Bool, params: Any?,
-                  createTime: Date, runCount: Int, retries: Int, interval: Double, isPaused: Bool) {
+                  createTime: Date, runCount: Int, maxRun: Int, retries: Int, interval: Double, isPaused: Bool) {
         self.handler = job
         self.uuid = uuid
         self.type = type
@@ -79,6 +80,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
         self.params = params
         self.createTime = createTime
         self.runCount = runCount
+        self.maxRun = maxRun
         self.retries = retries
         self.interval = interval
 
@@ -110,6 +112,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
            let isPersisted    = dictionary["isPersisted"] as? Bool,
            let createTimeStr  = dictionary["createTime"] as? String,
            let runCount       = dictionary["runCount"] as? Int,
+           let maxRun         = dictionary["maxRun"] as? Int,
            let retries        = dictionary["retries"] as? Int,
            let interval       = dictionary["interval"] as? Double,
            let job = SwiftQueue.createHandler(creators: creator, type: type, params: params) {
@@ -121,7 +124,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
             self.init(job: job, uuid: taskID, type: type, group: group, tags: Set(tags),
                     delay: delay, deadline: deadline, requireNetwork: network,
                     isPersisted: isPersisted, params: params, createTime: createTime,
-                    runCount: runCount, retries: retries, interval: interval, isPaused: true)
+                    runCount: runCount, maxRun: maxRun, retries: retries, interval: interval, isPaused: true)
         } else {
             return nil
         }
@@ -135,7 +138,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
     private func toDictionary() -> [String: Any] {
         var dict = [String: Any]()
         dict["taskID"]         = self.uuid
-        dict["type"]        = self.type
+        dict["type"]           = self.type
         dict["group"]          = self.group
         dict["tags"]           = Array(self.tags)
         dict["delay"]          = self.delay
@@ -145,6 +148,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
         dict["params"]         = self.params
         dict["createTime"]     = dateFormatter.string(from: self.createTime)
         dict["runCount"]       = self.runCount
+        dict["maxRun"]         = self.maxRun
         dict["retries"]        = self.retries
         dict["interval"]       = self.interval
         return dict
@@ -262,8 +266,8 @@ internal final class SwiftQueueJob: Operation, JobResult {
             }
         } else {
             lastError = nil
-            runCount -= 1
-            if runCount <= 0 {
+            runCount += 1
+            if maxRun >= 0 && runCount >= maxRun {
                 isFinished = true
             } else {
                 runInBackgroundAfter(TimeInterval(interval)) {
