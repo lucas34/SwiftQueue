@@ -36,7 +36,7 @@ class SwiftQueueManagerTests: XCTestCase {
         let requireNetwork = NetworkType.wifi
         let isPersisted = true // REquiered
         let params = UUID().uuidString
-        let runCount = 5
+        let maxRun = 5
         let retries = 3
         let interval: Double = 10
 
@@ -53,7 +53,7 @@ class SwiftQueueManagerTests: XCTestCase {
                 .persist(required: true)
                 .with(params: params)
                 .retry(max: retries)
-                .periodic(count: runCount, interval: interval)
+                .periodic(count: maxRun, interval: interval)
                 .schedule(manager: manager)
 
         XCTAssertEqual([taskID], persister.putTaskId)
@@ -73,7 +73,7 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertEqual(jobInfo?.requireNetwork, requireNetwork)
         XCTAssertEqual(jobInfo?.isPersisted, isPersisted)
         XCTAssertEqual(jobInfo?.params as? String, params)
-        XCTAssertEqual(jobInfo?.runCount, runCount)
+        XCTAssertEqual(jobInfo?.maxRun, maxRun)
         XCTAssertEqual(jobInfo?.retries, retries)
         XCTAssertEqual(jobInfo?.interval, interval)
     }
@@ -213,7 +213,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
     func testCancelAllShouldRemoveFromPersister() {
         let group = UUID().uuidString
-        
+
         let id1 = UUID().uuidString
         let type1 = UUID().uuidString
         let job1 = TestJob()
@@ -221,7 +221,7 @@ class SwiftQueueManagerTests: XCTestCase {
         let id2 = UUID().uuidString
         let type2 = UUID().uuidString
         let job2 = TestJob()
-        
+
         let creator = TestCreator([type1: job1, type2: job2])
 
         let persister = PersisterTracker()

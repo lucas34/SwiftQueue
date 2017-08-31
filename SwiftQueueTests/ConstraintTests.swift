@@ -243,4 +243,26 @@ class ConstraintTests: XCTestCase {
         XCTAssertEqual(0, persister.removeJobId.count)
     }
 
+    func testRepeatableJobWithExponentialBackoffRetry() {
+        let job = TestJob()
+        let type = UUID().uuidString
+
+        let creator = TestCreator([type: job])
+
+        job.result = JobError()
+        job.retryConstraint = RetryConstraint.exponential(initial: 1)
+
+        let manager = SwiftQueueManager(creators: [creator])
+        JobBuilder(type: type)
+                .retry(max: 1)
+                .periodic()
+                .schedule(manager: manager)
+
+        job.await(TimeInterval(10))
+
+        XCTAssertEqual(job.onRunJobCalled, 2)
+        XCTAssertEqual(job.onCompleteCalled, 0)
+        XCTAssertEqual(job.onRetryCalled, 1)
+        XCTAssertEqual(job.onCancelCalled, 1)
+    }
 }

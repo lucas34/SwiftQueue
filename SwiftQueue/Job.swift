@@ -18,7 +18,7 @@ public final class JobBuilder {
     private var isPersisted: Bool = false
     private var params: Any?
     private var createTime: Date = Date()
-    private var runCount: Int = 1
+    private var maxRun: Int = 1
     private var retries: Int = 0
     private var interval: Double = -1.0
 
@@ -46,8 +46,8 @@ public final class JobBuilder {
         return self
     }
 
-    public func periodic(count: Int = Int.max, interval: Double = 0) -> JobBuilder {
-        runCount = count
+    public func periodic(count: Int = -1, interval: Double = 0) -> JobBuilder {
+        maxRun = count
         self.interval = interval
         return self
     }
@@ -80,7 +80,7 @@ public final class JobBuilder {
     internal func build(job: Job, isPaused: Bool = false) -> SwiftQueueJob {
         return SwiftQueueJob(job: job, uuid: uuid, type: type, group: group, tags: tags,
                 delay: delay, deadline: deadline, requireNetwork: requireNetwork, isPersisted: isPersisted,
-                params: params, createTime: createTime, runCount: runCount,
+                params: params, createTime: createTime, runCount: 0, maxRun: maxRun,
                 retries: retries, interval: interval, isPaused: isPaused)
     }
 

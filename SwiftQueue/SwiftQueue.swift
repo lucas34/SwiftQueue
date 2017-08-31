@@ -78,7 +78,7 @@ internal final class SwiftQueue: OperationQueue {
         }
         super.addOperation(ope)
     }
-    
+
     public func cancelOperations(tag: String) {
         operations.flatMap { operation -> SwiftQueueJob? in
             operation as? SwiftQueueJob
