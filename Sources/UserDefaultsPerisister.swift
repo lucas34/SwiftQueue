@@ -3,7 +3,6 @@
 // Copyright (c) 2017 Lucas Nelaupe. All rights reserved.
 //
 
-import UIKit
 import Foundation
 
 public class UserDefaultsPersister: JobPersister {
