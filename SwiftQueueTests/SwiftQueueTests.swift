@@ -3,7 +3,6 @@
 // Copyright (c) 2017 lucas34. All rights reserved.
 //
 
-import UIKit
 import XCTest
 import Dispatch
 @testable import SwiftQueue
