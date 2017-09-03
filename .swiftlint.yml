@@ -1,6 +1,6 @@
 excluded:
-  - Pods
-  
+  - Sources/Reachability.swift
+
 function_body_length:
   - 50 # warning
   - 70 # error
