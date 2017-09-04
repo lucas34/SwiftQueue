@@ -1,8 +1,11 @@
 language: swift
 osx_image: xcode8.3
 
-install:
+before_install:
   - brew install swiftlint
+
+before_script:
+  - carthage bootstrap --platform iOS
 
 script:
     - swiftlint
