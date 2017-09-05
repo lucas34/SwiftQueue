@@ -4,12 +4,9 @@
 [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome)
 [![swift](https://img.shields.io/badge/Swift-3.0-orange.svg?style=flat)](https://swift.org)
 [![travis](https://travis-ci.org/lucas34/SwiftQueue.svg?branch=master)](https://travis-ci.org/lucas34/SwiftQueue)
-[![licence](https://img.shields.io/badge/License-MIT-blue.svg?style=flat)](https://tldrlegal.com/license/mit-license)
+[![codecov](https://codecov.io/gh/lucas34/SwiftQueue/branch/master/graph/badge.svg)](https://codecov.io/gh/lucas34/SwiftQueue)
 [![pod](https://img.shields.io/cocoapods/v/SwiftQueue.svg?style=flat)](https://cocoapods.org/pods/SwiftQueue)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![Platform](https://img.shields.io/cocoapods/p/LFAlertController.svg?style=flat)](http://cocoapods.org/pods/LFAlertController)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
-[![codecov](https://codecov.io/gh/lucas34/SwiftQueue/branch/master/graph/badge.svg)](https://codecov.io/gh/lucas34/SwiftQueue)
 [![codebeat badge](https://codebeat.co/badges/3d446d9e-3e7a-435c-85fc-aa626d4f7652)](https://codebeat.co/projects/github-com-lucas34-swiftqueue-master)
 
 SwiftQueue is a job scheduler for Ios inspired by popular android libraries like *android-priority-jobqueue* or *android-job*. It allows you to run your tasks with run and retry constraints. 
@@ -36,6 +33,15 @@ Library will rely on *Operation* and *OperationQueue* to make sure all tasks wil
 - Xcode 7.3
 
 ## Installation
+
+#### Carthage
+SwiftQueue is carthage compatible. Add the following entry in your Cartfile:
+
+```
+github "lucas34/SwiftQueue"
+```
+
+Then run `carthage update`.
 
 #### CocoaPods
 You can use [CocoaPods](https://cocoapods.org/pods/SwiftQueue) to install `SwiftQueue` by adding it to your `Podfile`:
