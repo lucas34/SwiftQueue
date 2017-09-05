@@ -1,5 +1,5 @@
 excluded:
-  - Sources/Reachability.swift
+  - Carthage
 
 function_body_length:
   - 50 # warning
