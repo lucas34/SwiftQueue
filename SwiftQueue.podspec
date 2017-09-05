@@ -13,4 +13,6 @@ Pod::Spec.new do |s|
 
   s.source_files = 'Sources/**.swift'
   
+  s.dependency 'ReachabilitySwift', '~> 3'
+  
 end
