@@ -4,7 +4,7 @@
 //
 
 import Foundation
-import Reachability
+import ReachabilitySwift
 
 internal final class SwiftQueueJob: Operation, JobResult {
 
