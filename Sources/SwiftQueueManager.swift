@@ -59,5 +59,11 @@ public final class SwiftQueueManager {
             element.cancelOperations(tag: tag)
         }
     }
+    
+    public func waitUntilAllOperationsAreFinished() {
+        manage.values.forEach { element in
+            element.waitUntilAllOperationsAreFinished()
+        }
+    }
 
 }
