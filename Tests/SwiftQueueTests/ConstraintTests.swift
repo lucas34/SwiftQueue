@@ -45,6 +45,7 @@ class ConstraintTests: XCTestCase {
                 .deadline(date: Date()) // After 1 second should fail
                 .schedule(manager: manager)
 
+        manager.waitUntilAllOperationsAreFinished()
         job1.await()
 
         XCTAssertEqual(job1.onRunJobCalled, 1)
@@ -185,7 +186,10 @@ class ConstraintTests: XCTestCase {
         let job2 = TestJob()
         let type2 = UUID().uuidString
 
-        let creator = TestCreator([type1: job1, type2: job2])
+        let job3 = TestJob()
+        let type3 = UUID().uuidString
+
+        let creator = TestCreator([type1: job1, type2: job2, type3: job3])
 
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type1)
@@ -193,14 +197,22 @@ class ConstraintTests: XCTestCase {
                 .delay(inSecond: Int.max)
                 .schedule(manager: manager)
 
-        JobBuilder(type: type2).singleInstance(forId: id).schedule(manager: manager)
+        JobBuilder(type: type2)
+                .singleInstance(forId: id)
+                .delay(inSecond: Int.max)
+                .schedule(manager: manager)
 
-        job2.await()
+        JobBuilder(type: type3).singleInstance(forId: id).schedule(manager: manager)
 
-        XCTAssertEqual(job2.onRunJobCalled, 0)
-        XCTAssertEqual(job2.onCompleteCalled, 0)
-        XCTAssertEqual(job2.onRetryCalled, 0)
-        XCTAssertEqual(job2.onCancelCalled, 1)
+        job3.await()
+
+        XCTAssertEqual(job3.onRunJobCalled, 0)
+        XCTAssertEqual(job3.onCompleteCalled, 0)
+        XCTAssertEqual(job3.onRetryCalled, 0)
+        XCTAssertEqual(job3.onCancelCalled, 1)
+
+        manager.cancelAllOperations()
+        manager.waitUntilAllOperationsAreFinished()
     }
 
     func testNonPersistedJobShouldNotBePersisted() {
