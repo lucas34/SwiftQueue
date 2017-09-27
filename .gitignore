@@ -38,3 +38,5 @@ Example/Pods
 ModuleCache
 Pods
 Fix
+Carthage
+.build
