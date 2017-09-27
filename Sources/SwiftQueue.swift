@@ -104,15 +104,15 @@ internal final class SwiftQueue: OperationQueue {
 
     func start() {
         isPaused = false
-        updatePauseStatue()
+        updatePauseStatus()
     }
 
     func pause() {
         isPaused = true
-        updatePauseStatue()
+        updatePauseStatus()
     }
 
-    private func updatePauseStatue() {
+    private func updatePauseStatus() {
         operations.flatMap { operation -> SwiftQueueJob? in
             operation as? SwiftQueueJob
         }.forEach {
