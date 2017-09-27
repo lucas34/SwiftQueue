@@ -42,8 +42,8 @@ public class UserDefaultsPersister: JobPersister {
 
     public func remove(queueName: String, taskId: String) {
         let store = UserDefaults()
-        var values: [String: [String: String]] = store.value(forKey: key) as? [String: [String: String]] ?? [:]
-        values[queueName]?.removeValue(forKey: taskId)
+        var values: [String: [String: String]]? = store.value(forKey: key) as? [String: [String: String]]
+        values?[queueName]?.removeValue(forKey: taskId)
         store.setValue(values, forKey: key)
         store.synchronize()
     }
