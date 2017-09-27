@@ -4,7 +4,7 @@
 //
 
 import Foundation
-import ReachabilitySwift
+import Reachability
 
 internal final class SwiftQueueJob: Operation, JobResult {
 
@@ -196,29 +196,13 @@ internal final class SwiftQueueJob: Operation, JobResult {
         // Check the constraint
         do {
             try Constraints.checkConstraintsForRun(job: self)
-            switch requireNetwork {
-            case .any:
-                break // Continue function
-            case .cellular:
-                guard let reachability = reachability, !reachability.isReachable else {
-                    break // Continue
-                }
-                reachability.whenReachable = { reachability in
-                    reachability.whenReachable = nil
-                    self.run()
-                }
-                return // Stop run function
-            case .wifi:
-                guard let reachability = reachability, !reachability.isReachableViaWiFi else {
-                    break // Continue
-
-                }
-                reachability.whenReachable = { reachability in
+            guard checkIsReachable() else {
+                reachability?.whenReachable = { reachability in
                     // Change network
                     reachability.whenReachable = nil
                     self.run()
                 }
-                return // Stop run function
+                return
             }
 
             if Date().timeIntervalSince(createTime) > TimeInterval(delay) {
@@ -231,6 +215,20 @@ internal final class SwiftQueueJob: Operation, JobResult {
 
         } catch (let error) {
             onDone(error: error)
+        }
+    }
+
+    internal func checkIsReachable() -> Bool {
+        guard let reachability = reachability else {
+            return true
+        }
+        switch requireNetwork {
+        case .any:
+            return true
+        case .cellular:
+            return reachability.isReachable
+        case .wifi:
+            return reachability.isReachableViaWiFi
         }
     }
 
