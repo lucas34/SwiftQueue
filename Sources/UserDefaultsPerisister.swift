@@ -7,9 +7,11 @@ import Foundation
 
 public class UserDefaultsPersister: JobPersister {
 
-    private let key = "SwiftQueueInfo"
+    private let key: String
 
-    public init() {}
+    public init(key: String = "SwiftQueueInfo") {
+        self.key = key
+    }
 
     // Structure as follow
     // [group:[id:data]]
