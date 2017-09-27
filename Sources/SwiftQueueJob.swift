@@ -155,7 +155,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
     }
 
     public func toJSONString() -> String? {
-        return toJSON(obj: toDictionary())
+        return toJSON(toDictionary())
     }
 
     public override func start() {
