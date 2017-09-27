@@ -1,5 +1,5 @@
 language: swift
-osx_image: xcode8.3
+osx_image: xcode9
 
 before_install:
   - brew install swiftlint
@@ -9,7 +9,7 @@ before_script:
 
 script:
     - swiftlint
-    - set -o pipefail && xcodebuild test -enableCodeCoverage YES -project SwiftQueue.xcodeproj -scheme SwiftQueue -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6S,OS=10.3.1'
+    - set -o pipefail && xcodebuild test -enableCodeCoverage YES -project SwiftQueue.xcodeproj -scheme SwiftQueue -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone X,OS=11.0'
 
 after_success:
     - bash <(curl -s https://codecov.io/bash)
