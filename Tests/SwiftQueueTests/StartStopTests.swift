@@ -8,19 +8,6 @@ import XCTest
 
 class StartStopTests: XCTestCase {
 
-    override class func setUp() {
-        super.setUp()
-
-        UserDefaults().set(nil, forKey: "SwiftQueueInfo")
-        UserDefaults().synchronize()
-    }
-
-    override func tearDown() {
-        UserDefaults().set(nil, forKey: "SwiftQueueInfo")
-        UserDefaults().synchronize()
-        super.tearDown()
-    }
-
     func testScheduleWhenQueueStop() {
         let job = TestJob()
         let type = UUID().uuidString

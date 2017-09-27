@@ -8,19 +8,6 @@ import XCTest
 
 class ConstraintTests: XCTestCase {
 
-    override class func setUp() {
-        super.setUp()
-
-        UserDefaults().set(nil, forKey: "SwiftQueueInfo")
-        UserDefaults().synchronize()
-    }
-
-    override func tearDown() {
-        UserDefaults().set(nil, forKey: "SwiftQueueInfo")
-        UserDefaults().synchronize()
-        super.tearDown()
-    }
-
     func testDeadlineWhenSchedule() {
         let job = TestJob()
         let type = UUID().uuidString
@@ -74,7 +61,6 @@ class ConstraintTests: XCTestCase {
     }
 
     func testDeadlineWhenDeserialize() {
-        UserDefaults().set(nil, forKey: "SwiftQueueInfo")
         let group = UUID().uuidString
 
         let job = TestJob()
@@ -90,7 +76,7 @@ class ConstraintTests: XCTestCase {
                 .build(job: job)
                 .toJSONString()!
 
-        let persister = PersisterTracker()
+        let persister = PersisterTracker(key: UUID().uuidString)
         persister.put(queueName: group, taskId: taskId, data: json)
 
         _ = SwiftQueueManager(creators: [creator], persister: persister)
@@ -223,7 +209,7 @@ class ConstraintTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let persister = PersisterTracker()
+        let persister = PersisterTracker(key: UUID().uuidString)
 
         let manager = SwiftQueueManager(creators: [creator], persister: persister)
         JobBuilder(type: type)
