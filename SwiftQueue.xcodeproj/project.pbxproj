@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1D0CACB71F5D95F0007620F1 /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D0CACB61F5D95F0007620F1 /* Reachability.framework */; };
-		1D0CACB81F5D96A0007620F1 /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D0CACB61F5D95F0007620F1 /* Reachability.framework */; };
 		1D7B3D281F5C1EBD000D49B6 /* Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B3D221F5C1EBD000D49B6 /* Constraints.swift */; };
 		1D7B3D291F5C1EBD000D49B6 /* Job.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B3D231F5C1EBD000D49B6 /* Job.swift */; };
 		1D7B3D2A1F5C1EBD000D49B6 /* SwiftQueueJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B3D241F5C1EBD000D49B6 /* SwiftQueueJob.swift */; };
@@ -35,7 +33,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1D0CACB61F5D95F0007620F1 /* Reachability.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reachability.framework; path = Carthage/Build/iOS/Reachability.framework; sourceTree = "<group>"; };
 		1D7B3D221F5C1EBD000D49B6 /* Constraints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constraints.swift; sourceTree = "<group>"; };
 		1D7B3D231F5C1EBD000D49B6 /* Job.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Job.swift; sourceTree = "<group>"; };
 		1D7B3D241F5C1EBD000D49B6 /* SwiftQueueJob.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftQueueJob.swift; sourceTree = "<group>"; };
@@ -46,6 +43,7 @@
 		1D7B3D2F1F5C1EC7000D49B6 /* StartStopTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartStopTests.swift; sourceTree = "<group>"; };
 		1D7B3D301F5C1EC7000D49B6 /* TestReadMeSample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestReadMeSample.swift; sourceTree = "<group>"; };
 		1D7B3D311F5C1EC7000D49B6 /* TestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestUtils.swift; sourceTree = "<group>"; };
+		B07F22851F7B6851004443DB /* Reachability.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reachability.framework; path = Carthage/Build/iOS/Reachability.framework; sourceTree = "<group>"; };
 		OBJ_11 /* SwiftQueueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftQueueTests.swift; sourceTree = "<group>"; };
 		OBJ_13 /* SwiftQueue.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftQueue.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_14 /* SwiftQueueTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = SwiftQueueTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -58,7 +56,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
 			files = (
-				1D0CACB71F5D95F0007620F1 /* Reachability.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -67,7 +64,6 @@
 			buildActionMask = 0;
 			files = (
 				OBJ_29 /* SwiftQueue.framework in Frameworks */,
-				1D0CACB81F5D96A0007620F1 /* Reachability.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,7 +73,7 @@
 		1D0CACB51F5D95F0007620F1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				1D0CACB61F5D95F0007620F1 /* Reachability.framework */,
+				B07F22851F7B6851004443DB /* Reachability.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -248,7 +244,7 @@
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = SwiftQueue.xcodeproj/SwiftQueue_Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx $(PROJECT_DIR)/Carthage/Build/iOS";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = SwiftQueue;
@@ -270,7 +266,7 @@
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = SwiftQueue.xcodeproj/SwiftQueue_Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx $(PROJECT_DIR)/Carthage/Build/iOS";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = SwiftQueue;
