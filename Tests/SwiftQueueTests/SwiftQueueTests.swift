@@ -9,18 +9,6 @@ import Dispatch
 
 class SwiftQueueManagerTests: XCTestCase {
 
-    override class func setUp() {
-        super.setUp()
-        UserDefaults().set(nil, forKey: "SwiftQueueInfo")
-        UserDefaults().synchronize()
-    }
-
-    override func tearDown() {
-        UserDefaults().set(nil, forKey: "SwiftQueueInfo")
-        UserDefaults().synchronize()
-        super.tearDown()
-    }
-
     func testBuilderAssignEverything() {
         let job = TestJob()
         let type = UUID().uuidString
@@ -39,7 +27,7 @@ class SwiftQueueManagerTests: XCTestCase {
         let retries = 3
         let interval: Double = 10
 
-        let persister = PersisterTracker()
+        let persister = PersisterTracker(key: UUID().uuidString)
 
         let manager = SwiftQueueManager(creators: [creator], persister: persister)
         JobBuilder(type: type)
@@ -111,7 +99,7 @@ class SwiftQueueManagerTests: XCTestCase {
         let job = TestJob()
         let creator = TestCreator([type: job])
 
-        let persister = PersisterTracker()
+        let persister = PersisterTracker(key: UUID().uuidString)
 
         let manager = SwiftQueueManager(creators: [creator], persister: persister)
 
@@ -148,7 +136,7 @@ class SwiftQueueManagerTests: XCTestCase {
         let job = TestJob()
         let creator = TestCreator([type: job])
 
-        let persister = PersisterTracker()
+        let persister = PersisterTracker(key: UUID().uuidString)
 
         let manager = SwiftQueueManager(creators: [creator], persister: persister)
 
@@ -182,7 +170,7 @@ class SwiftQueueManagerTests: XCTestCase {
         let job = TestJob()
         let creator = TestCreator([type: job])
 
-        let persister = PersisterTracker()
+        let persister = PersisterTracker(key: UUID().uuidString)
 
         let manager = SwiftQueueManager(creators: [creator], persister: persister)
 
@@ -223,7 +211,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         let creator = TestCreator([type1: job1, type2: job2])
 
-        let persister = PersisterTracker()
+        let persister = PersisterTracker(key: UUID().uuidString)
 
         let manager = SwiftQueueManager(creators: [creator], persister: persister)
 
@@ -261,7 +249,6 @@ class SwiftQueueManagerTests: XCTestCase {
     }
 
     func testLoadSerializedSortedTaskShouldRunSuccess() {
-        UserDefaults().set(nil, forKey: "SwiftQueueInfo") // Force reset
         let queueId = UUID().uuidString
 
         let job1 = TestJob()
@@ -287,7 +274,7 @@ class SwiftQueueManagerTests: XCTestCase {
                 .toJSONString()!
 
         // Should invert when deserialize
-        let persister = PersisterTracker()
+        let persister = PersisterTracker(key: UUID().uuidString)
         persister.put(queueName: queueId, taskId: job2Id, data: task2)
         XCTAssertEqual(persister.restore().count, 1)
         XCTAssertEqual(persister.restore()[0], queueId)
@@ -335,7 +322,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         let taskID = UUID().uuidString
 
-        let persister = PersisterTracker()
+        let persister = PersisterTracker(key: UUID().uuidString)
 
         let manager = SwiftQueueManager(creators: [creator], persister: persister)
         JobBuilder(type: type)
@@ -367,7 +354,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         let taskID = UUID().uuidString
 
-        let persister = PersisterTracker()
+        let persister = PersisterTracker(key: UUID().uuidString)
 
         let manager = SwiftQueueManager(creators: [creator], persister: persister)
         JobBuilder(type: type)
