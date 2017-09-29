@@ -5,7 +5,7 @@
 
 import Foundation
 #if os(iOS) || os(macOS) || os(tvOS)
-import Reachability
+import ReachabilitySwift
 #endif
 
 internal final class SwiftQueueJob: Operation, JobResult {
