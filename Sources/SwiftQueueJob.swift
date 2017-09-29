@@ -4,7 +4,9 @@
 //
 
 import Foundation
+#if os(iOS) || os(macOS) || os(tvOS)
 import Reachability
+#endif
 
 internal final class SwiftQueueJob: Operation, JobResult {
 
@@ -14,7 +16,9 @@ internal final class SwiftQueueJob: Operation, JobResult {
     public let type: String
     public let group: String
 
+#if os(iOS) || os(macOS) || os(tvOS)
     private let reachability: Reachability?
+#endif
 
     let tags: Set<String>
     let delay: Int
@@ -84,7 +88,9 @@ internal final class SwiftQueueJob: Operation, JobResult {
         self.retries = retries
         self.interval = interval
 
+#if os(iOS) || os(macOS) || os(tvOS)
         self.reachability = requireNetwork.rawValue > NetworkType.any.rawValue ? Reachability() : nil
+#endif
 
         super.init()
 
@@ -93,12 +99,16 @@ internal final class SwiftQueueJob: Operation, JobResult {
         self.queuePriority = .normal
         self.qualityOfService = .utility
 
+#if os(iOS) || os(macOS) || os(tvOS)
         try? reachability?.startNotifier()
+#endif
     }
 
+#if os(iOS) || os(macOS) || os(tvOS)
     deinit {
         reachability?.stopNotifier()
     }
+#endif
 
     private convenience init?(dictionary: [String: Any], creator: [JobCreator]) {
         let params = dictionary["params"] ?? nil
@@ -179,7 +189,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
         handler.onRemove(error: error)
     }
 
-    private func run() {
+    internal func run() {
         if isCancelled && !isFinished {
             isFinished = true
         }
@@ -196,12 +206,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
         // Check the constraint
         do {
             try Constraints.checkConstraintsForRun(job: self)
-            guard checkIsReachable() else {
-                reachability?.whenReachable = { reachability in
-                    // Change network
-                    reachability.whenReachable = nil
-                    self.run()
-                }
+            guard networkIsReady() else {
                 return
             }
 
@@ -218,18 +223,36 @@ internal final class SwiftQueueJob: Operation, JobResult {
         }
     }
 
-    internal func checkIsReachable() -> Bool {
-        guard let reachability = reachability else {
-            return true
+    internal func networkIsReady() -> Bool {
+#if os(iOS) || os(macOS) || os(tvOS)
+        func checkIsReachable() -> Bool {
+            guard let reachability = reachability else {
+                return true
+            }
+            switch requireNetwork {
+            case .any:
+                return true
+            case .cellular:
+                return reachability.isReachable
+            case .wifi:
+                return reachability.isReachableViaWiFi
+            }
         }
-        switch requireNetwork {
-        case .any:
-            return true
-        case .cellular:
-            return reachability.isReachable
-        case .wifi:
-            return reachability.isReachableViaWiFi
+
+        func waitForNetwork() {
+            reachability?.whenReachable = { reachability in
+                // Change network
+                reachability.whenReachable = nil
+                self.run()
+            }
         }
+
+        guard checkIsReachable() else {
+            waitForNetwork()
+            return false
+        }
+#endif
+        return true
     }
 
     internal func completed() {

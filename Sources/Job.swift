@@ -51,11 +51,13 @@ public final class JobBuilder {
         self.interval = interval
         return self
     }
-
+    
+    #if os(iOS) || os(macOS) || os(tvOS)
     public func internet(atLeast: NetworkType) -> JobBuilder {
         requireNetwork = atLeast
         return self
     }
+    #endif
 
     public func persist(required: Bool) -> JobBuilder {
         isPersisted = required
