@@ -10,12 +10,15 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = "8.0"
   s.tvos.deployment_target= "9.0"
+  s.watchos.deployment_target = "2.0"
   s.osx.deployment_target= "10.10"
 
   s.requires_arc = true
 
   s.source_files = 'Sources/**.swift'
   
-  s.dependency 'ReachabilitySwift', '~> 3'
+  s.ios.dependency 'ReachabilitySwift', '~> 3'
+  s.tvos.dependency 'ReachabilitySwift', '~> 3'
+  s.osx.dependency 'ReachabilitySwift', '~> 3'
   
 end
