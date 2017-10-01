@@ -5,15 +5,11 @@
 
 import Foundation
 
-internal class JobConstraint {
+internal protocol JobConstraint {
 
-    func schedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
+    func schedule(queue: SwiftQueue, operation: SwiftQueueJob) throws
 
-    }
-
-    func run(operation: SwiftQueueJob) throws {
-
-    }
+    func run(operation: SwiftQueueJob) throws
 
 }
 
@@ -24,11 +20,11 @@ internal class DeadlineConstraint: JobConstraint {
 
     class DeadlineError: ConstraintError {}
 
-    override func schedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
+    func schedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
         try check(operation: operation)
     }
 
-    override func run(operation: SwiftQueueJob) throws {
+    func run(operation: SwiftQueueJob) throws {
         try check(operation: operation)
     }
 
@@ -43,7 +39,7 @@ internal class UniqueUUIDConstraint: JobConstraint {
 
     class TaskAlreadyExist: ConstraintError {}
 
-    override func schedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
+    func schedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
         let exist = queue.operations.contains {
             if let op = $0 as? SwiftQueueJob {
                 return op.uuid == operation.uuid
@@ -53,6 +49,10 @@ internal class UniqueUUIDConstraint: JobConstraint {
         if exist {
             throw TaskAlreadyExist()
         }
+    }
+    
+    func run(operation: SwiftQueueJob) throws {
+        // Nothing to check
     }
 }
 
