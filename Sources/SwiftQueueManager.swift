@@ -27,14 +27,14 @@ public final class SwiftQueueManager {
     public func start() {
         isPaused = false
         manage.values.forEach { element in
-            element.start()
+            element.isSuspended = false
         }
     }
 
     public func pause() {
         isPaused = true
         manage.values.forEach { element in
-            element.pause()
+            element.isSuspended = true
         }
     }
 
@@ -59,7 +59,7 @@ public final class SwiftQueueManager {
             element.cancelOperations(tag: tag)
         }
     }
-    
+
     public func waitUntilAllOperationsAreFinished() {
         manage.values.forEach { element in
             element.waitUntilAllOperationsAreFinished()
