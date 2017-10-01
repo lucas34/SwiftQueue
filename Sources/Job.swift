@@ -51,7 +51,7 @@ public final class JobBuilder {
         self.interval = interval
         return self
     }
-    
+
     #if os(iOS) || os(macOS) || os(tvOS)
     public func internet(atLeast: NetworkType) -> JobBuilder {
         requireNetwork = atLeast
@@ -92,7 +92,7 @@ public final class JobBuilder {
             print("WARN: No job creator associate to job type \(type)") // log maybe
             return
         }
-        queue.addOperation(build(job: job, isPaused: queue.isPaused))
+        queue.addOperation(build(job: job, isPaused: queue.isSuspended))
     }
 }
 

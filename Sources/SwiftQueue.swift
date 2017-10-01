@@ -30,17 +30,25 @@ internal final class SwiftQueue: OperationQueue {
 
     private let queueName: String
 
-    internal var isPaused: Bool
+    private var isPaused: Bool = false
+    public override var isSuspended: Bool {
+        get { return isPaused }
+        set {
+            willChangeValue(forKey: "isSuspended")
+            isPaused = newValue
+            didChangeValue(forKey: "isSuspended")
+            updatePauseStatus()
+        }
+    }
 
     init(queueName: String, creators: [JobCreator], persister: JobPersister? = nil, isPaused: Bool = false) {
         self.creators = creators
         self.persister = persister
         self.queueName = queueName
 
-        self.isPaused = isPaused
-
         super.init()
 
+        self.isSuspended = isPaused
         self.name = queueName
         self.maxConcurrentOperationCount = 1
 
@@ -100,16 +108,6 @@ internal final class SwiftQueue: OperationQueue {
 
     func createHandler(type: String, params: Any?) -> Job? {
         return SwiftQueue.createHandler(creators: creators, type: type, params: params)
-    }
-
-    func start() {
-        isPaused = false
-        updatePauseStatus()
-    }
-
-    func pause() {
-        isPaused = true
-        updatePauseStatus()
     }
 
     private func updatePauseStatus() {

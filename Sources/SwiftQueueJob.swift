@@ -37,7 +37,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
 
     public override var name: String? { get { return uuid } set { } }
 
-    var jobIsExecuting: Bool = false
+    private var jobIsExecuting: Bool = false
     public override var isExecuting: Bool {
         get { return jobIsExecuting }
         set {
@@ -47,7 +47,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
         }
     }
 
-    var jobIsFinished: Bool = false
+    private var jobIsFinished: Bool = false
     public override var isFinished: Bool {
         get { return jobIsFinished }
         set {
@@ -57,7 +57,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
         }
     }
 
-    var jobIsPaused: Bool = false
+    private var jobIsPaused: Bool = false
     public var isPaused: Bool {
         get { return jobIsPaused }
         set {
