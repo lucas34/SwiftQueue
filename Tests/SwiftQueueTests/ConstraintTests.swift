@@ -263,4 +263,42 @@ class ConstraintTests: XCTestCase {
         XCTAssertEqual(job.onRetryCalled, 1)
         XCTAssertEqual(job.onCancelCalled, 1)
     }
+    
+    func testNetworkConstraint() {
+        let job = TestJob()
+        let type = UUID().uuidString
+        
+        let creator = TestCreator([type: job])
+        
+        let manager = SwiftQueueManager(creators: [creator])
+        JobBuilder(type: type)
+            .internet(atLeast: .cellular)
+            .schedule(manager: manager)
+        
+        job.await()
+        
+        XCTAssertEqual(job.onRunJobCalled, 1)
+        XCTAssertEqual(job.onCompleteCalled, 1)
+        XCTAssertEqual(job.onRetryCalled, 0)
+        XCTAssertEqual(job.onCancelCalled, 0)
+    }
+    
+    func testNetworkConstraintWifi() {
+        let job = TestJob()
+        let type = UUID().uuidString
+        
+        let creator = TestCreator([type: job])
+        
+        let manager = SwiftQueueManager(creators: [creator])
+        JobBuilder(type: type)
+            .internet(atLeast: .wifi)
+            .schedule(manager: manager)
+        
+        job.await()
+        
+        XCTAssertEqual(job.onRunJobCalled, 1)
+        XCTAssertEqual(job.onCompleteCalled, 1)
+        XCTAssertEqual(job.onRetryCalled, 0)
+        XCTAssertEqual(job.onCancelCalled, 0)
+    }
 }
