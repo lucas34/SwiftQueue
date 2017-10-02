@@ -7,17 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1D7B3D281F5C1EBD000D49B6 /* Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B3D221F5C1EBD000D49B6 /* Constraints.swift */; };
-		1D7B3D291F5C1EBD000D49B6 /* Job.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B3D231F5C1EBD000D49B6 /* Job.swift */; };
-		1D7B3D2A1F5C1EBD000D49B6 /* SwiftQueueJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B3D241F5C1EBD000D49B6 /* SwiftQueueJob.swift */; };
-		1D7B3D2B1F5C1EBD000D49B6 /* SwiftQueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B3D251F5C1EBD000D49B6 /* SwiftQueueManager.swift */; };
-		1D7B3D2C1F5C1EBD000D49B6 /* UserDefaultsPerisister.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B3D261F5C1EBD000D49B6 /* UserDefaultsPerisister.swift */; };
-		1D7B3D2D1F5C1EBD000D49B6 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B3D271F5C1EBD000D49B6 /* Utils.swift */; };
 		1D7B3D361F5C1EDC000D49B6 /* StartStopTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B3D2F1F5C1EC7000D49B6 /* StartStopTests.swift */; };
 		1D7B3D371F5C1EDE000D49B6 /* ConstraintTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B3D2E1F5C1EC7000D49B6 /* ConstraintTests.swift */; };
 		1D7B3D381F5C1EE1000D49B6 /* TestReadMeSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B3D301F5C1EC7000D49B6 /* TestReadMeSample.swift */; };
 		1D7B3D391F5C1EE4000D49B6 /* TestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B3D311F5C1EC7000D49B6 /* TestUtils.swift */; };
-		OBJ_20 /* SwiftQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_8 /* SwiftQueue.swift */; };
+		1D8479A81F82A84B00B3BBFB /* UserDefaultsPerisister.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A11F82A84A00B3BBFB /* UserDefaultsPerisister.swift */; };
+		1D8479A91F82A84B00B3BBFB /* SwiftQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A21F82A84A00B3BBFB /* SwiftQueue.swift */; };
+		1D8479AA1F82A84B00B3BBFB /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A31F82A84A00B3BBFB /* Utils.swift */; };
+		1D8479AB1F82A84B00B3BBFB /* SwiftQueueJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A41F82A84B00B3BBFB /* SwiftQueueJob.swift */; };
+		1D8479AC1F82A84B00B3BBFB /* SwiftQueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A51F82A84B00B3BBFB /* SwiftQueueManager.swift */; };
+		1D8479AD1F82A84B00B3BBFB /* Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A61F82A84B00B3BBFB /* Constraints.swift */; };
+		1D8479AE1F82A84B00B3BBFB /* Job.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A71F82A84B00B3BBFB /* Job.swift */; };
 		OBJ_27 /* SwiftQueueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* SwiftQueueTests.swift */; };
 		OBJ_29 /* SwiftQueue.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* SwiftQueue.framework */; };
 /* End PBXBuildFile section */
@@ -33,22 +33,22 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1D7B3D221F5C1EBD000D49B6 /* Constraints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constraints.swift; sourceTree = "<group>"; };
-		1D7B3D231F5C1EBD000D49B6 /* Job.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Job.swift; sourceTree = "<group>"; };
-		1D7B3D241F5C1EBD000D49B6 /* SwiftQueueJob.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftQueueJob.swift; sourceTree = "<group>"; };
-		1D7B3D251F5C1EBD000D49B6 /* SwiftQueueManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftQueueManager.swift; sourceTree = "<group>"; };
-		1D7B3D261F5C1EBD000D49B6 /* UserDefaultsPerisister.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsPerisister.swift; sourceTree = "<group>"; };
-		1D7B3D271F5C1EBD000D49B6 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		1D7B3D2E1F5C1EC7000D49B6 /* ConstraintTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstraintTests.swift; sourceTree = "<group>"; };
 		1D7B3D2F1F5C1EC7000D49B6 /* StartStopTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartStopTests.swift; sourceTree = "<group>"; };
 		1D7B3D301F5C1EC7000D49B6 /* TestReadMeSample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestReadMeSample.swift; sourceTree = "<group>"; };
 		1D7B3D311F5C1EC7000D49B6 /* TestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestUtils.swift; sourceTree = "<group>"; };
-		B07F22851F7B6851004443DB /* Reachability.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reachability.framework; path = Carthage/Build/iOS/Reachability.framework; sourceTree = "<group>"; };
+		1D8479A11F82A84A00B3BBFB /* UserDefaultsPerisister.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserDefaultsPerisister.swift; path = SwiftQueue/UserDefaultsPerisister.swift; sourceTree = "<group>"; };
+		1D8479A21F82A84A00B3BBFB /* SwiftQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftQueue.swift; path = SwiftQueue/SwiftQueue.swift; sourceTree = "<group>"; };
+		1D8479A31F82A84A00B3BBFB /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Utils.swift; path = SwiftQueue/Utils.swift; sourceTree = "<group>"; };
+		1D8479A41F82A84B00B3BBFB /* SwiftQueueJob.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftQueueJob.swift; path = SwiftQueue/SwiftQueueJob.swift; sourceTree = "<group>"; };
+		1D8479A51F82A84B00B3BBFB /* SwiftQueueManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftQueueManager.swift; path = SwiftQueue/SwiftQueueManager.swift; sourceTree = "<group>"; };
+		1D8479A61F82A84B00B3BBFB /* Constraints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constraints.swift; path = SwiftQueue/Constraints.swift; sourceTree = "<group>"; };
+		1D8479A71F82A84B00B3BBFB /* Job.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Job.swift; path = SwiftQueue/Job.swift; sourceTree = "<group>"; };
+		1DFCD8731F811FD6000568B9 /* Reachability.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reachability.framework; path = Carthage/Build/Mac/Reachability.framework; sourceTree = "<group>"; };
 		OBJ_11 /* SwiftQueueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftQueueTests.swift; sourceTree = "<group>"; };
 		OBJ_13 /* SwiftQueue.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftQueue.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_14 /* SwiftQueueTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = SwiftQueueTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_6 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
-		OBJ_8 /* SwiftQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftQueue.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,7 +73,7 @@
 		1D0CACB51F5D95F0007620F1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				B07F22851F7B6851004443DB /* Reachability.framework */,
+				1DFCD8731F811FD6000568B9 /* Reachability.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -114,13 +114,13 @@
 		OBJ_7 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				1D7B3D221F5C1EBD000D49B6 /* Constraints.swift */,
-				1D7B3D231F5C1EBD000D49B6 /* Job.swift */,
-				1D7B3D241F5C1EBD000D49B6 /* SwiftQueueJob.swift */,
-				1D7B3D251F5C1EBD000D49B6 /* SwiftQueueManager.swift */,
-				1D7B3D261F5C1EBD000D49B6 /* UserDefaultsPerisister.swift */,
-				1D7B3D271F5C1EBD000D49B6 /* Utils.swift */,
-				OBJ_8 /* SwiftQueue.swift */,
+				1D8479A61F82A84B00B3BBFB /* Constraints.swift */,
+				1D8479A71F82A84B00B3BBFB /* Job.swift */,
+				1D8479A21F82A84A00B3BBFB /* SwiftQueue.swift */,
+				1D8479A41F82A84B00B3BBFB /* SwiftQueueJob.swift */,
+				1D8479A51F82A84B00B3BBFB /* SwiftQueueManager.swift */,
+				1D8479A11F82A84A00B3BBFB /* UserDefaultsPerisister.swift */,
+				1D8479A31F82A84A00B3BBFB /* Utils.swift */,
 			);
 			path = Sources;
 			sourceTree = SOURCE_ROOT;
@@ -200,13 +200,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				1D7B3D2C1F5C1EBD000D49B6 /* UserDefaultsPerisister.swift in Sources */,
-				1D7B3D281F5C1EBD000D49B6 /* Constraints.swift in Sources */,
-				1D7B3D291F5C1EBD000D49B6 /* Job.swift in Sources */,
-				1D7B3D2D1F5C1EBD000D49B6 /* Utils.swift in Sources */,
-				OBJ_20 /* SwiftQueue.swift in Sources */,
-				1D7B3D2A1F5C1EBD000D49B6 /* SwiftQueueJob.swift in Sources */,
-				1D7B3D2B1F5C1EBD000D49B6 /* SwiftQueueManager.swift in Sources */,
+				1D8479A81F82A84B00B3BBFB /* UserDefaultsPerisister.swift in Sources */,
+				1D8479A91F82A84B00B3BBFB /* SwiftQueue.swift in Sources */,
+				1D8479AE1F82A84B00B3BBFB /* Job.swift in Sources */,
+				1D8479AD1F82A84B00B3BBFB /* Constraints.swift in Sources */,
+				1D8479AA1F82A84B00B3BBFB /* Utils.swift in Sources */,
+				1D8479AB1F82A84B00B3BBFB /* SwiftQueueJob.swift in Sources */,
+				1D8479AC1F82A84B00B3BBFB /* SwiftQueueManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -240,11 +240,11 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = SwiftQueue.xcodeproj/SwiftQueue_Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx $(PROJECT_DIR)/Carthage/Build/iOS";
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx $(PROJECT_DIR)/Carthage/Build/Mac";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = SwiftQueue;
@@ -262,11 +262,11 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = SwiftQueue.xcodeproj/SwiftQueue_Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx $(PROJECT_DIR)/Carthage/Build/iOS";
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx $(PROJECT_DIR)/Carthage/Build/Mac";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = SwiftQueue;
@@ -284,11 +284,11 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = SwiftQueue.xcodeproj/SwiftQueueTests_Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Carthage/build/iOS";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Carthage/build/Mac";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				TARGET_NAME = SwiftQueueTests;
@@ -302,11 +302,11 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = SwiftQueue.xcodeproj/SwiftQueueTests_Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Carthage/build/iOS";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Carthage/build/Mac";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				TARGET_NAME = SwiftQueueTests;
