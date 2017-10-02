@@ -5,11 +5,11 @@ before_install:
   - brew install swiftlint
 
 before_script:
-  - carthage bootstrap --platform iOS
+  - carthage bootstrap --platform Mac
 
 script:
     - swiftlint
-    - set -o pipefail && xcodebuild test -enableCodeCoverage YES -project SwiftQueue.xcodeproj -scheme SwiftQueue -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone X,OS=11.0'
+    - set -o pipefail && xcodebuild test -enableCodeCoverage YES -project SwiftQueue.xcodeproj -scheme SwiftQueue -sdk macosx10.13
 
 after_success:
     - bash <(curl -s https://codecov.io/bash)

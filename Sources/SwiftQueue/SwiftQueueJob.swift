@@ -110,58 +110,9 @@ internal final class SwiftQueueJob: Operation, JobResult {
     }
 #endif
 
-    private convenience init?(dictionary: [String: Any], creator: [JobCreator]) {
-        let params = dictionary["params"] ?? nil
-        if let taskID         = dictionary["taskID"] as? String,
-           let type           = dictionary["type"] as? String,
-           let group          = dictionary["group"] as? String,
-           let tags           = dictionary["tags"] as? [String],
-           let delay          = dictionary["delay"] as? Int,
-           let deadlineStr    = dictionary["deadline"] as? String?,
-           let requireNetwork = dictionary["requireNetwork"] as? Int,
-           let isPersisted    = dictionary["isPersisted"] as? Bool,
-           let createTimeStr  = dictionary["createTime"] as? String,
-           let runCount       = dictionary["runCount"] as? Int,
-           let maxRun         = dictionary["maxRun"] as? Int,
-           let retries        = dictionary["retries"] as? Int,
-           let interval       = dictionary["interval"] as? Double,
-           let job = SwiftQueue.createHandler(creators: creator, type: type, params: params) {
-
-            let deadline   = deadlineStr.flatMap { dateFormatter.date(from: $0) }
-            let createTime = dateFormatter.date(from: createTimeStr) ?? Date()
-            let network    = NetworkType(rawValue: requireNetwork) ?? NetworkType.any
-
-            self.init(job: job, uuid: taskID, type: type, group: group, tags: Set(tags),
-                    delay: delay, deadline: deadline, requireNetwork: network,
-                    isPersisted: isPersisted, params: params, createTime: createTime,
-                    runCount: runCount, maxRun: maxRun, retries: retries, interval: interval, isPaused: true)
-        } else {
-            return nil
-        }
-    }
-
     internal convenience init?(json: String, creator: [JobCreator]) {
         let dict = fromJSON(json) as? [String: Any] ?? [:]
         self.init(dictionary: dict, creator: creator)
-    }
-
-    private func toDictionary() -> [String: Any] {
-        var dict = [String: Any]()
-        dict["taskID"]         = self.uuid
-        dict["type"]           = self.type
-        dict["group"]          = self.group
-        dict["tags"]           = Array(self.tags)
-        dict["delay"]          = self.delay
-        dict["deadline"]       = self.deadline.map { dateFormatter.string(from: $0) }
-        dict["requireNetwork"] = self.requireNetwork.rawValue
-        dict["isPersisted"]    = self.isPersisted
-        dict["params"]         = self.params
-        dict["createTime"]     = dateFormatter.string(from: self.createTime)
-        dict["runCount"]       = self.runCount
-        dict["maxRun"]         = self.maxRun
-        dict["retries"]        = self.retries
-        dict["interval"]       = self.interval
-        return dict
     }
 
     public func toJSONString() -> String? {
@@ -298,3 +249,57 @@ internal final class SwiftQueueJob: Operation, JobResult {
         }
     }
 }
+
+extension SwiftQueueJob {
+ 
+    convenience init?(dictionary: [String: Any], creator: [JobCreator]) {
+        let params = dictionary["params"]
+        if let uuid            = dictionary["uuid"] as? String,
+            let type           = dictionary["type"] as? String,
+            let group          = dictionary["group"] as? String,
+            let tags           = dictionary["tags"] as? [String],
+            let delay          = dictionary["delay"] as? Int,
+            let deadlineStr    = dictionary["deadline"] as? String?,
+            let requireNetwork = dictionary["requireNetwork"] as? Int,
+            let isPersisted    = dictionary["isPersisted"] as? Bool,
+            let createTimeStr  = dictionary["createTime"] as? String,
+            let runCount       = dictionary["runCount"] as? Int,
+            let maxRun         = dictionary["maxRun"] as? Int,
+            let retries        = dictionary["retries"] as? Int,
+            let interval       = dictionary["interval"] as? Double,
+            let job = SwiftQueue.createHandler(creators: creator, type: type, params: params) {
+            
+            let deadline   = deadlineStr.flatMap { dateFormatter.date(from: $0) }
+            let createTime = dateFormatter.date(from: createTimeStr) ?? Date()
+            let network    = NetworkType(rawValue: requireNetwork) ?? NetworkType.any
+            
+            self.init(job: job, uuid: uuid, type: type, group: group, tags: Set(tags),
+                      delay: delay, deadline: deadline, requireNetwork: network,
+                      isPersisted: isPersisted, params: params, createTime: createTime,
+                      runCount: runCount, maxRun: maxRun, retries: retries, interval: interval, isPaused: true)
+        } else {
+            return nil
+        }
+    }
+    
+    func toDictionary() -> [String: Any] {
+        var dict = [String: Any]()
+        dict["uuid"]           = self.uuid
+        dict["type"]           = self.type
+        dict["group"]          = self.group
+        dict["tags"]           = Array(self.tags)
+        dict["delay"]          = self.delay
+        dict["deadline"]       = self.deadline.map { dateFormatter.string(from: $0) }
+        dict["requireNetwork"] = self.requireNetwork.rawValue
+        dict["isPersisted"]    = self.isPersisted
+        dict["params"]         = self.params
+        dict["createTime"]     = dateFormatter.string(from: self.createTime)
+        dict["runCount"]       = self.runCount
+        dict["maxRun"]         = self.maxRun
+        dict["retries"]        = self.retries
+        dict["interval"]       = self.interval
+        return dict
+    }
+
+}
+
