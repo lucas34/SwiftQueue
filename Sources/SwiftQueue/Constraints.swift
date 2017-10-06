@@ -50,7 +50,7 @@ internal class UniqueUUIDConstraint: JobConstraint {
             throw TaskAlreadyExist()
         }
     }
-    
+
     func run(operation: SwiftQueueJob) throws {
         // Nothing to check
     }
