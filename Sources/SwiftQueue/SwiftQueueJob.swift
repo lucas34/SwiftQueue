@@ -251,7 +251,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
 }
 
 extension SwiftQueueJob {
- 
+
     convenience init?(dictionary: [String: Any], creator: [JobCreator]) {
         let params = dictionary["params"]
         if let uuid            = dictionary["uuid"] as? String,
@@ -268,11 +268,11 @@ extension SwiftQueueJob {
             let retries        = dictionary["retries"] as? Int,
             let interval       = dictionary["interval"] as? Double,
             let job = SwiftQueue.createHandler(creators: creator, type: type, params: params) {
-            
+
             let deadline   = deadlineStr.flatMap { dateFormatter.date(from: $0) }
             let createTime = dateFormatter.date(from: createTimeStr) ?? Date()
             let network    = NetworkType(rawValue: requireNetwork) ?? NetworkType.any
-            
+
             self.init(job: job, uuid: uuid, type: type, group: group, tags: Set(tags),
                       delay: delay, deadline: deadline, requireNetwork: network,
                       isPersisted: isPersisted, params: params, createTime: createTime,
@@ -281,7 +281,7 @@ extension SwiftQueueJob {
             return nil
         }
     }
-    
+
     func toDictionary() -> [String: Any] {
         var dict = [String: Any]()
         dict["uuid"]           = self.uuid
@@ -302,4 +302,3 @@ extension SwiftQueueJob {
     }
 
 }
-
