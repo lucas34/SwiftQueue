@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "SwiftQueue"
-  s.version          = "0.2.0"
+  s.version          = "0.3.0"
   s.summary          = "SwiftQueue"
   s.description      = "Job Scheduler for IOS with Concurrent run, failure/retry, persistence, repeat, delay and more"
   s.homepage         = "https://github.com/lucas34/SwiftQueue"
@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
 
   s.requires_arc = true
 
-  s.source_files = 'Sources/**.swift'
+  s.source_files = 'Sources/SwiftQueue/**.swift'
   
   s.ios.dependency 'ReachabilitySwift', '~> 3'
   s.tvos.dependency 'ReachabilitySwift', '~> 3'
