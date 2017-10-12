@@ -17,6 +17,7 @@
 		1D8479AC1F82A84B00B3BBFB /* SwiftQueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A51F82A84B00B3BBFB /* SwiftQueueManager.swift */; };
 		1D8479AD1F82A84B00B3BBFB /* Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A61F82A84B00B3BBFB /* Constraints.swift */; };
 		1D8479AE1F82A84B00B3BBFB /* Job.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A71F82A84B00B3BBFB /* Job.swift */; };
+		D0B7C94CAD20ADBB67BE5192 /* SwiftQueueBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C4BC41F2C8121944180C /* SwiftQueueBuilderTests.swift */; };
 		OBJ_27 /* SwiftQueueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* SwiftQueueTests.swift */; };
 		OBJ_29 /* SwiftQueue.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* SwiftQueue.framework */; };
 /* End PBXBuildFile section */
@@ -43,6 +44,7 @@
 		1D8479A61F82A84B00B3BBFB /* Constraints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constraints.swift; path = SwiftQueue/Constraints.swift; sourceTree = "<group>"; };
 		1D8479A71F82A84B00B3BBFB /* Job.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Job.swift; path = SwiftQueue/Job.swift; sourceTree = "<group>"; };
 		1DFCD8731F811FD6000568B9 /* Reachability.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reachability.framework; path = Carthage/Build/Mac/Reachability.framework; sourceTree = "<group>"; };
+		D0B7C4BC41F2C8121944180C /* SwiftQueueBuilderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftQueueBuilderTests.swift; path = Tests/SwiftQueueTests/SwiftQueueBuilderTests.swift; sourceTree = "<group>"; };
 		OBJ_11 /* SwiftQueueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftQueueTests.swift; sourceTree = "<group>"; };
 		OBJ_13 /* SwiftQueue.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftQueue.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_14 /* SwiftQueueTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = SwiftQueueTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -105,6 +107,7 @@
 				OBJ_9 /* Tests */,
 				OBJ_12 /* Products */,
 				1D0CACB51F5D95F0007620F1 /* Frameworks */,
+				D0B7C4BC41F2C8121944180C /* SwiftQueueBuilderTests.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -215,6 +218,7 @@
 				OBJ_27 /* SwiftQueueTests.swift in Sources */,
 				1D7B3D391F5C1EE4000D49B6 /* TestUtils.swift in Sources */,
 				1D7B3D371F5C1EDE000D49B6 /* ConstraintTests.swift in Sources */,
+				D0B7C94CAD20ADBB67BE5192 /* SwiftQueueBuilderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
