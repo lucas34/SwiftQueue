@@ -29,7 +29,7 @@ Library will rely on *Operation* and *OperationQueue* to make sure all tasks wil
 
 ## Requirements
 
-- iOS 8.0+
+- iOS 8.0+, watchOS 2.0+, OSX 10.10+, tvOS 9.0+
 - Xcode 7.3
 
 ## Installation
