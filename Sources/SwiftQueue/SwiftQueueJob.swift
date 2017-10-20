@@ -27,7 +27,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
     let isPersisted: Bool
     let params: Any?
     let createTime: Date
-    let interval: Double
+    let interval: TimeInterval
 
     var runCount: Int
     var maxRun: Int
@@ -219,7 +219,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
             if maxRun >= 0 && runCount >= maxRun {
                 isFinished = true
             } else {
-                runInBackgroundAfter(TimeInterval(interval)) {
+                runInBackgroundAfter(interval) {
                     self.run()
                 }
             }
@@ -232,19 +232,19 @@ extension SwiftQueueJob {
     convenience init?(dictionary: [String: Any], creator: [JobCreator]) {
         let params = dictionary["params"]
         if let uuid            = dictionary["uuid"] as? String,
-            let type           = dictionary["type"] as? String,
-            let group          = dictionary["group"] as? String,
-            let tags           = dictionary["tags"] as? [String],
-            let delay          = dictionary["delay"] as? Int,
-            let deadlineStr    = dictionary["deadline"] as? String?,
-            let requireNetwork = dictionary["requireNetwork"] as? Int,
-            let isPersisted    = dictionary["isPersisted"] as? Bool,
-            let createTimeStr  = dictionary["createTime"] as? String,
-            let runCount       = dictionary["runCount"] as? Int,
-            let maxRun         = dictionary["maxRun"] as? Int,
-            let retries        = dictionary["retries"] as? Int,
-            let interval       = dictionary["interval"] as? Double,
-            let job = SwiftQueue.createHandler(creators: creator, type: type, params: params) {
+           let type           = dictionary["type"] as? String,
+           let group          = dictionary["group"] as? String,
+           let tags           = dictionary["tags"] as? [String],
+           let delay          = dictionary["delay"] as? Int,
+           let deadlineStr    = dictionary["deadline"] as? String?,
+           let requireNetwork = dictionary["requireNetwork"] as? Int,
+           let isPersisted    = dictionary["isPersisted"] as? Bool,
+           let createTimeStr  = dictionary["createTime"] as? String,
+           let runCount       = dictionary["runCount"] as? Int,
+           let maxRun         = dictionary["maxRun"] as? Int,
+           let retries        = dictionary["retries"] as? Int,
+           let interval       = dictionary["interval"] as? TimeInterval,
+           let job = SwiftQueue.createHandler(creators: creator, type: type, params: params) {
 
             let deadline   = deadlineStr.flatMap { dateFormatter.date(from: $0) }
             let createTime = dateFormatter.date(from: createTimeStr) ?? Date()
