@@ -20,7 +20,7 @@ public final class JobBuilder {
     private var createTime: Date = Date()
     private var maxRun: Int = 1
     private var retries: Int = 0
-    private var interval: Double = -1.0
+    private var interval: TimeInterval = -1.0
 
     public init(type: String) {
         self.type = type
@@ -46,7 +46,7 @@ public final class JobBuilder {
         return self
     }
 
-    public func periodic(count: Int = -1, interval: Double = 0) -> JobBuilder {
+    public func periodic(count: Int = -1, interval: TimeInterval = 0) -> JobBuilder {
         maxRun = count
         self.interval = interval
         return self
@@ -103,7 +103,7 @@ public protocol JobResult {
 public enum RetryConstraint {
     case retry
     case cancel
-    case exponential(initial: Double)
+    case exponential(initial: TimeInterval)
 }
 
 public enum NetworkType: Int {

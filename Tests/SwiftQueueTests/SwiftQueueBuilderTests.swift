@@ -26,7 +26,7 @@ class SwiftQueueBuilderTests: XCTestCase {
         let params = UUID().uuidString
         let maxRun = 5
         let retries = 3
-        let interval: Double = 10
+        let interval: TimeInterval = 10
 
         let persister = PersisterTracker(key: UUID().uuidString)
 
