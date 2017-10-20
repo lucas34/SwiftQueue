@@ -57,21 +57,9 @@ internal final class SwiftQueueJob: Operation, JobResult {
         }
     }
 
-    private var jobIsPaused: Bool = false
-    public var isPaused: Bool {
-        get { return jobIsPaused }
-        set {
-            let callRun = jobIsPaused && !newValue && isExecuting
-            jobIsPaused = newValue
-            if callRun {
-                run()
-            }
-        }
-    }
-
     internal init(job: Job, uuid: String = UUID().uuidString, type: String, group: String, tags: Set<String>,
                   delay: Int, deadline: Date?, requireNetwork: NetworkType, isPersisted: Bool, params: Any?,
-                  createTime: Date, runCount: Int, maxRun: Int, retries: Int, interval: Double, isPaused: Bool) {
+                  createTime: Date, runCount: Int, maxRun: Int, retries: Int, interval: Double) {
         self.handler = job
         self.uuid = uuid
         self.type = type
@@ -93,8 +81,6 @@ internal final class SwiftQueueJob: Operation, JobResult {
 #endif
 
         super.init()
-
-        self.isPaused = isPaused
 
         self.queuePriority = .normal
         self.qualityOfService = .utility
@@ -145,12 +131,6 @@ internal final class SwiftQueueJob: Operation, JobResult {
             isFinished = true
         }
         if isFinished {
-            return
-        }
-
-        if isPaused {
-            // Stop execution here.
-            // Will call run again later
             return
         }
 
@@ -271,9 +251,9 @@ extension SwiftQueueJob {
             let network    = NetworkType(rawValue: requireNetwork) ?? NetworkType.any
 
             self.init(job: job, uuid: uuid, type: type, group: group, tags: Set(tags),
-                      delay: delay, deadline: deadline, requireNetwork: network,
-                      isPersisted: isPersisted, params: params, createTime: createTime,
-                      runCount: runCount, maxRun: maxRun, retries: retries, interval: interval, isPaused: true)
+                    delay: delay, deadline: deadline, requireNetwork: network,
+                    isPersisted: isPersisted, params: params, createTime: createTime,
+                    runCount: runCount, maxRun: maxRun, retries: retries, interval: interval)
         } else {
             return nil
         }

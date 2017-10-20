@@ -30,17 +30,6 @@ internal final class SwiftQueue: OperationQueue {
 
     private let queueName: String
 
-    private var isPaused: Bool = false
-    public override var isSuspended: Bool {
-        get { return isPaused }
-        set {
-            willChangeValue(forKey: "isSuspended")
-            isPaused = newValue
-            didChangeValue(forKey: "isSuspended")
-            updatePauseStatus()
-        }
-    }
-
     init(queueName: String, creators: [JobCreator], persister: JobPersister? = nil, isPaused: Bool = false) {
         self.creators = creators
         self.persister = persister
@@ -108,14 +97,6 @@ internal final class SwiftQueue: OperationQueue {
 
     func createHandler(type: String, params: Any?) -> Job? {
         return SwiftQueue.createHandler(creators: creators, type: type, params: params)
-    }
-
-    private func updatePauseStatus() {
-        operations.flatMap { operation -> SwiftQueueJob? in
-            operation as? SwiftQueueJob
-        }.forEach {
-            $0.isPaused = isPaused
-        }
     }
 
     static func createHandler(creators: [JobCreator], type: String, params: Any?) -> Job? {
