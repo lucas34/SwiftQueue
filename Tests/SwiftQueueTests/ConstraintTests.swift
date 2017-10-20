@@ -118,7 +118,7 @@ class ConstraintTests: XCTestCase {
         let creator = TestCreator([type: job])
 
         job.result = JobError()
-        job.retryConstraint = .retry
+        job.retryConstraint = .retry(delay: 0)
 
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type)

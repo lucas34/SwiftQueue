@@ -17,7 +17,7 @@ class TestJob: Job {
     public var onCompleteCalled = 0
     public var onCancelCalled = 0
 
-    public var retryConstraint = RetryConstraint.retry
+    public var retryConstraint = RetryConstraint.retry(delay: 0)
 
     public var params: Any?
 

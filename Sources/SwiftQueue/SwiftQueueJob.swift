@@ -203,12 +203,14 @@ internal final class SwiftQueueJob: Operation, JobResult {
             switch retry {
             case .cancel:
                 cancel()
-            case .retry:
+            case .retry(let delay):
                 retries -= 1
-                run()
+                runInBackgroundAfter(delay) {
+                    self.run()
+                }
             case .exponential(let initial):
                 let decimal: NSDecimalNumber = NSDecimalNumber(decimal: Decimal(initial) * pow(2, max(0, runCount - 1)))
-                runInBackgroundAfter(Double(decimal)) {
+                runInBackgroundAfter(TimeInterval(decimal)) {
                     self.retries -= 1
                     self.run()
                 }

@@ -101,7 +101,7 @@ public protocol JobResult {
 }
 
 public enum RetryConstraint {
-    case retry
+    case retry(delay: TimeInterval)
     case cancel
     case exponential(initial: TimeInterval)
 }
