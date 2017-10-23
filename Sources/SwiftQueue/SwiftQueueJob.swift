@@ -203,9 +203,9 @@ internal final class SwiftQueueJob: Operation, JobResult {
             switch retry {
             case .cancel:
                 cancel()
-            case .retry(let delay):
+            case .retry(let after):
                 retries -= 1
-                runInBackgroundAfter(delay) {
+                runInBackgroundAfter(after) {
                     self.run()
                 }
             case .exponential(let initial):
