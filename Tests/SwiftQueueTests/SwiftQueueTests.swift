@@ -9,7 +9,7 @@ import Dispatch
 
 class SwiftQueueManagerTests: XCTestCase {
 
-    func testRunSucessJob() {
+    func testRunSuccessJob() {
         let job = TestJob()
         let type = UUID().uuidString
 
