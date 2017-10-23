@@ -194,12 +194,12 @@ class ConstraintTests: XCTestCase {
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type1)
                 .singleInstance(forId: id)
-                .delay(inSecond: Int.max)
+                .delay(inSecond: 3600)
                 .schedule(manager: manager)
 
         JobBuilder(type: type2)
                 .singleInstance(forId: id)
-                .delay(inSecond: Int.max)
+                .delay(inSecond: 3600)
                 .schedule(manager: manager)
 
         JobBuilder(type: type3).singleInstance(forId: id).schedule(manager: manager)
