@@ -164,9 +164,9 @@ internal final class SwiftQueueJob: Operation, JobResult {
             case .any:
                 return true
             case .cellular:
-                return reachability.isReachable
+                return reachability.connection != .none
             case .wifi:
-                return reachability.isReachableViaWiFi
+                return reachability.connection == .wifi
             }
         }
 
