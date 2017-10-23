@@ -12,7 +12,7 @@ public final class JobBuilder {
     private var uuid: String =  UUID().uuidString
     private var group: String = "GLOBAL"
     private var tags = Set<String>()
-    private var delay: Int = 0
+    private var delay: Int?
     private var deadline: Date?
     private var requireNetwork: NetworkType = NetworkType.any
     private var isPersisted: Bool = false

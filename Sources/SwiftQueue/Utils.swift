@@ -6,7 +6,7 @@
 import Foundation
 
 func runInBackgroundAfter(_ seconds: TimeInterval, callback: @escaping () -> Void) {
-    let delta = DispatchTime.now() + Double(Int64(seconds) * Int64(NSEC_PER_SEC)) / Double(NSEC_PER_SEC)
+    let delta = DispatchTime.now() + seconds
     DispatchQueue.global(qos: DispatchQoS.QoSClass.background).asyncAfter(deadline: delta, execute: callback)
 }
 
