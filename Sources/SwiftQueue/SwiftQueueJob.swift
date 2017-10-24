@@ -21,7 +21,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
 #endif
 
     let tags: Set<String>
-    let delay: Int?
+    let delay: TimeInterval?
     let deadline: Date?
     let requireNetwork: NetworkType
     let isPersisted: Bool
@@ -58,7 +58,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
     }
 
     internal init(job: Job, uuid: String = UUID().uuidString, type: String, group: String, tags: Set<String>,
-                  delay: Int?, deadline: Date?, requireNetwork: NetworkType, isPersisted: Bool, params: Any?,
+                  delay: TimeInterval?, deadline: Date?, requireNetwork: NetworkType, isPersisted: Bool, params: Any?,
                   createTime: Date, runCount: Int, maxRun: Int, retries: Int, interval: Double) {
         self.handler = job
         self.uuid = uuid
@@ -142,10 +142,8 @@ internal final class SwiftQueueJob: Operation, JobResult {
             }
 
             if let delay = delay {
-                if Date().timeIntervalSince(createTime) < TimeInterval(delay) {
-                    runInBackgroundAfter(TimeInterval(delay)) {
-                        self.run()
-                    }
+                if Date().timeIntervalSince(createTime) < delay {
+                    runInBackgroundAfter(delay, callback: self.run)
                     return
                 }
             }
@@ -239,7 +237,7 @@ extension SwiftQueueJob {
            let type           = dictionary["type"] as? String,
            let group          = dictionary["group"] as? String,
            let tags           = dictionary["tags"] as? [String],
-           let delay          = dictionary["delay"] as? Int?,
+           let delay          = dictionary["delay"] as? TimeInterval?,
            let deadlineStr    = dictionary["deadline"] as? String?,
            let requireNetwork = dictionary["requireNetwork"] as? Int,
            let isPersisted    = dictionary["isPersisted"] as? Bool,
