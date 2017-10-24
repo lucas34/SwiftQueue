@@ -205,7 +205,9 @@ internal final class SwiftQueueJob: Operation, JobResult {
                 cancel()
             case .retry(let after):
                 retries -= 1
-                runInBackgroundAfter(after) {
+                if after > 0 {
+                    runInBackgroundAfter(after, callback: self.run)
+                } else {
                     self.run()
                 }
             case .exponential(let initial):
@@ -221,7 +223,9 @@ internal final class SwiftQueueJob: Operation, JobResult {
             if maxRun >= 0 && runCount >= maxRun {
                 isFinished = true
             } else {
-                runInBackgroundAfter(interval) {
+                if interval > 0 {
+                    runInBackgroundAfter(interval, callback: self.run)
+                } else {
                     self.run()
                 }
             }
