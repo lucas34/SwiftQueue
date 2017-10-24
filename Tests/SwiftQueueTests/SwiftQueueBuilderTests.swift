@@ -19,7 +19,7 @@ class SwiftQueueBuilderTests: XCTestCase {
         let taskID = UUID().uuidString
         let group = UUID().uuidString
         let tag = UUID().uuidString
-        let delay = 12345
+        let delay = TimeInterval(12345)
         let deadline = Date(timeIntervalSinceNow: TimeInterval(UInt64.max))
         let requireNetwork = NetworkType.wifi
         let isPersisted = true // REquiered
@@ -35,7 +35,7 @@ class SwiftQueueBuilderTests: XCTestCase {
                 .singleInstance(forId: taskID)
                 .group(name: group)
                 .addTag(tag: tag)
-                .delay(inSecond: delay)
+                .delay(time: delay)
                 .deadline(date: deadline)
                 .internet(atLeast: .wifi)
                 .persist(required: true)
