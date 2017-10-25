@@ -17,6 +17,27 @@
 		1D8479AC1F82A84B00B3BBFB /* SwiftQueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A51F82A84B00B3BBFB /* SwiftQueueManager.swift */; };
 		1D8479AD1F82A84B00B3BBFB /* Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A61F82A84B00B3BBFB /* Constraints.swift */; };
 		1D8479AE1F82A84B00B3BBFB /* Job.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A71F82A84B00B3BBFB /* Job.swift */; };
+		B06405031FA04AA000086C69 /* UserDefaultsPersister.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A11F82A84A00B3BBFB /* UserDefaultsPersister.swift */; };
+		B06405041FA04AA000086C69 /* SwiftQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A21F82A84A00B3BBFB /* SwiftQueue.swift */; };
+		B06405051FA04AA000086C69 /* Job.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A71F82A84B00B3BBFB /* Job.swift */; };
+		B06405061FA04AA000086C69 /* Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A61F82A84B00B3BBFB /* Constraints.swift */; };
+		B06405071FA04AA000086C69 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A31F82A84A00B3BBFB /* Utils.swift */; };
+		B06405081FA04AA000086C69 /* SwiftQueueJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A41F82A84B00B3BBFB /* SwiftQueueJob.swift */; };
+		B06405091FA04AA000086C69 /* SwiftQueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A51F82A84B00B3BBFB /* SwiftQueueManager.swift */; };
+		B06405121FA04AAC00086C69 /* UserDefaultsPersister.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A11F82A84A00B3BBFB /* UserDefaultsPersister.swift */; };
+		B06405131FA04AAC00086C69 /* SwiftQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A21F82A84A00B3BBFB /* SwiftQueue.swift */; };
+		B06405141FA04AAC00086C69 /* Job.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A71F82A84B00B3BBFB /* Job.swift */; };
+		B06405151FA04AAC00086C69 /* Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A61F82A84B00B3BBFB /* Constraints.swift */; };
+		B06405161FA04AAC00086C69 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A31F82A84A00B3BBFB /* Utils.swift */; };
+		B06405171FA04AAC00086C69 /* SwiftQueueJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A41F82A84B00B3BBFB /* SwiftQueueJob.swift */; };
+		B06405181FA04AAC00086C69 /* SwiftQueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A51F82A84B00B3BBFB /* SwiftQueueManager.swift */; };
+		B06405211FA04CCF00086C69 /* UserDefaultsPersister.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A11F82A84A00B3BBFB /* UserDefaultsPersister.swift */; };
+		B06405221FA04CCF00086C69 /* SwiftQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A21F82A84A00B3BBFB /* SwiftQueue.swift */; };
+		B06405231FA04CCF00086C69 /* Job.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A71F82A84B00B3BBFB /* Job.swift */; };
+		B06405241FA04CCF00086C69 /* Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A61F82A84B00B3BBFB /* Constraints.swift */; };
+		B06405251FA04CCF00086C69 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A31F82A84A00B3BBFB /* Utils.swift */; };
+		B06405261FA04CCF00086C69 /* SwiftQueueJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A41F82A84B00B3BBFB /* SwiftQueueJob.swift */; };
+		B06405271FA04CCF00086C69 /* SwiftQueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A51F82A84B00B3BBFB /* SwiftQueueManager.swift */; };
 		D0B7C94CAD20ADBB67BE5192 /* SwiftQueueBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C4BC41F2C8121944180C /* SwiftQueueBuilderTests.swift */; };
 		OBJ_27 /* SwiftQueueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* SwiftQueueTests.swift */; };
 		OBJ_29 /* SwiftQueue.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* SwiftQueue.framework */; };
@@ -44,6 +65,9 @@
 		1D8479A61F82A84B00B3BBFB /* Constraints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constraints.swift; path = SwiftQueue/Constraints.swift; sourceTree = "<group>"; };
 		1D8479A71F82A84B00B3BBFB /* Job.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Job.swift; path = SwiftQueue/Job.swift; sourceTree = "<group>"; };
 		1DFCD8731F811FD6000568B9 /* Reachability.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reachability.framework; path = Carthage/Build/Mac/Reachability.framework; sourceTree = "<group>"; };
+		B064050E1FA04AA000086C69 /* SwiftQueue.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftQueue.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B064051D1FA04AAC00086C69 /* SwiftQueue.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftQueue.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B064052C1FA04CCF00086C69 /* SwiftQueue.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftQueue.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0B7C4BC41F2C8121944180C /* SwiftQueueBuilderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftQueueBuilderTests.swift; path = Tests/SwiftQueueTests/SwiftQueueBuilderTests.swift; sourceTree = "<group>"; };
 		OBJ_11 /* SwiftQueueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftQueueTests.swift; sourceTree = "<group>"; };
 		OBJ_13 /* SwiftQueue.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftQueue.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -52,6 +76,27 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		B064050A1FA04AA000086C69 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B06405191FA04AAC00086C69 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B06405281FA04CCF00086C69 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		OBJ_21 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
@@ -95,6 +140,9 @@
 			children = (
 				OBJ_13 /* SwiftQueue.framework */,
 				OBJ_14 /* SwiftQueueTests.xctest */,
+				B064050E1FA04AA000086C69 /* SwiftQueue.framework */,
+				B064051D1FA04AAC00086C69 /* SwiftQueue.framework */,
+				B064052C1FA04CCF00086C69 /* SwiftQueue.framework */,
 			);
 			name = Products;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -136,9 +184,57 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		OBJ_15 /* SwiftQueue */ = {
+		B06405011FA04AA000086C69 /* SwiftQueue iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_16 /* Build configuration list for PBXNativeTarget "SwiftQueue" */;
+			buildConfigurationList = B064050B1FA04AA000086C69 /* Build configuration list for PBXNativeTarget "SwiftQueue iOS" */;
+			buildPhases = (
+				B06405021FA04AA000086C69 /* Sources */,
+				B064050A1FA04AA000086C69 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "SwiftQueue iOS";
+			productName = SwiftQueue;
+			productReference = B064050E1FA04AA000086C69 /* SwiftQueue.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		B06405101FA04AAC00086C69 /* SwiftQueue watchOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B064051A1FA04AAC00086C69 /* Build configuration list for PBXNativeTarget "SwiftQueue watchOS" */;
+			buildPhases = (
+				B06405111FA04AAC00086C69 /* Sources */,
+				B06405191FA04AAC00086C69 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "SwiftQueue watchOS";
+			productName = SwiftQueue;
+			productReference = B064051D1FA04AAC00086C69 /* SwiftQueue.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		B064051F1FA04CCF00086C69 /* SwiftQueue tvOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B06405291FA04CCF00086C69 /* Build configuration list for PBXNativeTarget "SwiftQueue tvOS" */;
+			buildPhases = (
+				B06405201FA04CCF00086C69 /* Sources */,
+				B06405281FA04CCF00086C69 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "SwiftQueue tvOS";
+			productName = SwiftQueue;
+			productReference = B064052C1FA04CCF00086C69 /* SwiftQueue.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		OBJ_15 /* SwiftQueue macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_16 /* Build configuration list for PBXNativeTarget "SwiftQueue macOS" */;
 			buildPhases = (
 				OBJ_19 /* Sources */,
 				OBJ_21 /* Frameworks */,
@@ -147,7 +243,7 @@
 			);
 			dependencies = (
 			);
-			name = SwiftQueue;
+			name = "SwiftQueue macOS";
 			productName = SwiftQueue;
 			productReference = OBJ_13 /* SwiftQueue.framework */;
 			productType = "com.apple.product-type.framework";
@@ -189,13 +285,58 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				OBJ_15 /* SwiftQueue */,
+				OBJ_15 /* SwiftQueue macOS */,
+				B06405011FA04AA000086C69 /* SwiftQueue iOS */,
+				B06405101FA04AAC00086C69 /* SwiftQueue watchOS */,
+				B064051F1FA04CCF00086C69 /* SwiftQueue tvOS */,
 				OBJ_22 /* SwiftQueueTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		B06405021FA04AA000086C69 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				B06405031FA04AA000086C69 /* UserDefaultsPersister.swift in Sources */,
+				B06405041FA04AA000086C69 /* SwiftQueue.swift in Sources */,
+				B06405051FA04AA000086C69 /* Job.swift in Sources */,
+				B06405061FA04AA000086C69 /* Constraints.swift in Sources */,
+				B06405071FA04AA000086C69 /* Utils.swift in Sources */,
+				B06405081FA04AA000086C69 /* SwiftQueueJob.swift in Sources */,
+				B06405091FA04AA000086C69 /* SwiftQueueManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B06405111FA04AAC00086C69 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				B06405121FA04AAC00086C69 /* UserDefaultsPersister.swift in Sources */,
+				B06405131FA04AAC00086C69 /* SwiftQueue.swift in Sources */,
+				B06405141FA04AAC00086C69 /* Job.swift in Sources */,
+				B06405151FA04AAC00086C69 /* Constraints.swift in Sources */,
+				B06405161FA04AAC00086C69 /* Utils.swift in Sources */,
+				B06405171FA04AAC00086C69 /* SwiftQueueJob.swift in Sources */,
+				B06405181FA04AAC00086C69 /* SwiftQueueManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B06405201FA04CCF00086C69 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				B06405211FA04CCF00086C69 /* UserDefaultsPersister.swift in Sources */,
+				B06405221FA04CCF00086C69 /* SwiftQueue.swift in Sources */,
+				B06405231FA04CCF00086C69 /* Job.swift in Sources */,
+				B06405241FA04CCF00086C69 /* Constraints.swift in Sources */,
+				B06405251FA04CCF00086C69 /* Utils.swift in Sources */,
+				B06405261FA04CCF00086C69 /* SwiftQueueJob.swift in Sources */,
+				B06405271FA04CCF00086C69 /* SwiftQueueManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		OBJ_19 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
@@ -227,12 +368,152 @@
 /* Begin PBXTargetDependency section */
 		OBJ_30 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = OBJ_15 /* SwiftQueue */;
+			target = OBJ_15 /* SwiftQueue macOS */;
 			targetProxy = 1D7B3D211F5C1EAF000D49B6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		B064050C1FA04AA000086C69 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = SwiftQueue.xcodeproj/SwiftQueue_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/ios $(PROJECT_DIR)/Carthage/Build/iOS";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = SwiftQueue;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos11.0;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				TARGET_NAME = SwiftQueue;
+			};
+			name = Debug;
+		};
+		B064050D1FA04AA000086C69 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = SwiftQueue.xcodeproj/SwiftQueue_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/ios $(PROJECT_DIR)/Carthage/Build/iOS";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = SwiftQueue;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos11.0;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				TARGET_NAME = SwiftQueue;
+			};
+			name = Release;
+		};
+		B064051B1FA04AAC00086C69 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+					"$(PROJECT_DIR)/Carthage/Build/watchOS",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = SwiftQueue.xcodeproj/SwiftQueue_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx $(PROJECT_DIR)/Carthage/Build/watchOS";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = SwiftQueue;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos";
+				TARGET_NAME = SwiftQueue;
+			};
+			name = Debug;
+		};
+		B064051C1FA04AAC00086C69 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+					"$(PROJECT_DIR)/Carthage/Build/watchOS",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = SwiftQueue.xcodeproj/SwiftQueue_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx $(PROJECT_DIR)/Carthage/Build/watchOS";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = SwiftQueue;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos";
+				TARGET_NAME = SwiftQueue;
+			};
+			name = Release;
+		};
+		B064052A1FA04CCF00086C69 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = SwiftQueue.xcodeproj/SwiftQueue_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/tvOS $(PROJECT_DIR)/Carthage/Build/tvOS";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = SwiftQueue;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos";
+				TARGET_NAME = SwiftQueue;
+			};
+			name = Debug;
+		};
+		B064052B1FA04CCF00086C69 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = SwiftQueue.xcodeproj/SwiftQueue_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/tvOS $(PROJECT_DIR)/Carthage/Build/tvOS";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = SwiftQueue;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos";
+				TARGET_NAME = SwiftQueue;
+			};
+			name = Release;
+		};
 		OBJ_17 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -251,6 +532,7 @@
 				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = macosx;
 				TARGET_NAME = SwiftQueue;
 			};
 			name = Debug;
@@ -273,6 +555,7 @@
 				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = macosx;
 				TARGET_NAME = SwiftQueue;
 			};
 			name = Release;
@@ -366,7 +649,34 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		OBJ_16 /* Build configuration list for PBXNativeTarget "SwiftQueue" */ = {
+		B064050B1FA04AA000086C69 /* Build configuration list for PBXNativeTarget "SwiftQueue iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B064050C1FA04AA000086C69 /* Debug */,
+				B064050D1FA04AA000086C69 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B064051A1FA04AAC00086C69 /* Build configuration list for PBXNativeTarget "SwiftQueue watchOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B064051B1FA04AAC00086C69 /* Debug */,
+				B064051C1FA04AAC00086C69 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B06405291FA04CCF00086C69 /* Build configuration list for PBXNativeTarget "SwiftQueue tvOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B064052A1FA04CCF00086C69 /* Debug */,
+				B064052B1FA04CCF00086C69 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_16 /* Build configuration list for PBXNativeTarget "SwiftQueue macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				OBJ_17 /* Debug */,

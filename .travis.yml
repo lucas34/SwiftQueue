@@ -9,7 +9,7 @@ before_script:
 
 script:
     - swiftlint
-    - set -o pipefail && xcodebuild test -enableCodeCoverage YES -project SwiftQueue.xcodeproj -scheme SwiftQueue -sdk macosx10.13
+    - set -o pipefail && xcodebuild test -enableCodeCoverage YES -project SwiftQueue.xcodeproj -scheme "SwiftQueue macOS" -sdk macosx10.13
 
 after_success:
     - bash <(curl -s https://codecov.io/bash)
