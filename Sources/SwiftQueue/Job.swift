@@ -126,3 +126,5 @@ public protocol Job {
     func onRemove(error: Swift.Error?)
 
 }
+
+public class Canceled: Swift.Error {}
