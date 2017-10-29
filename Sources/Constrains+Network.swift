@@ -7,6 +7,12 @@ import Foundation
 import Reachability
 #endif
 
+public enum NetworkType: Int {
+    case any = 0
+    case cellular =  1
+    case wifi =  2
+}
+
 #if os(iOS) || os(macOS) || os(tvOS)
 internal class NetworkConstraint: JobConstraint {
 
@@ -65,4 +71,3 @@ internal class NetworkConstraint: JobConstraint {
 }
 
 #endif
-
