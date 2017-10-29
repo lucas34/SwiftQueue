@@ -26,7 +26,7 @@ before_install:
 
 before_script:
   - swiftlint
-  - carthage bootstrap --cache-builds
+  - carthage bootstrap $PLATFORM
 
 script:
   - set -o pipefail
