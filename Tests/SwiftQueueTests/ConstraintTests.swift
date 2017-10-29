@@ -39,10 +39,12 @@ class ConstraintTests: XCTestCase {
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type1)
                 .delay(inSecond: 1)
+                .retry(max: 5)
                 .schedule(manager: manager)
 
         JobBuilder(type: type2)
                 .deadline(date: Date()) // After 1 second should fail
+                .retry(max: 5)
                 .schedule(manager: manager)
 
         manager.waitUntilAllOperationsAreFinished()
