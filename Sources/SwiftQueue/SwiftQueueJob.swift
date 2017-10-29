@@ -4,9 +4,6 @@
 //
 
 import Foundation
-#if os(iOS) || os(macOS) || os(tvOS)
-import Reachability
-#endif
 
 internal final class SwiftQueueJob: Operation, JobResult {
 
@@ -16,10 +13,6 @@ internal final class SwiftQueueJob: Operation, JobResult {
     public let type: String
     public let group: String
 
-#if os(iOS) || os(macOS) || os(tvOS)
-    private let reachability: Reachability?
-#endif
-
     let tags: Set<String>
     let delay: TimeInterval?
     let deadline: Date?
@@ -28,6 +21,8 @@ internal final class SwiftQueueJob: Operation, JobResult {
     let params: Any?
     let createTime: Date
     let interval: TimeInterval
+
+    let constraints: [JobConstraint]
 
     var runCount: Int
     var maxRun: Int
@@ -76,47 +71,36 @@ internal final class SwiftQueueJob: Operation, JobResult {
         self.retries = retries
         self.interval = interval
 
-#if os(iOS) || os(macOS) || os(tvOS)
-        self.reachability = requireNetwork.rawValue > NetworkType.any.rawValue ? Reachability() : nil
-#endif
+        self.constraints = [
+            DeadlineConstraint(),
+            DelayConstraint(),
+            UniqueUUIDConstraint(),
+            NetworkConstraint()
+        ]
 
         super.init()
 
         self.queuePriority = .normal
         self.qualityOfService = .utility
 
-#if os(iOS) || os(macOS) || os(tvOS)
-        try? reachability?.startNotifier()
-#endif
     }
 
-#if os(iOS) || os(macOS) || os(tvOS)
-    deinit {
-        reachability?.stopNotifier()
-    }
-#endif
-
-    internal convenience init?(json: String, creator: [JobCreator]) {
-        let dict = fromJSON(json) as? [String: Any] ?? [:]
-        self.init(dictionary: dict, creator: creator)
-    }
-
-    public func toJSONString() -> String? {
-        return toJSON(toDictionary())
-    }
-
-    public override func start() {
+    override func start() {
         super.start()
         isExecuting = true
         run()
     }
 
-    public override func cancel() {
-        lastError = lastError ?? Canceled()
+    override func cancel() {
+        lastError = Canceled()
+        onTerminate()
+        super.cancel()
+    }
+
+    private func onTerminate() {
         if isExecuting {
             isFinished = true
         }
-        super.cancel()
     }
 
     // cancel before schedule and serialise
@@ -134,56 +118,22 @@ internal final class SwiftQueueJob: Operation, JobResult {
             return
         }
 
-        // Check the constraint
         do {
-            try Constraints.checkConstraintsForRun(job: self)
-            guard networkIsReady() else {
+            guard try self.checkConstraintsForRun() else {
+                // Constraint fail.
                 return
             }
+        } catch (let error) {
+            // Will never run again
+            lastError = error
+            onTerminate()
+        }
 
-            if let delay = delay {
-                if Date().timeIntervalSince(createTime) < delay {
-                    runInBackgroundAfter(delay, callback: self.run)
-                    return
-                }
-            }
-
+        do {
             try handler.onRun(callback: self)
         } catch (let error) {
             onDone(error: error)
         }
-    }
-
-    internal func networkIsReady() -> Bool {
-#if os(iOS) || os(macOS) || os(tvOS)
-        func checkIsReachable() -> Bool {
-            guard let reachability = reachability else {
-                return true
-            }
-            switch requireNetwork {
-            case .any:
-                return true
-            case .cellular:
-                return reachability.connection != .none
-            case .wifi:
-                return reachability.connection == .wifi
-            }
-        }
-
-        func waitForNetwork() {
-            reachability?.whenReachable = { reachability in
-                // Change network
-                reachability.whenReachable = nil
-                self.run()
-            }
-        }
-
-        guard checkIsReachable() else {
-            waitForNetwork()
-            return false
-        }
-#endif
-        return true
     }
 
     internal func completed() {
@@ -195,7 +145,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
             lastError = error
 
             guard retries > 0 else {
-                cancel()
+                onTerminate()
                 return
             }
 
@@ -221,7 +171,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
             lastError = nil
             runCount += 1
             if maxRun >= 0 && runCount >= maxRun {
-                isFinished = true
+                onTerminate()
             } else {
                 if interval > 0 {
                     runInBackgroundAfter(interval, callback: self.run)
@@ -265,6 +215,11 @@ extension SwiftQueueJob {
         }
     }
 
+    convenience init?(json: String, creator: [JobCreator]) {
+        let dict = fromJSON(json) as? [String: Any] ?? [:]
+        self.init(dictionary: dict, creator: creator)
+    }
+
     func toDictionary() -> [String: Any] {
         var dict = [String: Any]()
         dict["uuid"]           = self.uuid
@@ -282,6 +237,29 @@ extension SwiftQueueJob {
         dict["retries"]        = self.retries
         dict["interval"]       = self.interval
         return dict
+    }
+
+    func toJSONString() -> String? {
+        return toJSON(toDictionary())
+    }
+
+}
+
+extension SwiftQueueJob {
+
+    func checkConstraintsOnSchedule(queue: SwiftQueue) throws {
+        for constraint in self.constraints {
+            try constraint.schedule(queue: queue, operation: self)
+        }
+    }
+
+    func checkConstraintsForRun() throws -> Bool {
+        for constraint in self.constraints {
+            if try !constraint.run(operation: self) {
+                return false
+            }
+        }
+        return true
     }
 
 }

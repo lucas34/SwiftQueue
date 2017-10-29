@@ -17,6 +17,22 @@
 		1D8479AC1F82A84B00B3BBFB /* SwiftQueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A51F82A84B00B3BBFB /* SwiftQueueManager.swift */; };
 		1D8479AD1F82A84B00B3BBFB /* Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A61F82A84B00B3BBFB /* Constraints.swift */; };
 		1D8479AE1F82A84B00B3BBFB /* Job.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A71F82A84B00B3BBFB /* Job.swift */; };
+		1E68E019254E11329F491205 /* Constrains+Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E68E0070051B9A1F91FD52C /* Constrains+Network.swift */; };
+		1E68E0D85E9457D420C5DF91 /* Constrains+Delay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E68EBCDCC0F1769FE711C12 /* Constrains+Delay.swift */; };
+		1E68E34E00FEAC411B5BA1D9 /* Constrains+Deadline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E68EE0C8D130310EE74DB69 /* Constrains+Deadline.swift */; };
+		1E68E515B8AAE84A884BA60F /* Constrains+Deadline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E68EE0C8D130310EE74DB69 /* Constrains+Deadline.swift */; };
+		1E68E6650CF234CB5D6454EF /* Constraints+UniqueUUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E68E7B3B0AC894F3E3C64DF /* Constraints+UniqueUUID.swift */; };
+		1E68E84C06EE5D60002728CA /* Constrains+Deadline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E68EE0C8D130310EE74DB69 /* Constrains+Deadline.swift */; };
+		1E68E8BB162F52775B759011 /* Constraints+UniqueUUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E68E7B3B0AC894F3E3C64DF /* Constraints+UniqueUUID.swift */; };
+		1E68E92280553F2A8EC3BA93 /* Constraints+UniqueUUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E68E7B3B0AC894F3E3C64DF /* Constraints+UniqueUUID.swift */; };
+		1E68E9953699752F541A0117 /* Constraints+UniqueUUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E68E7B3B0AC894F3E3C64DF /* Constraints+UniqueUUID.swift */; };
+		1E68EACA0F1A5EAE34B62872 /* Constrains+Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E68E0070051B9A1F91FD52C /* Constrains+Network.swift */; };
+		1E68ED251E4688DD70887A7A /* Constrains+Delay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E68EBCDCC0F1769FE711C12 /* Constrains+Delay.swift */; };
+		1E68ED267C307BEC58FC60E5 /* Constrains+Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E68E0070051B9A1F91FD52C /* Constrains+Network.swift */; };
+		1E68EE2B47FF263612BA6C6F /* Constrains+Delay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E68EBCDCC0F1769FE711C12 /* Constrains+Delay.swift */; };
+		1E68EE741F05ACF1AE0D017D /* Constrains+Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E68E0070051B9A1F91FD52C /* Constrains+Network.swift */; };
+		1E68EF507F47A190C3FEEE67 /* Constrains+Deadline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E68EE0C8D130310EE74DB69 /* Constrains+Deadline.swift */; };
+		1E68EF7860233C5244BA01BD /* Constrains+Delay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E68EBCDCC0F1769FE711C12 /* Constrains+Delay.swift */; };
 		B06405031FA04AA000086C69 /* UserDefaultsPersister.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A11F82A84A00B3BBFB /* UserDefaultsPersister.swift */; };
 		B06405041FA04AA000086C69 /* SwiftQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A21F82A84A00B3BBFB /* SwiftQueue.swift */; };
 		B06405051FA04AA000086C69 /* Job.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A71F82A84B00B3BBFB /* Job.swift */; };
@@ -65,6 +81,10 @@
 		1D8479A61F82A84B00B3BBFB /* Constraints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constraints.swift; path = SwiftQueue/Constraints.swift; sourceTree = "<group>"; };
 		1D8479A71F82A84B00B3BBFB /* Job.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Job.swift; path = SwiftQueue/Job.swift; sourceTree = "<group>"; };
 		1DFCD8731F811FD6000568B9 /* Reachability.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reachability.framework; path = Carthage/Build/Mac/Reachability.framework; sourceTree = "<group>"; };
+		1E68E0070051B9A1F91FD52C /* Constrains+Network.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Constrains+Network.swift"; sourceTree = "<group>"; };
+		1E68E7B3B0AC894F3E3C64DF /* Constraints+UniqueUUID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Constraints+UniqueUUID.swift"; sourceTree = "<group>"; };
+		1E68EBCDCC0F1769FE711C12 /* Constrains+Delay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Constrains+Delay.swift"; sourceTree = "<group>"; };
+		1E68EE0C8D130310EE74DB69 /* Constrains+Deadline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Constrains+Deadline.swift"; sourceTree = "<group>"; };
 		B064050E1FA04AA000086C69 /* SwiftQueue.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftQueue.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B064051D1FA04AAC00086C69 /* SwiftQueue.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftQueue.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B064052C1FA04CCF00086C69 /* SwiftQueue.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftQueue.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -169,6 +189,10 @@
 				1D8479A51F82A84B00B3BBFB /* SwiftQueueManager.swift */,
 				1D8479A11F82A84A00B3BBFB /* UserDefaultsPersister.swift */,
 				1D8479A31F82A84A00B3BBFB /* Utils.swift */,
+				1E68E7B3B0AC894F3E3C64DF /* Constraints+UniqueUUID.swift */,
+				1E68EE0C8D130310EE74DB69 /* Constrains+Deadline.swift */,
+				1E68EBCDCC0F1769FE711C12 /* Constrains+Delay.swift */,
+				1E68E0070051B9A1F91FD52C /* Constrains+Network.swift */,
 			);
 			path = Sources;
 			sourceTree = SOURCE_ROOT;
@@ -306,6 +330,10 @@
 				B06405071FA04AA000086C69 /* Utils.swift in Sources */,
 				B06405081FA04AA000086C69 /* SwiftQueueJob.swift in Sources */,
 				B06405091FA04AA000086C69 /* SwiftQueueManager.swift in Sources */,
+				1E68E6650CF234CB5D6454EF /* Constraints+UniqueUUID.swift in Sources */,
+				1E68E515B8AAE84A884BA60F /* Constrains+Deadline.swift in Sources */,
+				1E68EE2B47FF263612BA6C6F /* Constrains+Delay.swift in Sources */,
+				1E68ED267C307BEC58FC60E5 /* Constrains+Network.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -320,6 +348,10 @@
 				B06405161FA04AAC00086C69 /* Utils.swift in Sources */,
 				B06405171FA04AAC00086C69 /* SwiftQueueJob.swift in Sources */,
 				B06405181FA04AAC00086C69 /* SwiftQueueManager.swift in Sources */,
+				1E68E9953699752F541A0117 /* Constraints+UniqueUUID.swift in Sources */,
+				1E68E34E00FEAC411B5BA1D9 /* Constrains+Deadline.swift in Sources */,
+				1E68EF7860233C5244BA01BD /* Constrains+Delay.swift in Sources */,
+				1E68E019254E11329F491205 /* Constrains+Network.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -334,6 +366,10 @@
 				B06405251FA04CCF00086C69 /* Utils.swift in Sources */,
 				B06405261FA04CCF00086C69 /* SwiftQueueJob.swift in Sources */,
 				B06405271FA04CCF00086C69 /* SwiftQueueManager.swift in Sources */,
+				1E68E8BB162F52775B759011 /* Constraints+UniqueUUID.swift in Sources */,
+				1E68EF507F47A190C3FEEE67 /* Constrains+Deadline.swift in Sources */,
+				1E68E0D85E9457D420C5DF91 /* Constrains+Delay.swift in Sources */,
+				1E68EE741F05ACF1AE0D017D /* Constrains+Network.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -348,6 +384,10 @@
 				1D8479AA1F82A84B00B3BBFB /* Utils.swift in Sources */,
 				1D8479AB1F82A84B00B3BBFB /* SwiftQueueJob.swift in Sources */,
 				1D8479AC1F82A84B00B3BBFB /* SwiftQueueManager.swift in Sources */,
+				1E68E92280553F2A8EC3BA93 /* Constraints+UniqueUUID.swift in Sources */,
+				1E68E84C06EE5D60002728CA /* Constrains+Deadline.swift in Sources */,
+				1E68ED251E4688DD70887A7A /* Constrains+Delay.swift in Sources */,
+				1E68EACA0F1A5EAE34B62872 /* Constrains+Network.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
