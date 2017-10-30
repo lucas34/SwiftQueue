@@ -119,14 +119,17 @@ internal final class SwiftQueueJob: Operation, JobResult {
         }
 
         do {
-            guard try self.checkConstraintsForRun() else {
-                // Constraint fail.
-                return
-            }
+            try self.willRunJob()
         } catch (let error) {
             // Will never run again
             lastError = error
             onTerminate()
+        }
+
+        guard self.checkIfJobCanRunNow() else {
+            // Constraint fail.
+            // Constraint will call run when it's ready
+            return
         }
 
         do {
@@ -247,15 +250,21 @@ extension SwiftQueueJob {
 
 extension SwiftQueueJob {
 
-    func checkConstraintsOnSchedule(queue: SwiftQueue) throws {
+    func willScheduleJob(queue: SwiftQueue) throws {
         for constraint in self.constraints {
-            try constraint.schedule(queue: queue, operation: self)
+            try constraint.willSchedule(queue: queue, operation: self)
         }
     }
 
-    func checkConstraintsForRun() throws -> Bool {
+    func willRunJob() throws {
         for constraint in self.constraints {
-            if try !constraint.run(operation: self) {
+            try constraint.willRun(operation: self)
+        }
+    }
+
+    func checkIfJobCanRunNow() -> Bool {
+        for constraint in self.constraints {
+            if !constraint.run(operation: self) {
                 return false
             }
         }

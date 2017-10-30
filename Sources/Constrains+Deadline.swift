@@ -8,12 +8,15 @@ internal class DeadlineConstraint: JobConstraint {
 
     class DeadlineError: ConstraintError {}
 
-    func schedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
+    func willSchedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
         try check(operation: operation)
     }
 
-    func run(operation: SwiftQueueJob) throws -> Bool {
+    func willRun(operation: SwiftQueueJob) throws {
         try check(operation: operation)
+    }
+
+    func run(operation: SwiftQueueJob) -> Bool {
         return true
     }
 
