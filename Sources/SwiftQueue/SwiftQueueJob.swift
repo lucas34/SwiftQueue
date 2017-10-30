@@ -205,7 +205,7 @@ extension SwiftQueueJob {
            let interval       = dictionary["interval"] as? TimeInterval,
            let job = SwiftQueue.createHandler(creators: creator, type: type, params: params) {
 
-            let deadline   = deadlineStr.flatMap { dateFormatter.date(from: $0) }
+            let deadline   = deadlineStr.flatMap(dateFormatter.date)
             let createTime = dateFormatter.date(from: createTimeStr) ?? Date()
             let network    = NetworkType(rawValue: requireNetwork) ?? NetworkType.any
 
@@ -230,7 +230,7 @@ extension SwiftQueueJob {
         dict["group"]          = self.group
         dict["tags"]           = Array(self.tags)
         dict["delay"]          = self.delay
-        dict["deadline"]       = self.deadline.map { dateFormatter.string(from: $0) }
+        dict["deadline"]       = self.deadline.map(dateFormatter.string)
         dict["requireNetwork"] = self.requireNetwork.rawValue
         dict["isPersisted"]    = self.isPersisted
         dict["params"]         = self.params
