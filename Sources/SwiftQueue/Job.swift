@@ -113,7 +113,7 @@ public enum RetryConstraint {
 
 public protocol Job {
 
-    func onRun(callback: JobResult) throws
+    func onRun(callback: JobResult)
 
     func onRetry(error: Swift.Error) -> RetryConstraint
 
