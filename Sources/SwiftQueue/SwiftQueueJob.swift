@@ -161,7 +161,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
                 }
             case .exponential(let initial):
                 let decimal: NSDecimalNumber = NSDecimalNumber(decimal: Decimal(initial) * pow(2, max(0, runCount - 1)))
-                runInBackgroundAfter(TimeInterval(decimal)) {
+                runInBackgroundAfter(TimeInterval(decimal)) { [unowned self] in
                     self.retries -= 1
                     self.run()
                 }
