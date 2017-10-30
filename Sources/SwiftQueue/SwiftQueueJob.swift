@@ -132,11 +132,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
             return
         }
 
-        do {
-            try handler.onRun(callback: self)
-        } catch (let error) {
-            onDone(error: error)
-        }
+        handler.onRun(callback: self)
     }
 
     internal func completed() {
