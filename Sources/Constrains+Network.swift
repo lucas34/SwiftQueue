@@ -18,23 +18,25 @@ internal class NetworkConstraint: JobConstraint {
 
     var reachability: Reachability?
 
-    func schedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
+    func willSchedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
         self.reachability = operation.requireNetwork.rawValue > NetworkType.any.rawValue ? Reachability() : nil
     }
 
-    func run(operation: SwiftQueueJob) throws -> Bool {
+    func willRun(operation: SwiftQueueJob) throws {
+        guard let reachability = reachability else { return }
+        guard hasCorrectNetwork(reachability: reachability, required: operation.requireNetwork) else {
+            try reachability.startNotifier()
+            return
+        }
+    }
+
+    func run(operation: SwiftQueueJob) -> Bool {
         guard let reachability = reachability else {
             return true
         }
 
         if hasCorrectNetwork(reachability: reachability, required: operation.requireNetwork) {
             return true
-        }
-
-        do {
-            try reachability.startNotifier()
-        } catch (let error) {
-            throw error
         }
 
         reachability.whenReachable = { reachability in
@@ -61,11 +63,15 @@ internal class NetworkConstraint: JobConstraint {
 
 internal class NetworkConstraint: JobConstraint {
 
-    func schedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
-        // Nothing
+    func willSchedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
+
     }
 
-    func run(operation: SwiftQueueJob) throws -> Bool {
+    func willRun(operation: SwiftQueueJob) throws {
+
+    }
+
+    func run(operation: SwiftQueueJob) -> Bool {
         return true
     }
 }

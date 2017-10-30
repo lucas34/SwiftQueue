@@ -7,9 +7,23 @@ import Foundation
 
 internal protocol JobConstraint {
 
-    func schedule(queue: SwiftQueue, operation: SwiftQueueJob) throws
+    /*
+        - Operation will be added to the queue
+        Raise exception if the job cannot run
+    */
+    func willSchedule(queue: SwiftQueue, operation: SwiftQueueJob) throws
 
-    func run(operation: SwiftQueueJob) throws -> Bool
+    /*
+        - Operation will run
+        Raise exception if the job cannot run anymore
+    */
+    func willRun(operation: SwiftQueueJob) throws
+
+    /*
+        - Operation will run
+        Return false if the job cannot run immediately
+    */
+    func run(operation: SwiftQueueJob) -> Bool
 
 }
 
