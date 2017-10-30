@@ -9,13 +9,7 @@ internal class UniqueUUIDConstraint: JobConstraint {
     class TaskAlreadyExist: ConstraintError {}
 
     func willSchedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
-        let exist = queue.operations.contains {
-            if let op = $0 as? SwiftQueueJob {
-                return op.uuid == operation.uuid
-            }
-            return false
-        }
-        if exist {
+        for op in queue.operations where op.name == operation.uuid {
             throw TaskAlreadyExist()
         }
     }
