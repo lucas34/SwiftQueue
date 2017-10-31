@@ -60,7 +60,7 @@ internal final class SwiftQueue: OperationQueue {
         }
 
         do {
-            try Constraints.checkConstraintsOnSchedule(queue: self, operation: job)
+            try job.willScheduleJob(queue: self)
         } catch (let error) {
             job.abort(error: error)
             return
@@ -70,7 +70,7 @@ internal final class SwiftQueue: OperationQueue {
         if job.isPersisted, let sp = persister, let data = job.toJSONString() {
             sp.put(queueName: queueName, taskId: job.uuid, data: data)
         }
-        job.completionBlock = {
+        job.completionBlock = { [unowned self] in
             self.completed(job)
         }
         super.addOperation(ope)

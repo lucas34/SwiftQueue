@@ -227,7 +227,7 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertEqual(persister.restore().count, 1)
         XCTAssertEqual(persister.restore()[0], queueId)
 
-        _ = SwiftQueueManager(creators: [creator], persister: persister)
+        let manager = SwiftQueueManager(creators: [creator], persister: persister)
 
         XCTAssertEqual(queueId, persister.restoreQueueName)
 
@@ -244,6 +244,8 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertEqual(job2.onCompleteCalled, 1)
         XCTAssertEqual(job2.onRetryCalled, 0)
         XCTAssertEqual(job2.onCancelCalled, 0)
+
+        manager.waitUntilAllOperationsAreFinished()
     }
 
     func testFailInitDoesNotCrash() {

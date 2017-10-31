@@ -21,7 +21,7 @@ class TestJob: Job {
 
     public var params: Any?
 
-    func onRun(callback: JobResult) throws {
+    func onRun(callback: JobResult) {
         onRunJobCalled += 1
         callback.onDone(error: result) // Auto complete
     }
