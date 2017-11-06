@@ -70,8 +70,8 @@ internal final class SwiftQueue: OperationQueue {
         if job.isPersisted, let sp = persister, let data = job.toJSONString() {
             sp.put(queueName: queueName, taskId: job.uuid, data: data)
         }
-        job.completionBlock = { [unowned self] in
-            self.completed(job)
+        job.completionBlock = { [weak self] in
+            self?.completed(job)
         }
         super.addOperation(ope)
     }

@@ -153,30 +153,37 @@ internal final class SwiftQueueJob: Operation, JobResult {
             case .cancel:
                 cancel()
             case .retry(let after):
-                retries -= 1
                 if after > 0 {
-                    runInBackgroundAfter(after, callback: self.run)
+                    runInBackgroundAfter(after) { [weak self] in
+                        self?.retries -= 1
+                        self?.run()
+                    }
                 } else {
+                    retries -= 1
                     self.run()
                 }
             case .exponential(let initial):
                 let decimal: NSDecimalNumber = NSDecimalNumber(decimal: Decimal(initial) * pow(2, max(0, runCount - 1)))
-                runInBackgroundAfter(TimeInterval(decimal)) { [unowned self] in
-                    self.retries -= 1
-                    self.run()
+                runInBackgroundAfter(TimeInterval(decimal)) { [weak self] in
+                    self?.retries -= 1
+                    self?.run()
                 }
             }
         } else {
             lastError = nil
-            runCount += 1
-            if maxRun >= 0 && runCount >= maxRun {
-                onTerminate()
-            } else {
+            if runCount + 1 < maxRun {
+                // Should run again
                 if interval > 0 {
-                    runInBackgroundAfter(interval, callback: self.run)
+                    runInBackgroundAfter(interval, callback: { [weak self] in
+                        self?.runCount += 1
+                        self?.run()
+                    })
                 } else {
+                    runCount += 1
                     self.run()
                 }
+            } else {
+                onTerminate()
             }
         }
     }
