@@ -55,12 +55,9 @@ class TestCreator: JobCreator {
     }
 
     func create(type: String, params: Any?) -> Job? {
-        if let value = job[type] as? TestJob {
-            value.params = params
-            return value
-        } else {
-            return job[type]
-        }
+        let value = job[type] as? TestJob
+        value?.params = params
+        return value
     }
 }
 
