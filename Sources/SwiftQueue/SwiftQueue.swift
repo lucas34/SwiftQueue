@@ -61,7 +61,7 @@ internal final class SwiftQueue: OperationQueue {
 
         do {
             try job.willScheduleJob(queue: self)
-        } catch (let error) {
+        } catch let error {
             job.abort(error: error)
             return
         }

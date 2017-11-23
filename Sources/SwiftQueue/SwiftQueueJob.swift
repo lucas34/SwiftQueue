@@ -120,7 +120,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
 
         do {
             try self.willRunJob()
-        } catch (let error) {
+        } catch let error {
             // Will never run again
             lastError = error
             onTerminate()
