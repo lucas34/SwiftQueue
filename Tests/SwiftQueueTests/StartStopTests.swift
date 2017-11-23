@@ -68,4 +68,45 @@ class StartStopTests: XCTestCase {
         XCTAssertEqual(job.onCancelCalled, 0)
     }
 
+    func testPauseQueueExecution() {
+        let job1 = TestJob()
+        let type1 = UUID().uuidString
+
+        let job2 = TestJob()
+        let type2 = UUID().uuidString
+
+        let creator = TestCreator([type1: job1, type2: job2])
+
+        let manager = SwiftQueueManager(creators: [creator])
+
+        JobBuilder(type: type1).schedule(manager: manager)
+
+        // Even if pause, if the job is already scheduled it will run
+        manager.pause()
+
+        JobBuilder(type: type2).schedule(manager: manager)
+
+        job1.await()
+
+        XCTAssertEqual(job1.onRunJobCalled, 1)
+        XCTAssertEqual(job1.onCompleteCalled, 1)
+        XCTAssertEqual(job1.onRetryCalled, 0)
+        XCTAssertEqual(job1.onCancelCalled, 0)
+
+        // Not run yet
+        XCTAssertEqual(job2.onRunJobCalled, 0)
+        XCTAssertEqual(job2.onCompleteCalled, 0)
+        XCTAssertEqual(job2.onRetryCalled, 0)
+        XCTAssertEqual(job2.onCancelCalled, 0)
+
+        manager.start()
+        job2.await()
+
+        XCTAssertEqual(job2.onRunJobCalled, 1)
+        XCTAssertEqual(job2.onCompleteCalled, 1)
+        XCTAssertEqual(job2.onRetryCalled, 0)
+        XCTAssertEqual(job2.onCancelCalled, 0)
+
+    }
+
 }
