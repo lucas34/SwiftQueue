@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Reachability",
+        "repositoryURL": "https://github.com/lucas34/Reachability.swift.git",
+        "state": {
+          "branch": null,
+          "revision": "31b72208fcc563e3213fbd260b9300b2c0b8609f",
+          "version": "5.0.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
