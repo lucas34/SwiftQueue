@@ -43,7 +43,7 @@ class TestJob: Job {
 
     func await(_ seconds: TimeInterval = TimeInterval(5)) {
         let delta = DispatchTime.now() + Double(Int64(seconds) * Int64(NSEC_PER_SEC)) / Double(NSEC_PER_SEC)
-        semaphore.wait(timeout: delta)
+        _ = semaphore.wait(timeout: delta)
     }
 }
 
