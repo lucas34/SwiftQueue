@@ -20,7 +20,7 @@ class SwiftQueueBuilderTests: XCTestCase {
         let group = UUID().uuidString
         let tag = UUID().uuidString
         let delay = TimeInterval(12345)
-        let deadline = Date(timeIntervalSinceNow: TimeInterval(UInt64.max))
+        let deadline = Date(timeIntervalSinceNow: TimeInterval(30))
         let requireNetwork = NetworkType.wifi
         let isPersisted = true // REquiered
         let params = UUID().uuidString
