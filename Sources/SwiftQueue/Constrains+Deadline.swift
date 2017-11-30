@@ -17,6 +17,11 @@ internal class DeadlineConstraint: JobConstraint {
     }
 
     func run(operation: SwiftQueueJob) -> Bool {
+        if let delay = operation.deadline {
+            runInBackgroundAfter(delay.timeIntervalSince(Date()), callback: { [weak operation = operation] in
+                operation?.run()
+            })
+        }
         return true
     }
 
