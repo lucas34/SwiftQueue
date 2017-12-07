@@ -243,7 +243,7 @@ class SwiftQueueManagerTests: XCTestCase {
     }
 
     func testFailInitDoesNotCrash() {
-        XCTAssertNil(SwiftQueueJob(json: "hey hey", creator: []))
+        XCTAssertNil(SwiftQueueJob(json: UUID().uuidString, creator: []))
     }
 
     func testAddOperationNotJobTask() {
