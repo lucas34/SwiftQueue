@@ -16,7 +16,7 @@ public final class JobBuilder {
     private var deadline: Date?
     private var requireNetwork: NetworkType = NetworkType.any
     private var isPersisted: Bool = false
-    private var params: Any?
+    private var params: [String: Any]?
     private var createTime: Date = Date()
     private var maxRun: Int = 1
     private var retries: Int = 0
@@ -77,7 +77,7 @@ public final class JobBuilder {
         return self
     }
 
-    public func with(params: Any) -> JobBuilder {
+    public func with(params: [String: Any]) -> JobBuilder {
         self.params = params
         return self
     }

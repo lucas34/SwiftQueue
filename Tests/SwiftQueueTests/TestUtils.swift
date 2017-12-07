@@ -19,7 +19,7 @@ class TestJob: Job {
 
     public var retryConstraint = RetryConstraint.retry(delay: 0)
 
-    public var params: Any?
+    public var params: [String: Any]?
 
     public let completionTimeout: TimeInterval
 
@@ -62,7 +62,7 @@ class TestCreator: JobCreator {
         self.job = job
     }
 
-    func create(type: String, params: Any?) -> Job? {
+    func create(type: String, params: [String: Any]?) -> Job? {
         let value = job[type] as? TestJob
         value?.params = params
         return value

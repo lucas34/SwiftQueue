@@ -18,7 +18,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
     let deadline: Date?
     let requireNetwork: NetworkType
     let isPersisted: Bool
-    let params: Any?
+    let params: [String: Any]?
     let createTime: Date
     let interval: TimeInterval
 
@@ -53,7 +53,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
     }
 
     internal init(job: Job, uuid: String = UUID().uuidString, type: String, group: String, tags: Set<String>,
-                  delay: TimeInterval?, deadline: Date?, requireNetwork: NetworkType, isPersisted: Bool, params: Any?,
+                  delay: TimeInterval?, deadline: Date?, requireNetwork: NetworkType, isPersisted: Bool, params: [String: Any]?,
                   createTime: Date, runCount: Int, maxRun: Int, retries: Int, interval: Double) {
         self.handler = job
         self.uuid = uuid
@@ -192,7 +192,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
 extension SwiftQueueJob {
 
     convenience init?(dictionary: [String: Any], creator: [JobCreator]) {
-        let params = dictionary["params"]
+        let params = dictionary["params"] as? [String: Any]
         if let uuid            = dictionary["uuid"] as? String,
            let type           = dictionary["type"] as? String,
            let group          = dictionary["group"] as? String,

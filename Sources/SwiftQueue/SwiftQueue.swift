@@ -7,7 +7,7 @@ import Foundation
 
 public protocol JobCreator {
 
-    func create(type: String, params: Any?) -> Job?
+    func create(type: String, params: [String: Any]?) -> Job?
 
 }
 
@@ -95,11 +95,11 @@ internal final class SwiftQueue: OperationQueue {
         job.completed()
     }
 
-    func createHandler(type: String, params: Any?) -> Job? {
+    func createHandler(type: String, params: [String: Any]?) -> Job? {
         return SwiftQueue.createHandler(creators: creators, type: type, params: params)
     }
 
-    static func createHandler(creators: [JobCreator], type: String, params: Any?) -> Job? {
+    static func createHandler(creators: [JobCreator], type: String, params: [String: Any]?) -> Job? {
         return creators.flatMap {
             $0.create(type: type, params: params)
         }.first
