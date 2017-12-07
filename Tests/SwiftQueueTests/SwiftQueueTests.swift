@@ -28,12 +28,6 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertEqual(job.onCancelCalled, 0)
     }
 
-    func testScheduleJobWithoutCreatorNoError() {
-        let manager = SwiftQueueManager(creators: [])
-        JobBuilder(type: UUID().uuidString)
-                .schedule(manager: manager)
-    }
-
     func testCancelWithTag() {
         let id = UUID().uuidString
         let tag = UUID().uuidString
