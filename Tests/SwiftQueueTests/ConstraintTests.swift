@@ -296,8 +296,8 @@ class ConstraintTests: XCTestCase {
 
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type)
-            .internet(atLeast: .cellular)
-            .schedule(manager: manager)
+                .internet(atLeast: .cellular)
+                .schedule(manager: manager)
 
         job.await()
 
@@ -315,8 +315,8 @@ class ConstraintTests: XCTestCase {
 
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type)
-            .internet(atLeast: .wifi)
-            .schedule(manager: manager)
+                .internet(atLeast: .wifi)
+                .schedule(manager: manager)
 
         job.await()
 
@@ -324,5 +324,52 @@ class ConstraintTests: XCTestCase {
         XCTAssertEqual(job.onCompleteCalled, 1)
         XCTAssertEqual(job.onRetryCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 0)
+    }
+
+    func testCancelRunningOperation() {
+        let job = TestJob(10)
+        let type = UUID().uuidString
+
+        let creator = TestCreator([type: job])
+
+        let manager = SwiftQueueManager(creators: [creator])
+        JobBuilder(type: type)
+                .schedule(manager: manager)
+
+        runInBackgroundAfter(1) {
+            manager.cancelAllOperations()
+        }
+
+        job.await()
+
+        XCTAssertEqual(job.onRunJobCalled, 1)
+        XCTAssertEqual(job.onCompleteCalled, 0)
+        XCTAssertEqual(job.onRetryCalled, 0)
+        XCTAssertEqual(job.onCancelCalled, 1)
+    }
+
+    func testCancelRunningOperationByTag() {
+        let job = TestJob(10)
+        let type = UUID().uuidString
+
+        let tag = UUID().uuidString
+
+        let creator = TestCreator([type: job])
+
+        let manager = SwiftQueueManager(creators: [creator])
+        JobBuilder(type: type)
+                .addTag(tag: tag)
+                .schedule(manager: manager)
+
+        runInBackgroundAfter(1) {
+            manager.cancelOperations(tag: tag)
+        }
+
+        job.await()
+
+        XCTAssertEqual(job.onRunJobCalled, 1)
+        XCTAssertEqual(job.onCompleteCalled, 0)
+        XCTAssertEqual(job.onRetryCalled, 0)
+        XCTAssertEqual(job.onCancelCalled, 1)
     }
 }

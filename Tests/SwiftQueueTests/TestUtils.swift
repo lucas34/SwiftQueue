@@ -21,9 +21,17 @@ class TestJob: Job {
 
     public var params: Any?
 
+    public let completionTimeout: TimeInterval
+
+    init(_ completionTimeout: TimeInterval = 0) {
+        self.completionTimeout = completionTimeout
+    }
+
     func onRun(callback: JobResult) {
         onRunJobCalled += 1
-        callback.onDone(error: result) // Auto complete
+        runInBackgroundAfter(completionTimeout) {
+            callback.onDone(error: self.result) // Auto complete
+        }
     }
 
     func onRetry(error: Error) -> RetryConstraint {
