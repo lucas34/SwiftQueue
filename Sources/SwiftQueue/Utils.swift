@@ -10,9 +10,16 @@ func runInBackgroundAfter(_ seconds: TimeInterval, callback: @escaping () -> Voi
     DispatchQueue.global(qos: DispatchQoS.QoSClass.background).asyncAfter(deadline: delta, execute: callback)
 }
 
-func toJSON(_ obj: Any) -> String? {
-    let json = try? JSONSerialization.data(withJSONObject: obj, options: .prettyPrinted)
-    return json.flatMap { NSString(data: $0, encoding: String.Encoding.utf8.rawValue) as String? }
+func toJSON(_ obj: [String: Any]) -> String? {
+    guard JSONSerialization.isValidJSONObject(obj) else {
+        assertionFailure("Job data is not a valid JSON")
+        return nil
+    }
+    guard let jsonData = try? JSONSerialization.data(withJSONObject: obj) else {
+        assertionFailure("Fail to serialize JSON")
+        return nil
+    }
+    return String(data: jsonData, encoding: .utf8)
 }
 
 func fromJSON(_ str: String) -> Any? {
