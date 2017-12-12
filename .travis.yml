@@ -23,9 +23,10 @@ env:
 
 before_install:
   - brew install swiftlint
+  - npm install -g danger
 
 before_script:
-  - swiftlint
+  - danger process danger-swift
   - carthage bootstrap $PLATFORM
 
 script:
