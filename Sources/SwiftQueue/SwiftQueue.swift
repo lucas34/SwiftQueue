@@ -52,7 +52,7 @@ internal final class SwiftQueue: OperationQueue {
         }.forEach(addOperation)
     }
 
-    public override func addOperation(_ ope: Operation) {
+    override func addOperation(_ ope: Operation) {
         guard let job = ope as? SwiftQueueJob else {
             // Not a job Task I don't care
             super.addOperation(ope)
@@ -76,7 +76,7 @@ internal final class SwiftQueue: OperationQueue {
         super.addOperation(ope)
     }
 
-    public func cancelOperations(tag: String) {
+    func cancelOperations(tag: String) {
         operations.flatMap { operation -> SwiftQueueJob? in
             operation as? SwiftQueueJob
         }.filter {
@@ -86,7 +86,7 @@ internal final class SwiftQueue: OperationQueue {
         }
     }
 
-    func completed(_ job: SwiftQueueJob) {
+    private func completed(_ job: SwiftQueueJob) {
         // Remove this operation from serialization
         if job.isPersisted, let sp = persister {
             sp.remove(queueName: queueName, taskId: job.uuid)
