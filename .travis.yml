@@ -29,6 +29,7 @@ before_script:
   - carthage bootstrap $PLATFORM
 
 script:
+  - bundle exec danger
   - set -o pipefail
   - xcodebuild -version
   - xcodebuild -showsdks
