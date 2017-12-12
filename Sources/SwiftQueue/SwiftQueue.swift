@@ -100,7 +100,7 @@ internal final class SwiftQueue: OperationQueue {
             sp.remove(queueName: queueName, taskId: job.uuid)
         }
 
-        job.completed()
+        job.remove()
     }
 
     func createHandler(type: String, params: [String: Any]?) -> Job? {

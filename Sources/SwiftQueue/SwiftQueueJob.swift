@@ -135,7 +135,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
         handler.onRun(callback: self)
     }
 
-    internal func completed() {
+    internal func remove() {
         handler.onRemove(error: lastError)
     }
 
