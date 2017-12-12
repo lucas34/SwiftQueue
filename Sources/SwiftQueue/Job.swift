@@ -5,6 +5,7 @@
 
 import Foundation
 
+/// Builder to create your job with behaviour
 public final class JobBuilder {
 
     private let type: String
@@ -26,16 +27,19 @@ public final class JobBuilder {
         self.type = type
     }
 
+    /// Allow only 1 job at the time with this ID scheduled or running
+    /// Same job scheduled with same id will result in onRemove(TaskAlreadyExist)
     public func singleInstance(forId: String) -> JobBuilder {
         self.uuid = forId
         return self
     }
 
+    /// Job in different groups can run in parallel
     public func group(name: String) -> JobBuilder {
         self.group = name
         return self
     }
-
+    
     public func delay(inSecond: Int) -> JobBuilder {
         delay = TimeInterval(inSecond)
         return self
@@ -46,6 +50,7 @@ public final class JobBuilder {
         return self
     }
 
+    /// Job should be removed from the queue after a certain date
     public func deadline(date: Date) -> JobBuilder {
         deadline = date
         return self
@@ -57,26 +62,30 @@ public final class JobBuilder {
         return self
     }
 
+    /// Connectivity constraint.
     public func internet(atLeast: NetworkType) -> JobBuilder {
         requireNetwork = atLeast
         return self
     }
-
+    
     public func persist(required: Bool) -> JobBuilder {
         isPersisted = required
         return self
     }
 
+    /// Max number of authorised retry before the job is removed
     public func retry(max: Int) -> JobBuilder {
         retries = max
         return self
     }
 
+    /// Custom tag to mark the job
     public func addTag(tag: String) -> JobBuilder {
         tags.insert(tag)
         return self
     }
 
+    /// Custom parameters will be forwarded to create method
     public func with(params: [String: Any]) -> JobBuilder {
         self.params = params
         return self
@@ -89,6 +98,7 @@ public final class JobBuilder {
                 retries: retries, interval: interval)
     }
 
+    /// Add job to the JobQueue
     public func schedule(manager: SwiftQueueManager) {
         let queue = manager.getQueue(name: group)
         guard let job = queue.createHandler(type: type, params: params) else {
@@ -99,26 +109,29 @@ public final class JobBuilder {
     }
 }
 
+/// Callback to give result in synchronous or asynchronous job
 public protocol JobResult {
 
+    /// Method callback to notify the completion of your 
     func onDone(error: Swift.Error?)
 
 }
 
-public enum RetryConstraint {
-    case retry(delay: TimeInterval)
-    case cancel
-    case exponential(initial: TimeInterval)
-}
-
+/// Protocol to implement to run a job
 public protocol Job {
 
+    /// Perform your operation
     func onRun(callback: JobResult)
 
+    /// Fail has failed with the 
+    /// Will only gets called if the job can be retried
+    /// Not applicable for 'ConstraintError'
+    /// Not application if the retry(value) is less than 2 which is the case by default
     func onRetry(error: Swift.Error) -> RetryConstraint
 
+    /// Job is removed from the queue and will never run again
     func onRemove(error: Swift.Error?)
 
 }
 
-public class Canceled: Swift.Error {}
+
