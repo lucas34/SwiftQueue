@@ -139,52 +139,64 @@ internal final class SwiftQueueJob: Operation, JobResult {
         handler.onRemove(error: lastError)
     }
 
-    func onDone(error: Swift.Error?) {
-        if let error = error {
-            lastError = error
+    func done(_ result: JobCompletion) {
+        switch result {
+        case .success:
+            completionSuccess()
 
-            guard retries > 0 else {
-                onTerminate()
-                return
-            }
+        case .fail(let error):
+            completionFail(error: error)
+        }
+    }
 
-            let retry = handler.onRetry(error: error)
-            switch retry {
-            case .cancel:
-                cancel()
-            case .retry(let after):
-                if after > 0 {
-                    runInBackgroundAfter(after) { [weak self] in
-                        self?.retries -= 1
-                        self?.run()
-                    }
-                } else {
-                    retries -= 1
-                    self.run()
-                }
-            case .exponential(let initial):
-                let decimal: NSDecimalNumber = NSDecimalNumber(decimal: Decimal(initial) * pow(2, max(0, runCount - 1)))
-                runInBackgroundAfter(TimeInterval(truncating: decimal)) { [weak self] in
+    private func completionFail(error: Swift.Error) {
+        lastError = error
+
+        if retries > 0 {
+            retryJob(retry: handler.onRetry(error: error))
+        } else {
+            onTerminate()
+        }
+    }
+
+    private func retryJob(retry: RetryConstraint) {
+        switch retry {
+        case .cancel:
+            cancel()
+        case .retry(let after):
+            if after > 0 {
+                runInBackgroundAfter(after) { [weak self] in
                     self?.retries -= 1
                     self?.run()
                 }
+            } else {
+                retries -= 1
+                self.run()
+            }
+        case .exponential(let initial):
+            let decimal: NSDecimalNumber = NSDecimalNumber(decimal: Decimal(initial) * pow(2, max(0, runCount - 1)))
+            runInBackgroundAfter(TimeInterval(truncating: decimal)) { [weak self] in
+                self?.retries -= 1
+                self?.run()
+            }
+        }
+    }
+
+    private func completionSuccess() {
+        lastError = nil
+        if runCount + 1 < maxRun {
+            // Should run again
+            if interval > 0 {
+                runInBackgroundAfter(interval, callback: { [weak self] in
+                    self?.runCount += 1
+                    self?.run()
+                })
+            } else {
+                runCount += 1
+                self.run()
             }
         } else {
-            lastError = nil
-            if runCount + 1 < maxRun {
-                // Should run again
-                if interval > 0 {
-                    runInBackgroundAfter(interval, callback: { [weak self] in
-                        self?.runCount += 1
-                        self?.run()
-                    })
-                } else {
-                    runCount += 1
-                    self.run()
-                }
-            } else {
-                onTerminate()
-            }
+            onTerminate()
         }
     }
 }

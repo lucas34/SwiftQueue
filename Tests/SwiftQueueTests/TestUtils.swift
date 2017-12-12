@@ -30,7 +30,11 @@ class TestJob: Job {
     func onRun(callback: JobResult) {
         onRunJobCalled += 1
         runInBackgroundAfter(completionTimeout) {
-            callback.onDone(error: self.result) // Auto complete
+            if let error = self.result {
+                callback.done(.fail(error))
+            } else {
+                callback.done(.success)
+            }
         }
     }
 

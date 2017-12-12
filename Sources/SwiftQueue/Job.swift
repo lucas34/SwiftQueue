@@ -113,8 +113,18 @@ public final class JobBuilder {
 public protocol JobResult {
 
     /// Method callback to notify the completion of your 
-    func onDone(error: Swift.Error?)
+    func done(_ result: JobCompletion)
 
+}
+
+public enum JobCompletion {
+    
+    /// Job completed successfully
+    case success
+    
+    /// Job completed with error
+    case fail(Swift.Error)
+    
 }
 
 /// Protocol to implement to run a job
