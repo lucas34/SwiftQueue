@@ -12,11 +12,8 @@ func runInBackgroundAfter(_ seconds: TimeInterval, callback: @escaping () -> Voi
 
 func toJSON(_ obj: [String: Any]) -> String? {
     assert(JSONSerialization.isValidJSONObject(obj))
-    guard let jsonData = try? JSONSerialization.data(withJSONObject: obj) else {
-        assertionFailure("Fail to serialize JSON")
-        return nil
-    }
-    return String(data: jsonData, encoding: .utf8)
+    let jsonData = try? JSONSerialization.data(withJSONObject: obj)
+    return jsonData.flatMap { String(data: $0, encoding: .utf8) }
 }
 
 func fromJSON(_ str: String) -> Any? {
