@@ -157,6 +157,28 @@ class ConstraintTests: XCTestCase {
         XCTAssertEqual(job.onCancelCalled, 1)
     }
 
+    func testRetryFailJobWithRetryDelayConstraint() {
+        let job = TestJob()
+        let type = UUID().uuidString
+
+        let creator = TestCreator([type: job])
+
+        job.result = JobError()
+        job.retryConstraint = .retry(delay: 2)
+
+        let manager = SwiftQueueManager(creators: [creator])
+        JobBuilder(type: type)
+                .retry(max: 2)
+                .schedule(manager: manager)
+
+        job.await()
+
+        XCTAssertEqual(job.onRunJobCalled, 3)
+        XCTAssertEqual(job.onCompleteCalled, 0)
+        XCTAssertEqual(job.onRetryCalled, 2)
+        XCTAssertEqual(job.onCancelCalled, 1)
+    }
+
     func testRetryFailJobWithCancelConstraint() {
         let job = TestJob()
         let type = UUID().uuidString
