@@ -1,5 +1,7 @@
 language: swift
 osx_image: xcode9
+rvm:
+  - 2.2
 
 env:
   global:
@@ -23,13 +25,13 @@ env:
 
 before_install:
   - brew install swiftlint
-  - npm install -g danger
+  - gem install danger
 
 before_script:
-  - danger process danger-swift
   - carthage bootstrap $PLATFORM
 
 script:
+  - danger
   - set -o pipefail
   - xcodebuild -version
   - xcodebuild -showsdks
