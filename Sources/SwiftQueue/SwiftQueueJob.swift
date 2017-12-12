@@ -9,9 +9,9 @@ internal final class SwiftQueueJob: Operation, JobResult {
 
     let handler: Job
 
-    public let uuid: String
-    public let type: String
-    public let group: String
+    let uuid: String
+    let type: String
+    let group: String
 
     let tags: Set<String>
     let delay: TimeInterval?
@@ -30,10 +30,10 @@ internal final class SwiftQueueJob: Operation, JobResult {
 
     internal var lastError: Swift.Error?
 
-    public override var name: String? { get { return uuid } set { } }
+    override var name: String? { get { return uuid } set { } }
 
     private var jobIsExecuting: Bool = false
-    public override var isExecuting: Bool {
+    override var isExecuting: Bool {
         get { return jobIsExecuting }
         set {
             willChangeValue(forKey: "isExecuting")
@@ -43,7 +43,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
     }
 
     private var jobIsFinished: Bool = false
-    public override var isFinished: Bool {
+    override var isFinished: Bool {
         get { return jobIsFinished }
         set {
             willChangeValue(forKey: "isFinished")
@@ -139,7 +139,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
         handler.onRemove(error: lastError)
     }
 
-    public func onDone(error: Swift.Error?) {
+    func onDone(error: Swift.Error?) {
         if let error = error {
             lastError = error
 
