@@ -4,9 +4,10 @@
 
 import Foundation
 
-internal class UniqueUUIDConstraint: JobConstraint {
+/// Exception thrown when you try to schedule a job with a same ID as one currently scheduled
+public class TaskAlreadyExist: ConstraintError {}
 
-    class TaskAlreadyExist: ConstraintError {}
+internal class UniqueUUIDConstraint: JobConstraint {
 
     func willSchedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
         for op in queue.operations where op.name == operation.uuid {

@@ -4,10 +4,11 @@
 
 import Foundation
 
+/// Exception thrown when a deadline is reached
+public class DeadlineError: ConstraintError {}
+
 internal class DeadlineConstraint: JobConstraint {
-
-    class DeadlineError: ConstraintError {}
-
+    
     func willSchedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
         try check(operation: operation)
     }
