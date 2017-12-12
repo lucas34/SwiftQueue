@@ -4,10 +4,10 @@ import PackageDescription
 let package = Package(
         name: "SwiftQueue",
         products: [
-            .library(name: "SwiftQueue", targets: ["SwiftQueue"]),
+            .library(name: "SwiftQueue", targets: ["SwiftQueue"])
         ],
         dependencies: [
-            .package(url: "https://github.com/lucas34/Reachability.swift.git", .upToNextMajor(from: "5.0.0")),
+            .package(url: "https://github.com/lucas34/Reachability.swift.git", .upToNextMajor(from: "5.0.0"))
         ],
         targets: [
             .target(
@@ -15,7 +15,7 @@ let package = Package(
                     dependencies: ["Reachability"]),
             .testTarget(
                     name: "SwiftQueueTests",
-                    dependencies: ["SwiftQueue"]),
+                    dependencies: ["SwiftQueue"])
         ],
         swiftLanguageVersions: [3, 4]
 )

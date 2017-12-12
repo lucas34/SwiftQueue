@@ -39,7 +39,7 @@ public final class JobBuilder {
         self.group = name
         return self
     }
-    
+
     public func delay(inSecond: Int) -> JobBuilder {
         delay = TimeInterval(inSecond)
         return self
@@ -67,7 +67,7 @@ public final class JobBuilder {
         requireNetwork = atLeast
         return self
     }
-    
+
     public func persist(required: Bool) -> JobBuilder {
         isPersisted = required
         return self
@@ -118,13 +118,13 @@ public protocol JobResult {
 }
 
 public enum JobCompletion {
-    
+
     /// Job completed successfully
     case success
-    
+
     /// Job completed with error
     case fail(Swift.Error)
-    
+
 }
 
 /// Protocol to implement to run a job
@@ -143,5 +143,3 @@ public protocol Job {
     func onRemove(error: Swift.Error?)
 
 }
-
-
