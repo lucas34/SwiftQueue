@@ -11,10 +11,7 @@ func runInBackgroundAfter(_ seconds: TimeInterval, callback: @escaping () -> Voi
 }
 
 func toJSON(_ obj: [String: Any]) -> String? {
-    guard JSONSerialization.isValidJSONObject(obj) else {
-        assertionFailure("Job data is not a valid JSON")
-        return nil
-    }
+    assert(JSONSerialization.isValidJSONObject(obj))
     guard let jsonData = try? JSONSerialization.data(withJSONObject: obj) else {
         assertionFailure("Fail to serialize JSON")
         return nil
