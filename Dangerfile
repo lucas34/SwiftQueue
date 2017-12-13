@@ -32,4 +32,6 @@ if onlyPodspec != onlyPackage {
     warn("Only one of either the podspec or SPM package was changed. This might be unintentional – double check.")
 }
 
+warn("Hello world")
+
 SwiftLint.lint()
