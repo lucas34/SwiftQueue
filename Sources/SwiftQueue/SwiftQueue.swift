@@ -5,20 +5,28 @@
 
 import Foundation
 
+/// Protocol to create instance of your job
 public protocol JobCreator {
 
-    func create(type: String, params: Any?) -> Job?
+    /// method called when a job has be to instantiate
+    /// Type as specified in JobBuilder.init(type) and params as JobBuilder.with(params)
+    func create(type: String, params: [String: Any]?) -> Job?
 
 }
 
+/// Method to implement to have a custom persister
 public protocol JobPersister {
 
+    /// Return an array of QueueName persisted
     func restore() -> [String]
 
+    /// Restore all job in a single queue
     func restore(queueName: String) -> [String]
 
+    /// Add a single job to a single queue with custom params
     func put(queueName: String, taskId: String, data: String)
 
+    /// Remove a single job for a single queue
     func remove(queueName: String, taskId: String)
 
 }
@@ -52,7 +60,7 @@ internal final class SwiftQueue: OperationQueue {
         }.forEach(addOperation)
     }
 
-    public override func addOperation(_ ope: Operation) {
+    override func addOperation(_ ope: Operation) {
         guard let job = ope as? SwiftQueueJob else {
             // Not a job Task I don't care
             super.addOperation(ope)
@@ -73,10 +81,44 @@ internal final class SwiftQueue: OperationQueue {
         job.completionBlock = { [weak self] in
             self?.completed(job)
         }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         super.addOperation(ope)
     }
 
-    public func cancelOperations(tag: String) {
+    func cancelOperations(tag: String) {
         operations.flatMap { operation -> SwiftQueueJob? in
             operation as? SwiftQueueJob
         }.filter {
@@ -86,7 +128,7 @@ internal final class SwiftQueue: OperationQueue {
         }
     }
 
-    func completed(_ job: SwiftQueueJob) {
+    private func completed(_ job: SwiftQueueJob) {
         // Remove this operation from serialization
         if job.isPersisted, let sp = persister {
             sp.remove(queueName: queueName, taskId: job.uuid)
@@ -95,11 +137,11 @@ internal final class SwiftQueue: OperationQueue {
         job.completed()
     }
 
-    func createHandler(type: String, params: Any?) -> Job? {
+    func createHandler(type: String, params: [String: Any]?) -> Job? {
         return SwiftQueue.createHandler(creators: creators, type: type, params: params)
     }
 
-    static func createHandler(creators: [JobCreator], type: String, params: Any?) -> Job? {
+    static func createHandler(creators: [JobCreator], type: String, params: [String: Any]?) -> Job? {
         return creators.flatMap {
             $0.create(type: type, params: params)
         }.first

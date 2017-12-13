@@ -31,6 +31,7 @@ public final class SwiftQueueManager {
         }
     }
 
+    /// Avoid new job to run. Not application for current running job.
     public func pause() {
         isPaused = true
         manage.values.forEach { element in
@@ -48,18 +49,21 @@ public final class SwiftQueueManager {
         return queue
     }
 
+    /// All operations in all queues will be removed
     public func cancelAllOperations() {
         manage.values.forEach { element in
             element.cancelAllOperations()
         }
     }
 
+    /// All operations with this tag in all queues will be removed
     public func cancelOperations(tag: String) {
         manage.values.forEach { element in
             element.cancelOperations(tag: tag)
         }
     }
 
+    /// Blocks the current thread until all of the receiver’s queued and executing operations finish executing.
     public func waitUntilAllOperationsAreFinished() {
         manage.values.forEach { element in
             element.waitUntilAllOperationsAreFinished()

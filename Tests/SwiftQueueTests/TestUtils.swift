@@ -19,7 +19,7 @@ class TestJob: Job {
 
     public var retryConstraint = RetryConstraint.retry(delay: 0)
 
-    public var params: Any?
+    public var params: [String: Any]?
 
     public let completionTimeout: TimeInterval
 
@@ -62,7 +62,7 @@ class TestCreator: JobCreator {
         self.job = job
     }
 
-    func create(type: String, params: Any?) -> Job? {
+    func create(type: String, params: [String: Any]?) -> Job? {
         let value = job[type] as? TestJob
         value?.params = params
         return value
@@ -73,11 +73,11 @@ class PersisterTracker: UserDefaultsPersister {
     var restoreQueueName = ""
 
     var putQueueName: [String] = [String]()
-    var putTaskId: [String] = [String]()
+    var putJobUUID: [String] = [String]()
     var putData: [String] = [String]()
 
     var removeQueueName: [String] = [String]()
-    var removeJobId: [String] = [String]()
+    var removeJobUUID: [String] = [String]()
 
     override func restore(queueName: String) -> [String] {
         restoreQueueName = queueName
@@ -86,14 +86,14 @@ class PersisterTracker: UserDefaultsPersister {
 
     override func put(queueName: String, taskId: String, data: String) {
         putQueueName.append(queueName)
-        putTaskId.append(taskId)
+        putJobUUID.append(taskId)
         putData.append(data)
         super.put(queueName: queueName, taskId: taskId, data: data)
     }
 
     override func remove(queueName: String, taskId: String) {
         removeQueueName.append(queueName)
-        removeJobId.append(taskId)
+        removeJobUUID.append(taskId)
         super.remove(queueName: queueName, taskId: taskId)
     }
 }

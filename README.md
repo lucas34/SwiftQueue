@@ -10,6 +10,7 @@
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![codebeat badge](https://codebeat.co/badges/3d446d9e-3e7a-435c-85fc-aa626d4f7652)](https://codebeat.co/projects/github-com-lucas34-swiftqueue-master)
 [![Swift Package Manager compatible](https://img.shields.io/badge/Swift%20Package%20Manager-compatible-brightgreen.svg)](https://github.com/apple/swift-package-manager)
+[![Documentation](https://lucas34.github.io/SwiftQueue/badge.svg)](https://lucas34.github.io/SwiftQueue)
 
 SwiftQueue is a job scheduler for Ios inspired by popular android libraries like *android-priority-jobqueue* or *android-job*. It allows you to run your tasks with run and retry constraints. 
 
