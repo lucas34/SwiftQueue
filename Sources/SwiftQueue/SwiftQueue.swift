@@ -56,7 +56,7 @@ internal final class SwiftQueue: OperationQueue {
         persister?.restore(queueName: name).flatMap { string -> SwiftQueueJob? in
             SwiftQueueJob(json: string, creator: creators)
         }.sorted {
-            $0.createTime < $1.createTime
+            $0.info.createTime < $1.info.createTime
         }.forEach(addOperation)
     }
 
@@ -75,8 +75,8 @@ internal final class SwiftQueue: OperationQueue {
         }
 
         // Serialize this operation
-        if job.isPersisted, let sp = persister, let data = job.toJSONString() {
-            sp.put(queueName: queueName, taskId: job.uuid, data: data)
+        if job.info.isPersisted, let sp = persister, let data = job.toJSONString() {
+            sp.put(queueName: queueName, taskId: job.info.uuid, data: data)
         }
         job.completionBlock = { [weak self] in
             self?.completed(job)
@@ -88,7 +88,7 @@ internal final class SwiftQueue: OperationQueue {
         operations.flatMap { operation -> SwiftQueueJob? in
             operation as? SwiftQueueJob
         }.filter {
-            $0.tags.contains(tag)
+            $0.info.tags.contains(tag)
         }.forEach {
             $0.cancel()
         }
@@ -96,8 +96,8 @@ internal final class SwiftQueue: OperationQueue {
 
     private func completed(_ job: SwiftQueueJob) {
         // Remove this operation from serialization
-        if job.isPersisted, let sp = persister {
-            sp.remove(queueName: queueName, taskId: job.uuid)
+        if job.info.isPersisted, let sp = persister {
+            sp.remove(queueName: queueName, taskId: job.info.uuid)
         }
 
         job.remove()

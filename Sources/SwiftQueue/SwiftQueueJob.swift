@@ -8,29 +8,13 @@ import Foundation
 internal final class SwiftQueueJob: Operation, JobResult {
 
     let handler: Job
-
-    let uuid: String
-    let type: String
-    let group: String
-
-    let tags: Set<String>
-    let delay: TimeInterval?
-    let deadline: Date?
-    let requireNetwork: NetworkType
-    let isPersisted: Bool
-    let params: [String: Any]?
-    let createTime: Date
-    let interval: TimeInterval
+    var info: JobInfo
 
     let constraints: [JobConstraint]
 
-    var runCount: Int
-    var maxRun: Int
-    var retries: Int
+    var lastError: Swift.Error?
 
-    internal var lastError: Swift.Error?
-
-    override var name: String? { get { return uuid } set { } }
+    override var name: String? { get { return info.uuid } set { } }
 
     private var jobIsExecuting: Bool = false
     override var isExecuting: Bool {
@@ -52,25 +36,9 @@ internal final class SwiftQueueJob: Operation, JobResult {
         }
     }
 
-    internal init(job: Job, uuid: String = UUID().uuidString, type: String, group: String,
-                  tags: Set<String>, delay: TimeInterval?, deadline: Date?, requireNetwork: NetworkType,
-                  isPersisted: Bool, params: [String: Any]?, createTime: Date, runCount: Int,
-                  maxRun: Int, retries: Int, interval: Double) {
+    internal init(job: Job, info: JobInfo) {
         self.handler = job
-        self.uuid = uuid
-        self.type = type
-        self.group = group
-        self.tags = tags
-        self.delay = delay
-        self.deadline = deadline
-        self.requireNetwork = requireNetwork
-        self.isPersisted = isPersisted
-        self.params = params
-        self.createTime = createTime
-        self.runCount = runCount
-        self.maxRun = maxRun
-        self.retries = retries
-        self.interval = interval
+        self.info = info
 
         self.constraints = [
             DeadlineConstraint(),
@@ -152,7 +120,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
     private func completionFail(error: Swift.Error) {
         lastError = error
 
-        if retries > 0 {
+        if info.retries > 0 {
             retryJob(retry: handler.onRetry(error: error))
         } else {
             onTerminate()
@@ -166,20 +134,20 @@ internal final class SwiftQueueJob: Operation, JobResult {
         case .retry(let after):
             guard after > 0 else {
                 // Retry immediately
-                retries -= 1
+                info.retries -= 1
                 self.run()
                 return
             }
 
             // Retry after time in parameter
             runInBackgroundAfter(after) { [weak self] in
-                self?.retries -= 1
+                self?.info.retries -= 1
                 self?.run()
             }
         case .exponential(let initial):
-            let decimal: NSDecimalNumber = NSDecimalNumber(decimal: Decimal(initial) * pow(2, max(0, runCount - 1)))
+            let decimal = NSDecimalNumber(decimal: Decimal(initial) * pow(2, max(0, info.runCount - 1)))
             runInBackgroundAfter(TimeInterval(truncating: decimal)) { [weak self] in
-                self?.retries -= 1
+                self?.info.retries -= 1
                 self?.run()
             }
         }
@@ -188,22 +156,22 @@ internal final class SwiftQueueJob: Operation, JobResult {
     private func completionSuccess() {
         lastError = nil
 
-        guard runCount + 1 < maxRun else {
+        guard info.runCount + 1 < info.maxRun else {
             // Reached run limit
             onTerminate()
             return
         }
 
-        guard interval > 0 else {
+        guard info.interval > 0 else {
             // Run immediately
-            runCount += 1
+            info.runCount += 1
             self.run()
             return
         }
 
         // Schedule run after interval
-        runInBackgroundAfter(interval, callback: { [weak self] in
-            self?.runCount += 1
+        runInBackgroundAfter(info.interval, callback: { [weak self] in
+            self?.info.runCount += 1
             self?.run()
         })
     }
@@ -212,33 +180,15 @@ internal final class SwiftQueueJob: Operation, JobResult {
 extension SwiftQueueJob {
 
     convenience init?(dictionary: [String: Any], creator: [JobCreator]) {
-        let params = dictionary["params"] as? [String: Any]
-        if let uuid            = dictionary["uuid"] as? String,
-           let type           = dictionary["type"] as? String,
-           let group          = dictionary["group"] as? String,
-           let tags           = dictionary["tags"] as? [String],
-           let delay          = dictionary["delay"] as? TimeInterval?,
-           let deadlineStr    = dictionary["deadline"] as? String?,
-           let requireNetwork = dictionary["requireNetwork"] as? Int,
-           let isPersisted    = dictionary["isPersisted"] as? Bool,
-           let createTimeStr  = dictionary["createTime"] as? String,
-           let runCount       = dictionary["runCount"] as? Int,
-           let maxRun         = dictionary["maxRun"] as? Int,
-           let retries        = dictionary["retries"] as? Int,
-           let interval       = dictionary["interval"] as? TimeInterval,
-           let job = SwiftQueue.createHandler(creators: creator, type: type, params: params) {
-
-            let deadline   = deadlineStr.flatMap(dateFormatter.date)
-            let createTime = dateFormatter.date(from: createTimeStr) ?? Date()
-            let network    = NetworkType(rawValue: requireNetwork) ?? NetworkType.any
-
-            self.init(job: job, uuid: uuid, type: type, group: group, tags: Set(tags),
-                    delay: delay, deadline: deadline, requireNetwork: network,
-                    isPersisted: isPersisted, params: params, createTime: createTime,
-                    runCount: runCount, maxRun: maxRun, retries: retries, interval: interval)
-        } else {
+        guard let info = JobInfo(dictionary: dictionary) else {
             return nil
         }
+
+        guard let job = SwiftQueue.createHandler(creators: creator, type: info.type, params: info.params) else {
+            return nil
+        }
+
+        self.init(job: job, info: info)
     }
 
     convenience init?(json: String, creator: [JobCreator]) {
@@ -246,27 +196,8 @@ extension SwiftQueueJob {
         self.init(dictionary: dict, creator: creator)
     }
 
-    func toDictionary() -> [String: Any] {
-        var dict = [String: Any]()
-        dict["uuid"]           = self.uuid
-        dict["type"]           = self.type
-        dict["group"]          = self.group
-        dict["tags"]           = Array(self.tags)
-        dict["delay"]          = self.delay
-        dict["deadline"]       = self.deadline.map(dateFormatter.string)
-        dict["requireNetwork"] = self.requireNetwork.rawValue
-        dict["isPersisted"]    = self.isPersisted
-        dict["params"]         = self.params
-        dict["createTime"]     = dateFormatter.string(from: self.createTime)
-        dict["runCount"]       = self.runCount
-        dict["maxRun"]         = self.maxRun
-        dict["retries"]        = self.retries
-        dict["interval"]       = self.interval
-        return dict
-    }
-
     func toJSONString() -> String? {
-        return toJSON(toDictionary())
+        return toJSON(info.toDictionary())
     }
 
 }

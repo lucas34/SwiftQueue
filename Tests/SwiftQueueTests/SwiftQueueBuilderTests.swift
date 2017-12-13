@@ -48,9 +48,10 @@ class SwiftQueueBuilderTests: XCTestCase {
         XCTAssertEqual([group], persister.putQueueName)
         XCTAssertEqual(1, persister.putData.count)
 
-        let jobInfo = SwiftQueueJob(json: persister.putData[0], creator: [creator])
+        let actual = SwiftQueueJob(json: persister.putData[0], creator: [creator])
+        let jobInfo = actual?.info
 
-        XCTAssertEqual(jobInfo?.name, taskID)
+        XCTAssertEqual(actual?.name, taskID)
         XCTAssertEqual(jobInfo?.uuid, taskID)
         XCTAssertEqual(jobInfo?.type, type)
         XCTAssertEqual(jobInfo?.group, group)
