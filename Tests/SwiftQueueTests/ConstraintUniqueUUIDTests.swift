@@ -25,12 +25,12 @@ class ConstraintUniqueUUIDTests: XCTestCase {
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type1)
                 .singleInstance(forId: id)
-                .delay(inSecond: 3600)
+                .delay(time: 3600)
                 .schedule(manager: manager)
 
         JobBuilder(type: type2)
                 .singleInstance(forId: id)
-                .delay(inSecond: 3600)
+                .delay(time: 3600)
                 .schedule(manager: manager)
 
         JobBuilder(type: type3).singleInstance(forId: id).schedule(manager: manager)

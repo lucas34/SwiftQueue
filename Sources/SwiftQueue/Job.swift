@@ -40,11 +40,6 @@ public final class JobBuilder {
         return self
     }
 
-    public func delay(inSecond: Int) -> JobBuilder {
-        delay = TimeInterval(inSecond)
-        return self
-    }
-
     public func delay(time: TimeInterval) -> JobBuilder {
         delay = time
         return self
