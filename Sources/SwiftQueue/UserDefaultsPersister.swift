@@ -5,6 +5,7 @@
 
 import Foundation
 
+/// Persist jobs in UserDefaults
 public class UserDefaultsPersister: JobPersister {
 
     private let key: String

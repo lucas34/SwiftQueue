@@ -23,6 +23,7 @@ public final class JobBuilder {
     private var retries: Int = 0
     private var interval: TimeInterval = -1.0
 
+    /// Type of your job that you will receive in JobCreator.create(type)
     public init(type: String) {
         self.type = type
     }
@@ -40,6 +41,8 @@ public final class JobBuilder {
         return self
     }
 
+    /// Delay the execution of the job.
+    /// Only start the countdown when the job should run and not when scheduled
     public func delay(time: TimeInterval) -> JobBuilder {
         delay = time
         return self
@@ -51,6 +54,8 @@ public final class JobBuilder {
         return self
     }
 
+    /// Repeat job a certain number of time and with a interval between each run 
+    /// count -1 by default for unlimited periodic and immediate
     public func periodic(count: Int = -1, interval: TimeInterval = 0) -> JobBuilder {
         maxRun = count
         self.interval = interval
@@ -63,6 +68,7 @@ public final class JobBuilder {
         return self
     }
 
+    /// Job should be persisted. 
     public func persist(required: Bool) -> JobBuilder {
         isPersisted = required
         return self

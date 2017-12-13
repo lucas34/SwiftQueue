@@ -14,6 +14,7 @@ public final class SwiftQueueManager {
 
     private var isPaused = true
 
+    /// Create a new QueueManager with creators to instantiate Job
     public init(creators: [JobCreator], persister: JobPersister? = nil) {
         self.creators = creators
         self.persister = persister
@@ -24,6 +25,7 @@ public final class SwiftQueueManager {
         start()
     }
 
+    /// Jobs queued will run again
     public func start() {
         isPaused = false
         manage.values.forEach { element in
