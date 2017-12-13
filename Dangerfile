@@ -1,13 +1,35 @@
-# Sometimes it's a README fix, or something like that - which isn't relevant for
-# including in a project's CHANGELOG for example
-declared_trivial = github.pr_title.include? "#trivial"
+import Foundation
+import Danger
+import DangerSwiftlint
 
-# Make it more obvious that a PR is a work in progress and shouldn't be merged yet
-warn("PR is classed as Work in Progress") if github.pr_title.include? "[WIP]"
+let danger = Danger()
 
-# Warn when there is a big PR
-warn("Big PR") if git.lines_of_code > 500
+let allSourceFiles = danger.git.modifiedFiles + danger.git.createdFiles
 
-# Don't let testing shortcuts get into master by accident
-fail("fdescribe left in tests") if `grep -r fdescribe specs/ `.length > 1
-fail("fit left in tests") if `grep -r fit specs/ `.length > 1
+let changelogChanged = allSourceFiles.contains("CHANGELOG.md")
+let sourceChanges = allSourceFiles.first(where: { $0.hasPrefix("Sources") })
+let isTrivial = danger.github.pullRequest.title.contains("#trivial")
+
+if (danger.git.createdFiles.count + danger.git.modifiedFiles.count - danger.git.deletedFiles.count > 10) {
+    warn("Big PR, try to keep changes smaller if you can")
+}
+
+if !isTrivial && !changelogChanged && sourceChanges != nil {
+    warn("""
+     Any changes to library code should be reflected in the Changelog.
+
+     Please consider adding a note there and adhere to the [Changelog Guidelines](https://github.com/Moya/contributors/blob/master/Changelog%20Guidelines.md).
+    """)
+}
+
+if danger.github.pullRequest.title.contains("WIP") {
+    warn("PR is classed as Work in Progress")
+}
+
+let onlyPodspec = allSourceFiles.contains("SwiftQueue.podspec") && !allSourceFiles.contains("Package.swift")
+let onlyPackage = !allSourceFiles.contains("SwiftQueue.podspec") && allSourceFiles.contains("Package.swift")
+if onlyPodspec != onlyPackage {
+    warn("Only one of either the podspec or SPM package was changed. This might be unintentional – double check.")
+}
+
+SwiftLint.lint()

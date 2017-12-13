@@ -65,7 +65,6 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertEqual(0, persister.removeQueueName.count)
     }
 
-
     func testCancelAll() {
         let id = UUID().uuidString
         let tag = UUID().uuidString
