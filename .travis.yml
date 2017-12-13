@@ -23,13 +23,14 @@ env:
 
 before_install:
   - brew install swiftlint
+  - gem install danger
 
 before_script:
   - swiftlint
   - carthage bootstrap $PLATFORM
 
 script:
-  - bundle exec danger
+  - danger
   - set -o pipefail
   - xcodebuild -version
   - xcodebuild -showsdks
