@@ -44,7 +44,7 @@ class SwiftQueueBuilderTests: XCTestCase {
                 .periodic(count: maxRun, interval: interval)
                 .schedule(manager: manager)
 
-        XCTAssertEqual([taskID], persister.putTaskId)
+        XCTAssertEqual([taskID], persister.putJobUUID)
         XCTAssertEqual([group], persister.putQueueName)
         XCTAssertEqual(1, persister.putData.count)
 

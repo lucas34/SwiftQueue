@@ -53,8 +53,8 @@ internal final class SwiftQueueJob: Operation, JobResult {
     }
 
     internal init(job: Job, uuid: String = UUID().uuidString, type: String, group: String, tags: Set<String>,
-                  delay: TimeInterval?, deadline: Date?, requireNetwork: NetworkType, isPersisted: Bool, params: [String: Any]?,
-                  createTime: Date, runCount: Int, maxRun: Int, retries: Int, interval: Double) {
+                  delay: TimeInterval?, deadline: Date?, requireNetwork: NetworkType, isPersisted: Bool,
+                  params: [String: Any]?, createTime: Date, runCount: Int, maxRun: Int, retries: Int, interval: Double) {
         self.handler = job
         self.uuid = uuid
         self.type = type

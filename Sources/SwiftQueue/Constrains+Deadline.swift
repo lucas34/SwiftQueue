@@ -8,7 +8,7 @@ import Foundation
 public class DeadlineError: ConstraintError {}
 
 internal class DeadlineConstraint: JobConstraint {
-    
+
     func willSchedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
         try check(operation: operation)
     }
