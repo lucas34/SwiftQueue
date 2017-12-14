@@ -125,6 +125,6 @@ public protocol Job {
     func onRetry(error: Swift.Error) -> RetryConstraint
 
     /// Job is removed from the queue and will never run again
-    func onRemove(error: Swift.Error?)
+    func onRemove(result: JobCompletion)
 
 }
