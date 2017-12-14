@@ -4,9 +4,10 @@
 
 import Foundation
 
-internal class DeadlineConstraint: JobConstraint {
+/// Exception thrown when a deadline is reached
+public class DeadlineError: ConstraintError {}
 
-    class DeadlineError: ConstraintError {}
+internal class DeadlineConstraint: JobConstraint {
 
     func willSchedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
         try check(operation: operation)
@@ -17,7 +18,7 @@ internal class DeadlineConstraint: JobConstraint {
     }
 
     func run(operation: SwiftQueueJob) -> Bool {
-        if let delay = operation.deadline {
+        if let delay = operation.info.deadline {
             runInBackgroundAfter(delay.timeIntervalSince(Date()), callback: { [weak operation = operation] in
                 operation?.run()
             })
@@ -26,7 +27,7 @@ internal class DeadlineConstraint: JobConstraint {
     }
 
     private func check(operation: SwiftQueueJob) throws {
-        if let deadline = operation.deadline, deadline < Date() {
+        if let deadline = operation.info.deadline, deadline < Date() {
             throw DeadlineError()
         }
     }

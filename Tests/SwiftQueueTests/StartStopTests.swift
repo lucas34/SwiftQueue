@@ -68,7 +68,7 @@ class StartStopTests: XCTestCase {
         XCTAssertEqual(job.onCancelCalled, 0)
     }
 
-    func testPauseQueueExecution() {
+    func testPauseQueue() {
         let job1 = TestJob()
         let type1 = UUID().uuidString
 

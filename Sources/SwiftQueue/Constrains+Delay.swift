@@ -15,8 +15,8 @@ internal class DelayConstraint: JobConstraint {
     }
 
     func run(operation: SwiftQueueJob) -> Bool {
-        if let delay = operation.delay {
-            if Date().timeIntervalSince(operation.createTime) < delay {
+        if let delay = operation.info.delay {
+            if Date().timeIntervalSince(operation.info.createTime) < delay {
                 runInBackgroundAfter(delay, callback: { [weak operation = operation] in
                     // If the operation in already deInit, it may have been canceled
                     // It's safe to ignore the nil check

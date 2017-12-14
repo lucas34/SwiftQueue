@@ -4,12 +4,13 @@
 
 import Foundation
 
+/// Exception thrown when you try to schedule a job with a same ID as one currently scheduled
+public class TaskAlreadyExist: ConstraintError {}
+
 internal class UniqueUUIDConstraint: JobConstraint {
 
-    class TaskAlreadyExist: ConstraintError {}
-
     func willSchedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
-        for op in queue.operations where op.name == operation.uuid {
+        for op in queue.operations where op.name == operation.info.uuid {
             throw TaskAlreadyExist()
         }
     }

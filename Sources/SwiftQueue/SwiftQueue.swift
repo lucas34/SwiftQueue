@@ -5,20 +5,28 @@
 
 import Foundation
 
+/// Protocol to create instance of your job
 public protocol JobCreator {
 
-    func create(type: String, params: Any?) -> Job?
+    /// method called when a job has be to instantiate
+    /// Type as specified in JobBuilder.init(type) and params as JobBuilder.with(params)
+    func create(type: String, params: [String: Any]?) -> Job?
 
 }
 
+/// Method to implement to have a custom persister
 public protocol JobPersister {
 
+    /// Return an array of QueueName persisted
     func restore() -> [String]
 
+    /// Restore all job in a single queue
     func restore(queueName: String) -> [String]
 
+    /// Add a single job to a single queue with custom params
     func put(queueName: String, taskId: String, data: String)
 
+    /// Remove a single job for a single queue
     func remove(queueName: String, taskId: String)
 
 }
@@ -48,11 +56,11 @@ internal final class SwiftQueue: OperationQueue {
         persister?.restore(queueName: name).flatMap { string -> SwiftQueueJob? in
             SwiftQueueJob(json: string, creator: creators)
         }.sorted {
-            $0.createTime < $1.createTime
+            $0.info.createTime < $1.info.createTime
         }.forEach(addOperation)
     }
 
-    public override func addOperation(_ ope: Operation) {
+    override func addOperation(_ ope: Operation) {
         guard let job = ope as? SwiftQueueJob else {
             // Not a job Task I don't care
             super.addOperation(ope)
@@ -67,8 +75,8 @@ internal final class SwiftQueue: OperationQueue {
         }
 
         // Serialize this operation
-        if job.isPersisted, let sp = persister, let data = job.toJSONString() {
-            sp.put(queueName: queueName, taskId: job.uuid, data: data)
+        if job.info.isPersisted, let sp = persister, let data = job.toJSONString() {
+            sp.put(queueName: queueName, taskId: job.info.uuid, data: data)
         }
         job.completionBlock = { [weak self] in
             self?.completed(job)
@@ -76,30 +84,30 @@ internal final class SwiftQueue: OperationQueue {
         super.addOperation(ope)
     }
 
-    public func cancelOperations(tag: String) {
+    func cancelOperations(tag: String) {
         operations.flatMap { operation -> SwiftQueueJob? in
             operation as? SwiftQueueJob
         }.filter {
-            $0.tags.contains(tag)
+            $0.info.tags.contains(tag)
         }.forEach {
             $0.cancel()
         }
     }
 
-    func completed(_ job: SwiftQueueJob) {
+    private func completed(_ job: SwiftQueueJob) {
         // Remove this operation from serialization
-        if job.isPersisted, let sp = persister {
-            sp.remove(queueName: queueName, taskId: job.uuid)
+        if job.info.isPersisted, let sp = persister {
+            sp.remove(queueName: queueName, taskId: job.info.uuid)
         }
 
-        job.completed()
+        job.remove()
     }
 
-    func createHandler(type: String, params: Any?) -> Job? {
+    func createHandler(type: String, params: [String: Any]?) -> Job? {
         return SwiftQueue.createHandler(creators: creators, type: type, params: params)
     }
 
-    static func createHandler(creators: [JobCreator], type: String, params: Any?) -> Job? {
+    static func createHandler(creators: [JobCreator], type: String, params: [String: Any]?) -> Job? {
         return creators.flatMap {
             $0.create(type: type, params: params)
         }.first

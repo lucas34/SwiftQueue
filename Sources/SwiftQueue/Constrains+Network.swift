@@ -7,9 +7,13 @@ import Foundation
 import Reachability
 #endif
 
+/// Kind of connectivity required for the job to run
 public enum NetworkType: Int {
+    /// Job will run regardless the connectivity of the platform
     case any = 0
+    /// Requires at least cellular such as 2G, 3G, 4G, LTE or Wifi
     case cellular =  1
+    /// Device has to be connected to Wifi or Lan
     case wifi =  2
 }
 
@@ -19,12 +23,12 @@ internal class NetworkConstraint: JobConstraint {
     var reachability: Reachability?
 
     func willSchedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
-        self.reachability = operation.requireNetwork.rawValue > NetworkType.any.rawValue ? Reachability() : nil
+        self.reachability = operation.info.requireNetwork.rawValue > NetworkType.any.rawValue ? Reachability() : nil
     }
 
     func willRun(operation: SwiftQueueJob) throws {
         guard let reachability = reachability else { return }
-        guard hasCorrectNetwork(reachability: reachability, required: operation.requireNetwork) else {
+        guard hasCorrectNetwork(reachability: reachability, required: operation.info.requireNetwork) else {
             try reachability.startNotifier()
             return
         }
@@ -35,7 +39,7 @@ internal class NetworkConstraint: JobConstraint {
             return true
         }
 
-        if hasCorrectNetwork(reachability: reachability, required: operation.requireNetwork) {
+        if hasCorrectNetwork(reachability: reachability, required: operation.info.requireNetwork) {
             return true
         }
 

@@ -5,120 +5,126 @@
 
 import Foundation
 
+/// Builder to create your job with behaviour
 public final class JobBuilder {
 
-    private let type: String
+    private var info: JobInfo
 
-    private var uuid: String =  UUID().uuidString
-    private var group: String = "GLOBAL"
-    private var tags = Set<String>()
-    private var delay: TimeInterval?
-    private var deadline: Date?
-    private var requireNetwork: NetworkType = NetworkType.any
-    private var isPersisted: Bool = false
-    private var params: Any?
-    private var createTime: Date = Date()
-    private var maxRun: Int = 1
-    private var retries: Int = 0
-    private var interval: TimeInterval = -1.0
-
+    /// Type of your job that you will receive in JobCreator.create(type)
     public init(type: String) {
-        self.type = type
+        self.info = JobInfo(type: type)
     }
 
+    /// Allow only 1 job at the time with this ID scheduled or running
+    /// Same job scheduled with same id will result in onRemove(TaskAlreadyExist)
     public func singleInstance(forId: String) -> JobBuilder {
-        self.uuid = forId
+        info.uuid = forId
         return self
     }
 
+    /// Job in different groups can run in parallel
     public func group(name: String) -> JobBuilder {
-        self.group = name
+        info.group = name
         return self
     }
 
-    public func delay(inSecond: Int) -> JobBuilder {
-        delay = TimeInterval(inSecond)
-        return self
-    }
-
+    /// Delay the execution of the job.
+    /// Only start the countdown when the job should run and not when scheduled
     public func delay(time: TimeInterval) -> JobBuilder {
-        delay = time
+        info.delay = time
         return self
     }
 
+    /// Job should be removed from the queue after a certain date
     public func deadline(date: Date) -> JobBuilder {
-        deadline = date
+        info.deadline = date
         return self
     }
 
+    /// Repeat job a certain number of time and with a interval between each run 
+    /// count -1 by default for unlimited periodic and immediate
     public func periodic(count: Int = -1, interval: TimeInterval = 0) -> JobBuilder {
-        maxRun = count
-        self.interval = interval
+        info.maxRun = count
+        info.interval = interval
         return self
     }
 
+    /// Connectivity constraint.
     public func internet(atLeast: NetworkType) -> JobBuilder {
-        requireNetwork = atLeast
+        info.requireNetwork = atLeast
         return self
     }
 
+    /// Job should be persisted. 
     public func persist(required: Bool) -> JobBuilder {
-        isPersisted = required
+        info.isPersisted = required
         return self
     }
 
+    /// Max number of authorised retry before the job is removed
     public func retry(max: Int) -> JobBuilder {
-        retries = max
+        info.retries = max
         return self
     }
 
+    /// Custom tag to mark the job
     public func addTag(tag: String) -> JobBuilder {
-        tags.insert(tag)
+        info.tags.insert(tag)
         return self
     }
 
-    public func with(params: Any) -> JobBuilder {
-        self.params = params
+    /// Custom parameters will be forwarded to create method
+    public func with(params: [String: Any]) -> JobBuilder {
+        info.params = params
         return self
     }
 
     internal func build(job: Job) -> SwiftQueueJob {
-        return SwiftQueueJob(job: job, uuid: uuid, type: type, group: group, tags: tags,
-                delay: delay, deadline: deadline, requireNetwork: requireNetwork, isPersisted: isPersisted,
-                params: params, createTime: createTime, runCount: 0, maxRun: maxRun,
-                retries: retries, interval: interval)
+        return SwiftQueueJob(job: job, info: info)
     }
 
+    /// Add job to the JobQueue
     public func schedule(manager: SwiftQueueManager) {
-        let queue = manager.getQueue(name: group)
-        guard let job = queue.createHandler(type: type, params: params) else {
-            print("WARN: No job creator associate to job type \(type)") // log maybe
+        let queue = manager.getQueue(name: info.group)
+        guard let job = queue.createHandler(type: info.type, params: info.params) else {
+            assertionFailure("No job creator associate to job type \(info.type)")
             return
         }
         queue.addOperation(build(job: job))
     }
 }
 
+/// Callback to give result in synchronous or asynchronous job
 public protocol JobResult {
 
-    func onDone(error: Swift.Error?)
+    /// Method callback to notify the completion of your 
+    func done(_ result: JobCompletion)
 
 }
 
-public enum RetryConstraint {
-    case retry(delay: TimeInterval)
-    case cancel
-    case exponential(initial: TimeInterval)
+public enum JobCompletion {
+
+    /// Job completed successfully
+    case success
+
+    /// Job completed with error
+    case fail(Swift.Error)
+
 }
 
+/// Protocol to implement to run a job
 public protocol Job {
 
+    /// Perform your operation
     func onRun(callback: JobResult)
 
+    /// Fail has failed with the 
+    /// Will only gets called if the job can be retried
+    /// Not applicable for 'ConstraintError'
+    /// Not application if the retry(value) is less than 2 which is the case by default
     func onRetry(error: Swift.Error) -> RetryConstraint
 
+    /// Job is removed from the queue and will never run again
     func onRemove(error: Swift.Error?)
 
 }
-
-public class Canceled: Swift.Error {}

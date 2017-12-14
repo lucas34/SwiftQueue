@@ -14,6 +14,7 @@ public final class SwiftQueueManager {
 
     private var isPaused = true
 
+    /// Create a new QueueManager with creators to instantiate Job
     public init(creators: [JobCreator], persister: JobPersister? = nil) {
         self.creators = creators
         self.persister = persister
@@ -24,6 +25,7 @@ public final class SwiftQueueManager {
         start()
     }
 
+    /// Jobs queued will run again
     public func start() {
         isPaused = false
         manage.values.forEach { element in
@@ -31,6 +33,7 @@ public final class SwiftQueueManager {
         }
     }
 
+    /// Avoid new job to run. Not application for current running job.
     public func pause() {
         isPaused = true
         manage.values.forEach { element in
@@ -48,18 +51,21 @@ public final class SwiftQueueManager {
         return queue
     }
 
+    /// All operations in all queues will be removed
     public func cancelAllOperations() {
         manage.values.forEach { element in
             element.cancelAllOperations()
         }
     }
 
+    /// All operations with this tag in all queues will be removed
     public func cancelOperations(tag: String) {
         manage.values.forEach { element in
             element.cancelOperations(tag: tag)
         }
     }
 
+    /// Blocks the current thread until all of the receiver’s queued and executing operations finish executing.
     public func waitUntilAllOperationsAreFinished() {
         manage.values.forEach { element in
             element.waitUntilAllOperationsAreFinished()

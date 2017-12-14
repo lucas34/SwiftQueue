@@ -54,7 +54,15 @@
 		B06405251FA04CCF00086C69 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A31F82A84A00B3BBFB /* Utils.swift */; };
 		B06405261FA04CCF00086C69 /* SwiftQueueJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A41F82A84B00B3BBFB /* SwiftQueueJob.swift */; };
 		B06405271FA04CCF00086C69 /* SwiftQueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A51F82A84B00B3BBFB /* SwiftQueueManager.swift */; };
+		D0B7C0848D0FF83C8B04EBB6 /* JobInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C4E41A1BF73329A7D03D /* JobInfo.swift */; };
+		D0B7C5D398315B8EE556EECE /* ConstraintNetworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7CA593223929B393FAF08 /* ConstraintNetworkTests.swift */; };
+		D0B7C6BB715C5C54D932CF60 /* PersisterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7CF67C4781CB9C45574A8 /* PersisterTests.swift */; };
+		D0B7C893AA62C12F4A1EAD13 /* ConstraintUniqueUUIDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C5947CC5CAD0CCE99F8B /* ConstraintUniqueUUIDTests.swift */; };
 		D0B7C94CAD20ADBB67BE5192 /* SwiftQueueBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C4BC41F2C8121944180C /* SwiftQueueBuilderTests.swift */; };
+		D0B7C996BDB2A748B6B8843A /* JobInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C4E41A1BF73329A7D03D /* JobInfo.swift */; };
+		D0B7CA36BB35653EB30BC026 /* ConstraintDeadlineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7CC33BDA48B501A2811A0 /* ConstraintDeadlineTests.swift */; };
+		D0B7CC03343274087B4C7955 /* JobInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C4E41A1BF73329A7D03D /* JobInfo.swift */; };
+		D0B7CC89D901F6C8AD2666D9 /* JobInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C4E41A1BF73329A7D03D /* JobInfo.swift */; };
 		OBJ_27 /* SwiftQueueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* SwiftQueueTests.swift */; };
 		OBJ_29 /* SwiftQueue.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* SwiftQueue.framework */; };
 /* End PBXBuildFile section */
@@ -89,6 +97,11 @@
 		B064051D1FA04AAC00086C69 /* SwiftQueue.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftQueue.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B064052C1FA04CCF00086C69 /* SwiftQueue.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftQueue.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0B7C4BC41F2C8121944180C /* SwiftQueueBuilderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftQueueBuilderTests.swift; sourceTree = "<group>"; };
+		D0B7C4E41A1BF73329A7D03D /* JobInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JobInfo.swift; path = SwiftQueue/JobInfo.swift; sourceTree = "<group>"; };
+		D0B7C5947CC5CAD0CCE99F8B /* ConstraintUniqueUUIDTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConstraintUniqueUUIDTests.swift; path = Tests/SwiftQueueTests/ConstraintUniqueUUIDTests.swift; sourceTree = "<group>"; };
+		D0B7CA593223929B393FAF08 /* ConstraintNetworkTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConstraintNetworkTests.swift; path = Tests/SwiftQueueTests/ConstraintNetworkTests.swift; sourceTree = "<group>"; };
+		D0B7CC33BDA48B501A2811A0 /* ConstraintDeadlineTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConstraintDeadlineTests.swift; path = Tests/SwiftQueueTests/ConstraintDeadlineTests.swift; sourceTree = "<group>"; };
+		D0B7CF67C4781CB9C45574A8 /* PersisterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersisterTests.swift; path = Tests/SwiftQueueTests/PersisterTests.swift; sourceTree = "<group>"; };
 		OBJ_11 /* SwiftQueueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftQueueTests.swift; sourceTree = "<group>"; };
 		OBJ_13 /* SwiftQueue.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftQueue.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_14 /* SwiftQueueTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = SwiftQueueTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -176,6 +189,10 @@
 				OBJ_9 /* Tests */,
 				OBJ_12 /* Products */,
 				1D0CACB51F5D95F0007620F1 /* Frameworks */,
+				D0B7CF67C4781CB9C45574A8 /* PersisterTests.swift */,
+				D0B7CC33BDA48B501A2811A0 /* ConstraintDeadlineTests.swift */,
+				D0B7CA593223929B393FAF08 /* ConstraintNetworkTests.swift */,
+				D0B7C5947CC5CAD0CCE99F8B /* ConstraintUniqueUUIDTests.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -193,6 +210,7 @@
 				1E68E940C8373221E3EDC771 /* Constrains+Delay.swift */,
 				1E68E82C1E071C7AA1AC4BB6 /* Constrains+Network.swift */,
 				1E68E002DC39E9BBE4A0A06A /* Constraints+UniqueUUID.swift */,
+				D0B7C4E41A1BF73329A7D03D /* JobInfo.swift */,
 			);
 			path = Sources;
 			sourceTree = SOURCE_ROOT;
@@ -295,7 +313,7 @@
 		OBJ_1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 9999;
+				LastUpgradeCheck = 0920;
 			};
 			buildConfigurationList = OBJ_2 /* Build configuration list for PBXProject "SwiftQueue" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -334,6 +352,7 @@
 				1E68EDC2230D2FACC61E7868 /* Constrains+Delay.swift in Sources */,
 				1E68E27E30C2ECBA84227438 /* Constrains+Network.swift in Sources */,
 				1E68E0ABCE7FDC17AD665D7D /* Constraints+UniqueUUID.swift in Sources */,
+				D0B7CC03343274087B4C7955 /* JobInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -352,6 +371,7 @@
 				1E68E50072A5A3975890B1C5 /* Constrains+Delay.swift in Sources */,
 				1E68E6C0E0677240BAE94396 /* Constrains+Network.swift in Sources */,
 				1E68EE914B5B51CDB2BD7C4D /* Constraints+UniqueUUID.swift in Sources */,
+				D0B7C0848D0FF83C8B04EBB6 /* JobInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -370,6 +390,7 @@
 				1E68E5571363098B08B6B7AC /* Constrains+Delay.swift in Sources */,
 				1E68E4E7E82AA3F923E506ED /* Constrains+Network.swift in Sources */,
 				1E68E3E5B1F435F4BA6F7A45 /* Constraints+UniqueUUID.swift in Sources */,
+				D0B7CC89D901F6C8AD2666D9 /* JobInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -388,6 +409,7 @@
 				1E68E3EBCA9E8C864968B6DB /* Constrains+Delay.swift in Sources */,
 				1E68E40BB6FB2BCA442AF263 /* Constrains+Network.swift in Sources */,
 				1E68E727B0ED1A76491D4BAB /* Constraints+UniqueUUID.swift in Sources */,
+				D0B7C996BDB2A748B6B8843A /* JobInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,6 +422,10 @@
 				1D7B3D391F5C1EE4000D49B6 /* TestUtils.swift in Sources */,
 				1D7B3D371F5C1EDE000D49B6 /* ConstraintTests.swift in Sources */,
 				D0B7C94CAD20ADBB67BE5192 /* SwiftQueueBuilderTests.swift in Sources */,
+				D0B7C6BB715C5C54D932CF60 /* PersisterTests.swift in Sources */,
+				D0B7CA36BB35653EB30BC026 /* ConstraintDeadlineTests.swift in Sources */,
+				D0B7C5D398315B8EE556EECE /* ConstraintNetworkTests.swift in Sources */,
+				D0B7C893AA62C12F4A1EAD13 /* ConstraintUniqueUUIDTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -607,7 +633,7 @@
 		OBJ_24 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
@@ -625,7 +651,7 @@
 		OBJ_25 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
@@ -644,12 +670,36 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_NS_ASSERTIONS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				ONLY_ACTIVE_ARCH = YES;
@@ -670,11 +720,34 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_SWIFT_FLAGS = "-DXcode";

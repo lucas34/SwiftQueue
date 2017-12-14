@@ -22,8 +22,8 @@ class SwiftQueueBuilderTests: XCTestCase {
         let delay = TimeInterval(12345)
         let deadline = Date(timeIntervalSinceNow: TimeInterval(30))
         let requireNetwork = NetworkType.wifi
-        let isPersisted = true // REquiered
-        let params = UUID().uuidString
+        let isPersisted = true // Required
+        let params: [String: Any] = [UUID().uuidString: UUID().uuidString]
         let maxRun = 5
         let retries = 3
         let interval: TimeInterval = 10
@@ -44,13 +44,14 @@ class SwiftQueueBuilderTests: XCTestCase {
                 .periodic(count: maxRun, interval: interval)
                 .schedule(manager: manager)
 
-        XCTAssertEqual([taskID], persister.putTaskId)
+        XCTAssertEqual([taskID], persister.putJobUUID)
         XCTAssertEqual([group], persister.putQueueName)
         XCTAssertEqual(1, persister.putData.count)
 
-        let jobInfo = SwiftQueueJob(json: persister.putData[0], creator: [creator])
+        let actual = SwiftQueueJob(json: persister.putData[0], creator: [creator])
+        let jobInfo = actual?.info
 
-        XCTAssertEqual(jobInfo?.name, taskID)
+        XCTAssertEqual(actual?.name, taskID)
         XCTAssertEqual(jobInfo?.uuid, taskID)
         XCTAssertEqual(jobInfo?.type, type)
         XCTAssertEqual(jobInfo?.group, group)
@@ -60,7 +61,7 @@ class SwiftQueueBuilderTests: XCTestCase {
         XCTAssertEqual(jobInfo?.deadline, dateFormatter.date(from: dateFormatter.string(from: deadline)))
         XCTAssertEqual(jobInfo?.requireNetwork, requireNetwork)
         XCTAssertEqual(jobInfo?.isPersisted, isPersisted)
-        XCTAssertEqual(jobInfo?.params as? String, params)
+        XCTAssertTrue(NSDictionary(dictionary: params).isEqual(to: jobInfo?.params))
         XCTAssertEqual(jobInfo?.maxRun, maxRun)
         XCTAssertEqual(jobInfo?.retries, retries)
         XCTAssertEqual(jobInfo?.interval, interval)
