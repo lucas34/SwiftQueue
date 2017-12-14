@@ -43,13 +43,18 @@ class TestJob: Job {
         return retryConstraint
     }
 
-    func onRemove(error: Error?) {
-        if error == nil {
+    func onRemove(result: JobCompletion) {
+        switch result {
+        case .success:
             onCompleteCalled += 1
             semaphore.signal()
-        } else {
+            break
+
+        case .fail:
             onCancelCalled += 1
             semaphore.signal()
+            break
+
         }
     }
 
