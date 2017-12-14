@@ -76,7 +76,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
     internal func abort(error: Swift.Error) {
         lastError = error
         // Need to be called manually since the task is actually not in the queue. So cannot call cancel()
-        handler.onRemove(error: error)
+        handler.onRemove(result: .fail(error))
     }
 
     internal func run() {
@@ -105,7 +105,8 @@ internal final class SwiftQueueJob: Operation, JobResult {
     }
 
     internal func remove() {
-        handler.onRemove(error: lastError)
+        let result = lastError.map(JobCompletion.fail) ?? JobCompletion.success
+        handler.onRemove(result: result)
     }
 
     func done(_ result: JobCompletion) {
