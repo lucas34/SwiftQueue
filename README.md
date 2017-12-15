@@ -71,16 +71,21 @@ class SendTweetJob: Job {
     // Type to know which Job to return in job creator
     static let type = "SendTweetJob"
     // Param
-    private let tweetMessage: String
+    private let tweet: [String: Any]
 
-    required init(message: String) {
+    required init(params: [String: Any]) {
         // Receive params from JobBuilder.with()
-        self.tweetMessage = message
+        self.tweet = params
     }
 
     func onRun(callback: JobResult) throws {
-        // Run your job here
-        callback.onDone(error: nil)
+        do {
+            try Api().sendTweet(data: tweet)
+            // Consider the call synchronous in this case
+            callback.done(.success)        
+        } catch let error {
+            callback.done(.fail(error))    
+        }
     }
 
     func onRetry(error: Error) -> RetryConstraint {
@@ -88,9 +93,18 @@ class SendTweetJob: Job {
         return error is ApiError ? RetryConstraint.cancel : RetryConstraint.retry
     }
 
-    func onRemove(error: Error?) {
+    func onRemove(result: JobCompletion) {
         // This job will never run anymore  
-        // Success if error is nil. fail otherwise
+        switch result {
+            case .success:
+                // Job success
+            break
+            
+            case .fail(let error):
+                // Job fail
+            break
+       
+        }
     }
 }
 ```
@@ -106,7 +120,7 @@ Schedule a job with type, parameters and constraints.
 ```swift
 JobBuilder(type: SendTweetJob.type)
         // params of my job
-        .with(params: "Hello TweetWorld")
+        .with(params: ["content": "Hellow world"])
         // Add to queue manager
         .schedule(manager: manager)
 ```
