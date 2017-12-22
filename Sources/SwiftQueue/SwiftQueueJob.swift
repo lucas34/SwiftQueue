@@ -146,8 +146,9 @@ internal final class SwiftQueueJob: Operation, JobResult {
                 self?.run()
             }
         case .exponential(let initial):
-            let decimal = NSDecimalNumber(decimal: Decimal(initial) * pow(2, max(0, info.runCount - 1)))
-            runInBackgroundAfter(TimeInterval(truncating: decimal)) { [weak self] in
+            info.currentRepetition += 1
+            let delay = info.currentRepetition == 1 ? initial : initial * pow(2, Double(info.currentRepetition - 1))
+            runInBackgroundAfter(delay) { [weak self] in
                 self?.info.retries -= 1
                 self?.run()
             }
@@ -156,6 +157,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
 
     private func completionSuccess() {
         lastError = nil
+        info.currentRepetition = 0
 
         guard info.runCount + 1 < info.maxRun else {
             // Reached run limit

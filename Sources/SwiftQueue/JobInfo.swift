@@ -22,6 +22,7 @@ struct JobInfo {
     var runCount: Int = 0
     var maxRun: Int = 0
     var retries: Int = 0
+    var currentRepetition: Int = 0
 
     init(type: String) {
         self.type = type
