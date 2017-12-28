@@ -1,3 +1,4 @@
 excluded:
   - Carthage
   - .build
+  - Dangerfile.swift
