@@ -48,13 +48,10 @@ class TestJob: Job {
         case .success:
             onCompleteCalled += 1
             semaphore.signal()
-            break
 
         case .fail:
             onCancelCalled += 1
             semaphore.signal()
-            break
-
         }
     }
 
