@@ -131,10 +131,10 @@ The `JobCreator` maps a job type to a specific `job` class. You will receive par
 class TweetJobCreator: JobCreator {
 
     // Base on type, return the actual job implementation
-    func create(type: String, params: Any?) -> Job? {
+    func create(type: String, params: [String: Any]?) -> Job? {
         // check for job and params type
-        if type == SendTweetJob.type, let message = params as? String  {
-            return SendTweetJob(message: message)
+        if type == SendTweetJob.type  {
+            return SendTweetJob(params: params)
         } else {
             // Nothing match
             return nil
