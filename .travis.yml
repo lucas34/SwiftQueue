@@ -16,22 +16,27 @@ env:
   - WORKSPACE="SwiftQueue.xcodeproj"
 
   matrix:
-    - PLATFORM="--platform iOS" DESTINATION="OS=11.0,name=iPhone X"       SCHEME="$IOS_FRAMEWORK_SCHEME"   RUN_TESTS="NO"  POD_LINT="YES"
-    - PLATFORM="--platform iOS" DESTINATION="OS=8.1,name=iPhone 4S"       SCHEME="$IOS_FRAMEWORK_SCHEME"   RUN_TESTS="NO"  POD_LINT="NO"
-
-    - PLATFORM="--platform mac" DESTINATION="arch=x86_64"                 SCHEME="$MACOS_FRAMEWORK_SCHEME" RUN_TESTS="YES" POD_LINT="NO"
+    - PLATFORM="--platform iOS" DESTINATION="OS=11.0,name=iPhone X" SCHEME="$IOS_FRAMEWORK_SCHEME"   RUN_TESTS="NO"  POD_LINT="YES" DANGER="1"
+    - PLATFORM="--platform iOS" DESTINATION="OS=8.1,name=iPhone 4S" SCHEME="$IOS_FRAMEWORK_SCHEME"   RUN_TESTS="NO"  POD_LINT="NO"  DANGER="0"
+ 
+    - PLATFORM="--platform mac" DESTINATION="arch=x86_64"           SCHEME="$MACOS_FRAMEWORK_SCHEME" RUN_TESTS="YES" POD_LINT="NO"  DANGER="0"
 
 before_install:
-  - npm install -g danger
-  - brew install swiftlint
-  - brew install danger/tap/danger-swift
+  # Run `Danger` if specified
+  - if [ DANGER == "1" ]; then
+      npm install -g danger;
+      brew install danger/tap/danger-swift;
+    fi
 
 before_script:
   - swiftlint
   - carthage bootstrap $PLATFORM --cache-builds
 
 script:
-  - danger process danger-swift
+  # Run `Danger` if specified
+  - if [ DANGER == "1" ]; then
+      danger process danger-swift;
+    fi
   - set -o pipefail
   - xcodebuild -version
   - xcodebuild -showsdks
