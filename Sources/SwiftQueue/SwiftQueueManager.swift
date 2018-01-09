@@ -65,6 +65,13 @@ public final class SwiftQueueManager {
         }
     }
 
+    /// All operations with this uuid in all queues will be removed
+    public func cancelOperations(uuid: String) {
+        manage.values.forEach { element in
+            element.cancelOperations(uuid: uuid)
+        }
+    }
+
     /// Blocks the current thread until all of the receiver’s queued and executing operations finish executing.
     public func waitUntilAllOperationsAreFinished() {
         manage.values.forEach { element in
