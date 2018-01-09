@@ -16,7 +16,7 @@ class ConstraintTests: XCTestCase {
 
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type)
-                .periodic(count: 5)
+                .periodic(limit: .limited(5))
                 .schedule(manager: manager)
 
         job.await()
@@ -38,7 +38,7 @@ class ConstraintTests: XCTestCase {
 
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type)
-                .retry(max: 2)
+                .retry(limit: .limited(2))
                 .schedule(manager: manager)
 
         job.await()
@@ -60,7 +60,7 @@ class ConstraintTests: XCTestCase {
 
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type)
-                .retry(max: 2)
+                .retry(limit: .limited(2))
                 .schedule(manager: manager)
 
         job.await()
@@ -82,7 +82,7 @@ class ConstraintTests: XCTestCase {
 
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type)
-                .retry(max: 2)
+                .retry(limit: .limited(2))
                 .schedule(manager: manager)
 
         job.await()
@@ -104,7 +104,7 @@ class ConstraintTests: XCTestCase {
 
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type)
-                .retry(max: 2)
+                .retry(limit: .limited(2))
                 .schedule(manager: manager)
 
         job.await()
@@ -126,7 +126,7 @@ class ConstraintTests: XCTestCase {
 
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type)
-                .retry(max: 1)
+                .retry(limit: .limited(1))
                 .periodic()
                 .schedule(manager: manager)
 
