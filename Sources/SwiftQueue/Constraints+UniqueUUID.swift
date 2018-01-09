@@ -11,7 +11,13 @@ internal class UniqueUUIDConstraint: JobConstraint {
 
     func willSchedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
         for op in queue.operations where op.name == operation.info.uuid {
-            throw TaskAlreadyExist()
+            if operation.info.override {
+                // Cancel previous job
+                queue.cancelOperations(uuid: operation.info.uuid)
+            } else {
+                // Cancel new job
+                throw TaskAlreadyExist()
+            }
         }
     }
 

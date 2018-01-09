@@ -12,6 +12,8 @@ class TestJob: Job {
 
     public var result: Error?
 
+    public var lastError: Error?
+
     public var onRunJobCalled = 0
     public var onRetryCalled = 0
     public var onCompleteCalled = 0
@@ -39,6 +41,7 @@ class TestJob: Job {
     }
 
     func onRetry(error: Error) -> RetryConstraint {
+        lastError = error
         onRetryCalled += 1
         return retryConstraint
     }
@@ -49,7 +52,8 @@ class TestJob: Job {
             onCompleteCalled += 1
             semaphore.signal()
 
-        case .fail:
+        case .fail(let error):
+            lastError = error
             onCancelCalled += 1
             semaphore.signal()
         }

@@ -9,6 +9,8 @@ struct JobInfo {
     let type: String
 
     var uuid: String =  UUID().uuidString
+    var override = false
+
     var group: String = "GLOBAL"
     var tags = Set<String>()
     var delay: TimeInterval?
@@ -31,6 +33,7 @@ struct JobInfo {
     init?(dictionary: [String: Any]) {
         guard let type           = dictionary["type"] as? String,
               let uuid           = dictionary["uuid"] as? String,
+              let override       = dictionary["override"] as? Bool,
               let group          = dictionary["group"] as? String,
               let tags           = dictionary["tags"] as? [String],
               let delay          = dictionary["delay"] as? TimeInterval?,
@@ -52,6 +55,7 @@ struct JobInfo {
 
         self.type = type
         self.uuid = uuid
+        self.override = override
         self.group = group
         self.tags = Set(tags)
         self.delay = delay
@@ -70,6 +74,7 @@ struct JobInfo {
         var dict = [String: Any]()
         dict["type"]           = self.type
         dict["uuid"]           = self.uuid
+        dict["override"]       = self.override
         dict["group"]          = self.group
         dict["tags"]           = Array(self.tags)
         dict["delay"]          = self.delay

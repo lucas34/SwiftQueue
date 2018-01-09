@@ -16,9 +16,11 @@ public final class JobBuilder {
     }
 
     /// Allow only 1 job at the time with this ID scheduled or running
-    /// Same job scheduled with same id will result in onRemove(TaskAlreadyExist)
-    public func singleInstance(forId: String) -> JobBuilder {
+    /// Same job scheduled with same id will result in onRemove(TaskAlreadyExist) if override = false
+    /// If override = true the previous job will be canceled and the new job will be scheduled
+    public func singleInstance(forId: String, override: Bool = false) -> JobBuilder {
         info.uuid = forId
+        info.override = override
         return self
     }
 
