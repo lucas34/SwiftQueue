@@ -94,6 +94,16 @@ internal final class SwiftQueue: OperationQueue {
         }
     }
 
+    func cancelOperations(uuid: String) {
+        operations.flatMap { operation -> SwiftQueueJob? in
+            operation as? SwiftQueueJob
+        }.filter {
+            $0.info.uuid == uuid
+        }.forEach {
+            $0.cancel()
+        }
+    }
+
     private func completed(_ job: SwiftQueueJob) {
         // Remove this operation from serialization
         if job.info.isPersisted, let sp = persister {

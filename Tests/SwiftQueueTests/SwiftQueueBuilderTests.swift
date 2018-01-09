@@ -32,7 +32,7 @@ class SwiftQueueBuilderTests: XCTestCase {
 
         let manager = SwiftQueueManager(creators: [creator], persister: persister)
         JobBuilder(type: type)
-                .singleInstance(forId: taskID)
+                .singleInstance(forId: taskID, override: true)
                 .group(name: group)
                 .addTag(tag: tag)
                 .delay(time: delay)
@@ -53,6 +53,7 @@ class SwiftQueueBuilderTests: XCTestCase {
 
         XCTAssertEqual(actual?.name, taskID)
         XCTAssertEqual(jobInfo?.uuid, taskID)
+        XCTAssertEqual(jobInfo?.override, true)
         XCTAssertEqual(jobInfo?.type, type)
         XCTAssertEqual(jobInfo?.group, group)
         XCTAssertEqual(jobInfo?.tags.first, tag)
