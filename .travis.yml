@@ -11,8 +11,6 @@ env:
   - LANG=en_US.UTF-8
   - IOS_FRAMEWORK_SCHEME="SwiftQueue iOS"
   - MACOS_FRAMEWORK_SCHEME="SwiftQueue macOS"
-  - TVOS_FRAMEWORK_SCHEME="SwiftQueue tvOS"
-  - WATCHOS_FRAMEWORK_SCHEME="SwiftQueue watchOS"
   - WORKSPACE="SwiftQueue.xcodeproj"
 
   matrix:
@@ -22,12 +20,9 @@ env:
     - PLATFORM="--platform mac" DESTINATION="arch=x86_64"                 SCHEME="$MACOS_FRAMEWORK_SCHEME" RUN_TESTS="YES" POD_LINT="NO"
 
 before_install:
-  - npm install -g danger
-  - brew install swiftlint
-  - brew install danger/tap/danger-swift
+  - gem install danger
 
 before_script:
-  - swiftlint
   - carthage bootstrap $PLATFORM --cache-builds
 
 script:
