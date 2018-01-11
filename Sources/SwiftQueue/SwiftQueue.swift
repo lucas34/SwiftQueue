@@ -118,8 +118,12 @@ internal final class SwiftQueue: OperationQueue {
     }
 
     static func createHandler(creators: [JobCreator], type: String, params: [String: Any]?) -> Job? {
-        return creators.flatMap {
-            $0.create(type: type, params: params)
-        }.first
+        for creator in creators {
+            if let job = creator.create(type: type, params: params) {
+                return job
+            }
+        }
+        assertionFailure("No job creator associate to job type \(type)")
+        return nil
     }
 }
