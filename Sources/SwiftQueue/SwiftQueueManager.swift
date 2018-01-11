@@ -5,6 +5,9 @@
 
 import Foundation
 
+/// Global manager to perform operations on all your queues/
+/// You will have to keep this instance. We highly recommend you to store this instance in a Singleton
+/// Creating and instance of this class will automatically un-serialise your jobs and schedule them 
 public final class SwiftQueueManager {
 
     private let creators: [JobCreator]
@@ -60,6 +63,7 @@ public final class SwiftQueueManager {
 
     /// All operations with this tag in all queues will be removed
     public func cancelOperations(tag: String) {
+        assertNotEmptyString(tag)
         manage.values.forEach { element in
             element.cancelOperations(tag: tag)
         }
@@ -67,6 +71,7 @@ public final class SwiftQueueManager {
 
     /// All operations with this uuid in all queues will be removed
     public func cancelOperations(uuid: String) {
+        assertNotEmptyString(uuid)
         manage.values.forEach { element in
             element.cancelOperations(uuid: uuid)
         }

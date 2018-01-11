@@ -26,3 +26,22 @@ let dateFormatter: DateFormatter = {
     formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
     return formatter
 }()
+
+func assertNotEmptyString(_ string: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {
+    assert(!string().isEmpty, file: file, line: line)
+}
+
+internal extension Limit {
+
+    internal var intValue: Int {
+        switch self {
+        case .unlimited:
+            return -1
+        case .limited(let val):
+            assert(val >= 0)
+            return val
+        }
+
+    }
+
+}
