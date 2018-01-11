@@ -25,6 +25,8 @@ class ConstraintDeadlineTests: XCTestCase {
         XCTAssertEqual(job.onCompleteCalled, 0)
         XCTAssertEqual(job.onRetryCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 1)
+
+        XCTAssertTrue(job.lastError is DeadlineError)
     }
 
     func testDeadlineWhenRun() {
@@ -61,6 +63,8 @@ class ConstraintDeadlineTests: XCTestCase {
         XCTAssertEqual(job2.onCompleteCalled, 0)
         XCTAssertEqual(job2.onRetryCalled, 0)
         XCTAssertEqual(job2.onCancelCalled, 1)
+
+        XCTAssertTrue(job2.lastError is DeadlineError)
     }
 
     func testDeadlineWhenDeserialize() {
@@ -92,28 +96,32 @@ class ConstraintDeadlineTests: XCTestCase {
         XCTAssertEqual(job.onCompleteCalled, 0)
         XCTAssertEqual(job.onRetryCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 1)
+        
+        XCTAssertTrue(job.lastError is DeadlineError)
     }
 
     func testDeadlineAfterSchedule() {
-        let job1 = TestJob()
-        let type1 = UUID().uuidString
+        let job = TestJob()
+        let type = UUID().uuidString
 
-        let creator = TestCreator([type1: job1])
+        let creator = TestCreator([type: job])
 
         let manager = SwiftQueueManager(creators: [creator])
-        JobBuilder(type: type1)
+        JobBuilder(type: type)
                 .delay(time: 60)
                 .deadline(date: Date(timeIntervalSinceNow: TimeInterval(2)))
                 .retry(limit: .unlimited)
                 .schedule(manager: manager)
 
         manager.waitUntilAllOperationsAreFinished()
-        job1.await()
+        job.await()
 
-        XCTAssertEqual(job1.onRunJobCalled, 0)
-        XCTAssertEqual(job1.onCompleteCalled, 0)
-        XCTAssertEqual(job1.onRetryCalled, 0)
-        XCTAssertEqual(job1.onCancelCalled, 1)
+        XCTAssertEqual(job.onRunJobCalled, 0)
+        XCTAssertEqual(job.onCompleteCalled, 0)
+        XCTAssertEqual(job.onRetryCalled, 0)
+        XCTAssertEqual(job.onCancelCalled, 1)
+        
+        XCTAssertTrue(job.lastError is DeadlineError)
     }
 
 }
