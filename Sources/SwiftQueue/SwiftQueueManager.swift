@@ -5,6 +5,9 @@
 
 import Foundation
 
+/// Global manager to perform operations on all your queues/
+/// You will have to keep this instance. We highly recommend you to store this instance in a Singleton
+/// Creating and instance of this class will automatically un-serialise your jobs and schedule them 
 public final class SwiftQueueManager {
 
     private let creators: [JobCreator]

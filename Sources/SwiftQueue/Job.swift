@@ -124,6 +124,7 @@ public protocol JobResult {
 
 }
 
+/// Enum to define possible Job completion values
 public enum JobCompletion {
 
     /// Job completed successfully
