@@ -138,6 +138,25 @@ class ConstraintTests: XCTestCase {
         XCTAssertEqual(job.onCancelCalled, 1)
     }
 
+    func testRepeatableJobWithDelay() {
+        let job = TestJob()
+        let type = UUID().uuidString
+
+        let creator = TestCreator([type: job])
+
+        let manager = SwiftQueueManager(creators: [creator])
+        JobBuilder(type: type)
+                .periodic(limit: .limited(2), interval: 0.1)
+                .schedule(manager: manager)
+
+        job.await(TimeInterval(10))
+
+        XCTAssertEqual(job.onRunJobCalled, 2)
+        XCTAssertEqual(job.onCompleteCalled, 1)
+        XCTAssertEqual(job.onRetryCalled, 0)
+        XCTAssertEqual(job.onCancelCalled, 0)
+    }
+
     func testCancelRunningOperation() {
         let job = TestJob(10)
         let type = UUID().uuidString
