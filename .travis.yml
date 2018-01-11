@@ -9,17 +9,21 @@ env:
   global:
   - LC_CTYPE=en_US.UTF-8
   - LANG=en_US.UTF-8
+  
   - IOS_FRAMEWORK_SCHEME="SwiftQueue iOS"
   - MACOS_FRAMEWORK_SCHEME="SwiftQueue macOS"
   - TVOS_FRAMEWORK_SCHEME="SwiftQueue tvOS"
   - WATCHOS_FRAMEWORK_SCHEME="SwiftQueue watchOS"
+  
   - WORKSPACE="SwiftQueue.xcodeproj"
+  - DESTINATION="OS=11.0,name=iPhone X"
 
   matrix:
-    - PLATFORM="--platform iOS" DESTINATION="OS=11.0,name=iPhone X"       SCHEME="$IOS_FRAMEWORK_SCHEME"   RUN_TESTS="NO"  POD_LINT="YES"
-    - PLATFORM="--platform iOS" DESTINATION="OS=8.1,name=iPhone 4S"       SCHEME="$IOS_FRAMEWORK_SCHEME"   RUN_TESTS="NO"  POD_LINT="NO"
-
-    - PLATFORM="--platform mac" DESTINATION="arch=x86_64"                 SCHEME="$MACOS_FRAMEWORK_SCHEME" RUN_TESTS="YES" POD_LINT="NO"
+    - TYPE="DANGER"   PLATFORM="--platform mac"
+    - TYPE="CARTHAGE" PLATFORM=""
+    - TYPE="SPM"      PLATFORM="--platform mac"
+    - TYPE="XCODE"    PLATFORM="--platform mac"
+    - TYPE="POD"      PLATFORM="--platform mac"
 
 before_install:
   - npm install -g danger
@@ -31,20 +35,27 @@ before_script:
   - carthage bootstrap $PLATFORM --cache-builds
 
 script:
-  - danger process danger-swift
   - set -o pipefail
   - xcodebuild -version
   - xcodebuild -showsdks
 
-  # Build Framework in Debug and Run Tests if specified
-  - if [ $RUN_TESTS == "YES" ]; then
-      xcodebuild -project "$WORKSPACE" -scheme "$SCHEME" -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO ENABLE_TESTABILITY=YES test -enableCodeCoverage YES | xcpretty;
-    else
-      xcodebuild -project "$WORKSPACE" -scheme "$SCHEME" -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO build | xcpretty;
+  - if [ $TYPE == "DANGER" ]; then
+      danger process danger-swift;
     fi
 
-  # Run `pod lib lint` if specified
-  - if [ $POD_LINT == "YES" ]; then
+  - if [ $TYPE == "XCODE" ]; then
+      xcodebuild -project "$WORKSPACE" -scheme "$MACOS_FRAMEWORK_SCHEME" -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO ENABLE_TESTABILITY=YES test -enableCodeCoverage YES | xcpretty;
+    fi
+
+  - if [ $TYPE == "CARTHAGE" ]; then
+      carthage build --no-skip-current --cache-builds;
+    fi
+
+  - if [ $TYPE == "SPM" ]; then
+      swift test;
+    fi
+    
+  - if [ $TYPE == "POD" ]; then
       pod lib lint;
     fi
 
