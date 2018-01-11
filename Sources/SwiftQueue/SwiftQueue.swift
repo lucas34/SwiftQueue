@@ -89,7 +89,7 @@ internal final class SwiftQueue: OperationQueue {
             operation.cancel()
         }
     }
-    
+
     func cancelOperations(uuid: String) {
         operations.flatMap { operation -> SwiftQueueJob? in
             operation as? SwiftQueueJob

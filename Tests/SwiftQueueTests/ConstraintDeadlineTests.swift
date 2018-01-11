@@ -40,7 +40,7 @@ class ConstraintDeadlineTests: XCTestCase {
 
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type1)
-                .delay(time: 0.1)
+                .delay(time: 0.0000001)
                 .retry(limit: .limited(5))
                 .schedule(manager: manager)
 
@@ -96,7 +96,7 @@ class ConstraintDeadlineTests: XCTestCase {
         XCTAssertEqual(job.onCompleteCalled, 0)
         XCTAssertEqual(job.onRetryCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 1)
-        
+
         XCTAssertTrue(job.lastError is DeadlineError)
     }
 
@@ -109,7 +109,7 @@ class ConstraintDeadlineTests: XCTestCase {
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type)
                 .delay(time: 60)
-                .deadline(date: Date(timeIntervalSinceNow: TimeInterval(0.1)))
+                .deadline(date: Date(timeIntervalSinceNow: TimeInterval(0.001)))
                 .retry(limit: .unlimited)
                 .schedule(manager: manager)
 
@@ -120,7 +120,7 @@ class ConstraintDeadlineTests: XCTestCase {
         XCTAssertEqual(job.onCompleteCalled, 0)
         XCTAssertEqual(job.onRetryCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 1)
-        
+
         XCTAssertTrue(job.lastError is DeadlineError)
     }
 

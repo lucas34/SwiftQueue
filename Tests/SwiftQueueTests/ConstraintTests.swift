@@ -56,7 +56,7 @@ class ConstraintTests: XCTestCase {
         let creator = TestCreator([type: job])
 
         job.result = JobError()
-        job.retryConstraint = .retry(delay: 0.1)
+        job.retryConstraint = .retry(delay: 0.0000001)
 
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type)
@@ -122,7 +122,7 @@ class ConstraintTests: XCTestCase {
         let creator = TestCreator([type: job])
 
         job.result = JobError()
-        job.retryConstraint = RetryConstraint.exponential(initial: 0.1)
+        job.retryConstraint = RetryConstraint.exponential(initial: 0.0000001)
 
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type)
@@ -146,7 +146,7 @@ class ConstraintTests: XCTestCase {
 
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type)
-                .periodic(limit: .limited(2), interval: 0.1)
+                .periodic(limit: .limited(2), interval: 0.0000001)
                 .schedule(manager: manager)
 
         job.await(TimeInterval(10))
@@ -167,7 +167,7 @@ class ConstraintTests: XCTestCase {
         JobBuilder(type: type)
                 .schedule(manager: manager)
 
-        runInBackgroundAfter(0.1) {
+        runInBackgroundAfter(0.0000001) {
             manager.cancelAllOperations()
         }
 
@@ -192,7 +192,7 @@ class ConstraintTests: XCTestCase {
                 .addTag(tag: tag)
                 .schedule(manager: manager)
 
-        runInBackgroundAfter(0.1) {
+        runInBackgroundAfter(0.0000001) {
             manager.cancelOperations(tag: tag)
         }
 

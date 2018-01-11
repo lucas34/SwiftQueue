@@ -44,7 +44,7 @@ public class UserDefaultsPersister: JobPersister {
         store.setValue(values, forKey: key)
         store.synchronize()
     }
-    
+
     /// Remove a specific task from a queue
     public func remove(queueName: String, taskId: String) {
         let store = UserDefaults()
