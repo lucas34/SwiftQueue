@@ -60,6 +60,7 @@ public final class SwiftQueueManager {
 
     /// All operations with this tag in all queues will be removed
     public func cancelOperations(tag: String) {
+        assertNotEmptyString(tag)
         manage.values.forEach { element in
             element.cancelOperations(tag: tag)
         }
@@ -67,6 +68,7 @@ public final class SwiftQueueManager {
 
     /// All operations with this uuid in all queues will be removed
     public func cancelOperations(uuid: String) {
+        assertNotEmptyString(uuid)
         manage.values.forEach { element in
             element.cancelOperations(uuid: uuid)
         }
