@@ -33,6 +33,10 @@
 		1E68ED598FA15EF36B431571 /* Constrains+Deadline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E68EF96F1DE038FFF94FCD8 /* Constrains+Deadline.swift */; };
 		1E68EDC2230D2FACC61E7868 /* Constrains+Delay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E68E940C8373221E3EDC771 /* Constrains+Delay.swift */; };
 		1E68EE914B5B51CDB2BD7C4D /* Constraints+UniqueUUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E68E002DC39E9BBE4A0A06A /* Constraints+UniqueUUID.swift */; };
+		99E41C2B2005C7E400C3DE1B /* QueueInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E41C2A2005C7E400C3DE1B /* QueueInfo.swift */; };
+		99E41C2C2005C7E400C3DE1B /* QueueInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E41C2A2005C7E400C3DE1B /* QueueInfo.swift */; };
+		99E41C2D2005C7E400C3DE1B /* QueueInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E41C2A2005C7E400C3DE1B /* QueueInfo.swift */; };
+		99E41C2E2005C7E400C3DE1B /* QueueInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E41C2A2005C7E400C3DE1B /* QueueInfo.swift */; };
 		B06405031FA04AA000086C69 /* UserDefaultsPersister.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A11F82A84A00B3BBFB /* UserDefaultsPersister.swift */; };
 		B06405041FA04AA000086C69 /* SwiftQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A21F82A84A00B3BBFB /* SwiftQueue.swift */; };
 		B06405051FA04AA000086C69 /* Job.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A71F82A84B00B3BBFB /* Job.swift */; };
@@ -93,6 +97,7 @@
 		1E68E82C1E071C7AA1AC4BB6 /* Constrains+Network.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Constrains+Network.swift"; path = "SwiftQueue/Constrains+Network.swift"; sourceTree = "<group>"; };
 		1E68E940C8373221E3EDC771 /* Constrains+Delay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Constrains+Delay.swift"; path = "SwiftQueue/Constrains+Delay.swift"; sourceTree = "<group>"; };
 		1E68EF96F1DE038FFF94FCD8 /* Constrains+Deadline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Constrains+Deadline.swift"; path = "SwiftQueue/Constrains+Deadline.swift"; sourceTree = "<group>"; };
+		99E41C2A2005C7E400C3DE1B /* QueueInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = QueueInfo.swift; path = SwiftQueue/QueueInfo.swift; sourceTree = "<group>"; };
 		B064050E1FA04AA000086C69 /* SwiftQueue.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftQueue.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B064051D1FA04AAC00086C69 /* SwiftQueue.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftQueue.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B064052C1FA04CCF00086C69 /* SwiftQueue.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftQueue.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -199,6 +204,7 @@
 		OBJ_7 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				99E41C2A2005C7E400C3DE1B /* QueueInfo.swift */,
 				1D8479A61F82A84B00B3BBFB /* Constraints.swift */,
 				1D8479A71F82A84B00B3BBFB /* Job.swift */,
 				1D8479A21F82A84A00B3BBFB /* SwiftQueue.swift */,
@@ -351,6 +357,7 @@
 				1E68ED598FA15EF36B431571 /* Constrains+Deadline.swift in Sources */,
 				1E68EDC2230D2FACC61E7868 /* Constrains+Delay.swift in Sources */,
 				1E68E27E30C2ECBA84227438 /* Constrains+Network.swift in Sources */,
+				99E41C2C2005C7E400C3DE1B /* QueueInfo.swift in Sources */,
 				1E68E0ABCE7FDC17AD665D7D /* Constraints+UniqueUUID.swift in Sources */,
 				D0B7CC03343274087B4C7955 /* JobInfo.swift in Sources */,
 			);
@@ -370,6 +377,7 @@
 				1E68EA78A2D5CF807765CF75 /* Constrains+Deadline.swift in Sources */,
 				1E68E50072A5A3975890B1C5 /* Constrains+Delay.swift in Sources */,
 				1E68E6C0E0677240BAE94396 /* Constrains+Network.swift in Sources */,
+				99E41C2D2005C7E400C3DE1B /* QueueInfo.swift in Sources */,
 				1E68EE914B5B51CDB2BD7C4D /* Constraints+UniqueUUID.swift in Sources */,
 				D0B7C0848D0FF83C8B04EBB6 /* JobInfo.swift in Sources */,
 			);
@@ -389,6 +397,7 @@
 				1E68E8801255D163804FD66C /* Constrains+Deadline.swift in Sources */,
 				1E68E5571363098B08B6B7AC /* Constrains+Delay.swift in Sources */,
 				1E68E4E7E82AA3F923E506ED /* Constrains+Network.swift in Sources */,
+				99E41C2E2005C7E400C3DE1B /* QueueInfo.swift in Sources */,
 				1E68E3E5B1F435F4BA6F7A45 /* Constraints+UniqueUUID.swift in Sources */,
 				D0B7CC89D901F6C8AD2666D9 /* JobInfo.swift in Sources */,
 			);
@@ -408,6 +417,7 @@
 				1E68EB2E5C2B18444083FC37 /* Constrains+Deadline.swift in Sources */,
 				1E68E3EBCA9E8C864968B6DB /* Constrains+Delay.swift in Sources */,
 				1E68E40BB6FB2BCA442AF263 /* Constrains+Network.swift in Sources */,
+				99E41C2B2005C7E400C3DE1B /* QueueInfo.swift in Sources */,
 				1E68E727B0ED1A76491D4BAB /* Constraints+UniqueUUID.swift in Sources */,
 				D0B7C996BDB2A748B6B8843A /* JobInfo.swift in Sources */,
 			);
