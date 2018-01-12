@@ -90,7 +90,7 @@ class SendTweetJob: Job {
 
     func onRetry(error: Error) -> RetryConstraint {
         // Check if error is non fatal
-        return error is ApiError ? RetryConstraint.cancel : RetryConstraint.retry
+        return error is ApiError ? RetryConstraint.cancel : RetryConstraint.retry(delay: 0) // immediate retry
     }
 
     func onRemove(result: JobCompletion) {
