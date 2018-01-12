@@ -38,12 +38,16 @@ class SerializerTests: XCTestCase {
         // Should invert when deserialize
         let persister = PersisterTracker(key: UUID().uuidString)
         persister.put(queueName: queueId, taskId: job2Id, data: task2)
-        XCTAssertEqual(persister.restore().count, 1)
-        XCTAssertEqual(persister.restore()[0], queueId)
+
+        let restore = persister.restore()
+        XCTAssertEqual(restore.count, 1)
+        XCTAssertEqual(restore[0], queueId)
 
         persister.put(queueName: queueId, taskId: job1Id, data: task1)
-        XCTAssertEqual(persister.restore().count, 1)
-        XCTAssertEqual(persister.restore()[0], queueId)
+
+        let restore2 = persister.restore()
+        XCTAssertEqual(restore2.count, 1)
+        XCTAssertEqual(restore2[0], queueId)
 
         let manager = SwiftQueueManager(creators: [creator], persister: persister)
 

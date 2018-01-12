@@ -12,6 +12,7 @@ public final class JobBuilder {
 
     /// Type of your job that you will receive in JobCreator.create(type)
     public init(type: String) {
+        assertNotEmptyString(type)
         self.info = JobInfo(type: type)
     }
 
@@ -19,6 +20,7 @@ public final class JobBuilder {
     /// Same job scheduled with same id will result in onRemove(TaskAlreadyExist) if override = false
     /// If override = true the previous job will be canceled and the new job will be scheduled
     public func singleInstance(forId: String, override: Bool = false) -> JobBuilder {
+        assertNotEmptyString(forId)
         info.uuid = forId
         info.override = override
         return self
@@ -26,6 +28,7 @@ public final class JobBuilder {
 
     /// Job in different groups can run in parallel
     public func group(name: String) -> JobBuilder {
+        assertNotEmptyString(name)
         info.group = name
         return self
     }
@@ -33,6 +36,7 @@ public final class JobBuilder {
     /// Delay the execution of the job.
     /// Only start the countdown when the job should run and not when scheduled
     public func delay(time: TimeInterval) -> JobBuilder {
+        assert(time >= 0)
         info.delay = time
         return self
     }
@@ -45,8 +49,16 @@ public final class JobBuilder {
 
     /// Repeat job a certain number of time and with a interval between each run 
     /// count -1 by default for unlimited periodic and immediate
+    @available(*, unavailable, message: "Use periodic(Limit, TimeInterval) instead")
     public func periodic(count: Int = -1, interval: TimeInterval = 0) -> JobBuilder {
         info.maxRun = count
+        info.interval = interval
+        return self
+    }
+
+    public func periodic(limit: Limit = .unlimited, interval: TimeInterval = 0) -> JobBuilder {
+        assert(interval >= 0)
+        info.maxRun = limit.intValue
         info.interval = interval
         return self
     }
@@ -64,19 +76,28 @@ public final class JobBuilder {
     }
 
     /// Max number of authorised retry before the job is removed
+    @available(*, unavailable, message: "Use retry(Limit) instead")
     public func retry(max: Int) -> JobBuilder {
-        info.retries = max
+        return self
+    }
+
+    /// Limit number of retry. Overall for the lifecycle of the SwiftQueueManager.
+    /// For a periodic job, the retry count will not be reset at each period. 
+    public func retry(limit: Limit) -> JobBuilder {
+        info.retries = limit.intValue
         return self
     }
 
     /// Custom tag to mark the job
     public func addTag(tag: String) -> JobBuilder {
+        assertNotEmptyString(tag)
         info.tags.insert(tag)
         return self
     }
 
     /// Custom parameters will be forwarded to create method
     public func with(params: [String: Any]) -> JobBuilder {
+        assert(JSONSerialization.isValidJSONObject(params))
         info.params = params
         return self
     }
@@ -89,7 +110,6 @@ public final class JobBuilder {
     public func schedule(manager: SwiftQueueManager) {
         let queue = manager.getQueue(name: info.group)
         guard let job = queue.createHandler(type: info.type, params: info.params) else {
-            assertionFailure("No job creator associate to job type \(info.type)")
             return
         }
         queue.addOperation(build(job: job))
@@ -104,6 +124,7 @@ public protocol JobResult {
 
 }
 
+/// Enum to define possible Job completion values
 public enum JobCompletion {
 
     /// Job completed successfully
@@ -128,5 +149,16 @@ public protocol Job {
 
     /// Job is removed from the queue and will never run again
     func onRemove(result: JobCompletion)
+
+}
+
+/// Enum to specify a limit
+public enum Limit {
+
+    /// No limit
+    case unlimited
+
+    /// Limited to a specific number
+    case limited(Int)
 
 }

@@ -45,7 +45,7 @@ class StartStopTests: XCTestCase {
 
         manager.pause()
 
-        JobBuilder(type: type).periodic(count: 4, interval: 0).schedule(manager: manager)
+        JobBuilder(type: type).periodic(limit: .limited(4), interval: 0).schedule(manager: manager)
 
         // No run
         XCTAssertEqual(job.onRunJobCalled, 0)

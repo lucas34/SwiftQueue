@@ -10,6 +10,7 @@ public class UserDefaultsPersister: JobPersister {
 
     private let key: String
 
+    /// Create a Job persister with a custom key
     public init(key: String = "SwiftQueueInfo") {
         self.key = key
     }
@@ -22,6 +23,8 @@ public class UserDefaultsPersister: JobPersister {
         return Array(values.keys)
     }
 
+    /// Restore jobs for a single queue
+    /// Returns an array of String. Serialised job
     public func restore(queueName: String) -> [String] {
         let store = UserDefaults()
         let values: [String: [String: String]] = store.value(forKey: key) as? [String: [String: String]] ?? [:]
@@ -29,6 +32,7 @@ public class UserDefaultsPersister: JobPersister {
         return Array(tasks.values)
     }
 
+    /// Insert a job to a specific queue
     public func put(queueName: String, taskId: String, data: String) {
         let store = UserDefaults()
         var values: [String: [String: String]] = store.value(forKey: key) as? [String: [String: String]] ?? [:]
@@ -41,6 +45,7 @@ public class UserDefaultsPersister: JobPersister {
         store.synchronize()
     }
 
+    /// Remove a specific task from a queue
     public func remove(queueName: String, taskId: String) {
         let store = UserDefaults()
         var values: [String: [String: String]]? = store.value(forKey: key) as? [String: [String: String]]

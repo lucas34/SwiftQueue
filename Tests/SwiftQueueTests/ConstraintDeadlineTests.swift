@@ -25,6 +25,8 @@ class ConstraintDeadlineTests: XCTestCase {
         XCTAssertEqual(job.onCompleteCalled, 0)
         XCTAssertEqual(job.onRetryCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 1)
+
+        XCTAssertTrue(job.lastError is DeadlineError)
     }
 
     func testDeadlineWhenRun() {
@@ -38,13 +40,13 @@ class ConstraintDeadlineTests: XCTestCase {
 
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type1)
-                .delay(time: 0.1)
-                .retry(max: 5)
+                .delay(time: 0.0000001)
+                .retry(limit: .limited(5))
                 .schedule(manager: manager)
 
         JobBuilder(type: type2)
                 .deadline(date: Date()) // After 1 second should fail
-                .retry(max: 5)
+                .retry(limit: .unlimited)
                 .schedule(manager: manager)
 
         manager.waitUntilAllOperationsAreFinished()
@@ -61,6 +63,8 @@ class ConstraintDeadlineTests: XCTestCase {
         XCTAssertEqual(job2.onCompleteCalled, 0)
         XCTAssertEqual(job2.onRetryCalled, 0)
         XCTAssertEqual(job2.onCancelCalled, 1)
+
+        XCTAssertTrue(job2.lastError is DeadlineError)
     }
 
     func testDeadlineWhenDeserialize() {
@@ -92,28 +96,32 @@ class ConstraintDeadlineTests: XCTestCase {
         XCTAssertEqual(job.onCompleteCalled, 0)
         XCTAssertEqual(job.onRetryCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 1)
+
+        XCTAssertTrue(job.lastError is DeadlineError)
     }
 
     func testDeadlineAfterSchedule() {
-        let job1 = TestJob()
-        let type1 = UUID().uuidString
+        let job = TestJob()
+        let type = UUID().uuidString
 
-        let creator = TestCreator([type1: job1])
+        let creator = TestCreator([type: job])
 
         let manager = SwiftQueueManager(creators: [creator])
-        JobBuilder(type: type1)
+        JobBuilder(type: type)
                 .delay(time: 60)
-                .deadline(date: Date(timeIntervalSinceNow: TimeInterval(0.1)))
-                .retry(max: 5)
+                .deadline(date: Date(timeIntervalSinceNow: TimeInterval(0.001)))
+                .retry(limit: .unlimited)
                 .schedule(manager: manager)
 
         manager.waitUntilAllOperationsAreFinished()
-        job1.await()
+        job.await()
 
-        XCTAssertEqual(job1.onRunJobCalled, 0)
-        XCTAssertEqual(job1.onCompleteCalled, 0)
-        XCTAssertEqual(job1.onRetryCalled, 0)
-        XCTAssertEqual(job1.onCancelCalled, 1)
+        XCTAssertEqual(job.onRunJobCalled, 0)
+        XCTAssertEqual(job.onCompleteCalled, 0)
+        XCTAssertEqual(job.onRetryCalled, 0)
+        XCTAssertEqual(job.onCancelCalled, 1)
+
+        XCTAssertTrue(job.lastError is DeadlineError)
     }
 
 }
