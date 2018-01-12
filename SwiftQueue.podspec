@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "SwiftQueue"
-  s.version          = "1.3.2"
+  s.version          = "1.4.0"
   s.summary          = "SwiftQueue"
   s.description      = "Job Scheduler for IOS with Concurrent run, failure/retry, persistence, repeat, delay and more"
   s.homepage         = "https://github.com/lucas34/SwiftQueue"
