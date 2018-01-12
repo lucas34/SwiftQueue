@@ -12,62 +12,64 @@ struct JobInfo {
     var override = false
 
     var group: String = "GLOBAL"
+
     var tags = Set<String>()
+
     var delay: TimeInterval?
     var deadline: Date?
+
     var requireNetwork: NetworkType = NetworkType.any
+
     var isPersisted: Bool = false
+
     var params: [String: Any] = [:]
+
     var createTime: Date = Date()
+
     var interval: TimeInterval = -1.0
+    var maxRun: Int = 0
+
+    var retries: Int = 0
 
     var runCount: Int = 0
-    var maxRun: Int = 0
-    var retries: Int = 0
-    var currentRepetition: Int = 0
+    var currentRepetition: Int = 0 // Do not serialize
 
     init(type: String) {
         self.type = type
     }
 
-    init?(dictionary: [String: Any]) {
-        guard let type           = dictionary["type"] as? String,
-              let uuid           = dictionary["uuid"] as? String,
-              let override       = dictionary["override"] as? Bool,
-              let group          = dictionary["group"] as? String,
-              let tags           = dictionary["tags"] as? [String],
-              let delay          = dictionary["delay"] as? TimeInterval?,
-              let deadlineStr    = dictionary["deadline"] as? String?,
-              let requireNetwork = dictionary["requireNetwork"] as? Int,
-              let isPersisted    = dictionary["isPersisted"] as? Bool,
-              let params         = dictionary["params"] as? [String: Any],
-              let createTimeStr  = dictionary["createTime"] as? String,
-              let runCount       = dictionary["runCount"] as? Int,
-              let maxRun         = dictionary["maxRun"] as? Int,
-              let retries        = dictionary["retries"] as? Int,
-              let interval       = dictionary["interval"] as? TimeInterval else {
+    init?(dictionary: [String: Any]) throws {
+        guard let type = dictionary["type"] as? String else {
+            assertionFailure("Unable to retrieve Job type")
             return nil
         }
 
-        let deadline   = deadlineStr.flatMap(dateFormatter.date)
-        let createTime = dateFormatter.date(from: createTimeStr) ?? Date()
-        let network    = NetworkType(rawValue: requireNetwork) ?? NetworkType.any
-
         self.type = type
-        self.uuid = uuid
-        self.override = override
-        self.group = group
-        self.tags = Set(tags)
-        self.delay = delay
-        self.deadline = deadline
-        self.requireNetwork = network
-        self.isPersisted = isPersisted
-        self.params = params
-        self.createTime = createTime
-        self.interval = interval
-        self.runCount = runCount
-        self.maxRun = maxRun
-        self.retries = retries
+
+        dictionary.assign(&self.uuid, key: "uuid")
+        dictionary.assign(&self.override, key: "override")
+
+        dictionary.assign(&self.group, key: "group")
+
+        dictionary.assign(&self.tags, key: "tags") { (array: [String]) -> Set<String> in Set(array) }
+
+        dictionary.assign(&self.delay, key: "delay")
+        dictionary.assign(&self.deadline, key: "deadline", dateFormatter.date)
+
+        dictionary.assign(&self.requireNetwork, key: "requireNetwork") { NetworkType(rawValue: $0) }
+
+        dictionary.assign(&self.isPersisted, key: "isPersisted")
+
+        dictionary.assign(&self.params, key: "params")
+
+        dictionary.assign(&self.createTime, key: "createTime", dateFormatter.date)
+
+        dictionary.assign(&self.interval, key: "interval")
+        dictionary.assign(&self.maxRun, key: "maxRun")
+
+        dictionary.assign(&self.retries, key: "retries")
+
+        dictionary.assign(&self.runCount, key: "runCount")
     }
 
     func toDictionary() -> [String: Any] {
@@ -88,6 +90,22 @@ struct JobInfo {
         dict["retries"]        = self.retries
         dict["interval"]       = self.interval
         return dict
+    }
+
+}
+
+extension Dictionary where Key == String {
+
+    func assign<A>(_ variable: inout A, key: String) {
+        if let value = self[key] as? A {
+            variable = value
+        }
+    }
+
+    func assign<A, B>(_ variable: inout B, key: String, _ transform: (A) -> B?) {
+        if let value = self[key] as? A, let transformed = transform(value) {
+            variable = transformed
+        }
     }
 
 }
