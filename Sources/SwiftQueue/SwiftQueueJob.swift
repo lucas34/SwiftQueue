@@ -183,15 +183,16 @@ internal final class SwiftQueueJob: Operation, JobResult {
 extension SwiftQueueJob {
 
     convenience init?(dictionary: [String: Any], creator: [JobCreator]) {
-        guard let info = JobInfo(dictionary: dictionary) else {
+        guard let info = try? JobInfo(dictionary: dictionary) else {
+            assertionFailure("Unable to un-serialise job")
             return nil
         }
 
-        guard let job = SwiftQueue.createHandler(creators: creator, type: info.type, params: info.params) else {
+        guard let job = SwiftQueue.createHandler(creators: creator, type: info!.type, params: info!.params) else {
             return nil
         }
 
-        self.init(job: job, info: info)
+        self.init(job: job, info: info!)
     }
 
     convenience init?(json: String, creator: [JobCreator]) {
