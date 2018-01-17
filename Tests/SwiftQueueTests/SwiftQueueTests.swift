@@ -139,10 +139,6 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertEqual(0, persister.removeQueueName.count)
     }
 
-    func testFailInitDoesNotCrash() {
-        XCTAssertNil(SwiftQueueJob(json: UUID().uuidString, creator: []))
-    }
-
     func testAddOperationNotJobTask() {
         let queue = SwiftQueue(queueName: UUID().uuidString, creators: [])
         let operation = Operation()
