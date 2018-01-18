@@ -33,7 +33,15 @@ func assertNotEmptyString(_ string: @autoclosure () -> String, file: StaticStrin
 
 internal extension Limit {
 
-    internal var intValue: Int {
+    static func fromIntValue(value: Int) -> Limit {
+        if value < 0 {
+            return Limit.unlimited
+        } else {
+            return Limit.limited(value)
+        }
+    }
+    
+    var intValue: Int {
         switch self {
         case .unlimited:
             return -1
@@ -43,5 +51,28 @@ internal extension Limit {
         }
 
     }
+    
+    mutating func decreaseValue(by: Int) {
+        if case .limited(let limit) = self {
+            let value = limit - by
+            assert(value >= 0)
+            self = Limit.limited(value)
+        }
+    }
 
+}
+
+
+ extension Limit: Equatable {
+
+    public static func ==(lhs: Limit, rhs: Limit) -> Bool {
+        switch (lhs, rhs) {
+        case let (.limited(a), .limited(b)):
+            return a == b
+        case (.unlimited, .unlimited):
+            return true
+        default:
+            return false
+        }
+    }
 }
