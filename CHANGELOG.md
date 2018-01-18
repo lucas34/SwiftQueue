@@ -35,16 +35,16 @@ Develop 1.4.0 (#52)
 Develop 1.3.0 Re-write 90% of the code. (#22) 
 
 #### Breaking changes 
-- Scheduling a job without a creator will throw an error (Assertion) 
+- Scheduling a job without a creator will throw an error (Assertion)
 - Replace Any params type to [String: Any] (#20) 
-- Callback result now use enum to avoid passing nil error as success (#26) 
+- Callback result now use enum to avoid passing nil error as success (#26)
 - onRemove will foward JobCompletion (#32)
 - Remove delay(inSecond) use delay(time) instead 
 
 #### Bug fix and improvements 
 - Improve documentation and publish (#24) 
 - Constraints should be public (#25) 
-- Add assertion to validate the [String: Any] when serialise 
+- Add assertion to validate the [String: Any] when serialise
 
 ## [v1.2.3](https://github.com/lucas34/SwiftQueue/tree/1.2.3)
 
@@ -56,7 +56,7 @@ Develop 1.3.0 Re-write 90% of the code. (#22)
 
 ## [v1.2.1](https://github.com/lucas34/SwiftQueue/tree/1.2.1)
 
-- Fix job retain loger after cancellation
+- Fix job retained longer after cancellation
 
 ## [v1.2.0](https://github.com/lucas34/SwiftQueue/tree/1.2.0)
 
@@ -83,11 +83,11 @@ Support all targets when using carthage
 - Delay by TimeInterval
 
 #### Improvement
-- Reschedule and run immediately when delay set to 0 
+- Reschedule and run immediately when delay is set to 0
 
 #### Bug fix
 - Job not delayed properly
-- Crash when delaying the job with a huge number
+- Crash when delaying the job with a high value
 
 ## [v1.0.1](https://github.com/lucas34/SwiftQueue/tree/1.0.1)
 
