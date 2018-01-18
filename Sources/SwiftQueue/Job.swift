@@ -97,7 +97,6 @@ public final class JobBuilder {
 
     /// Custom parameters will be forwarded to create method
     public func with(params: [String: Any]) -> Self {
-        assert(JSONSerialization.isValidJSONObject(params))
         info.params = params
         return self
     }
@@ -108,6 +107,11 @@ public final class JobBuilder {
 
     /// Add job to the JobQueue
     public func schedule(manager: SwiftQueueManager) {
+        if info.isPersisted {
+            // Check if we will be able to serialise args
+            assert(JSONSerialization.isValidJSONObject(info.params))
+        }
+
         let queue = manager.getQueue(name: info.group)
         guard let job = queue.createHandler(type: info.type, params: info.params) else {
             return

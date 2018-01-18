@@ -135,6 +135,17 @@ class SwiftQueueBuilderTests: XCTestCase {
         XCTAssertTrue(NSDictionary(dictionary: params).isEqual(to: jobInfo?.params))
     }
 
+    public func testBuilderWithFreeArgs() {
+        let type = UUID().uuidString
+        let params: [String: Any] = [UUID().uuidString: [UUID().uuidString: self]]
+
+        let creator = TestCreator([type: TestJob()])
+        let manager = SwiftQueueManager(creators: [creator])
+        
+        // No assert expected
+        JobBuilder(type: type).with(params: params).schedule(manager: manager)
+    }
+
     private func toJobInfo(type: String, _ builder: JobBuilder) -> JobInfo? {
         let creator = TestCreator([type: TestJob()])
         let persister = PersisterTracker(key: UUID().uuidString)
