@@ -3,11 +3,11 @@
 ## [v1.4.1](https://github.com/lucas34/SwiftQueue/tree/1.4.1)
 
 #### Bug fix 
-- Fix an issue where a periodic job with unlimited run will not be re-scheduled #63
+- Fix an issue where a periodic job will not be re-scheduled #63
 - Validate dictionary args only if persistence is required (#61)
 
 #### Other changes
-- Make unavailable crash if called #64
+- Make unavailable methods crash if called #64
 - Raise warning if something went wrong during the deserialization (#58)
 
 ## [v1.4.0](https://github.com/lucas34/SwiftQueue/tree/1.4.0)
