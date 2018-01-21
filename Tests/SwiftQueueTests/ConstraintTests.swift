@@ -56,7 +56,7 @@ class ConstraintTests: XCTestCase {
         let creator = TestCreator([type: job])
 
         job.result = JobError()
-        job.retryConstraint = .retry(delay: 0.0000001)
+        job.retryConstraint = .retry(delay: Double.leastNonzeroMagnitude)
 
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type)
@@ -122,7 +122,7 @@ class ConstraintTests: XCTestCase {
         let creator = TestCreator([type: job])
 
         job.result = JobError()
-        job.retryConstraint = RetryConstraint.exponential(initial: 0.0000001)
+        job.retryConstraint = RetryConstraint.exponential(initial: Double.leastNonzeroMagnitude)
 
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type)
@@ -130,7 +130,7 @@ class ConstraintTests: XCTestCase {
                 .periodic()
                 .schedule(manager: manager)
 
-        job.await(TimeInterval(10))
+        job.await()
 
         XCTAssertEqual(job.onRunJobCalled, 2)
         XCTAssertEqual(job.onCompleteCalled, 0)
@@ -146,10 +146,10 @@ class ConstraintTests: XCTestCase {
 
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type)
-                .periodic(limit: .limited(2), interval: 0.0000001)
+                .periodic(limit: .limited(2), interval: Double.leastNonzeroMagnitude)
                 .schedule(manager: manager)
 
-        job.await(TimeInterval(10))
+        job.await()
 
         XCTAssertEqual(job.onRunJobCalled, 2)
         XCTAssertEqual(job.onCompleteCalled, 1)
@@ -167,7 +167,7 @@ class ConstraintTests: XCTestCase {
         JobBuilder(type: type)
                 .schedule(manager: manager)
 
-        runInBackgroundAfter(0.0000001) {
+        runInBackgroundAfter(Double.leastNonzeroMagnitude) {
             manager.cancelAllOperations()
         }
 
@@ -192,7 +192,7 @@ class ConstraintTests: XCTestCase {
                 .addTag(tag: tag)
                 .schedule(manager: manager)
 
-        runInBackgroundAfter(0.0000001) {
+        runInBackgroundAfter(Double.leastNonzeroMagnitude) {
             manager.cancelOperations(tag: tag)
         }
 

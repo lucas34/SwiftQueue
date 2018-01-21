@@ -40,7 +40,7 @@ class ConstraintDeadlineTests: XCTestCase {
 
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type1)
-                .delay(time: 0.0000001)
+                .delay(time: Double.leastNonzeroMagnitude)
                 .retry(limit: .limited(5))
                 .schedule(manager: manager)
 
@@ -109,7 +109,7 @@ class ConstraintDeadlineTests: XCTestCase {
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type)
                 .delay(time: 60)
-                .deadline(date: Date(timeIntervalSinceNow: TimeInterval(0.001)))
+                .deadline(date: Date(timeIntervalSinceNow: Double.leastNonzeroMagnitude))
                 .retry(limit: .unlimited)
                 .schedule(manager: manager)
 
