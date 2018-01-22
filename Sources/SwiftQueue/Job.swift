@@ -56,7 +56,7 @@ public final class JobBuilder {
 
     public func periodic(limit: Limit = .unlimited, interval: TimeInterval = 0) -> Self {
         assert(interval >= 0)
-        info.maxRun = limit.intValue
+        info.maxRun = limit
         info.interval = interval
         return self
     }
@@ -82,7 +82,7 @@ public final class JobBuilder {
     /// Limit number of retry. Overall for the lifecycle of the SwiftQueueManager.
     /// For a periodic job, the retry count will not be reset at each period. 
     public func retry(limit: Limit) -> Self {
-        info.retries = limit.intValue
+        info.retries = limit
         return self
     }
 
