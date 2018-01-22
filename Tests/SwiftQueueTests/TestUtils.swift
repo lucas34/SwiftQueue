@@ -25,12 +25,18 @@ class TestJob: Job {
 
     public let completionTimeout: TimeInterval
 
+    var runSemaphoreValue = 0
+    let runSemaphore = DispatchSemaphore(value: 0)
+    
     init(_ completionTimeout: TimeInterval = 0) {
         self.completionTimeout = completionTimeout
     }
 
     func onRun(callback: JobResult) {
         onRunJobCalled += 1
+        if runSemaphoreValue == onRunJobCalled {
+            runSemaphore.signal()   
+        }
         runInBackgroundAfter(completionTimeout) {
             if let error = self.result {
                 callback.done(.fail(error))
@@ -62,6 +68,12 @@ class TestJob: Job {
     func await(_ seconds: TimeInterval = TimeInterval(5)) {
         let delta = DispatchTime.now() + Double(Int64(seconds) * Int64(NSEC_PER_SEC)) / Double(NSEC_PER_SEC)
         _ = semaphore.wait(timeout: delta)
+    }
+
+    func awaitRun(value: Int, _ seconds: TimeInterval = TimeInterval(5)) {
+        let delta = DispatchTime.now() + Double(Int64(seconds) * Int64(NSEC_PER_SEC)) / Double(NSEC_PER_SEC)
+        runSemaphoreValue = value
+        _ = runSemaphore.wait(timeout: delta)
     }
 }
 

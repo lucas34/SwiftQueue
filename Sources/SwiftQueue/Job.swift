@@ -51,14 +51,12 @@ public final class JobBuilder {
     /// count -1 by default for unlimited periodic and immediate
     @available(*, unavailable, message: "Use periodic(Limit, TimeInterval) instead")
     public func periodic(count: Int = -1, interval: TimeInterval = 0) -> Self {
-        info.maxRun = count
-        info.interval = interval
-        return self
+        fatalError("Should not be called")
     }
 
     public func periodic(limit: Limit = .unlimited, interval: TimeInterval = 0) -> Self {
         assert(interval >= 0)
-        info.maxRun = limit.intValue
+        info.maxRun = limit
         info.interval = interval
         return self
     }
@@ -78,13 +76,13 @@ public final class JobBuilder {
     /// Max number of authorised retry before the job is removed
     @available(*, unavailable, message: "Use retry(Limit) instead")
     public func retry(max: Int) -> Self {
-        return self
+        fatalError("Should not be called")
     }
 
     /// Limit number of retry. Overall for the lifecycle of the SwiftQueueManager.
     /// For a periodic job, the retry count will not be reset at each period. 
     public func retry(limit: Limit) -> Self {
-        info.retries = limit.intValue
+        info.retries = limit
         return self
     }
 
