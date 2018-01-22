@@ -27,9 +27,9 @@ struct JobInfo {
     var createTime: Date = Date()
 
     var interval: TimeInterval = -1.0
-    var maxRun: Int = 0
+    var maxRun: Limit = .limited(0)
 
-    var retries: Int = 0
+    var retries: Limit = .limited(0)
 
     var runCount: Int = 0
     var currentRepetition: Int = 0 // Do not serialize
@@ -65,9 +65,9 @@ struct JobInfo {
         dictionary.assign(&self.createTime, key: "createTime", dateFormatter.date)
 
         dictionary.assign(&self.interval, key: "interval")
-        dictionary.assign(&self.maxRun, key: "maxRun")
+        dictionary.assign(&self.maxRun, key: "maxRun", Limit.fromIntValue)
 
-        dictionary.assign(&self.retries, key: "retries")
+        dictionary.assign(&self.retries, key: "retries", Limit.fromIntValue)
 
         dictionary.assign(&self.runCount, key: "runCount")
     }
@@ -86,8 +86,8 @@ struct JobInfo {
         dict["params"]         = self.params
         dict["createTime"]     = dateFormatter.string(from: self.createTime)
         dict["runCount"]       = self.runCount
-        dict["maxRun"]         = self.maxRun
-        dict["retries"]        = self.retries
+        dict["maxRun"]         = self.maxRun.intValue
+        dict["retries"]        = self.retries.intValue
         dict["interval"]       = self.interval
         return dict
     }
