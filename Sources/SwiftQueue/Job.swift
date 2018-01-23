@@ -51,14 +51,12 @@ public final class JobBuilder {
     /// count -1 by default for unlimited periodic and immediate
     @available(*, unavailable, message: "Use periodic(Limit, TimeInterval) instead")
     public func periodic(count: Int = -1, interval: TimeInterval = 0) -> Self {
-        info.maxRun = count
-        info.interval = interval
-        return self
+        fatalError("Should not be called")
     }
 
     public func periodic(limit: Limit = .unlimited, interval: TimeInterval = 0) -> Self {
         assert(interval >= 0)
-        info.maxRun = limit.intValue
+        info.maxRun = limit
         info.interval = interval
         return self
     }
@@ -78,13 +76,13 @@ public final class JobBuilder {
     /// Max number of authorised retry before the job is removed
     @available(*, unavailable, message: "Use retry(Limit) instead")
     public func retry(max: Int) -> Self {
-        return self
+        fatalError("Should not be called")
     }
 
     /// Limit number of retry. Overall for the lifecycle of the SwiftQueueManager.
     /// For a periodic job, the retry count will not be reset at each period. 
     public func retry(limit: Limit) -> Self {
-        info.retries = limit.intValue
+        info.retries = limit
         return self
     }
 
@@ -97,7 +95,6 @@ public final class JobBuilder {
 
     /// Custom parameters will be forwarded to create method
     public func with(params: [String: Any]) -> Self {
-        assert(JSONSerialization.isValidJSONObject(params))
         info.params = params
         return self
     }
@@ -108,6 +105,11 @@ public final class JobBuilder {
 
     /// Add job to the JobQueue
     public func schedule(manager: SwiftQueueManager) {
+        if info.isPersisted {
+            // Check if we will be able to serialise args
+            assert(JSONSerialization.isValidJSONObject(info.params))
+        }
+
         let queue = manager.getQueue(name: info.group)
         guard let job = queue.createHandler(type: info.type, params: info.params) else {
             return

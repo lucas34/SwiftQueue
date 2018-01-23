@@ -27,6 +27,27 @@ class ConstraintTests: XCTestCase {
         XCTAssertEqual(job.onCancelCalled, 0)
     }
 
+    func testPeriodicJobUnlimited() {
+        let job = TestJob()
+        let type = UUID().uuidString
+
+        let creator = TestCreator([type: job])
+
+        let manager = SwiftQueueManager(creators: [creator])
+        JobBuilder(type: type)
+                .periodic(limit: .unlimited)
+                .schedule(manager: manager)
+        
+        // Should run at least 100 times
+        job.awaitRun(value: 1000)
+
+        // Semaphore is async so the value is un-predicable
+        XCTAssertTrue(job.onRunJobCalled > 50)
+        XCTAssertEqual(job.onCompleteCalled, 0)
+        XCTAssertEqual(job.onRetryCalled, 0)
+        XCTAssertEqual(job.onCancelCalled, 0)
+    }
+
     func testRetryFailJobWithRetryConstraint() {
         let job = TestJob()
         let type = UUID().uuidString
@@ -69,6 +90,28 @@ class ConstraintTests: XCTestCase {
         XCTAssertEqual(job.onCompleteCalled, 0)
         XCTAssertEqual(job.onRetryCalled, 2)
         XCTAssertEqual(job.onCancelCalled, 1)
+    }
+
+    func testRetryUnlimitedShouldRetryManyTimes() {
+        let job = TestJob()
+        let type = UUID().uuidString
+
+        let creator = TestCreator([type: job])
+
+        job.result = JobError()
+        job.retryConstraint = .retry(delay: 0)
+
+        let manager = SwiftQueueManager(creators: [creator])
+        JobBuilder(type: type)
+                .retry(limit: .unlimited)
+                .schedule(manager: manager)
+
+        job.awaitRun(value: 10000)
+
+        XCTAssertTrue(job.onRunJobCalled > 50)
+        XCTAssertEqual(job.onCompleteCalled, 0)
+        XCTAssertTrue(job.onRetryCalled > 50)
+        XCTAssertEqual(job.onCancelCalled, 0)
     }
 
     func testRetryFailJobWithCancelConstraint() {

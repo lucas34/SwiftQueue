@@ -64,7 +64,7 @@ class SwiftQueueBuilderTests: XCTestCase {
         let interval: Double = 12341
 
         let jobInfo = toJobInfo(type: type, JobBuilder(type: type).periodic(limit: .unlimited, interval: interval))
-        XCTAssertEqual(jobInfo?.maxRun, -1)
+        XCTAssertEqual(jobInfo?.maxRun, Limit.unlimited)
         XCTAssertEqual(jobInfo?.interval, interval)
     }
 
@@ -74,7 +74,7 @@ class SwiftQueueBuilderTests: XCTestCase {
         let interval: Double = 12342
 
         let jobInfo = toJobInfo(type: type, JobBuilder(type: type).periodic(limit: .limited(limited), interval: interval))
-        XCTAssertEqual(jobInfo?.maxRun, limited)
+        XCTAssertEqual(jobInfo?.maxRun, Limit.limited(limited))
         XCTAssertEqual(jobInfo?.interval, interval)
     }
 
@@ -106,7 +106,7 @@ class SwiftQueueBuilderTests: XCTestCase {
         let type = UUID().uuidString
 
         let jobInfo = toJobInfo(type: type, JobBuilder(type: type).retry(limit: .unlimited))
-        XCTAssertEqual(jobInfo?.retries, -1)
+        XCTAssertEqual(jobInfo?.retries, Limit.unlimited)
     }
 
     public func testBuilderRetryLimited() {
@@ -114,7 +114,7 @@ class SwiftQueueBuilderTests: XCTestCase {
         let limited = 123
 
         let jobInfo = toJobInfo(type: type, JobBuilder(type: type).retry(limit: .limited(limited)))
-        XCTAssertEqual(jobInfo?.retries, limited)
+        XCTAssertEqual(jobInfo?.retries, Limit.limited(limited))
     }
 
     public func testBuilderAddTag() {
@@ -133,6 +133,17 @@ class SwiftQueueBuilderTests: XCTestCase {
 
         let jobInfo = toJobInfo(type: type, JobBuilder(type: type).with(params: params))
         XCTAssertTrue(NSDictionary(dictionary: params).isEqual(to: jobInfo?.params))
+    }
+
+    public func testBuilderWithFreeArgs() {
+        let type = UUID().uuidString
+        let params: [String: Any] = [UUID().uuidString: [UUID().uuidString: self]]
+
+        let creator = TestCreator([type: TestJob()])
+        let manager = SwiftQueueManager(creators: [creator])
+        
+        // No assert expected
+        JobBuilder(type: type).with(params: params).schedule(manager: manager)
     }
 
     private func toJobInfo(type: String, _ builder: JobBuilder) -> JobInfo? {
