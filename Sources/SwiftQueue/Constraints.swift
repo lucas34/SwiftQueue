@@ -28,7 +28,7 @@ internal protocol JobConstraint {
 }
 
 /// Generic class for any constraint violation
-public class ConstraintError: Swift.Error {}
+open class ConstraintError: Swift.Error {}
 
 /// Job has been canceled
 public final class Canceled: Swift.Error {}
