@@ -1,5 +1,19 @@
 # Change Log
 
+## [DEVELOPEMENT](https://github.com/lucas34/SwiftQueue/tree/1.4.2)
+
+#### Improvement
+- Performance improvement in for-loops
+
+#### Internal changes
+- `SwiftQueue` has been renamed `SqOperationQueue`
+- `SwiftQueueJob` -> `SqOperation`
+- `JobBuilder` has moved to its own class
+- SwiftQueue.swift reference all public protocols
+
+#### Misc
+- Support BUCK build
+
 ## [v1.4.1](https://github.com/lucas34/SwiftQueue/tree/1.4.1)
 
 #### Bug fix 
