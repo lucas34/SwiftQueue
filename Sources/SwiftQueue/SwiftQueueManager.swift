@@ -22,8 +22,10 @@ public final class SwiftQueueManager {
         self.creators = creators
         self.persister = persister
 
-        persister?.restore().forEach {
-            manage[$0] = SwiftQueue(queueName: $0, creators: creators, persister: persister, isPaused: isPaused)
+        if let data = persister {
+            for queueName in data.restore() {
+                manage[queueName] = SwiftQueue(queueName: queueName, creators: creators, persister: persister, isPaused: isPaused)
+            }
         }
         start()
     }

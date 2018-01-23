@@ -10,11 +10,13 @@ public class TaskAlreadyExist: ConstraintError {}
 internal class UniqueUUIDConstraint: JobConstraint {
 
     func willSchedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
-        for op in queue.operations where op.name == operation.info.uuid {
-            if operation.info.override {
+        if operation.info.override {
+            for op in queue.operations where op.name == operation.info.uuid {
                 // Cancel previous job
                 queue.cancelOperations(uuid: operation.info.uuid)
-            } else {
+            }
+        } else {
+            for op in queue.operations where op.name == operation.info.uuid {
                 // Cancel new job
                 throw TaskAlreadyExist()
             }
