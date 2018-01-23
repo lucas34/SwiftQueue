@@ -22,7 +22,7 @@ internal final class NetworkConstraint: JobConstraint {
 
     var reachability: Reachability?
 
-    func willSchedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
+    func willSchedule(queue: SqOperationQueue, operation: SwiftQueueJob) throws {
         self.reachability = operation.info.requireNetwork.rawValue > NetworkType.any.rawValue ? Reachability() : nil
     }
 
@@ -67,7 +67,7 @@ internal final class NetworkConstraint: JobConstraint {
 
 internal final class NetworkConstraint: JobConstraint {
 
-    func willSchedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
+    func willSchedule(queue: SqOperationQueue, operation: SwiftQueueJob) throws {
 
     }
 

@@ -9,7 +9,7 @@ public final class DeadlineError: ConstraintError {}
 
 internal final class DeadlineConstraint: JobConstraint {
 
-    func willSchedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
+    func willSchedule(queue: SqOperationQueue, operation: SwiftQueueJob) throws {
         try check(operation: operation)
     }
 

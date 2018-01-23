@@ -196,7 +196,7 @@ extension SwiftQueueJob {
             return nil
         }
 
-        guard let job = SwiftQueue.createHandler(creators: creator, type: info!.type, params: info!.params) else {
+        guard let job = SqOperationQueue.createHandler(creators: creator, type: info!.type, params: info!.params) else {
             return nil
         }
 
@@ -216,7 +216,7 @@ extension SwiftQueueJob {
 
 extension SwiftQueueJob {
 
-    func willScheduleJob(queue: SwiftQueue) throws {
+    func willScheduleJob(queue: SqOperationQueue) throws {
         for constraint in self.constraints {
             try constraint.willSchedule(queue: queue, operation: self)
         }

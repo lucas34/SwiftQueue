@@ -9,7 +9,7 @@ public final class TaskAlreadyExist: ConstraintError {}
 
 internal final class UniqueUUIDConstraint: JobConstraint {
 
-    func willSchedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
+    func willSchedule(queue: SqOperationQueue, operation: SwiftQueueJob) throws {
         if operation.info.override {
             for op in queue.operations where op.name == operation.info.uuid {
                 // Cancel previous job
