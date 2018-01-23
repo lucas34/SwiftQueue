@@ -85,18 +85,14 @@ internal final class SwiftQueue: OperationQueue {
     }
 
     func cancelOperations(tag: String) {
-        for operation in operations where (operation as? SwiftQueueJob)?.info.tags.contains(tag) ?? false {
+        for case let operation as SwiftQueueJob in operations where operation.info.tags.contains(tag) {
             operation.cancel()
         }
     }
 
     func cancelOperations(uuid: String) {
-        operations.flatMap { operation -> SwiftQueueJob? in
-            operation as? SwiftQueueJob
-        }.filter {
-            $0.info.uuid == uuid
-        }.forEach {
-            $0.cancel()
+        for case let operation as SwiftQueueJob in operations where operation.info.uuid == uuid {
+            operation.cancel()
         }
     }
 
