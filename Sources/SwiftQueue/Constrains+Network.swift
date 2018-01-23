@@ -18,7 +18,7 @@ public enum NetworkType: Int {
 }
 
 #if os(iOS) || os(macOS) || os(tvOS)
-internal class NetworkConstraint: JobConstraint {
+internal final class NetworkConstraint: JobConstraint {
 
     var reachability: Reachability?
 
@@ -65,7 +65,7 @@ internal class NetworkConstraint: JobConstraint {
 }
 #else
 
-internal class NetworkConstraint: JobConstraint {
+internal final class NetworkConstraint: JobConstraint {
 
     func willSchedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
 

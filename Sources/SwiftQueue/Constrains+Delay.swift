@@ -4,7 +4,7 @@
 
 import Foundation
 
-internal class DelayConstraint: JobConstraint {
+internal final class DelayConstraint: JobConstraint {
 
     func willSchedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
         // Nothing to do

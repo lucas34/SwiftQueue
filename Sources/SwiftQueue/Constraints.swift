@@ -31,7 +31,7 @@ internal protocol JobConstraint {
 public class ConstraintError: Swift.Error {}
 
 /// Job has been canceled
-public class Canceled: Swift.Error {}
+public final class Canceled: Swift.Error {}
 
 /// Behaviour for retrying the job
 public enum RetryConstraint {
