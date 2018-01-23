@@ -41,7 +41,7 @@ internal extension Limit {
             return Limit.limited(value)
         }
     }
-    
+
     var intValue: Int {
         switch self {
         case .unlimited:
@@ -52,7 +52,7 @@ internal extension Limit {
         }
 
     }
-    
+
     mutating func decreaseValue(by: Int) {
         if case .limited(let limit) = self {
             let value = limit - by
@@ -64,7 +64,7 @@ internal extension Limit {
 }
 
 
- extension Limit: Equatable {
+extension Limit: Equatable {
 
     public static func ==(lhs: Limit, rhs: Limit) -> Bool {
         switch (lhs, rhs) {
