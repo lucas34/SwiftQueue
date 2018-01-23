@@ -4,10 +4,11 @@
 //
 
 import Foundation
+import Dispatch
 
 func runInBackgroundAfter(_ seconds: TimeInterval, callback: @escaping () -> Void) {
     let delta = DispatchTime.now() + seconds
-    DispatchQueue.global(qos: DispatchQoS.QoSClass.background).asyncAfter(deadline: delta, execute: callback)
+    DispatchQueue.global(qos: DispatchQoS.QoSClass.utility).asyncAfter(deadline: delta, execute: callback)
 }
 
 func toJSON(_ obj: [String: Any]) -> String? {
