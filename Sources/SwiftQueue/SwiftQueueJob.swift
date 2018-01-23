@@ -221,10 +221,8 @@ extension SwiftQueueJob {
     }
 
     func checkIfJobCanRunNow() -> Bool {
-        for constraint in self.constraints {
-            if !constraint.run(operation: self) {
-                return false
-            }
+        for constraint in self.constraints where constraint.run(operation: self) == false {
+            return false
         }
         return true
     }
