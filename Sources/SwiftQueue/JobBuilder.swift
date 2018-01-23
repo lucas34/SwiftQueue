@@ -1,0 +1,118 @@
+//
+// Created by Lucas Nelaupe on 23/1/18.
+//
+
+import Foundation
+
+/// Builder to create your job with behaviour
+public final class JobBuilder {
+
+    private var info: JobInfo
+
+    /// Type of your job that you will receive in JobCreator.create(type)
+    public init(type: String) {
+        assertNotEmptyString(type)
+        self.info = JobInfo(type: type)
+    }
+
+    /// Allow only 1 job at the time with this ID scheduled or running
+    /// Same job scheduled with same id will result in onRemove(TaskAlreadyExist) if override = false
+    /// If override = true the previous job will be canceled and the new job will be scheduled
+    public func singleInstance(forId: String, override: Bool = false) -> Self {
+        assertNotEmptyString(forId)
+        info.uuid = forId
+        info.override = override
+        return self
+    }
+
+    /// Job in different groups can run in parallel
+    public func group(name: String) -> Self {
+        assertNotEmptyString(name)
+        info.group = name
+        return self
+    }
+
+    /// Delay the execution of the job.
+    /// Only start the countdown when the job should run and not when scheduled
+    public func delay(time: TimeInterval) -> Self {
+        assert(time >= 0)
+        info.delay = time
+        return self
+    }
+
+    /// Job should be removed from the queue after a certain date
+    public func deadline(date: Date) -> Self {
+        info.deadline = date
+        return self
+    }
+
+    /// Repeat job a certain number of time and with a interval between each run 
+    /// count -1 by default for unlimited periodic and immediate
+    @available(*, unavailable, message: "Use periodic(Limit, TimeInterval) instead")
+    public func periodic(count: Int = -1, interval: TimeInterval = 0) -> Self {
+        fatalError("Should not be called")
+    }
+
+    public func periodic(limit: Limit = .unlimited, interval: TimeInterval = 0) -> Self {
+        assert(interval >= 0)
+        info.maxRun = limit
+        info.interval = interval
+        return self
+    }
+
+    /// Connectivity constraint.
+    public func internet(atLeast: NetworkType) -> Self {
+        info.requireNetwork = atLeast
+        return self
+    }
+
+    /// Job should be persisted. 
+    public func persist(required: Bool) -> Self {
+        info.isPersisted = required
+        return self
+    }
+
+    /// Max number of authorised retry before the job is removed
+    @available(*, unavailable, message: "Use retry(Limit) instead")
+    public func retry(max: Int) -> Self {
+        fatalError("Should not be called")
+    }
+
+    /// Limit number of retry. Overall for the lifecycle of the SwiftQueueManager.
+    /// For a periodic job, the retry count will not be reset at each period. 
+    public func retry(limit: Limit) -> Self {
+        info.retries = limit
+        return self
+    }
+
+    /// Custom tag to mark the job
+    public func addTag(tag: String) -> Self {
+        assertNotEmptyString(tag)
+        info.tags.insert(tag)
+        return self
+    }
+
+    /// Custom parameters will be forwarded to create method
+    public func with(params: [String: Any]) -> Self {
+        info.params = params
+        return self
+    }
+
+    internal func build(job: Job) -> SwiftQueueJob {
+        return SwiftQueueJob(job: job, info: info)
+    }
+
+    /// Add job to the JobQueue
+    public func schedule(manager: SwiftQueueManager) {
+        if info.isPersisted {
+            // Check if we will be able to serialise args
+            assert(JSONSerialization.isValidJSONObject(info.params))
+        }
+
+        let queue = manager.getQueue(name: info.group)
+        guard let job = queue.createHandler(type: info.type, params: info.params) else {
+            return
+        }
+        queue.addOperation(build(job: job))
+    }
+}

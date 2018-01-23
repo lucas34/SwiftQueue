@@ -55,14 +55,18 @@
 		B06405261FA04CCF00086C69 /* SwiftQueueJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A41F82A84B00B3BBFB /* SwiftQueueJob.swift */; };
 		B06405271FA04CCF00086C69 /* SwiftQueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A51F82A84B00B3BBFB /* SwiftQueueManager.swift */; };
 		D0B7C0848D0FF83C8B04EBB6 /* JobInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C4E41A1BF73329A7D03D /* JobInfo.swift */; };
+		D0B7C437539F0BEE35FBE8F0 /* JobBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7CB3B79E039D3B11D8921 /* JobBuilder.swift */; };
 		D0B7C5D398315B8EE556EECE /* ConstraintNetworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7CA593223929B393FAF08 /* ConstraintNetworkTests.swift */; };
+		D0B7C6B8833437575C438715 /* JobBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7CB3B79E039D3B11D8921 /* JobBuilder.swift */; };
 		D0B7C6BB715C5C54D932CF60 /* PersisterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7CF67C4781CB9C45574A8 /* PersisterTests.swift */; };
+		D0B7C8729FA2F6EF3A6C42F8 /* JobBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7CB3B79E039D3B11D8921 /* JobBuilder.swift */; };
 		D0B7C893AA62C12F4A1EAD13 /* ConstraintUniqueUUIDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C5947CC5CAD0CCE99F8B /* ConstraintUniqueUUIDTests.swift */; };
 		D0B7C94CAD20ADBB67BE5192 /* SwiftQueueBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C4BC41F2C8121944180C /* SwiftQueueBuilderTests.swift */; };
 		D0B7C996BDB2A748B6B8843A /* JobInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C4E41A1BF73329A7D03D /* JobInfo.swift */; };
 		D0B7CA36BB35653EB30BC026 /* ConstraintDeadlineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7CC33BDA48B501A2811A0 /* ConstraintDeadlineTests.swift */; };
 		D0B7CC03343274087B4C7955 /* JobInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C4E41A1BF73329A7D03D /* JobInfo.swift */; };
 		D0B7CC89D901F6C8AD2666D9 /* JobInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C4E41A1BF73329A7D03D /* JobInfo.swift */; };
+		D0B7CFA2089DFF576E0D765B /* JobBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7CB3B79E039D3B11D8921 /* JobBuilder.swift */; };
 		OBJ_27 /* SwiftQueueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* SwiftQueueTests.swift */; };
 		OBJ_29 /* SwiftQueue.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* SwiftQueue.framework */; };
 /* End PBXBuildFile section */
@@ -100,6 +104,7 @@
 		D0B7C4E41A1BF73329A7D03D /* JobInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JobInfo.swift; path = SwiftQueue/JobInfo.swift; sourceTree = "<group>"; };
 		D0B7C5947CC5CAD0CCE99F8B /* ConstraintUniqueUUIDTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConstraintUniqueUUIDTests.swift; path = Tests/SwiftQueueTests/ConstraintUniqueUUIDTests.swift; sourceTree = "<group>"; };
 		D0B7CA593223929B393FAF08 /* ConstraintNetworkTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConstraintNetworkTests.swift; path = Tests/SwiftQueueTests/ConstraintNetworkTests.swift; sourceTree = "<group>"; };
+		D0B7CB3B79E039D3B11D8921 /* JobBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JobBuilder.swift; path = SwiftQueue/JobBuilder.swift; sourceTree = "<group>"; };
 		D0B7CC33BDA48B501A2811A0 /* ConstraintDeadlineTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConstraintDeadlineTests.swift; path = Tests/SwiftQueueTests/ConstraintDeadlineTests.swift; sourceTree = "<group>"; };
 		D0B7CF67C4781CB9C45574A8 /* PersisterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersisterTests.swift; path = Tests/SwiftQueueTests/PersisterTests.swift; sourceTree = "<group>"; };
 		OBJ_11 /* SwiftQueueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftQueueTests.swift; sourceTree = "<group>"; };
@@ -211,6 +216,7 @@
 				1E68E82C1E071C7AA1AC4BB6 /* Constrains+Network.swift */,
 				1E68E002DC39E9BBE4A0A06A /* Constraints+UniqueUUID.swift */,
 				D0B7C4E41A1BF73329A7D03D /* JobInfo.swift */,
+				D0B7CB3B79E039D3B11D8921 /* JobBuilder.swift */,
 			);
 			path = Sources;
 			sourceTree = SOURCE_ROOT;
@@ -353,6 +359,7 @@
 				1E68E27E30C2ECBA84227438 /* Constrains+Network.swift in Sources */,
 				1E68E0ABCE7FDC17AD665D7D /* Constraints+UniqueUUID.swift in Sources */,
 				D0B7CC03343274087B4C7955 /* JobInfo.swift in Sources */,
+				D0B7C8729FA2F6EF3A6C42F8 /* JobBuilder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -372,6 +379,7 @@
 				1E68E6C0E0677240BAE94396 /* Constrains+Network.swift in Sources */,
 				1E68EE914B5B51CDB2BD7C4D /* Constraints+UniqueUUID.swift in Sources */,
 				D0B7C0848D0FF83C8B04EBB6 /* JobInfo.swift in Sources */,
+				D0B7CFA2089DFF576E0D765B /* JobBuilder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -391,6 +399,7 @@
 				1E68E4E7E82AA3F923E506ED /* Constrains+Network.swift in Sources */,
 				1E68E3E5B1F435F4BA6F7A45 /* Constraints+UniqueUUID.swift in Sources */,
 				D0B7CC89D901F6C8AD2666D9 /* JobInfo.swift in Sources */,
+				D0B7C6B8833437575C438715 /* JobBuilder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -410,6 +419,7 @@
 				1E68E40BB6FB2BCA442AF263 /* Constrains+Network.swift in Sources */,
 				1E68E727B0ED1A76491D4BAB /* Constraints+UniqueUUID.swift in Sources */,
 				D0B7C996BDB2A748B6B8843A /* JobInfo.swift in Sources */,
+				D0B7C437539F0BEE35FBE8F0 /* JobBuilder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
