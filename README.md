@@ -8,20 +8,19 @@
 [![codecov](https://codecov.io/gh/lucas34/SwiftQueue/branch/master/graph/badge.svg)](https://codecov.io/gh/lucas34/SwiftQueue)
 [![pod](https://img.shields.io/cocoapods/v/SwiftQueue.svg?style=flat)](https://cocoapods.org/pods/SwiftQueue)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![codebeat badge](https://codebeat.co/badges/3d446d9e-3e7a-435c-85fc-aa626d4f7652)](https://codebeat.co/projects/github-com-lucas34-swiftqueue-master)
 [![Swift Package Manager compatible](https://img.shields.io/badge/Swift%20Package%20Manager-compatible-brightgreen.svg)](https://github.com/apple/swift-package-manager)
 [![Documentation](https://lucas34.github.io/SwiftQueue/badge.svg)](https://lucas34.github.io/SwiftQueue)
 
-SwiftQueue is a job scheduler for Ios inspired by popular android libraries like *android-priority-jobqueue* or *android-job*. It allows you to run your tasks with run and retry constraints. 
+`SwiftQueue` is a job scheduler for iOS inspired by popular android libraries like *android-priority-jobqueue* or *android-job*. It allows you to run your tasks with run and retry constraints. 
 
-Library will rely on *Operation* and *OperationQueue* to make sure all tasks will run in order. Don't forget to check our [**WIKI**](https://github.com/lucas34/SwiftQueue/wiki). 
+Library will rely on `Operation` and `OperationQueue` to make sure all tasks will run in order. Don't forget to check our [**WIKI**](https://github.com/lucas34/SwiftQueue/wiki). 
 
 ## Features
 
 - [x] Sequential execution
 - [x] Concurrent run
 - [x] Persistence
-- [x] Cancel all or by tag
+- [x] Cancel all, by id or by tag
 - [x] Delay
 - [x] Deadline
 - [x] Internet constraint
@@ -38,7 +37,7 @@ Library will rely on *Operation* and *OperationQueue* to make sure all tasks wil
 ## Installation
 
 #### Carthage
-SwiftQueue is carthage compatible. Add the following entry in your Cartfile:
+`SwiftQueue` is `carthage` compatible. Add the following entry in your `Cartfile`:
 
 ```
 github "lucas34/SwiftQueue"
@@ -60,9 +59,8 @@ In your application, simply import the library
 ``` swift
 import SwiftQueue
 ```
-## Usage example
-
-This short example will shows you how to schedule a task that send tweets. First, you will need to extend `Job` and implement `onRun`, `onRetry` and `onRemove` callbacks.
+## Example
+This example will simply wrap an api call. Create your custom job by extending `Job` with `onRun`, `onRetry` and `onRemove` callbacks.
 
 ```swift
 // A job to send a tweet
@@ -79,13 +77,12 @@ class SendTweetJob: Job {
     }
 
     func onRun(callback: JobResult) throws {
-        do {
-            try Api().sendTweet(data: tweet)
-            // Consider the call synchronous in this case
-            callback.done(.success)        
-        } catch let error {
-            callback.done(.fail(error))    
-        }
+        let api = try Api()
+        api.sendTweet(data: tweet).execute(onSuccess: {
+            callback.done(.success)
+        }, onError: { error in
+            callback.done(.fail(error))
+        })
     }
 
     func onRetry(error: Error) -> RetryConstraint {
@@ -109,23 +106,25 @@ class SendTweetJob: Job {
 }
 ```
 
-The class `SwiftQueueManager` serves as entry point. Your jobs need to extend the class `Job`. Specify run and retry constraints with `JobBuilder` and schedule by giving `SwiftQueueManager` 
+Create your `SwiftQueueManager` and **keep the reference**. If you want to cancel a job it has to be done with the same instance.
 
 ```swift
 let manager = SwiftQueueManager(creators: [TweetJobCreator()])
 ```
 
-Schedule a job with type, parameters and constraints.
+Schedule your job and specify the constraints.
 
 ```swift
 JobBuilder(type: SendTweetJob.type)
+        // Requires internet to run
+        .internet(atLeast: .cellular)
         // params of my job
-        .with(params: ["content": "Hellow world"])
+        .with(params: ["content": "Hello world"])
         // Add to queue manager
         .schedule(manager: manager)
 ```
 
-The `JobCreator` maps a job type to a specific `job` class. You will receive parameters you specified in `JobBuilder`.
+Bind your `job` type with an actual instance.
 
 ```swift
 class TweetJobCreator: JobCreator {
@@ -142,8 +141,6 @@ class TweetJobCreator: JobCreator {
     }
 }
 ```
-
-That's it. We haven't specify any constraint so the job will run immediately. Check the [**WIKI**](https://github.com/lucas34/SwiftQueue/wiki) for a more detailed example.
 
 ## Contributors
 
