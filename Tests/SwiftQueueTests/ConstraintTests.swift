@@ -37,7 +37,7 @@ class ConstraintTests: XCTestCase {
         JobBuilder(type: type)
                 .periodic(limit: .unlimited)
                 .schedule(manager: manager)
-        
+
         // Should run at least 100 times
         job.awaitRun(value: 1000)
 

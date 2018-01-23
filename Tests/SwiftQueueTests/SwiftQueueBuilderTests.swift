@@ -141,7 +141,7 @@ class SwiftQueueBuilderTests: XCTestCase {
 
         let creator = TestCreator([type: TestJob()])
         let manager = SwiftQueueManager(creators: [creator])
-        
+
         // No assert expected
         JobBuilder(type: type).with(params: params).schedule(manager: manager)
     }

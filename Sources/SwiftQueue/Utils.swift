@@ -63,10 +63,9 @@ internal extension Limit {
 
 }
 
-
 extension Limit: Equatable {
 
-    public static func ==(lhs: Limit, rhs: Limit) -> Bool {
+    public static func == (lhs: Limit, rhs: Limit) -> Bool {
         switch (lhs, rhs) {
         case let (.limited(a), .limited(b)):
             return a == b

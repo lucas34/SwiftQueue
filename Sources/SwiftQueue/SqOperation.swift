@@ -128,7 +128,6 @@ internal final class SqOperation: Operation, JobResult {
             } else {
                 onTerminate()
             }
-            break
         case .unlimited:
             retryJob(retry: handler.onRetry(error: error))
         }
