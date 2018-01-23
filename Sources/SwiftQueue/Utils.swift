@@ -47,10 +47,17 @@ internal extension Limit {
         case .unlimited:
             return -1
         case .limited(let val):
-            assert(val >= 0)
             return val
         }
-
+    }
+    
+    var validate: Bool {
+        switch self {
+        case .unlimited:
+            return true
+        case .limited(let val):
+            return val >= 0
+        }
     }
 
     mutating func decreaseValue(by: Int) {
