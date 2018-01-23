@@ -11,19 +11,19 @@ internal protocol JobConstraint {
         - Operation will be added to the queue
         Raise exception if the job cannot run
     */
-    func willSchedule(queue: SqOperationQueue, operation: SwiftQueueJob) throws
+    func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws
 
     /**
         - Operation will run
         Raise exception if the job cannot run anymore
     */
-    func willRun(operation: SwiftQueueJob) throws
+    func willRun(operation: SqOperation) throws
 
     /**
         - Operation will run
         Return false if the job cannot run immediately
     */
-    func run(operation: SwiftQueueJob) -> Bool
+    func run(operation: SqOperation) -> Bool
 
 }
 

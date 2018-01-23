@@ -9,15 +9,15 @@ public final class DeadlineError: ConstraintError {}
 
 internal final class DeadlineConstraint: JobConstraint {
 
-    func willSchedule(queue: SqOperationQueue, operation: SwiftQueueJob) throws {
+    func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {
         try check(operation: operation)
     }
 
-    func willRun(operation: SwiftQueueJob) throws {
+    func willRun(operation: SqOperation) throws {
         try check(operation: operation)
     }
 
-    func run(operation: SwiftQueueJob) -> Bool {
+    func run(operation: SqOperation) -> Bool {
         if let delay = operation.info.deadline {
             runInBackgroundAfter(delay.timeIntervalSince(Date()), callback: { [weak operation = operation] in
                 operation?.run()
@@ -26,7 +26,7 @@ internal final class DeadlineConstraint: JobConstraint {
         return true
     }
 
-    private func check(operation: SwiftQueueJob) throws {
+    private func check(operation: SqOperation) throws {
         if let deadline = operation.info.deadline, deadline < Date() {
             throw DeadlineError()
         }

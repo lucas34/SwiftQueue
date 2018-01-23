@@ -5,7 +5,7 @@
 
 import Foundation
 
-internal final class SwiftQueueJob: Operation, JobResult {
+internal final class SqOperation: Operation, JobResult {
 
     let handler: Job
     var info: JobInfo
@@ -188,7 +188,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
     }
 }
 
-extension SwiftQueueJob {
+extension SqOperation {
 
     convenience init?(dictionary: [String: Any], creator: [JobCreator]) {
         guard let info = try? JobInfo(dictionary: dictionary) else {
@@ -214,7 +214,7 @@ extension SwiftQueueJob {
 
 }
 
-extension SwiftQueueJob {
+extension SqOperation {
 
     func willScheduleJob(queue: SqOperationQueue) throws {
         for constraint in self.constraints {

@@ -26,15 +26,15 @@ internal final class SqOperationQueue: OperationQueue {
     }
 
     private func loadSerializedTasks(name: String) {
-        persister?.restore(queueName: name).flatMap { string -> SwiftQueueJob? in
-            SwiftQueueJob(json: string, creator: creators)
+        persister?.restore(queueName: name).flatMap { string -> SqOperation? in
+            SqOperation(json: string, creator: creators)
         }.sorted {
             $0.info.createTime < $1.info.createTime
         }.forEach(addOperation)
     }
 
     override func addOperation(_ ope: Operation) {
-        guard let job = ope as? SwiftQueueJob else {
+        guard let job = ope as? SqOperation else {
             // Not a job Task I don't care
             super.addOperation(ope)
             return
@@ -58,18 +58,18 @@ internal final class SqOperationQueue: OperationQueue {
     }
 
     func cancelOperations(tag: String) {
-        for case let operation as SwiftQueueJob in operations where operation.info.tags.contains(tag) {
+        for case let operation as SqOperation in operations where operation.info.tags.contains(tag) {
             operation.cancel()
         }
     }
 
     func cancelOperations(uuid: String) {
-        for case let operation as SwiftQueueJob in operations where operation.info.uuid == uuid {
+        for case let operation as SqOperation in operations where operation.info.uuid == uuid {
             operation.cancel()
         }
     }
 
-    private func completed(_ job: SwiftQueueJob) {
+    private func completed(_ job: SqOperation) {
         // Remove this operation from serialization
         if job.info.isPersisted, let sp = persister {
             sp.remove(queueName: queueName, taskId: job.info.uuid)

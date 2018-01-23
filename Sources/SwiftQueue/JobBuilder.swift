@@ -98,8 +98,8 @@ public final class JobBuilder {
         return self
     }
 
-    internal func build(job: Job) -> SwiftQueueJob {
-        return SwiftQueueJob(job: job, info: info)
+    internal func build(job: Job) -> SqOperation {
+        return SqOperation(job: job, info: info)
     }
 
     /// Add job to the JobQueue
