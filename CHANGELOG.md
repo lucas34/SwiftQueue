@@ -1,12 +1,12 @@
 # Change Log
 
-## [DEVELOPEMENT](https://github.com/lucas34/SwiftQueue/tree/1.4.2)
+## [1.5.0](https://github.com/lucas34/SwiftQueue/tree/1.5.0)
 
 #### Breaking Changes
 - Change Error type to follow enum pattern (#68) 
-    - TaskAlreadyExist -> SwiftQueueError.Duplicate
-    - DealineError -> SwiftQueueError.Deadline
-    - Canceled -> SwiftQueueError.Canceled
+    - `TaskAlreadyExist` -> `SwiftQueueError.Duplicate`
+    - `DeadlineError` -> `SwiftQueueError.Deadline`
+    - `Canceled` -> `SwiftQueueError.Canceled`
 
 #### Improvement
 - Performance improvement in for-loops
@@ -18,7 +18,7 @@
 - SwiftQueue.swift reference all public protocols
 
 #### Misc
-- Support BUCK build
+- Support `BUCK` build
 
 ## [v1.4.1](https://github.com/lucas34/SwiftQueue/tree/1.4.1)
 
