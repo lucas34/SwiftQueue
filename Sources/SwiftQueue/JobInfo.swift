@@ -8,7 +8,7 @@ struct JobInfo {
 
     let type: String
 
-    var uuid: String =  UUID().uuidString
+    var uuid: String = UUID().uuidString
     var override = false
 
     var group: String = "GLOBAL"

@@ -5,7 +5,7 @@
 
 import Foundation
 
-internal final class SqOperation: Operation, JobResult {
+internal final class SqOperation: Operation {
 
     let handler: Job
     var info: JobInfo
@@ -109,6 +109,10 @@ internal final class SqOperation: Operation, JobResult {
         handler.onRemove(result: result)
     }
 
+}
+
+extension SqOperation: JobResult {
+
     func done(_ result: JobCompletion) {
         switch result {
         case .success:
@@ -185,6 +189,7 @@ internal final class SqOperation: Operation, JobResult {
             self?.run()
         })
     }
+
 }
 
 extension SqOperation {

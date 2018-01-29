@@ -50,7 +50,7 @@ internal extension Limit {
             return val
         }
     }
-    
+
     var validate: Bool {
         switch self {
         case .unlimited:
