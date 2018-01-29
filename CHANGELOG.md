@@ -21,7 +21,7 @@
 - Support BUCK build
 
 #### Other changes
-- Remove unavailable methods
+- Remove unavailable methods (#71)
     - `func retry(Int)`
     - `func periodic(Int, TimeInterval)`
 
