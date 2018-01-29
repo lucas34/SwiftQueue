@@ -47,13 +47,9 @@ public final class JobBuilder {
         return self
     }
 
-    /// Repeat job a certain number of time and with a interval between each run 
-    /// count -1 by default for unlimited periodic and immediate
-    @available(*, unavailable, message: "Use periodic(Limit, TimeInterval) instead")
-    public func periodic(count: Int = -1, interval: TimeInterval = 0) -> Self {
-        fatalError("Should not be called")
-    }
-
+    /// Repeat job a certain number of time and with a interval between each run
+    /// Limit of period to reproduce
+    /// interval between each run. Does not affect the first iteration. Please add delay if so
     public func periodic(limit: Limit = .unlimited, interval: TimeInterval = 0) -> Self {
         assert(limit.validate)
         assert(interval >= 0)
@@ -72,12 +68,6 @@ public final class JobBuilder {
     public func persist(required: Bool) -> Self {
         info.isPersisted = required
         return self
-    }
-
-    /// Max number of authorised retry before the job is removed
-    @available(*, unavailable, message: "Use retry(Limit) instead")
-    public func retry(max: Int) -> Self {
-        fatalError("Should not be called")
     }
 
     /// Limit number of retry. Overall for the lifecycle of the SwiftQueueManager.
