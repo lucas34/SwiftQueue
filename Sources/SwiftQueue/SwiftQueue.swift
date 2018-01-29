@@ -89,7 +89,5 @@ public enum SwiftQueueError: Swift.Error {
 
     /// Exception thrown when you try to schedule a job with a same ID as one currently scheduled
     case duplicate
-    
+
 }
-
-
