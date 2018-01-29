@@ -14,6 +14,10 @@ class TestJob: Job {
 
     public var lastError: Error?
 
+    public var lastSwiftQueueError: SwiftQueueError? {
+        return lastError as? SwiftQueueError
+    }
+
     public var onRunJobCalled = 0
     public var onRetryCalled = 0
     public var onCompleteCalled = 0
@@ -27,7 +31,7 @@ class TestJob: Job {
 
     var runSemaphoreValue = 0
     let runSemaphore = DispatchSemaphore(value: 0)
-    
+
     init(_ completionTimeout: TimeInterval = 0) {
         self.completionTimeout = completionTimeout
     }
@@ -35,7 +39,7 @@ class TestJob: Job {
     func onRun(callback: JobResult) {
         onRunJobCalled += 1
         if runSemaphoreValue == onRunJobCalled {
-            runSemaphore.signal()   
+            runSemaphore.signal()
         }
         runInBackgroundAfter(completionTimeout) {
             if let error = self.result {

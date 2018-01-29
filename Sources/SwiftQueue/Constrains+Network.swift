@@ -12,21 +12,21 @@ public enum NetworkType: Int {
     /// Job will run regardless the connectivity of the platform
     case any = 0
     /// Requires at least cellular such as 2G, 3G, 4G, LTE or Wifi
-    case cellular =  1
+    case cellular = 1
     /// Device has to be connected to Wifi or Lan
-    case wifi =  2
+    case wifi = 2
 }
 
 #if os(iOS) || os(macOS) || os(tvOS)
-internal class NetworkConstraint: JobConstraint {
+internal final class NetworkConstraint: JobConstraint {
 
     var reachability: Reachability?
 
-    func willSchedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
+    func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {
         self.reachability = operation.info.requireNetwork.rawValue > NetworkType.any.rawValue ? Reachability() : nil
     }
 
-    func willRun(operation: SwiftQueueJob) throws {
+    func willRun(operation: SqOperation) throws {
         guard let reachability = reachability else { return }
         guard hasCorrectNetwork(reachability: reachability, required: operation.info.requireNetwork) else {
             try reachability.startNotifier()
@@ -34,7 +34,7 @@ internal class NetworkConstraint: JobConstraint {
         }
     }
 
-    func run(operation: SwiftQueueJob) -> Bool {
+    func run(operation: SqOperation) -> Bool {
         guard let reachability = reachability else {
             return true
         }
@@ -65,17 +65,17 @@ internal class NetworkConstraint: JobConstraint {
 }
 #else
 
-internal class NetworkConstraint: JobConstraint {
+internal final class NetworkConstraint: JobConstraint {
 
-    func willSchedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
-
-    }
-
-    func willRun(operation: SwiftQueueJob) throws {
+    func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {
 
     }
 
-    func run(operation: SwiftQueueJob) -> Bool {
+    func willRun(operation: SqOperation) throws {
+
+    }
+
+    func run(operation: SqOperation) -> Bool {
         return true
     }
 }

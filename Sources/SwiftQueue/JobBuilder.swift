@@ -1,6 +1,5 @@
 //
-// Created by Lucas Nelaupe on 10/08/2017.
-// Copyright (c) 2017 lucas34. All rights reserved.
+// Created by Lucas Nelaupe on 23/1/18.
 //
 
 import Foundation
@@ -17,7 +16,7 @@ public final class JobBuilder {
     }
 
     /// Allow only 1 job at the time with this ID scheduled or running
-    /// Same job scheduled with same id will result in onRemove(TaskAlreadyExist) if override = false
+    /// Same job scheduled with same id will result in onRemove(SwiftQueueError.duplicate) if override = false
     /// If override = true the previous job will be canceled and the new job will be scheduled
     public func singleInstance(forId: String, override: Bool = false) -> Self {
         assertNotEmptyString(forId)
@@ -41,7 +40,8 @@ public final class JobBuilder {
         return self
     }
 
-    /// Job should be removed from the queue after a certain date
+    /// If the job hasn't run after the date, It will be removed
+    /// will call onRemove(SwiftQueueError.deadline)
     public func deadline(date: Date) -> Self {
         info.deadline = date
         return self
@@ -55,6 +55,7 @@ public final class JobBuilder {
     }
 
     public func periodic(limit: Limit = .unlimited, interval: TimeInterval = 0) -> Self {
+        assert(limit.validate)
         assert(interval >= 0)
         info.maxRun = limit
         info.interval = interval
@@ -82,6 +83,7 @@ public final class JobBuilder {
     /// Limit number of retry. Overall for the lifecycle of the SwiftQueueManager.
     /// For a periodic job, the retry count will not be reset at each period. 
     public func retry(limit: Limit) -> Self {
+        assert(limit.validate)
         info.retries = limit
         return self
     }
@@ -99,8 +101,8 @@ public final class JobBuilder {
         return self
     }
 
-    internal func build(job: Job) -> SwiftQueueJob {
-        return SwiftQueueJob(job: job, info: info)
+    internal func build(job: Job) -> SqOperation {
+        return SqOperation(job: job, info: info)
     }
 
     /// Add job to the JobQueue
@@ -116,51 +118,4 @@ public final class JobBuilder {
         }
         queue.addOperation(build(job: job))
     }
-}
-
-/// Callback to give result in synchronous or asynchronous job
-public protocol JobResult {
-
-    /// Method callback to notify the completion of your 
-    func done(_ result: JobCompletion)
-
-}
-
-/// Enum to define possible Job completion values
-public enum JobCompletion {
-
-    /// Job completed successfully
-    case success
-
-    /// Job completed with error
-    case fail(Swift.Error)
-
-}
-
-/// Protocol to implement to run a job
-public protocol Job {
-
-    /// Perform your operation
-    func onRun(callback: JobResult)
-
-    /// Fail has failed with the 
-    /// Will only gets called if the job can be retried
-    /// Not applicable for 'ConstraintError'
-    /// Not application if the retry(value) is less than 2 which is the case by default
-    func onRetry(error: Swift.Error) -> RetryConstraint
-
-    /// Job is removed from the queue and will never run again
-    func onRemove(result: JobCompletion)
-
-}
-
-/// Enum to specify a limit
-public enum Limit {
-
-    /// No limit
-    case unlimited
-
-    /// Limited to a specific number
-    case limited(Int)
-
 }

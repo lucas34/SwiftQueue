@@ -5,7 +5,7 @@
 
 import Foundation
 
-internal final class SwiftQueueJob: Operation, JobResult {
+internal final class SqOperation: Operation {
 
     let handler: Job
     var info: JobInfo
@@ -61,7 +61,7 @@ internal final class SwiftQueueJob: Operation, JobResult {
     }
 
     override func cancel() {
-        lastError = Canceled()
+        lastError = SwiftQueueError.canceled
         onTerminate()
         super.cancel()
     }
@@ -109,6 +109,10 @@ internal final class SwiftQueueJob: Operation, JobResult {
         handler.onRemove(result: result)
     }
 
+}
+
+extension SqOperation: JobResult {
+
     func done(_ result: JobCompletion) {
         switch result {
         case .success:
@@ -128,7 +132,6 @@ internal final class SwiftQueueJob: Operation, JobResult {
             } else {
                 onTerminate()
             }
-            break
         case .unlimited:
             retryJob(retry: handler.onRetry(error: error))
         }
@@ -186,9 +189,10 @@ internal final class SwiftQueueJob: Operation, JobResult {
             self?.run()
         })
     }
+
 }
 
-extension SwiftQueueJob {
+extension SqOperation {
 
     convenience init?(dictionary: [String: Any], creator: [JobCreator]) {
         guard let info = try? JobInfo(dictionary: dictionary) else {
@@ -196,7 +200,7 @@ extension SwiftQueueJob {
             return nil
         }
 
-        guard let job = SwiftQueue.createHandler(creators: creator, type: info!.type, params: info!.params) else {
+        guard let job = SqOperationQueue.createHandler(creators: creator, type: info!.type, params: info!.params) else {
             return nil
         }
 
@@ -214,9 +218,9 @@ extension SwiftQueueJob {
 
 }
 
-extension SwiftQueueJob {
+extension SqOperation {
 
-    func willScheduleJob(queue: SwiftQueue) throws {
+    func willScheduleJob(queue: SqOperationQueue) throws {
         for constraint in self.constraints {
             try constraint.willSchedule(queue: queue, operation: self)
         }
@@ -229,10 +233,8 @@ extension SwiftQueueJob {
     }
 
     func checkIfJobCanRunNow() -> Bool {
-        for constraint in self.constraints {
-            if !constraint.run(operation: self) {
-                return false
-            }
+        for constraint in self.constraints where constraint.run(operation: self) == false {
+            return false
         }
         return true
     }

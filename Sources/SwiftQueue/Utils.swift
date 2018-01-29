@@ -4,10 +4,11 @@
 //
 
 import Foundation
+import Dispatch
 
 func runInBackgroundAfter(_ seconds: TimeInterval, callback: @escaping () -> Void) {
     let delta = DispatchTime.now() + seconds
-    DispatchQueue.global(qos: DispatchQoS.QoSClass.background).asyncAfter(deadline: delta, execute: callback)
+    DispatchQueue.global(qos: DispatchQoS.QoSClass.utility).asyncAfter(deadline: delta, execute: callback)
 }
 
 func toJSON(_ obj: [String: Any]) -> String? {
@@ -40,18 +41,25 @@ internal extension Limit {
             return Limit.limited(value)
         }
     }
-    
+
     var intValue: Int {
         switch self {
         case .unlimited:
             return -1
         case .limited(let val):
-            assert(val >= 0)
             return val
         }
-
     }
-    
+
+    var validate: Bool {
+        switch self {
+        case .unlimited:
+            return true
+        case .limited(let val):
+            return val >= 0
+        }
+    }
+
     mutating func decreaseValue(by: Int) {
         if case .limited(let limit) = self {
             let value = limit - by
@@ -62,10 +70,9 @@ internal extension Limit {
 
 }
 
+extension Limit: Equatable {
 
- extension Limit: Equatable {
-
-    public static func ==(lhs: Limit, rhs: Limit) -> Bool {
+    public static func == (lhs: Limit, rhs: Limit) -> Bool {
         switch (lhs, rhs) {
         case let (.limited(a), .limited(b)):
             return a == b

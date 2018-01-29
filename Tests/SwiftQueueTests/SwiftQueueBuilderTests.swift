@@ -141,7 +141,7 @@ class SwiftQueueBuilderTests: XCTestCase {
 
         let creator = TestCreator([type: TestJob()])
         let manager = SwiftQueueManager(creators: [creator])
-        
+
         // No assert expected
         JobBuilder(type: type).with(params: params).schedule(manager: manager)
     }
@@ -153,7 +153,7 @@ class SwiftQueueBuilderTests: XCTestCase {
 
         builder.persist(required: true).schedule(manager: manager)
 
-        let actual = SwiftQueueJob(json: persister.putData[0], creator: [creator])
+        let actual = SqOperation(json: persister.putData[0], creator: [creator])
         return actual?.info
     }
 

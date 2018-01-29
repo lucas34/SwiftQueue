@@ -13,7 +13,7 @@ public final class SwiftQueueManager {
     private let creators: [JobCreator]
     private let persister: JobPersister?
 
-    private var manage = [String: SwiftQueue]()
+    private var manage = [String: SqOperationQueue]()
 
     private var isPaused = true
 
@@ -22,8 +22,10 @@ public final class SwiftQueueManager {
         self.creators = creators
         self.persister = persister
 
-        persister?.restore().forEach {
-            manage[$0] = SwiftQueue(queueName: $0, creators: creators, persister: persister, isPaused: isPaused)
+        if let data = persister {
+            for queueName in data.restore() {
+                manage[queueName] = SqOperationQueue(queueName: queueName, creators: creators, persister: persister, isPaused: isPaused)
+            }
         }
         start()
     }
@@ -31,7 +33,7 @@ public final class SwiftQueueManager {
     /// Jobs queued will run again
     public func start() {
         isPaused = false
-        manage.values.forEach { element in
+        for element in manage.values {
             element.isSuspended = false
         }
     }
@@ -39,24 +41,24 @@ public final class SwiftQueueManager {
     /// Avoid new job to run. Not application for current running job.
     public func pause() {
         isPaused = true
-        manage.values.forEach { element in
+        for element in manage.values {
             element.isSuspended = true
         }
     }
 
-    internal func getQueue(name: String) -> SwiftQueue {
+    internal func getQueue(name: String) -> SqOperationQueue {
         return manage[name] ?? createQueue(name: name)
     }
 
-    private func createQueue(name: String) -> SwiftQueue {
-        let queue = SwiftQueue(queueName: name, creators: creators, persister: persister, isPaused: isPaused)
+    private func createQueue(name: String) -> SqOperationQueue {
+        let queue = SqOperationQueue(queueName: name, creators: creators, persister: persister, isPaused: isPaused)
         manage[name] = queue
         return queue
     }
 
     /// All operations in all queues will be removed
     public func cancelAllOperations() {
-        manage.values.forEach { element in
+        for element in manage.values {
             element.cancelAllOperations()
         }
     }
@@ -64,7 +66,7 @@ public final class SwiftQueueManager {
     /// All operations with this tag in all queues will be removed
     public func cancelOperations(tag: String) {
         assertNotEmptyString(tag)
-        manage.values.forEach { element in
+        for element in manage.values {
             element.cancelOperations(tag: tag)
         }
     }
@@ -72,14 +74,14 @@ public final class SwiftQueueManager {
     /// All operations with this uuid in all queues will be removed
     public func cancelOperations(uuid: String) {
         assertNotEmptyString(uuid)
-        manage.values.forEach { element in
+        for element in manage.values {
             element.cancelOperations(uuid: uuid)
         }
     }
 
     /// Blocks the current thread until all of the receiver’s queued and executing operations finish executing.
     public func waitUntilAllOperationsAreFinished() {
-        manage.values.forEach { element in
+        for element in manage.values {
             element.waitUntilAllOperationsAreFinished()
         }
     }

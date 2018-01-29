@@ -8,6 +8,7 @@ import Foundation
 /// Persist jobs in UserDefaults
 public class UserDefaultsPersister: JobPersister {
 
+    private let store = UserDefaults()
     private let key: String
 
     /// Create a Job persister with a custom key
@@ -18,7 +19,6 @@ public class UserDefaultsPersister: JobPersister {
     // Structure as follow
     // [group:[id:data]]
     public func restore() -> [String] {
-        let store = UserDefaults()
         let values: [String: Any] = store.value(forKey: key) as? [String: Any] ?? [:]
         return Array(values.keys)
     }
@@ -26,7 +26,6 @@ public class UserDefaultsPersister: JobPersister {
     /// Restore jobs for a single queue
     /// Returns an array of String. Serialised job
     public func restore(queueName: String) -> [String] {
-        let store = UserDefaults()
         let values: [String: [String: String]] = store.value(forKey: key) as? [String: [String: String]] ?? [:]
         let tasks: [String: String] = values[queueName] ?? [:]
         return Array(tasks.values)
@@ -34,7 +33,6 @@ public class UserDefaultsPersister: JobPersister {
 
     /// Insert a job to a specific queue
     public func put(queueName: String, taskId: String, data: String) {
-        let store = UserDefaults()
         var values: [String: [String: String]] = store.value(forKey: key) as? [String: [String: String]] ?? [:]
         if values[queueName] != nil {
             values[queueName]?[taskId] = data
@@ -42,16 +40,13 @@ public class UserDefaultsPersister: JobPersister {
             values[queueName] = [taskId: data]
         }
         store.setValue(values, forKey: key)
-        store.synchronize()
     }
 
     /// Remove a specific task from a queue
     public func remove(queueName: String, taskId: String) {
-        let store = UserDefaults()
         var values: [String: [String: String]]? = store.value(forKey: key) as? [String: [String: String]]
         values?[queueName]?.removeValue(forKey: taskId)
         store.setValue(values, forKey: key)
-        store.synchronize()
     }
 
 }

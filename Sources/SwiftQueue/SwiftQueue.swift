@@ -31,95 +31,63 @@ public protocol JobPersister {
 
 }
 
-internal final class SwiftQueue: OperationQueue {
+/// Callback to give result in synchronous or asynchronous job
+public protocol JobResult {
 
-    private let creators: [JobCreator]
-    private let persister: JobPersister?
+    /// Method callback to notify the completion of your 
+    func done(_ result: JobCompletion)
 
-    private let queueName: String
+}
 
-    init(queueName: String, creators: [JobCreator], persister: JobPersister? = nil, isPaused: Bool = false) {
-        self.creators = creators
-        self.persister = persister
-        self.queueName = queueName
+/// Enum to define possible Job completion values
+public enum JobCompletion {
 
-        super.init()
+    /// Job completed successfully
+    case success
 
-        self.isSuspended = isPaused
-        self.name = queueName
-        self.maxConcurrentOperationCount = 1
+    /// Job completed with error
+    case fail(Swift.Error)
 
-        loadSerializedTasks(name: queueName)
-    }
+}
 
-    private func loadSerializedTasks(name: String) {
-        persister?.restore(queueName: name).flatMap { string -> SwiftQueueJob? in
-            SwiftQueueJob(json: string, creator: creators)
-        }.sorted {
-            $0.info.createTime < $1.info.createTime
-        }.forEach(addOperation)
-    }
+/// Protocol to implement to run a job
+public protocol Job {
 
-    override func addOperation(_ ope: Operation) {
-        guard let job = ope as? SwiftQueueJob else {
-            // Not a job Task I don't care
-            super.addOperation(ope)
-            return
-        }
+    /// Perform your operation
+    func onRun(callback: JobResult)
 
-        do {
-            try job.willScheduleJob(queue: self)
-        } catch let error {
-            job.abort(error: error)
-            return
-        }
+    /// Fail has failed with the 
+    /// Will only gets called if the job can be retried
+    /// Not applicable for 'ConstraintError'
+    /// Not application if the retry(value) is less than 2 which is the case by default
+    func onRetry(error: Swift.Error) -> RetryConstraint
 
-        // Serialize this operation
-        if job.info.isPersisted, let sp = persister, let data = job.toJSONString() {
-            sp.put(queueName: queueName, taskId: job.info.uuid, data: data)
-        }
-        job.completionBlock = { [weak self] in
-            self?.completed(job)
-        }
-        super.addOperation(ope)
-    }
+    /// Job is removed from the queue and will never run again
+    func onRemove(result: JobCompletion)
 
-    func cancelOperations(tag: String) {
-        for operation in operations where (operation as? SwiftQueueJob)?.info.tags.contains(tag) ?? false {
-            operation.cancel()
-        }
-    }
+}
 
-    func cancelOperations(uuid: String) {
-        operations.flatMap { operation -> SwiftQueueJob? in
-            operation as? SwiftQueueJob
-        }.filter {
-            $0.info.uuid == uuid
-        }.forEach {
-            $0.cancel()
-        }
-    }
+/// Enum to specify a limit
+public enum Limit {
 
-    private func completed(_ job: SwiftQueueJob) {
-        // Remove this operation from serialization
-        if job.info.isPersisted, let sp = persister {
-            sp.remove(queueName: queueName, taskId: job.info.uuid)
-        }
+    /// No limit
+    case unlimited
 
-        job.remove()
-    }
+    /// Limited to a specific number
+    case limited(Int)
 
-    func createHandler(type: String, params: [String: Any]?) -> Job? {
-        return SwiftQueue.createHandler(creators: creators, type: type, params: params)
-    }
+}
 
-    static func createHandler(creators: [JobCreator], type: String, params: [String: Any]?) -> Job? {
-        for creator in creators {
-            if let job = creator.create(type: type, params: params) {
-                return job
-            }
-        }
-        assertionFailure("No job creator associate to job type \(type)")
-        return nil
-    }
+/// Generic class for any constraint violation
+public enum SwiftQueueError: Swift.Error {
+
+    /// Job has been canceled
+    case canceled
+
+    /// Exception thrown when a deadline is reached
+    case deadline
+
+    /// Exception thrown when you try to schedule a job with a same ID as one currently scheduled
+    case duplicate
+
 }

@@ -4,17 +4,17 @@
 
 import Foundation
 
-internal class DelayConstraint: JobConstraint {
+internal final class DelayConstraint: JobConstraint {
 
-    func willSchedule(queue: SwiftQueue, operation: SwiftQueueJob) throws {
+    func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {
         // Nothing to do
     }
 
-    func willRun(operation: SwiftQueueJob) throws {
+    func willRun(operation: SqOperation) throws {
         // Nothing to do
     }
 
-    func run(operation: SwiftQueueJob) -> Bool {
+    func run(operation: SqOperation) -> Bool {
         if let delay = operation.info.delay {
             if Date().timeIntervalSince(operation.info.createTime) < delay {
                 runInBackgroundAfter(delay, callback: { [weak operation = operation] in

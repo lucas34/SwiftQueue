@@ -26,7 +26,8 @@ class ConstraintDeadlineTests: XCTestCase {
         XCTAssertEqual(job.onRetryCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 1)
 
-        XCTAssertTrue(job.lastError is DeadlineError)
+        XCTAssertNotNil(job.lastError)
+        XCTAssertEqual(job.lastSwiftQueueError, SwiftQueueError.deadline)
     }
 
     func testDeadlineWhenRun() {
@@ -40,7 +41,7 @@ class ConstraintDeadlineTests: XCTestCase {
 
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type1)
-                .delay(time: 0.0000001)
+                .delay(time: Double.leastNonzeroMagnitude)
                 .retry(limit: .limited(5))
                 .schedule(manager: manager)
 
@@ -64,7 +65,8 @@ class ConstraintDeadlineTests: XCTestCase {
         XCTAssertEqual(job2.onRetryCalled, 0)
         XCTAssertEqual(job2.onCancelCalled, 1)
 
-        XCTAssertTrue(job2.lastError is DeadlineError)
+        XCTAssertNotNil(job2.lastError)
+        XCTAssertEqual(job2.lastSwiftQueueError, SwiftQueueError.deadline)
     }
 
     func testDeadlineWhenDeserialize() {
@@ -97,7 +99,8 @@ class ConstraintDeadlineTests: XCTestCase {
         XCTAssertEqual(job.onRetryCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 1)
 
-        XCTAssertTrue(job.lastError is DeadlineError)
+        XCTAssertNotNil(job.lastError)
+        XCTAssertEqual(job.lastSwiftQueueError, SwiftQueueError.deadline)
     }
 
     func testDeadlineAfterSchedule() {
@@ -109,7 +112,7 @@ class ConstraintDeadlineTests: XCTestCase {
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type)
                 .delay(time: 60)
-                .deadline(date: Date(timeIntervalSinceNow: TimeInterval(0.001)))
+                .deadline(date: Date(timeIntervalSinceNow: Double.leastNonzeroMagnitude))
                 .retry(limit: .unlimited)
                 .schedule(manager: manager)
 
@@ -121,7 +124,8 @@ class ConstraintDeadlineTests: XCTestCase {
         XCTAssertEqual(job.onRetryCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 1)
 
-        XCTAssertTrue(job.lastError is DeadlineError)
+        XCTAssertNotNil(job.lastError)
+        XCTAssertEqual(job.lastSwiftQueueError, SwiftQueueError.deadline)
     }
 
 }

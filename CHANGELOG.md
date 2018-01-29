@@ -1,9 +1,29 @@
 # Change Log
 
+## [DEVELOPEMENT](https://github.com/lucas34/SwiftQueue/tree/1.4.2)
+
+#### Breaking Changes
+- Change Error type to follow enum pattern (#68) 
+    - TaskAlreadyExist -> SwiftQueueError.Duplicate
+    - DealineError -> SwiftQueueError.Deadline
+    - Canceled -> SwiftQueueError.Canceled
+
+#### Improvement
+- Performance improvement in for-loops
+
+#### Internal changes
+- `SwiftQueue` has been renamed `SqOperationQueue`
+- `SwiftQueueJob` -> `SqOperation`
+- `JobBuilder` has moved to its own class
+- SwiftQueue.swift reference all public protocols
+
+#### Misc
+- Support BUCK build
+
 ## [v1.4.1](https://github.com/lucas34/SwiftQueue/tree/1.4.1)
 
 #### Bug fix 
-- Fix an issue where a periodic job will not be re-scheduled #63
+- Fix an issue where a periodic job will not be re-scheduled (#63)
 - Validate dictionary args only if persistence is required (#61)
 
 #### Other changes

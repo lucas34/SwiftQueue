@@ -11,27 +11,21 @@ internal protocol JobConstraint {
         - Operation will be added to the queue
         Raise exception if the job cannot run
     */
-    func willSchedule(queue: SwiftQueue, operation: SwiftQueueJob) throws
+    func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws
 
     /**
         - Operation will run
         Raise exception if the job cannot run anymore
     */
-    func willRun(operation: SwiftQueueJob) throws
+    func willRun(operation: SqOperation) throws
 
     /**
         - Operation will run
         Return false if the job cannot run immediately
     */
-    func run(operation: SwiftQueueJob) -> Bool
+    func run(operation: SqOperation) -> Bool
 
 }
-
-/// Generic class for any constraint violation
-public class ConstraintError: Swift.Error {}
-
-/// Job has been canceled
-public class Canceled: Swift.Error {}
 
 /// Behaviour for retrying the job
 public enum RetryConstraint {

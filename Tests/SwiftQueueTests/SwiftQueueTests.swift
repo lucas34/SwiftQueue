@@ -92,7 +92,8 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertEqual(job.onRetryCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 1)
 
-        XCTAssertTrue(job.lastError is Canceled)
+        XCTAssertNotNil(job.lastError)
+        XCTAssertEqual(job.lastSwiftQueueError, SwiftQueueError.canceled)
 
         XCTAssertEqual(0, persister.putQueueName.count)
         XCTAssertEqual(0, persister.putJobUUID.count)
@@ -140,7 +141,7 @@ class SwiftQueueManagerTests: XCTestCase {
     }
 
     func testAddOperationNotJobTask() {
-        let queue = SwiftQueue(queueName: UUID().uuidString, creators: [])
+        let queue = SqOperationQueue(queueName: UUID().uuidString, creators: [])
         let operation = Operation()
         queue.addOperation(operation) // Should not crash
     }
