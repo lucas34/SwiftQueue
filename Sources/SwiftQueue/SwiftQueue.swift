@@ -77,3 +77,19 @@ public enum Limit {
     case limited(Int)
 
 }
+
+/// Generic class for any constraint violation
+public enum SwiftQueueError: Swift.Error {
+
+    /// Job has been canceled
+    case Canceled
+
+    /// Exception thrown when a deadline is reached
+    case Deadline
+
+    /// Exception thrown when you try to schedule a job with a same ID as one currently scheduled
+    case Duplicate
+    
+}
+
+

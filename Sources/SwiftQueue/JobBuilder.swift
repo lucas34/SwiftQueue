@@ -16,7 +16,7 @@ public final class JobBuilder {
     }
 
     /// Allow only 1 job at the time with this ID scheduled or running
-    /// Same job scheduled with same id will result in onRemove(TaskAlreadyExist) if override = false
+    /// Same job scheduled with same id will result in onRemove(SwiftQueueError.duplicate) if override = false
     /// If override = true the previous job will be canceled and the new job will be scheduled
     public func singleInstance(forId: String, override: Bool = false) -> Self {
         assertNotEmptyString(forId)
@@ -40,7 +40,8 @@ public final class JobBuilder {
         return self
     }
 
-    /// Job should be removed from the queue after a certain date
+    /// If the job hasn't run after the date, It will be removed
+    /// will call onRemove(SwiftQueueError.deadline)
     public func deadline(date: Date) -> Self {
         info.deadline = date
         return self

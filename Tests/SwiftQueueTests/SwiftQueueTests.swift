@@ -92,7 +92,8 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertEqual(job.onRetryCalled, 0)
         XCTAssertEqual(job.onCancelCalled, 1)
 
-        XCTAssertTrue(job.lastError is Canceled)
+        XCTAssertNotNil(job.lastError)
+        XCTAssertEqual(job.lastSwiftQueueError, SwiftQueueError.Canceled)
 
         XCTAssertEqual(0, persister.putQueueName.count)
         XCTAssertEqual(0, persister.putJobUUID.count)

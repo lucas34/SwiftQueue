@@ -27,12 +27,6 @@ internal protocol JobConstraint {
 
 }
 
-/// Generic class for any constraint violation
-open class ConstraintError: Swift.Error {}
-
-/// Job has been canceled
-public final class Canceled: Swift.Error {}
-
 /// Behaviour for retrying the job
 public enum RetryConstraint {
     /// Retry after a certain time. If set to 0 it will retry immediately

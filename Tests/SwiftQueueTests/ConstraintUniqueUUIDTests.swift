@@ -34,7 +34,8 @@ class ConstraintUniqueUUIDTests: XCTestCase {
         XCTAssertEqual(job2.onRetryCalled, 0)
         XCTAssertEqual(job2.onCancelCalled, 1)
 
-        XCTAssertTrue(job2.lastError is TaskAlreadyExist)
+        XCTAssertNotNil(job2.lastError)
+        XCTAssertEqual(job2.lastSwiftQueueError, SwiftQueueError.Duplicate)
 
         manager.cancelAllOperations()
         manager.waitUntilAllOperationsAreFinished()

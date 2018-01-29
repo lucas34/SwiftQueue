@@ -14,6 +14,10 @@ class TestJob: Job {
 
     public var lastError: Error?
 
+    public var lastSwiftQueueError: SwiftQueueError? {
+        return lastError as? SwiftQueueError
+    }
+
     public var onRunJobCalled = 0
     public var onRetryCalled = 0
     public var onCompleteCalled = 0
