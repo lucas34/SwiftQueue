@@ -20,6 +20,11 @@
 #### Misc
 - Support BUCK build
 
+#### Other changes
+- Remove unavailable methods
+    - `func retry(Int)`
+    - `func periodic(Int, TimeInterval)`
+
 ## [v1.4.1](https://github.com/lucas34/SwiftQueue/tree/1.4.1)
 
 #### Bug fix 
