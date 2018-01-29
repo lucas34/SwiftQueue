@@ -35,7 +35,7 @@ class ConstraintUniqueUUIDTests: XCTestCase {
         XCTAssertEqual(job2.onCancelCalled, 1)
 
         XCTAssertNotNil(job2.lastError)
-        XCTAssertEqual(job2.lastSwiftQueueError, SwiftQueueError.Duplicate)
+        XCTAssertEqual(job2.lastSwiftQueueError, SwiftQueueError.duplicate)
 
         manager.cancelAllOperations()
         manager.waitUntilAllOperationsAreFinished()

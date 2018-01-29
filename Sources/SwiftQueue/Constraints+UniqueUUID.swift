@@ -15,7 +15,7 @@ internal final class UniqueUUIDConstraint: JobConstraint {
         } else {
             for op in queue.operations where op.name == operation.info.uuid {
                 // Cancel new job
-                throw SwiftQueueError.Duplicate
+                throw SwiftQueueError.duplicate
             }
         }
     }

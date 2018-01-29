@@ -82,13 +82,13 @@ public enum Limit {
 public enum SwiftQueueError: Swift.Error {
 
     /// Job has been canceled
-    case Canceled
+    case canceled
 
     /// Exception thrown when a deadline is reached
-    case Deadline
+    case deadline
 
     /// Exception thrown when you try to schedule a job with a same ID as one currently scheduled
-    case Duplicate
+    case duplicate
     
 }
 

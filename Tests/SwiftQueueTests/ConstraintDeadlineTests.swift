@@ -27,7 +27,7 @@ class ConstraintDeadlineTests: XCTestCase {
         XCTAssertEqual(job.onCancelCalled, 1)
 
         XCTAssertNotNil(job.lastError)
-        XCTAssertEqual(job.lastSwiftQueueError, SwiftQueueError.Deadline)
+        XCTAssertEqual(job.lastSwiftQueueError, SwiftQueueError.deadline)
     }
 
     func testDeadlineWhenRun() {
@@ -66,7 +66,7 @@ class ConstraintDeadlineTests: XCTestCase {
         XCTAssertEqual(job2.onCancelCalled, 1)
 
         XCTAssertNotNil(job2.lastError)
-        XCTAssertEqual(job2.lastSwiftQueueError, SwiftQueueError.Deadline)
+        XCTAssertEqual(job2.lastSwiftQueueError, SwiftQueueError.deadline)
     }
 
     func testDeadlineWhenDeserialize() {
@@ -100,7 +100,7 @@ class ConstraintDeadlineTests: XCTestCase {
         XCTAssertEqual(job.onCancelCalled, 1)
 
         XCTAssertNotNil(job.lastError)
-        XCTAssertEqual(job.lastSwiftQueueError, SwiftQueueError.Deadline)
+        XCTAssertEqual(job.lastSwiftQueueError, SwiftQueueError.deadline)
     }
 
     func testDeadlineAfterSchedule() {
@@ -125,7 +125,7 @@ class ConstraintDeadlineTests: XCTestCase {
         XCTAssertEqual(job.onCancelCalled, 1)
 
         XCTAssertNotNil(job.lastError)
-        XCTAssertEqual(job.lastSwiftQueueError, SwiftQueueError.Deadline)
+        XCTAssertEqual(job.lastSwiftQueueError, SwiftQueueError.deadline)
     }
 
 }

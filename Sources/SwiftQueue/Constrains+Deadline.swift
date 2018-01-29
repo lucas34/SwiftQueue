@@ -25,7 +25,7 @@ internal final class DeadlineConstraint: JobConstraint {
 
     private func check(operation: SqOperation) throws {
         if let deadline = operation.info.deadline, deadline < Date() {
-            throw SwiftQueueError.Deadline
+            throw SwiftQueueError.deadline
         }
     }
 }

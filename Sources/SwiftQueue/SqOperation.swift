@@ -61,7 +61,7 @@ internal final class SqOperation: Operation {
     }
 
     override func cancel() {
-        lastError = SwiftQueueError.Canceled
+        lastError = SwiftQueueError.canceled
         onTerminate()
         super.cancel()
     }
