@@ -21,18 +21,12 @@ class StartStopTests: XCTestCase {
         JobBuilder(type: type).schedule(manager: manager)
 
         // No run
-        XCTAssertEqual(job.onRunJobCalled, 0)
-        XCTAssertEqual(job.onCompleteCalled, 0)
-        XCTAssertEqual(job.onRetryCalled, 0)
-        XCTAssertEqual(job.onCancelCalled, 0)
+        job.assertNoRun()
 
         manager.start()
-        job.await()
 
-        XCTAssertEqual(job.onRunJobCalled, 1)
-        XCTAssertEqual(job.onCompleteCalled, 1)
-        XCTAssertEqual(job.onRetryCalled, 0)
-        XCTAssertEqual(job.onCancelCalled, 0)
+        job.awaitForRemoval()
+        job.assertSingleCompletion()
     }
 
     func testSchedulePeriodicJobThenStart() {
@@ -48,10 +42,7 @@ class StartStopTests: XCTestCase {
         JobBuilder(type: type).periodic(limit: .limited(4), interval: 0).schedule(manager: manager)
 
         // No run
-        XCTAssertEqual(job.onRunJobCalled, 0)
-        XCTAssertEqual(job.onCompleteCalled, 0)
-        XCTAssertEqual(job.onRetryCalled, 0)
-        XCTAssertEqual(job.onCancelCalled, 0)
+        job.assertNoRun()
 
         manager.start()
         manager.start()
@@ -60,12 +51,14 @@ class StartStopTests: XCTestCase {
         manager.start()
         manager.start()
         manager.start()
-        job.await()
 
-        XCTAssertEqual(job.onRunJobCalled, 4)
-        XCTAssertEqual(job.onCompleteCalled, 1)
-        XCTAssertEqual(job.onRetryCalled, 0)
-        XCTAssertEqual(job.onCancelCalled, 0)
+        job.awaitForRemoval()
+
+        job.assertRunCount(expected: 4)
+        job.assertCompletedCount(expected: 1)
+        job.assertRetriedCount(expected: 0)
+        job.assertCanceledCount(expected: 0)
+        job.assertNoError()
     }
 
     func testPauseQueue() {
@@ -86,27 +79,16 @@ class StartStopTests: XCTestCase {
 
         JobBuilder(type: type2).schedule(manager: manager)
 
-        job1.await()
-
-        XCTAssertEqual(job1.onRunJobCalled, 1)
-        XCTAssertEqual(job1.onCompleteCalled, 1)
-        XCTAssertEqual(job1.onRetryCalled, 0)
-        XCTAssertEqual(job1.onCancelCalled, 0)
+        job1.awaitForRemoval()
+        job1.assertSingleCompletion()
 
         // Not run yet
-        XCTAssertEqual(job2.onRunJobCalled, 0)
-        XCTAssertEqual(job2.onCompleteCalled, 0)
-        XCTAssertEqual(job2.onRetryCalled, 0)
-        XCTAssertEqual(job2.onCancelCalled, 0)
+        job2.assertNoRun()
 
         manager.start()
-        job2.await()
 
-        XCTAssertEqual(job2.onRunJobCalled, 1)
-        XCTAssertEqual(job2.onCompleteCalled, 1)
-        XCTAssertEqual(job2.onRetryCalled, 0)
-        XCTAssertEqual(job2.onCancelCalled, 0)
-
+        job2.awaitForRemoval()
+        job2.assertSingleCompletion()
     }
 
 }

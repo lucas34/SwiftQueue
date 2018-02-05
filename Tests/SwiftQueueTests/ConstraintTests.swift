@@ -19,12 +19,12 @@ class ConstraintTests: XCTestCase {
                 .periodic(limit: .limited(5))
                 .schedule(manager: manager)
 
-        job.await()
-
-        XCTAssertEqual(job.onRunJobCalled, 5)
-        XCTAssertEqual(job.onCompleteCalled, 1)
-        XCTAssertEqual(job.onRetryCalled, 0)
-        XCTAssertEqual(job.onCancelCalled, 0)
+        job.awaitForRemoval()
+        job.assertRunCount(expected: 5)
+        job.assertCompletedCount(expected: 1)
+        job.assertRetriedCount(expected: 0)
+        job.assertCanceledCount(expected: 0)
+        job.assertNoError()
     }
 
     func testPeriodicJobUnlimited() {
@@ -39,133 +39,116 @@ class ConstraintTests: XCTestCase {
                 .schedule(manager: manager)
 
         // Should run at least 100 times
-        job.awaitRun(value: 1000)
+        job.awaitForRun(value: 10000)
+        job.assertRunCount(atLeast: 50)
+        job.assertCompletedCount(expected: 0)
+        job.assertRetriedCount(expected: 0)
+        job.assertCanceledCount(expected: 0)
+        job.assertNoError()
 
-        // Semaphore is async so the value is un-predicable
-        XCTAssertTrue(job.onRunJobCalled > 50)
-        XCTAssertEqual(job.onCompleteCalled, 0)
-        XCTAssertEqual(job.onRetryCalled, 0)
-        XCTAssertEqual(job.onCancelCalled, 0)
     }
 
     func testRetryFailJobWithRetryConstraint() {
-        let job = TestJob()
+        let job = TestJob(completion: .fail(JobError()), retry: .retry(delay: 0))
         let type = UUID().uuidString
 
         let creator = TestCreator([type: job])
-
-        job.result = JobError()
-        job.retryConstraint = .retry(delay: 0)
 
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type)
                 .retry(limit: .limited(2))
                 .schedule(manager: manager)
 
-        job.await()
-
-        XCTAssertEqual(job.onRunJobCalled, 3)
-        XCTAssertEqual(job.onCompleteCalled, 0)
-        XCTAssertEqual(job.onRetryCalled, 2)
-        XCTAssertEqual(job.onCancelCalled, 1)
+        job.awaitForRemoval()
+        job.assertRunCount(expected: 3)
+        job.assertCompletedCount(expected: 0)
+        job.assertRetriedCount(expected: 2)
+        job.assertCanceledCount(expected: 1)
+        job.assertError()
     }
 
     func testRetryFailJobWithRetryDelayConstraint() {
-        let job = TestJob()
+        let job = TestJob(completion: .fail(JobError()), retry: .retry(delay: Double.leastNonzeroMagnitude))
         let type = UUID().uuidString
 
         let creator = TestCreator([type: job])
-
-        job.result = JobError()
-        job.retryConstraint = .retry(delay: Double.leastNonzeroMagnitude)
 
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type)
                 .retry(limit: .limited(2))
                 .schedule(manager: manager)
 
-        job.await()
-
-        XCTAssertEqual(job.onRunJobCalled, 3)
-        XCTAssertEqual(job.onCompleteCalled, 0)
-        XCTAssertEqual(job.onRetryCalled, 2)
-        XCTAssertEqual(job.onCancelCalled, 1)
+        job.awaitForRemoval()
+        job.assertRunCount(expected: 3)
+        job.assertCompletedCount(expected: 0)
+        job.assertRetriedCount(expected: 2)
+        job.assertCanceledCount(expected: 1)
+        job.assertError()
     }
 
     func testRetryUnlimitedShouldRetryManyTimes() {
-        let job = TestJob()
+        let job = TestJob(completion: .fail(JobError()), retry: .retry(delay: 0))
         let type = UUID().uuidString
 
         let creator = TestCreator([type: job])
-
-        job.result = JobError()
-        job.retryConstraint = .retry(delay: 0)
 
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type)
                 .retry(limit: .unlimited)
                 .schedule(manager: manager)
 
-        job.awaitRun(value: 10000)
-
-        XCTAssertTrue(job.onRunJobCalled > 50)
-        XCTAssertEqual(job.onCompleteCalled, 0)
-        XCTAssertTrue(job.onRetryCalled > 50)
-        XCTAssertEqual(job.onCancelCalled, 0)
+        job.awaitForRun(value: 10000)
+        job.assertRunCount(atLeast: 50)
+        job.assertCompletedCount(expected: 0)
+        job.assertRetriedCount(atLeast: 50)
+        job.assertCanceledCount(expected: 0)
+        job.assertError()
     }
 
     func testRetryFailJobWithCancelConstraint() {
-        let job = TestJob()
+        let job = TestJob(completion: .fail(JobError()), retry: .cancel)
         let type = UUID().uuidString
 
         let creator = TestCreator([type: job])
-
-        job.result = JobError()
-        job.retryConstraint = .cancel
 
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type)
                 .retry(limit: .limited(2))
                 .schedule(manager: manager)
 
-        job.await()
-
-        XCTAssertEqual(job.onRunJobCalled, 1)
-        XCTAssertEqual(job.onCompleteCalled, 0)
-        XCTAssertEqual(job.onRetryCalled, 1)
-        XCTAssertEqual(job.onCancelCalled, 1)
+        job.awaitForRemoval()
+        job.assertRunCount(expected: 1)
+        job.assertCompletedCount(expected: 0)
+        job.assertRetriedCount(expected: 1)
+        job.assertCanceledCount(expected: 1)
+        // TODO here the error is not forwared
+        job.assertError(queueError: .canceled)
     }
 
     func testRetryFailJobWithExponentialConstraint() {
-        let job = TestJob()
+        let job = TestJob(completion: .fail(JobError()), retry: .exponential(initial: 0))
         let type = UUID().uuidString
 
         let creator = TestCreator([type: job])
-
-        job.result = JobError()
-        job.retryConstraint = .exponential(initial: 0)
 
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type)
                 .retry(limit: .limited(2))
                 .schedule(manager: manager)
 
-        job.await()
-
-        XCTAssertEqual(job.onRunJobCalled, 3)
-        XCTAssertEqual(job.onCompleteCalled, 0)
-        XCTAssertEqual(job.onRetryCalled, 2)
-        XCTAssertEqual(job.onCancelCalled, 1)
+        job.awaitForRemoval()
+        job.assertRunCount(expected: 3)
+        job.assertCompletedCount(expected: 0)
+        job.assertRetriedCount(expected: 2)
+        job.assertCanceledCount(expected: 1)
+        job.assertError()
     }
 
     func testRepeatableJobWithExponentialBackoffRetry() {
-        let job = TestJob()
         let type = UUID().uuidString
+        let job = TestJob(completion: .fail(JobError()), retry: .exponential(initial: Double.leastNonzeroMagnitude))
 
         let creator = TestCreator([type: job])
-
-        job.result = JobError()
-        job.retryConstraint = RetryConstraint.exponential(initial: Double.leastNonzeroMagnitude)
 
         let manager = SwiftQueueManager(creators: [creator])
         JobBuilder(type: type)
@@ -173,12 +156,12 @@ class ConstraintTests: XCTestCase {
                 .periodic()
                 .schedule(manager: manager)
 
-        job.await()
-
-        XCTAssertEqual(job.onRunJobCalled, 2)
-        XCTAssertEqual(job.onCompleteCalled, 0)
-        XCTAssertEqual(job.onRetryCalled, 1)
-        XCTAssertEqual(job.onCancelCalled, 1)
+        job.awaitForRemoval()
+        job.assertRunCount(expected: 2)
+        job.assertCompletedCount(expected: 0)
+        job.assertRetriedCount(expected: 1)
+        job.assertCanceledCount(expected: 1)
+        job.assertError()
     }
 
     func testRepeatableJobWithDelay() {
@@ -192,12 +175,12 @@ class ConstraintTests: XCTestCase {
                 .periodic(limit: .limited(2), interval: Double.leastNonzeroMagnitude)
                 .schedule(manager: manager)
 
-        job.await()
-
-        XCTAssertEqual(job.onRunJobCalled, 2)
-        XCTAssertEqual(job.onCompleteCalled, 1)
-        XCTAssertEqual(job.onRetryCalled, 0)
-        XCTAssertEqual(job.onCancelCalled, 0)
+        job.awaitForRemoval()
+        job.assertRunCount(expected: 2)
+        job.assertCompletedCount(expected: 1)
+        job.assertRetriedCount(expected: 0)
+        job.assertCanceledCount(expected: 0)
+        job.assertNoError()
     }
 
     func testCancelRunningOperation() {
@@ -210,16 +193,16 @@ class ConstraintTests: XCTestCase {
         JobBuilder(type: type)
                 .schedule(manager: manager)
 
-        runInBackgroundAfter(Double.leastNonzeroMagnitude) {
+        runInBackgroundAfter(0.01) {
             manager.cancelAllOperations()
         }
 
-        job.await()
-
-        XCTAssertEqual(job.onRunJobCalled, 1)
-        XCTAssertEqual(job.onCompleteCalled, 0)
-        XCTAssertEqual(job.onRetryCalled, 0)
-        XCTAssertEqual(job.onCancelCalled, 1)
+        job.awaitForRemoval()
+        job.assertRunCount(expected: 1)
+        job.assertCompletedCount(expected: 0)
+        job.assertRetriedCount(expected: 0)
+        job.assertCanceledCount(expected: 1)
+        job.assertError(queueError: .canceled)
     }
 
     func testCancelRunningOperationByTag() {
@@ -235,15 +218,15 @@ class ConstraintTests: XCTestCase {
                 .addTag(tag: tag)
                 .schedule(manager: manager)
 
-        runInBackgroundAfter(Double.leastNonzeroMagnitude) {
+        runInBackgroundAfter(0.01) {
             manager.cancelOperations(tag: tag)
         }
 
-        job.await()
-
-        XCTAssertEqual(job.onRunJobCalled, 1)
-        XCTAssertEqual(job.onCompleteCalled, 0)
-        XCTAssertEqual(job.onRetryCalled, 0)
-        XCTAssertEqual(job.onCancelCalled, 1)
+        job.awaitForRemoval()
+        job.assertRunCount(expected: 1)
+        job.assertCompletedCount(expected: 0)
+        job.assertRetriedCount(expected: 0)
+        job.assertCanceledCount(expected: 1)
+        job.assertError(queueError: .canceled)
     }
 }
