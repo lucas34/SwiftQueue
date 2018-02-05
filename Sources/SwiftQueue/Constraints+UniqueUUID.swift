@@ -10,7 +10,7 @@ internal final class UniqueUUIDConstraint: JobConstraint {
         if operation.info.override {
             for op in queue.operations where op.name == operation.info.uuid {
                 // Cancel previous job
-                queue.cancelOperations(uuid: operation.info.uuid)
+                op.cancel()
             }
         } else {
             for op in queue.operations where op.name == operation.info.uuid {
