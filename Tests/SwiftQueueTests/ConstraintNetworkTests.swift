@@ -21,12 +21,8 @@ class ConstraintNetworkTests: XCTestCase {
                 .internet(atLeast: .cellular)
                 .schedule(manager: manager)
 
-        job.await()
-
-        XCTAssertEqual(job.onRunJobCalled, 1)
-        XCTAssertEqual(job.onCompleteCalled, 1)
-        XCTAssertEqual(job.onRetryCalled, 0)
-        XCTAssertEqual(job.onCancelCalled, 0)
+        job.awaitForRemoval()
+        job.assertSingleCompletion()
     }
 
     func testNetworkConstraintWifi() {
@@ -40,12 +36,8 @@ class ConstraintNetworkTests: XCTestCase {
                 .internet(atLeast: .wifi)
                 .schedule(manager: manager)
 
-        job.await()
-
-        XCTAssertEqual(job.onRunJobCalled, 1)
-        XCTAssertEqual(job.onCompleteCalled, 1)
-        XCTAssertEqual(job.onRetryCalled, 0)
-        XCTAssertEqual(job.onCancelCalled, 0)
+        job.awaitForRemoval()
+        job.assertSingleCompletion()
     }
 
 }

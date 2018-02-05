@@ -53,19 +53,11 @@ class SerializerTests: XCTestCase {
 
         XCTAssertEqual(queueId, persister.restoreQueueName)
 
-        job1.await()
+        job1.awaitForRemoval()
+        job1.assertSingleCompletion()
 
-        XCTAssertEqual(job1.onRunJobCalled, 1)
-        XCTAssertEqual(job1.onCompleteCalled, 1)
-        XCTAssertEqual(job1.onRetryCalled, 0)
-        XCTAssertEqual(job1.onCancelCalled, 0)
-
-        job2.await()
-
-        XCTAssertEqual(job2.onRunJobCalled, 1)
-        XCTAssertEqual(job2.onCompleteCalled, 1)
-        XCTAssertEqual(job2.onRetryCalled, 0)
-        XCTAssertEqual(job2.onCancelCalled, 0)
+        job2.awaitForRemoval()
+        job2.assertSingleCompletion()
 
         manager.waitUntilAllOperationsAreFinished()
     }
@@ -103,18 +95,11 @@ class SerializerTests: XCTestCase {
 
         manager.cancelAllOperations()
 
-        job1.await()
-        job2.await()
+        job1.awaitForRemoval()
+        job2.awaitForRemoval()
 
-        XCTAssertEqual(job1.onRunJobCalled, 0)
-        XCTAssertEqual(job1.onCompleteCalled, 0)
-        XCTAssertEqual(job1.onRetryCalled, 0)
-        XCTAssertEqual(job1.onCancelCalled, 1)
-
-        XCTAssertEqual(job2.onRunJobCalled, 0)
-        XCTAssertEqual(job2.onCompleteCalled, 0)
-        XCTAssertEqual(job2.onRetryCalled, 0)
-        XCTAssertEqual(job2.onCancelCalled, 1)
+        job1.assertRemovedBeforeRun(reason: .canceled)
+        job2.assertRemovedBeforeRun(reason: .canceled)
 
         XCTAssertEqual([id1, id2], persister.removeJobUUID)
         XCTAssertEqual([group, group], persister.removeQueueName)
@@ -139,12 +124,8 @@ class SerializerTests: XCTestCase {
                 .persist(required: true)
                 .schedule(manager: manager)
 
-        job.await()
-
-        XCTAssertEqual(job.onRunJobCalled, 1)
-        XCTAssertEqual(job.onCompleteCalled, 1)
-        XCTAssertEqual(job.onRetryCalled, 0)
-        XCTAssertEqual(job.onCancelCalled, 0)
+        job.awaitForRemoval()
+        job.assertSingleCompletion()
 
         XCTAssertEqual([taskID], persister.removeJobUUID)
         XCTAssertEqual([queueId], persister.removeQueueName)
@@ -153,10 +134,8 @@ class SerializerTests: XCTestCase {
     func testCompleteFailTaskRemoveFromSerializer() {
         let queueId = UUID().uuidString
 
-        let job = TestJob()
+        let job = TestJob(completion: .fail(JobError()))
         let type = UUID().uuidString
-
-        job.result = JobError()
 
         let creator = TestCreator([type: job])
 
@@ -171,12 +150,12 @@ class SerializerTests: XCTestCase {
                 .persist(required: true)
                 .schedule(manager: manager)
 
-        job.await()
-
-        XCTAssertEqual(job.onRunJobCalled, 1)
-        XCTAssertEqual(job.onCompleteCalled, 0)
-        XCTAssertEqual(job.onRetryCalled, 0)
-        XCTAssertEqual(job.onCancelCalled, 1)
+        job.awaitForRemoval()
+        job.assertRunCount(expected: 1)
+        job.assertCompletedCount(expected: 0)
+        job.assertRetriedCount(expected: 0)
+        job.assertCanceledCount(expected: 1)
+        job.assertError()
 
         XCTAssertEqual([taskID], persister.removeJobUUID)
         XCTAssertEqual([queueId], persister.removeQueueName)
@@ -194,12 +173,9 @@ class SerializerTests: XCTestCase {
         JobBuilder(type: type)
                 .schedule(manager: manager)
 
-        job.await()
+        job.awaitForRemoval()
 
-        XCTAssertEqual(job.onRunJobCalled, 1)
-        XCTAssertEqual(job.onCompleteCalled, 1)
-        XCTAssertEqual(job.onRetryCalled, 0)
-        XCTAssertEqual(job.onCancelCalled, 0)
+        job.assertSingleCompletion()
 
         XCTAssertEqual(0, persister.putQueueName.count)
         XCTAssertEqual(0, persister.putJobUUID.count)
@@ -231,12 +207,8 @@ class SerializerTests: XCTestCase {
 
         manager.cancelOperations(tag: tag)
 
-        job.await()
-
-        XCTAssertEqual(job.onRunJobCalled, 0)
-        XCTAssertEqual(job.onCompleteCalled, 0)
-        XCTAssertEqual(job.onRetryCalled, 0)
-        XCTAssertEqual(job.onCancelCalled, 1)
+        job.awaitForRemoval()
+        job.assertRemovedBeforeRun(reason: .canceled)
 
         XCTAssertEqual([id], persister.removeJobUUID)
         XCTAssertEqual([group], persister.removeQueueName)

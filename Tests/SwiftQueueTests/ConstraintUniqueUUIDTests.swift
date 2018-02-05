@@ -27,15 +27,8 @@ class ConstraintUniqueUUIDTests: XCTestCase {
 
         JobBuilder(type: type2).singleInstance(forId: id).schedule(manager: manager)
 
-        job2.await()
-
-        XCTAssertEqual(job2.onRunJobCalled, 0)
-        XCTAssertEqual(job2.onCompleteCalled, 0)
-        XCTAssertEqual(job2.onRetryCalled, 0)
-        XCTAssertEqual(job2.onCancelCalled, 1)
-
-        XCTAssertNotNil(job2.lastError)
-        XCTAssertEqual(job2.lastSwiftQueueError, SwiftQueueError.duplicate)
+        job2.awaitForRemoval()
+        job2.assertRemovedBeforeRun(reason: .duplicate)
 
         manager.cancelAllOperations()
         manager.waitUntilAllOperationsAreFinished()
@@ -62,17 +55,11 @@ class ConstraintUniqueUUIDTests: XCTestCase {
                 .singleInstance(forId: id, override: true)
                 .schedule(manager: manager)
 
-        job2.await()
+        job1.awaitForRemoval()
+        job1.assertRemovedBeforeRun(reason: .canceled)
 
-        XCTAssertEqual(job1.onRunJobCalled, 0)
-        XCTAssertEqual(job1.onCompleteCalled, 0)
-        XCTAssertEqual(job1.onRetryCalled, 0)
-        XCTAssertEqual(job1.onCancelCalled, 1)
-
-        XCTAssertEqual(job2.onRunJobCalled, 1)
-        XCTAssertEqual(job2.onCompleteCalled, 1)
-        XCTAssertEqual(job2.onRetryCalled, 0)
-        XCTAssertEqual(job2.onCancelCalled, 0)
+        job2.awaitForRemoval()
+        job2.assertSingleCompletion()
 
         manager.cancelAllOperations()
         manager.waitUntilAllOperationsAreFinished()

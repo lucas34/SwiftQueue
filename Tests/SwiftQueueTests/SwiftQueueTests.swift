@@ -20,12 +20,8 @@ class SwiftQueueManagerTests: XCTestCase {
                 .internet(atLeast: .wifi)
                 .schedule(manager: manager)
 
-        job.await()
-
-        XCTAssertEqual(job.onRunJobCalled, 1)
-        XCTAssertEqual(job.onCompleteCalled, 1)
-        XCTAssertEqual(job.onRetryCalled, 0)
-        XCTAssertEqual(job.onCancelCalled, 0)
+        job.awaitForRemoval()
+        job.assertSingleCompletion()
     }
 
     func testCancelWithTag() {
@@ -50,12 +46,8 @@ class SwiftQueueManagerTests: XCTestCase {
 
         manager.cancelOperations(tag: tag)
 
-        job.await()
-
-        XCTAssertEqual(job.onRunJobCalled, 0)
-        XCTAssertEqual(job.onCompleteCalled, 0)
-        XCTAssertEqual(job.onRetryCalled, 0)
-        XCTAssertEqual(job.onCancelCalled, 1)
+        job.awaitForRemoval()
+        job.assertRemovedBeforeRun(reason: .canceled)
 
         XCTAssertEqual(0, persister.putQueueName.count)
         XCTAssertEqual(0, persister.putJobUUID.count)
@@ -85,15 +77,8 @@ class SwiftQueueManagerTests: XCTestCase {
 
         manager.cancelOperations(uuid: id)
 
-        job.await()
-
-        XCTAssertEqual(job.onRunJobCalled, 0)
-        XCTAssertEqual(job.onCompleteCalled, 0)
-        XCTAssertEqual(job.onRetryCalled, 0)
-        XCTAssertEqual(job.onCancelCalled, 1)
-
-        XCTAssertNotNil(job.lastError)
-        XCTAssertEqual(job.lastSwiftQueueError, SwiftQueueError.canceled)
+        job.awaitForRemoval()
+        job.assertRemovedBeforeRun(reason: .canceled)
 
         XCTAssertEqual(0, persister.putQueueName.count)
         XCTAssertEqual(0, persister.putJobUUID.count)
@@ -125,12 +110,8 @@ class SwiftQueueManagerTests: XCTestCase {
 
         manager.cancelAllOperations()
 
-        job.await()
-
-        XCTAssertEqual(job.onRunJobCalled, 0)
-        XCTAssertEqual(job.onCompleteCalled, 0)
-        XCTAssertEqual(job.onRetryCalled, 0)
-        XCTAssertEqual(job.onCancelCalled, 1)
+        job.awaitForRemoval()
+        job.assertRemovedBeforeRun(reason: .canceled)
 
         XCTAssertEqual(0, persister.putQueueName.count)
         XCTAssertEqual(0, persister.putJobUUID.count)

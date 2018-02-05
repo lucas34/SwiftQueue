@@ -19,15 +19,8 @@ class ConstraintDeadlineTests: XCTestCase {
                 .deadline(date: Date(timeIntervalSinceNow: TimeInterval(-10)))
                 .schedule(manager: manager)
 
-        job.await()
-
-        XCTAssertEqual(job.onRunJobCalled, 0)
-        XCTAssertEqual(job.onCompleteCalled, 0)
-        XCTAssertEqual(job.onRetryCalled, 0)
-        XCTAssertEqual(job.onCancelCalled, 1)
-
-        XCTAssertNotNil(job.lastError)
-        XCTAssertEqual(job.lastSwiftQueueError, SwiftQueueError.deadline)
+        job.awaitForRemoval()
+        job.assertRemovedBeforeRun(reason: .deadline)
     }
 
     func testDeadlineWhenRun() {
@@ -51,22 +44,12 @@ class ConstraintDeadlineTests: XCTestCase {
                 .schedule(manager: manager)
 
         manager.waitUntilAllOperationsAreFinished()
-        job1.await()
 
-        XCTAssertEqual(job1.onRunJobCalled, 1)
-        XCTAssertEqual(job1.onCompleteCalled, 1)
-        XCTAssertEqual(job1.onRetryCalled, 0)
-        XCTAssertEqual(job1.onCancelCalled, 0)
+        job1.awaitForRemoval()
+        job1.assertSingleCompletion()
 
-        job2.await()
-
-        XCTAssertEqual(job2.onRunJobCalled, 0)
-        XCTAssertEqual(job2.onCompleteCalled, 0)
-        XCTAssertEqual(job2.onRetryCalled, 0)
-        XCTAssertEqual(job2.onCancelCalled, 1)
-
-        XCTAssertNotNil(job2.lastError)
-        XCTAssertEqual(job2.lastSwiftQueueError, SwiftQueueError.deadline)
+        job2.awaitForRemoval()
+        job2.assertRemovedBeforeRun(reason: .deadline)
     }
 
     func testDeadlineWhenDeserialize() {
@@ -92,15 +75,8 @@ class ConstraintDeadlineTests: XCTestCase {
 
         XCTAssertEqual(group, persister.restoreQueueName)
 
-        job.await()
-
-        XCTAssertEqual(job.onRunJobCalled, 0)
-        XCTAssertEqual(job.onCompleteCalled, 0)
-        XCTAssertEqual(job.onRetryCalled, 0)
-        XCTAssertEqual(job.onCancelCalled, 1)
-
-        XCTAssertNotNil(job.lastError)
-        XCTAssertEqual(job.lastSwiftQueueError, SwiftQueueError.deadline)
+        job.awaitForRemoval()
+        job.assertRemovedBeforeRun(reason: .deadline)
     }
 
     func testDeadlineAfterSchedule() {
@@ -117,15 +93,9 @@ class ConstraintDeadlineTests: XCTestCase {
                 .schedule(manager: manager)
 
         manager.waitUntilAllOperationsAreFinished()
-        job.await()
 
-        XCTAssertEqual(job.onRunJobCalled, 0)
-        XCTAssertEqual(job.onCompleteCalled, 0)
-        XCTAssertEqual(job.onRetryCalled, 0)
-        XCTAssertEqual(job.onCancelCalled, 1)
-
-        XCTAssertNotNil(job.lastError)
-        XCTAssertEqual(job.lastSwiftQueueError, SwiftQueueError.deadline)
+        job.awaitForRemoval()
+        job.assertRemovedBeforeRun(reason: .deadline)
     }
 
 }
