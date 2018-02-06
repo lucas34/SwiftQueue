@@ -1,5 +1,16 @@
 # Change Log
 
+## [1.5.1](https://github.com/lucas34/SwiftQueue/tree/1.5.1)
+
+#### Fix 
+- Breaking support for Swift 3.2 (#75)
+
+#### Improvement
+- Performance issue when overriding a job (#73)
+
+#### Misc
+- Update documentation
+
 ## [1.5.0](https://github.com/lucas34/SwiftQueue/tree/1.5.0)
 
 #### Breaking Changes
