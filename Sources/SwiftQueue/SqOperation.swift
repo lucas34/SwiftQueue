@@ -66,7 +66,7 @@ internal final class SqOperation: Operation {
         super.cancel()
     }
 
-    private func onTerminate() {
+    func onTerminate() {
         if isExecuting {
             isFinished = true
         }
