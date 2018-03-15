@@ -74,7 +74,7 @@ public enum Limit {
     case unlimited
 
     /// Limited to a specific number
-    case limited(Int)
+    case limited(Double)
 
 }
 

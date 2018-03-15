@@ -70,7 +70,7 @@ class SwiftQueueBuilderTests: XCTestCase {
 
     public func testBuilderPeriodicLimited() {
         let type = UUID().uuidString
-        let limited: Int = 123
+        let limited: Double = 123
         let interval: Double = 12342
 
         let jobInfo = toJobInfo(type: type, JobBuilder(type: type).periodic(limit: .limited(limited), interval: interval))
@@ -111,7 +111,7 @@ class SwiftQueueBuilderTests: XCTestCase {
 
     public func testBuilderRetryLimited() {
         let type = UUID().uuidString
-        let limited = 123
+        let limited: Double = 123
 
         let jobInfo = toJobInfo(type: type, JobBuilder(type: type).retry(limit: .limited(limited)))
         XCTAssertEqual(jobInfo?.retries, Limit.limited(limited))

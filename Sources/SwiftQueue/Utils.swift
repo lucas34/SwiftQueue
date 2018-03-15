@@ -34,7 +34,7 @@ func assertNotEmptyString(_ string: @autoclosure () -> String, file: StaticStrin
 
 internal extension Limit {
 
-    static func fromIntValue(value: Int) -> Limit {
+    static func fromRawValue(value: Double) -> Limit {
         if value < 0 {
             return Limit.unlimited
         } else {
@@ -42,7 +42,7 @@ internal extension Limit {
         }
     }
 
-    var intValue: Int {
+    var rawValue: Double {
         switch self {
         case .unlimited:
             return -1
@@ -60,7 +60,7 @@ internal extension Limit {
         }
     }
 
-    mutating func decreaseValue(by: Int) {
+    mutating func decreaseValue(by: Double) {
         if case .limited(let limit) = self {
             let value = limit - by
             assert(value >= 0)
