@@ -1,6 +1,9 @@
 # Change Log
 
-## [1.5.1](https://github.com/lucas34/SwiftQueue/tree/1.5.1)
+## [1.6.0](https://github.com/lucas34/SwiftQueue/tree/1.6.0)
+
+#### Breaking Changes
+- Change signature of Limit(Int) to Limit(Double)
 
 #### Fix 
 - Breaking support for Swift 3.2 (#75)
