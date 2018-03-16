@@ -35,11 +35,7 @@ func assertNotEmptyString(_ string: @autoclosure () -> String, file: StaticStrin
 internal extension Limit {
 
     static func fromRawValue(value: Double) -> Limit {
-        if value < 0 {
-            return Limit.unlimited
-        } else {
-            return Limit.limited(value)
-        }
+        return value < 0 ? Limit.unlimited : Limit.limited(value)
     }
 
     var rawValue: Double {
