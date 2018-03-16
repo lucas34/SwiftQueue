@@ -127,4 +127,13 @@ class SwiftQueueManagerTests: XCTestCase {
         queue.addOperation(operation) // Should not crash
     }
 
+    func testLimitEquatable() {
+        XCTAssertEqual(Limit.unlimited, Limit.unlimited)
+        XCTAssertEqual(Limit.limited(-1), Limit.limited(-1))
+        XCTAssertEqual(Limit.limited(0), Limit.limited(0))
+        XCTAssertEqual(Limit.limited(1), Limit.limited(1))
+
+        XCTAssertNotEqual(Limit.limited(1), Limit.limited(2))
+    }
+
 }

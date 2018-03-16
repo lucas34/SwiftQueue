@@ -123,8 +123,8 @@ class SwiftQueueBuilderTests: XCTestCase {
         let tag2 = UUID().uuidString
 
         let jobInfo = toJobInfo(type: type, JobBuilder(type: type).addTag(tag: tag1).addTag(tag: tag2))
-        XCTAssertTrue(jobInfo?.tags.contains(tag1) ?? false)
-        XCTAssertTrue(jobInfo?.tags.contains(tag2) ?? false)
+        XCTAssertEqual(jobInfo?.tags.contains(tag1), true)
+        XCTAssertEqual(jobInfo?.tags.contains(tag2), true)
     }
 
     public func testBuilderWith() {
