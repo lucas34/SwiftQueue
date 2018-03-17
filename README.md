@@ -76,7 +76,7 @@ class SendTweetJob: Job {
         self.tweet = params
     }
 
-    func onRun(callback: JobResult) throws {
+    func onRun(callback: JobResult) {
         let api = try Api()
         api.sendTweet(data: tweet).execute(onSuccess: {
             callback.done(.success)
@@ -144,10 +144,10 @@ class TweetJobCreator: JobCreator {
 
 ## Contributors
 
-We would love you for the contribution to **SwiftQueue**, check the ``LICENSE`` file for more info.
+We would love you for the contribution to **SwiftQueue**, check the [`LICENSE`](LICENSE) file for more info.
 
 * [Lucas Nelaupe](http://www.lucas-nelaupe.fr/) - [@lucas34990](https://twitter.com/lucas34990)
 
-## Licence
+## License
 
-Distributed under the MIT license. See ``LICENSE`` for more information.
+Distributed under the MIT license. See [`LICENSE`](LICENSE) for more information.
