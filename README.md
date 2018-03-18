@@ -77,7 +77,7 @@ class SendTweetJob: Job {
     }
 
     func onRun(callback: JobResult) {
-        let api = try Api()
+        let api = Api()
         api.sendTweet(data: tweet).execute(onSuccess: {
             callback.done(.success)
         }, onError: { error in
