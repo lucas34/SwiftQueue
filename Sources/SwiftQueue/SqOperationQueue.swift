@@ -34,6 +34,8 @@ internal final class SqOperationQueue: OperationQueue {
     }
 
     override func addOperation(_ ope: Operation) {
+        guard !ope.isFinished else { return }
+
         guard let job = ope as? SqOperation else {
             // Not a job Task I don't care
             super.addOperation(ope)

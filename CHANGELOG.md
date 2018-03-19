@@ -10,6 +10,7 @@
 - Breaking support for Swift 3.2 (#75)
 
 #### Improvement
+- Avoid crash when scheduling a terminated job (#92)
 - Performance issue when overriding a job (#73)
 
 #### Misc
