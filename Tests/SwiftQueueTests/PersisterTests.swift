@@ -11,15 +11,10 @@ import Dispatch
 class SerializerTests: XCTestCase {
 
     func testLoadSerializedSortedJobShouldRunSuccess() {
+        let (type1, job1, job1Id) = (UUID().uuidString, TestJob(), UUID().uuidString)
+        let (type2, job2, job2Id) = (UUID().uuidString, TestJob(), UUID().uuidString)
+
         let queueId = UUID().uuidString
-
-        let job1 = TestJob()
-        let type1 = UUID().uuidString
-        let job1Id = UUID().uuidString
-
-        let job2 = TestJob()
-        let type2 = UUID().uuidString
-        let job2Id = UUID().uuidString
 
         let creator = TestCreator([type1: job1, type2: job2])
 
@@ -63,15 +58,10 @@ class SerializerTests: XCTestCase {
     }
 
     func testCancelAllShouldRemoveFromPersister() {
+        let (type1, job1, job1Id) = (UUID().uuidString, TestJob(), UUID().uuidString)
+        let (type2, job2, job2Id) = (UUID().uuidString, TestJob(), UUID().uuidString)
+
         let group = UUID().uuidString
-
-        let id1 = UUID().uuidString
-        let type1 = UUID().uuidString
-        let job1 = TestJob()
-
-        let id2 = UUID().uuidString
-        let type2 = UUID().uuidString
-        let job2 = TestJob()
 
         let creator = TestCreator([type1: job1, type2: job2])
 
@@ -80,14 +70,14 @@ class SerializerTests: XCTestCase {
         let manager = SwiftQueueManager(creators: [creator], persister: persister)
 
         JobBuilder(type: type1)
-                .singleInstance(forId: id1)
+                .singleInstance(forId: job1Id)
                 .group(name: group)
                 .delay(time: 3600)
                 .persist(required: true)
                 .schedule(manager: manager)
 
         JobBuilder(type: type2)
-                .singleInstance(forId: id2)
+                .singleInstance(forId: job2Id)
                 .group(name: group)
                 .delay(time: 3600)
                 .persist(required: true)
@@ -101,20 +91,17 @@ class SerializerTests: XCTestCase {
         job1.assertRemovedBeforeRun(reason: .canceled)
         job2.assertRemovedBeforeRun(reason: .canceled)
 
-        XCTAssertEqual([id1, id2], persister.removeJobUUID)
+        XCTAssertEqual([job1Id, job2Id], persister.removeJobUUID)
         XCTAssertEqual([group, group], persister.removeQueueName)
     }
 
     func testCompleteJobRemoveFromSerializer() {
+        let (type, job) = (UUID().uuidString, TestJob())
+
         let queueId = UUID().uuidString
-
-        let job = TestJob()
-        let type = UUID().uuidString
-
-        let creator = TestCreator([type: job])
-
         let taskID = UUID().uuidString
 
+        let creator = TestCreator([type: job])
         let persister = PersisterTracker(key: UUID().uuidString)
 
         let manager = SwiftQueueManager(creators: [creator], persister: persister)
@@ -162,11 +149,9 @@ class SerializerTests: XCTestCase {
     }
 
     func testNonPersistedJobShouldNotBePersisted() {
-        let job = TestJob()
-        let type = UUID().uuidString
+        let (type, job) = (UUID().uuidString, TestJob())
 
         let creator = TestCreator([type: job])
-
         let persister = PersisterTracker(key: UUID().uuidString)
 
         let manager = SwiftQueueManager(creators: [creator], persister: persister)
@@ -185,12 +170,12 @@ class SerializerTests: XCTestCase {
     }
 
     func testCancelWithTagShouldRemoveFromPersister() {
+        let (type, job) = (UUID().uuidString, TestJob())
+
         let id = UUID().uuidString
         let tag = UUID().uuidString
-        let type = UUID().uuidString
         let group = UUID().uuidString
 
-        let job = TestJob()
         let creator = TestCreator([type: job])
 
         let persister = PersisterTracker(key: UUID().uuidString)

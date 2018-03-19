@@ -11,8 +11,7 @@ import XCTest
 class ConstraintNetworkTests: XCTestCase {
 
     func testNetworkConstraint() {
-        let job = TestJob()
-        let type = UUID().uuidString
+        let (type, job) = (UUID().uuidString, TestJob())
 
         let creator = TestCreator([type: job])
 
@@ -26,8 +25,7 @@ class ConstraintNetworkTests: XCTestCase {
     }
 
     func testNetworkConstraintWifi() {
-        let job = TestJob()
-        let type = UUID().uuidString
+        let (type, job) = (UUID().uuidString, TestJob())
 
         let creator = TestCreator([type: job])
 

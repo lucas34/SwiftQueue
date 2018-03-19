@@ -10,8 +10,7 @@ import Dispatch
 class SwiftQueueManagerTests: XCTestCase {
 
     func testRunSuccessJob() {
-        let job = TestJob()
-        let type = UUID().uuidString
+        let (type, job) = (UUID().uuidString, TestJob())
 
         let creator = TestCreator([type: job])
 
@@ -25,12 +24,12 @@ class SwiftQueueManagerTests: XCTestCase {
     }
 
     func testCancelWithTag() {
+        let (type, job) = (UUID().uuidString, TestJob())
+
         let id = UUID().uuidString
         let tag = UUID().uuidString
-        let type = UUID().uuidString
         let group = UUID().uuidString
 
-        let job = TestJob()
         let creator = TestCreator([type: job])
 
         let persister = PersisterTracker(key: UUID().uuidString)
@@ -58,11 +57,11 @@ class SwiftQueueManagerTests: XCTestCase {
     }
 
     func testCancelWithUUID() {
+        let (type, job) = (UUID().uuidString, TestJob())
+
         let id = UUID().uuidString
-        let type = UUID().uuidString
         let group = UUID().uuidString
 
-        let job = TestJob()
         let creator = TestCreator([type: job])
 
         let persister = PersisterTracker(key: UUID().uuidString)
@@ -89,12 +88,12 @@ class SwiftQueueManagerTests: XCTestCase {
     }
 
     func testCancelAll() {
+        let (type, job) = (UUID().uuidString, TestJob())
+
         let id = UUID().uuidString
         let tag = UUID().uuidString
-        let type = UUID().uuidString
         let group = UUID().uuidString
 
-        let job = TestJob()
         let creator = TestCreator([type: job])
 
         let persister = PersisterTracker(key: UUID().uuidString)
