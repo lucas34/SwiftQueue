@@ -11,7 +11,7 @@ internal final class SqOperationQueue: OperationQueue {
 
     private let queueName: String
 
-    init(queueName: String, creators: [JobCreator], persister: JobPersister? = nil, isPaused: Bool = false) {
+    init(_ queueName: String, _ creators: [JobCreator], _ persister: JobPersister? = nil, _ isPaused: Bool = false) {
         self.creators = creators
         self.persister = persister
         self.queueName = queueName

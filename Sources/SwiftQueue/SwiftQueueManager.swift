@@ -24,7 +24,7 @@ public final class SwiftQueueManager {
 
         if let data = persister {
             for queueName in data.restore() {
-                manage[queueName] = SqOperationQueue(queueName: queueName, creators: creators, persister: persister, isPaused: isPaused)
+                manage[queueName] = SqOperationQueue(queueName, creators, persister, isPaused)
             }
         }
         start()
@@ -46,13 +46,13 @@ public final class SwiftQueueManager {
         }
     }
 
-    internal func getQueue(name: String) -> SqOperationQueue {
-        return manage[name] ?? createQueue(name: name)
+    internal func getQueue(queueName: String) -> SqOperationQueue {
+        return manage[queueName] ?? createQueue(queueName: queueName)
     }
 
-    private func createQueue(name: String) -> SqOperationQueue {
-        let queue = SqOperationQueue(queueName: name, creators: creators, persister: persister, isPaused: isPaused)
-        manage[name] = queue
+    private func createQueue(queueName: String) -> SqOperationQueue {
+        let queue = SqOperationQueue(queueName, creators, persister, isPaused)
+        manage[queueName] = queue
         return queue
     }
 

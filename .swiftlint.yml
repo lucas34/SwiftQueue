@@ -1,4 +1,12 @@
 excluded:
   - Carthage
   - .build
-  - Dangerfile.swift
+
+line_length: 130
+
+identifier_name:
+  excluded:
+    - by
+    - at
+    - to
+    - in
