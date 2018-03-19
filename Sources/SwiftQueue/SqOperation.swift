@@ -128,19 +128,20 @@ extension SqOperation: JobResult {
         switch info.retries {
         case .limited(let value):
             if value > 0 {
-                retryJob(retry: handler.onRetry(error: error))
+                retryJob(retry: handler.onRetry(error: error), origin: error)
             } else {
                 onTerminate()
             }
         case .unlimited:
-            retryJob(retry: handler.onRetry(error: error))
+            retryJob(retry: handler.onRetry(error: error), origin: error)
         }
     }
 
-    private func retryJob(retry: RetryConstraint) {
+    private func retryJob(retry: RetryConstraint, origin: Error) {
         switch retry {
         case .cancel:
-            cancel()
+            lastError = SwiftQueueError.onRetryCancel(origin)
+            onTerminate()
         case .retry(let after):
             guard after > 0 else {
                 // Retry immediately
