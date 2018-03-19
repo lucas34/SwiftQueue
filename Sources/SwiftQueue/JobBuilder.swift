@@ -102,7 +102,7 @@ public final class JobBuilder {
             assert(JSONSerialization.isValidJSONObject(info.params))
         }
 
-        let queue = manager.getQueue(name: info.group)
+        let queue = manager.getQueue(queueName: info.group)
         guard let job = queue.createHandler(type: info.type, params: info.params) else {
             return
         }

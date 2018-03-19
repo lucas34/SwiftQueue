@@ -47,8 +47,7 @@ class ConstraintTests: XCTestCase {
     }
 
     func testRetryFailJobWithRetryConstraint() {
-        let job = TestJob(completion: .fail(JobError()), retry: .retry(delay: 0))
-        let type = UUID().uuidString
+        let (type, job) = (UUID().uuidString, TestJob(completion: .fail(JobError()), retry: .retry(delay: 0)))
 
         let creator = TestCreator([type: job])
 
@@ -104,10 +103,7 @@ class ConstraintTests: XCTestCase {
     }
 
     func testRetryFailJobWithCancelConstraint() {
-        let error = JobError()
-
-        let job = TestJob(completion: .fail(error), retry: .cancel)
-        let type = UUID().uuidString
+        let (type, job) = (UUID().uuidString, TestJob(completion: .fail(JobError()), retry: .cancel))
 
         let creator = TestCreator([type: job])
 
@@ -183,8 +179,7 @@ class ConstraintTests: XCTestCase {
     }
 
     func testCancelRunningOperation() {
-        let job = TestJob(10)
-        let type = UUID().uuidString
+        let (type, job) = (UUID().uuidString, TestJob(10))
 
         let creator = TestCreator([type: job])
 
@@ -205,8 +200,7 @@ class ConstraintTests: XCTestCase {
     }
 
     func testCancelRunningOperationByTag() {
-        let job = TestJob(10)
-        let type = UUID().uuidString
+        let (type, job) = (UUID().uuidString, TestJob(10))
 
         let tag = UUID().uuidString
 
