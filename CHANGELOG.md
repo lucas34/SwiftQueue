@@ -3,6 +3,7 @@
 ## [1.6.0](https://github.com/lucas34/SwiftQueue/tree/1.6.0)
 
 #### Breaking Changes
+- Origin error is now forward to completion block (#88)
 - Change signature of Limit(Int) to Limit(Double)
 
 #### Fix 

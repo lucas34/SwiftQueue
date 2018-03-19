@@ -90,4 +90,7 @@ public enum SwiftQueueError: Swift.Error {
     /// Exception thrown when you try to schedule a job with a same ID as one currently scheduled
     case duplicate
 
+    /// Job canceled inside onError. Parameter contains the origin error
+    case onRetryCancel(Error)
+
 }

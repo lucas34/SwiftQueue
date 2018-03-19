@@ -3,6 +3,7 @@
 // Copyright (c) 2017 Lucas Nelaupe. All rights reserved.
 //
 
+import Foundation
 import XCTest
 import Dispatch
 @testable import SwiftQueue
@@ -97,7 +98,17 @@ class TestJob: Job {
         XCTAssertTrue(lastError is JobError, file: file, line: line)
     }
     public func assertError(queueError: SwiftQueueError, file: StaticString = #file, line: UInt = #line) {
-        XCTAssertEqual(lastError as? SwiftQueueError, queueError, file: file, line: line)
+        let base: SwiftQueueError = lastError as! SwiftQueueError
+        switch (base, queueError) {
+
+        case let (.onRetryCancel(l), .onRetryCancel(r)): XCTAssertEqual(l as? JobError, r as? JobError, file: file, line: line)
+
+        case (.duplicate, .duplicate): return
+        case (.deadline, .deadline): return
+        case (.canceled, .canceled): return
+
+        default: XCTFail("Type mismatch", file: file, line: line)
+        }
     }
 
     public func assertNoError(file: StaticString = #file, line: UInt = #line) {
@@ -172,4 +183,13 @@ class PersisterTracker: UserDefaultsPersister {
 
 class JobError: Error {
 
+    private let id = UUID().uuidString
+
+}
+
+extension JobError: Equatable {
+
+    public static func == (lhs: JobError, rhs: JobError) -> Bool {
+        return lhs.id == rhs.id
+    }
 }

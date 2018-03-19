@@ -103,7 +103,9 @@ class ConstraintTests: XCTestCase {
     }
 
     func testRetryFailJobWithCancelConstraint() {
-        let (type, job) = (UUID().uuidString, TestJob(completion: .fail(JobError()), retry: .cancel))
+        let error = JobError()
+
+        let (type, job) = (UUID().uuidString, TestJob(completion: .fail(error), retry: .cancel))
 
         let creator = TestCreator([type: job])
 
@@ -117,8 +119,7 @@ class ConstraintTests: XCTestCase {
         job.assertCompletedCount(expected: 0)
         job.assertRetriedCount(expected: 1)
         job.assertCanceledCount(expected: 1)
-        // TODO here the error is not forwared
-        job.assertError(queueError: .canceled)
+        job.assertError(queueError: .onRetryCancel(error))
     }
 
     func testRetryFailJobWithExponentialConstraint() {
