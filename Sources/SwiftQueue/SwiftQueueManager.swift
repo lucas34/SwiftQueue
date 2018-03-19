@@ -10,7 +10,7 @@ import Foundation
 /// Creating and instance of this class will automatically un-serialise your jobs and schedule them 
 public final class SwiftQueueManager {
 
-    private let creators: [JobCreator]
+    private let creator: JobCreator
     private let persister: JobPersister?
 
     private var manage = [String: SqOperationQueue]()
@@ -18,13 +18,13 @@ public final class SwiftQueueManager {
     private var isPaused = true
 
     /// Create a new QueueManager with creators to instantiate Job
-    public init(creators: [JobCreator], persister: JobPersister? = nil) {
-        self.creators = creators
+    public init(creator: JobCreator, persister: JobPersister? = nil) {
+        self.creator = creator
         self.persister = persister
 
         if let data = persister {
             for queueName in data.restore() {
-                manage[queueName] = SqOperationQueue(queueName, creators, persister, isPaused)
+                manage[queueName] = SqOperationQueue(queueName, creator, persister, isPaused)
             }
         }
         start()
@@ -51,7 +51,7 @@ public final class SwiftQueueManager {
     }
 
     private func createQueue(queueName: String) -> SqOperationQueue {
-        let queue = SqOperationQueue(queueName, creators, persister, isPaused)
+        let queue = SqOperationQueue(queueName, creator, persister, isPaused)
         manage[queueName] = queue
         return queue
     }

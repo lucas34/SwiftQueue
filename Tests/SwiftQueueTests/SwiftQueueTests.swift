@@ -14,7 +14,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManager(creators: [creator])
+        let manager = SwiftQueueManager(creator: creator)
         JobBuilder(type: type)
                 .internet(atLeast: .wifi)
                 .schedule(manager: manager)
@@ -34,7 +34,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         let persister = PersisterTracker(key: UUID().uuidString)
 
-        let manager = SwiftQueueManager(creators: [creator], persister: persister)
+        let manager = SwiftQueueManager(creator: creator, persister: persister)
 
         JobBuilder(type: type)
                 .singleInstance(forId: id)
@@ -66,7 +66,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         let persister = PersisterTracker(key: UUID().uuidString)
 
-        let manager = SwiftQueueManager(creators: [creator], persister: persister)
+        let manager = SwiftQueueManager(creator: creator, persister: persister)
 
         JobBuilder(type: type)
                 .singleInstance(forId: id)
@@ -98,7 +98,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         let persister = PersisterTracker(key: UUID().uuidString)
 
-        let manager = SwiftQueueManager(creators: [creator], persister: persister)
+        let manager = SwiftQueueManager(creator: creator, persister: persister)
 
         JobBuilder(type: type)
                 .singleInstance(forId: id)
@@ -121,7 +121,7 @@ class SwiftQueueManagerTests: XCTestCase {
     }
 
     func testAddOperationNotJobTask() {
-        let queue = SqOperationQueue(UUID().uuidString, [])
+        let queue = SqOperationQueue(UUID().uuidString, TestCreator([:]))
         let operation = Operation()
         queue.addOperation(operation) // Should not crash
     }

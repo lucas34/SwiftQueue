@@ -141,14 +141,14 @@ class TestJob: Job {
 }
 
 class TestCreator: JobCreator {
-    private let job: [String: Job]
+    private let job: [String: TestJob]
 
-    public init(_ job: [String: Job]) {
+    public init(_ job: [String: TestJob]) {
         self.job = job
     }
 
-    func create(type: String, params: [String: Any]?) -> Job? {
-        return job[type] as? TestJob
+    func create(type: String, params: [String: Any]?) -> Job {
+        return job[type]!
     }
 }
 

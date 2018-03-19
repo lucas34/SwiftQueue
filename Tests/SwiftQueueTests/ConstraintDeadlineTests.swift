@@ -13,7 +13,7 @@ class ConstraintDeadlineTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManager(creators: [creator])
+        let manager = SwiftQueueManager(creator: creator)
         JobBuilder(type: type)
                 .deadline(date: Date(timeIntervalSinceNow: TimeInterval(-10)))
                 .schedule(manager: manager)
@@ -27,7 +27,7 @@ class ConstraintDeadlineTests: XCTestCase {
         let (type2, job2) = (UUID().uuidString, TestJob())
 
         let creator = TestCreator([type1: job1, type2: job2])
-        let manager = SwiftQueueManager(creators: [creator])
+        let manager = SwiftQueueManager(creator: creator)
 
         JobBuilder(type: type1)
                 .delay(time: Double.leastNonzeroMagnitude)
@@ -64,7 +64,7 @@ class ConstraintDeadlineTests: XCTestCase {
         let persister = PersisterTracker(key: UUID().uuidString)
         persister.put(queueName: group, taskId: UUID().uuidString, data: json)
 
-        _ = SwiftQueueManager(creators: [creator], persister: persister)
+        _ = SwiftQueueManager(creator: creator, persister: persister)
 
         XCTAssertEqual(group, persister.restoreQueueName)
 
@@ -77,7 +77,7 @@ class ConstraintDeadlineTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManager(creators: [creator])
+        let manager = SwiftQueueManager(creator: creator)
         JobBuilder(type: type)
                 .delay(time: 60)
                 .deadline(date: Date(timeIntervalSinceNow: Double.leastNonzeroMagnitude))
