@@ -9,8 +9,7 @@ import XCTest
 class StartStopTests: XCTestCase {
 
     func testScheduleWhenQueueStop() {
-        let job = TestJob()
-        let type = UUID().uuidString
+        let (type, job) = (UUID().uuidString, TestJob())
 
         let creator = TestCreator([type: job])
 
@@ -30,8 +29,7 @@ class StartStopTests: XCTestCase {
     }
 
     func testSchedulePeriodicJobThenStart() {
-        let job = TestJob()
-        let type = UUID().uuidString
+        let (type, job) = (UUID().uuidString, TestJob())
 
         let creator = TestCreator([type: job])
 
@@ -62,11 +60,8 @@ class StartStopTests: XCTestCase {
     }
 
     func testPauseQueue() {
-        let job1 = TestJob()
-        let type1 = UUID().uuidString
-
-        let job2 = TestJob()
-        let type2 = UUID().uuidString
+        let (type1, job1) = (UUID().uuidString, TestJob())
+        let (type2, job2) = (UUID().uuidString, TestJob())
 
         let creator = TestCreator([type1: job1, type2: job2])
 

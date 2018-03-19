@@ -9,13 +9,10 @@ import XCTest
 class ConstraintUniqueUUIDTests: XCTestCase {
 
     func testUniqueIdConstraintShouldCancelTheSecond() {
+        let (type1, job1) = (UUID().uuidString, TestJob())
+        let (type2, job2) = (UUID().uuidString, TestJob())
+
         let id = UUID().uuidString
-
-        let job1 = TestJob()
-        let type1 = UUID().uuidString
-
-        let job2 = TestJob()
-        let type2 = UUID().uuidString
 
         let creator = TestCreator([type1: job1, type2: job2])
 
@@ -35,13 +32,10 @@ class ConstraintUniqueUUIDTests: XCTestCase {
     }
 
     func testUniqueIdConstraintShouldCancelTheFirst() {
+        let (type1, job1) = (UUID().uuidString, TestJob())
+        let (type2, job2) = (UUID().uuidString, TestJob())
+
         let id = UUID().uuidString
-
-        let job1 = TestJob()
-        let type1 = UUID().uuidString
-
-        let job2 = TestJob()
-        let type2 = UUID().uuidString
 
         let creator = TestCreator([type1: job1, type2: job2])
 

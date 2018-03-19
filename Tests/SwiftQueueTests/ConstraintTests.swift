@@ -9,8 +9,7 @@ import XCTest
 class ConstraintTests: XCTestCase {
 
     func testPeriodicJob() {
-        let job = TestJob()
-        let type = UUID().uuidString
+        let (type, job) = (UUID().uuidString, TestJob())
 
         let creator = TestCreator([type: job])
 
@@ -28,8 +27,7 @@ class ConstraintTests: XCTestCase {
     }
 
     func testPeriodicJobUnlimited() {
-        let job = TestJob()
-        let type = UUID().uuidString
+        let (type, job) = (UUID().uuidString, TestJob())
 
         let creator = TestCreator([type: job])
 
@@ -106,7 +104,9 @@ class ConstraintTests: XCTestCase {
     }
 
     func testRetryFailJobWithCancelConstraint() {
-        let job = TestJob(completion: .fail(JobError()), retry: .cancel)
+        let error = JobError()
+
+        let job = TestJob(completion: .fail(error), retry: .cancel)
         let type = UUID().uuidString
 
         let creator = TestCreator([type: job])
@@ -165,8 +165,7 @@ class ConstraintTests: XCTestCase {
     }
 
     func testRepeatableJobWithDelay() {
-        let job = TestJob()
-        let type = UUID().uuidString
+        let (type, job) = (UUID().uuidString, TestJob())
 
         let creator = TestCreator([type: job])
 

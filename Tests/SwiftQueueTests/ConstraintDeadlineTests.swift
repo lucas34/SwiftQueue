@@ -9,8 +9,7 @@ import XCTest
 class ConstraintDeadlineTests: XCTestCase {
 
     func testDeadlineWhenSchedule() {
-        let job = TestJob()
-        let type = UUID().uuidString
+        let (type, job) = (UUID().uuidString, TestJob())
 
         let creator = TestCreator([type: job])
 
@@ -24,15 +23,12 @@ class ConstraintDeadlineTests: XCTestCase {
     }
 
     func testDeadlineWhenRun() {
-        let job1 = TestJob()
-        let type1 = UUID().uuidString
-
-        let job2 = TestJob()
-        let type2 = UUID().uuidString
+        let (type1, job1) = (UUID().uuidString, TestJob())
+        let (type2, job2) = (UUID().uuidString, TestJob())
 
         let creator = TestCreator([type1: job1, type2: job2])
-
         let manager = SwiftQueueManager(creators: [creator])
+
         JobBuilder(type: type1)
                 .delay(time: Double.leastNonzeroMagnitude)
                 .retry(limit: .limited(5))
@@ -53,14 +49,11 @@ class ConstraintDeadlineTests: XCTestCase {
     }
 
     func testDeadlineWhenDeserialize() {
-        let group = UUID().uuidString
-
-        let job = TestJob()
-        let type = UUID().uuidString
+        let (type, job) = (UUID().uuidString, TestJob())
 
         let creator = TestCreator([type: job])
 
-        let jobUUID = UUID().uuidString
+        let group = UUID().uuidString
 
         let json = JobBuilder(type: type)
                 .group(name: group)
@@ -69,7 +62,7 @@ class ConstraintDeadlineTests: XCTestCase {
                 .toJSONString()!
 
         let persister = PersisterTracker(key: UUID().uuidString)
-        persister.put(queueName: group, taskId: jobUUID, data: json)
+        persister.put(queueName: group, taskId: UUID().uuidString, data: json)
 
         _ = SwiftQueueManager(creators: [creator], persister: persister)
 
@@ -80,8 +73,7 @@ class ConstraintDeadlineTests: XCTestCase {
     }
 
     func testDeadlineAfterSchedule() {
-        let job = TestJob()
-        let type = UUID().uuidString
+        let (type, job) = (UUID().uuidString, TestJob())
 
         let creator = TestCreator([type: job])
 
