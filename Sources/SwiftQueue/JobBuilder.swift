@@ -103,9 +103,8 @@ public final class JobBuilder {
         }
 
         let queue = manager.getQueue(queueName: info.group)
-        guard let job = queue.createHandler(type: info.type, params: info.params) else {
-            return
-        }
+        let job = queue.createHandler(type: info.type, params: info.params)
+
         queue.addOperation(build(job: job))
     }
 }

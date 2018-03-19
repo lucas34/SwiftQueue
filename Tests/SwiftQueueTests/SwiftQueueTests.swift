@@ -131,8 +131,11 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertEqual(Limit.limited(-1), Limit.limited(-1))
         XCTAssertEqual(Limit.limited(0), Limit.limited(0))
         XCTAssertEqual(Limit.limited(1), Limit.limited(1))
-
         XCTAssertNotEqual(Limit.limited(1), Limit.limited(2))
+
+        XCTAssertNotEqual(Limit.unlimited, Limit.limited(1))
+        XCTAssertNotEqual(Limit.unlimited, Limit.limited(0))
+        XCTAssertNotEqual(Limit.unlimited, Limit.limited(-1))
     }
 
 }
