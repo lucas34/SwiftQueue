@@ -30,6 +30,10 @@ public final class SwiftQueueManager {
         start()
     }
 
+    public convenience init(creator: JobCreator, persister: JobPersister? = nil) {
+        self.init(creators: [creator], persister: persister)
+    }
+
     /// Jobs queued will run again
     public func start() {
         isPaused = false
