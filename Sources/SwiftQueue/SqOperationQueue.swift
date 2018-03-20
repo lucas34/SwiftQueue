@@ -6,13 +6,13 @@ import Foundation
 
 internal final class SqOperationQueue: OperationQueue {
 
-    private let creators: [JobCreator]
+    private let creator: JobCreator
     private let persister: JobPersister?
 
     private let queueName: String
 
-    init(_ queueName: String, _ creators: [JobCreator], _ persister: JobPersister? = nil, _ isPaused: Bool = false) {
-        self.creators = creators
+    init(_ queueName: String, _ creator: JobCreator, _ persister: JobPersister? = nil, _ isPaused: Bool = false) {
+        self.creator = creator
         self.persister = persister
         self.queueName = queueName
 
@@ -27,7 +27,7 @@ internal final class SqOperationQueue: OperationQueue {
 
     private func loadSerializedTasks(name: String) {
         persister?.restore(queueName: name).flatMap { string -> SqOperation? in
-            SqOperation(json: string, creator: creators)
+            SqOperation(json: string, creator: creator)
         }.sorted {
             $0.info.createTime < $1.info.createTime
         }.forEach(addOperation)
@@ -80,17 +80,8 @@ internal final class SqOperationQueue: OperationQueue {
         job.remove()
     }
 
-    func createHandler(type: String, params: [String: Any]?) -> Job? {
-        return SqOperationQueue.createHandler(creators: creators, type: type, params: params)
+    func createHandler(type: String, params: [String: Any]?) -> Job {
+        return creator.create(type: type, params: params)
     }
 
-    static func createHandler(creators: [JobCreator], type: String, params: [String: Any]?) -> Job? {
-        for creator in creators {
-            if let job = creator.create(type: type, params: params) {
-                return job
-            }
-        }
-        assertionFailure("No job creator associate to job type \(type)")
-        return nil
-    }
 }

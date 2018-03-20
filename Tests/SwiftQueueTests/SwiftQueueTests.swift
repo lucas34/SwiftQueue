@@ -121,7 +121,7 @@ class SwiftQueueManagerTests: XCTestCase {
     }
 
     func testAddOperationNotJobTask() {
-        let queue = SqOperationQueue(UUID().uuidString, [])
+        let queue = SqOperationQueue(UUID().uuidString, TestCreator([:]))
         let operation = Operation()
         queue.addOperation(operation) // Should not crash
     }
