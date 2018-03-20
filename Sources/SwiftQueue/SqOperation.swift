@@ -195,20 +195,18 @@ extension SqOperation: JobResult {
 
 extension SqOperation {
 
-    convenience init?(dictionary: [String: Any], creator: [JobCreator]) {
+    convenience init?(dictionary: [String: Any], creator: JobCreator) {
         guard let info = JobInfo(dictionary: dictionary) else {
             assertionFailure("Unable to un-serialise job")
             return nil
         }
 
-        guard let job = SqOperationQueue.createHandler(creators: creator, type: info.type, params: info.params) else {
-            return nil
-        }
+        let job = creator.create(type: info.type, params: info.params)
 
         self.init(job: job, info: info)
     }
 
-    convenience init?(json: String, creator: [JobCreator]) {
+    convenience init?(json: String, creator: JobCreator) {
         let dict = fromJSON(json) as? [String: Any] ?? [:]
         self.init(dictionary: dict, creator: creator)
     }

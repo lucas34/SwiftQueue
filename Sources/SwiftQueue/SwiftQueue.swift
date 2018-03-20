@@ -10,7 +10,7 @@ public protocol JobCreator {
 
     /// method called when a job has be to instantiate
     /// Type as specified in JobBuilder.init(type) and params as JobBuilder.with(params)
-    func create(type: String, params: [String: Any]?) -> Job?
+    func create(type: String, params: [String: Any]?) -> Job
 
 }
 

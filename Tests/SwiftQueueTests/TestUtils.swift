@@ -98,7 +98,8 @@ class TestJob: Job {
         XCTAssertTrue(lastError is JobError, file: file, line: line)
     }
     public func assertError(queueError: SwiftQueueError, file: StaticString = #file, line: UInt = #line) {
-        let base: SwiftQueueError = lastError as! SwiftQueueError
+        XCTAssertTrue(lastError is SwiftQueueError)
+        guard let base: SwiftQueueError = lastError as? SwiftQueueError else { return }
         switch (base, queueError) {
 
         case let (.onRetryCancel(l), .onRetryCancel(r)): XCTAssertEqual(l as? JobError, r as? JobError, file: file, line: line)
@@ -141,14 +142,14 @@ class TestJob: Job {
 }
 
 class TestCreator: JobCreator {
-    private let job: [String: Job]
+    private let job: [String: TestJob]
 
-    public init(_ job: [String: Job]) {
+    public init(_ job: [String: TestJob]) {
         self.job = job
     }
 
-    func create(type: String, params: [String: Any]?) -> Job? {
-        return job[type] as? TestJob
+    func create(type: String, params: [String: Any]?) -> Job {
+        return job[type]!
     }
 }
 

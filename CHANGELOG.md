@@ -3,6 +3,11 @@
 ## [1.6.0](https://github.com/lucas34/SwiftQueue/tree/1.6.0)
 
 #### Breaking Changes
+- Change `JobCreator.create` signature (#94)
+    - Return type is no longer optional
+    - `SwiftQueueManager` only accept 1 single `JobCreator`
+    - This is to avoid unregistered handler or scheduling job with no `JobCreator` associates
+    - The user will have to deal with unknown handler on his side
 - Origin error is now forward to completion block (#88)
 - Change signature of Limit(Int) to Limit(Double)
 
