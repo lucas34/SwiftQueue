@@ -129,5 +129,4 @@ class ConstraintDeadlineTests: XCTestCase {
         job.assertSingleCompletion()
     }
 
-
 }
