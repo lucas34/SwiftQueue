@@ -14,7 +14,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManager(creators: [creator])
+        let manager = SwiftQueueManager(creator: creator)
         JobBuilder(type: type)
                 .internet(atLeast: .wifi)
                 .schedule(manager: manager)
@@ -34,7 +34,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         let persister = PersisterTracker(key: UUID().uuidString)
 
-        let manager = SwiftQueueManager(creators: [creator], persister: persister)
+        let manager = SwiftQueueManager(creator: creator, persister: persister)
 
         JobBuilder(type: type)
                 .singleInstance(forId: id)
@@ -66,7 +66,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         let persister = PersisterTracker(key: UUID().uuidString)
 
-        let manager = SwiftQueueManager(creators: [creator], persister: persister)
+        let manager = SwiftQueueManager(creator: creator, persister: persister)
 
         JobBuilder(type: type)
                 .singleInstance(forId: id)
@@ -98,7 +98,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         let persister = PersisterTracker(key: UUID().uuidString)
 
-        let manager = SwiftQueueManager(creators: [creator], persister: persister)
+        let manager = SwiftQueueManager(creator: creator, persister: persister)
 
         JobBuilder(type: type)
                 .singleInstance(forId: id)
@@ -131,8 +131,11 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertEqual(Limit.limited(-1), Limit.limited(-1))
         XCTAssertEqual(Limit.limited(0), Limit.limited(0))
         XCTAssertEqual(Limit.limited(1), Limit.limited(1))
-
         XCTAssertNotEqual(Limit.limited(1), Limit.limited(2))
+
+        XCTAssertNotEqual(Limit.unlimited, Limit.limited(1))
+        XCTAssertNotEqual(Limit.unlimited, Limit.limited(0))
+        XCTAssertNotEqual(Limit.unlimited, Limit.limited(-1))
     }
 
 }

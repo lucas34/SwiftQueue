@@ -140,7 +140,7 @@ class SwiftQueueBuilderTests: XCTestCase {
         let params: [String: Any] = [UUID().uuidString: [UUID().uuidString: self]]
 
         let creator = TestCreator([type: TestJob()])
-        let manager = SwiftQueueManager(creators: [creator])
+        let manager = SwiftQueueManager(creator: creator)
 
         // No assert expected
         JobBuilder(type: type).with(params: params).schedule(manager: manager)
@@ -149,7 +149,7 @@ class SwiftQueueBuilderTests: XCTestCase {
     private func toJobInfo(type: String, _ builder: JobBuilder) -> JobInfo? {
         let creator = TestCreator([type: TestJob()])
         let persister = PersisterTracker(key: UUID().uuidString)
-        let manager = SwiftQueueManager(creators: [creator], persister: persister)
+        let manager = SwiftQueueManager(creator: creator, persister: persister)
 
         builder.persist(required: true).schedule(manager: manager)
 

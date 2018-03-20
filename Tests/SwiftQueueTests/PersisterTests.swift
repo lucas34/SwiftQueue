@@ -44,7 +44,7 @@ class SerializerTests: XCTestCase {
         XCTAssertEqual(restore2.count, 1)
         XCTAssertEqual(restore2[0], queueId)
 
-        let manager = SwiftQueueManager(creators: [creator], persister: persister)
+        let manager = SwiftQueueManager(creator: creator, persister: persister)
 
         XCTAssertEqual(queueId, persister.restoreQueueName)
 
@@ -67,7 +67,7 @@ class SerializerTests: XCTestCase {
 
         let persister = PersisterTracker(key: UUID().uuidString)
 
-        let manager = SwiftQueueManager(creators: [creator], persister: persister)
+        let manager = SwiftQueueManager(creator: creator, persister: persister)
 
         JobBuilder(type: type1)
                 .singleInstance(forId: job1Id)
@@ -104,7 +104,7 @@ class SerializerTests: XCTestCase {
         let creator = TestCreator([type: job])
         let persister = PersisterTracker(key: UUID().uuidString)
 
-        let manager = SwiftQueueManager(creators: [creator], persister: persister)
+        let manager = SwiftQueueManager(creator: creator, persister: persister)
         JobBuilder(type: type)
                 .singleInstance(forId: taskID)
                 .group(name: queueId)
@@ -130,7 +130,7 @@ class SerializerTests: XCTestCase {
 
         let persister = PersisterTracker(key: UUID().uuidString)
 
-        let manager = SwiftQueueManager(creators: [creator], persister: persister)
+        let manager = SwiftQueueManager(creator: creator, persister: persister)
         JobBuilder(type: type)
                 .singleInstance(forId: taskID)
                 .group(name: queueId)
@@ -154,7 +154,7 @@ class SerializerTests: XCTestCase {
         let creator = TestCreator([type: job])
         let persister = PersisterTracker(key: UUID().uuidString)
 
-        let manager = SwiftQueueManager(creators: [creator], persister: persister)
+        let manager = SwiftQueueManager(creator: creator, persister: persister)
         JobBuilder(type: type)
                 .schedule(manager: manager)
 
@@ -180,7 +180,7 @@ class SerializerTests: XCTestCase {
 
         let persister = PersisterTracker(key: UUID().uuidString)
 
-        let manager = SwiftQueueManager(creators: [creator], persister: persister)
+        let manager = SwiftQueueManager(creator: creator, persister: persister)
 
         JobBuilder(type: type)
                 .singleInstance(forId: id)

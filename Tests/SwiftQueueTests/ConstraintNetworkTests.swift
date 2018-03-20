@@ -15,7 +15,7 @@ class ConstraintNetworkTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManager(creators: [creator])
+        let manager = SwiftQueueManager(creator: creator)
         JobBuilder(type: type)
                 .internet(atLeast: .cellular)
                 .schedule(manager: manager)
@@ -29,7 +29,7 @@ class ConstraintNetworkTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManager(creators: [creator])
+        let manager = SwiftQueueManager(creator: creator)
         JobBuilder(type: type)
                 .internet(atLeast: .wifi)
                 .schedule(manager: manager)
