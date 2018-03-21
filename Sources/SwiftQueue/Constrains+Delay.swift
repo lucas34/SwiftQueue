@@ -15,17 +15,24 @@ internal final class DelayConstraint: JobConstraint {
     }
 
     func run(operation: SqOperation) -> Bool {
-        if let delay = operation.info.delay {
-            if Date().timeIntervalSince(operation.info.createTime) < delay {
-                runInBackgroundAfter(delay, callback: { [weak operation] in
-                    // If the operation in already deInit, it may have been canceled
-                    // It's safe to ignore the nil check
-                    // This is mostly to prevent job retention when cancelling operation with delay
-                    operation?.run()
-                })
-                return false
-            }
+        guard let delay = operation.info.delay else {
+            // No delay run immediately
+            return true
         }
-        return true
+
+        let epoch = Date().timeIntervalSince(operation.info.createTime)
+        guard epoch < delay else {
+            // Epoch already greater than delay
+            return true
+        }
+
+        runInBackgroundAfter(abs(epoch - delay), callback: { [weak operation] in
+            // If the operation in already deInit, it may have been canceled
+            // It's safe to ignore the nil check
+            // This is mostly to prevent job retention when cancelling operation with delay
+            operation?.run()
+        })
+
+        return false
     }
 }

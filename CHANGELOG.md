@@ -15,6 +15,7 @@
 - Deadline now cancel the job properly (#98)
 - Fix calling `done` after termination will remove the lastError (#97)
 - Breaking support for Swift 3.2 (#75)
+- Delay not waiting for the remaining time (#96)
 
 #### Improvement
 - Avoid crash when scheduling a terminated job (#92)
