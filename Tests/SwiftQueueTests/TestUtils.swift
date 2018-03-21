@@ -33,6 +33,8 @@ class TestJob: Job {
     }
 
     func onRun(callback: JobResult) {
+        XCTAssertFalse(Thread.isMainThread)
+
         onRunCount += 1
         if runSemaphoreValue == onRunCount {
             onRunSemaphore.signal()
@@ -43,6 +45,8 @@ class TestJob: Job {
     }
 
     func onRetry(error: Error) -> RetryConstraint {
+        XCTAssertFalse(Thread.isMainThread)
+
         lastError = error
         onRetryCount += 1
         return withRetry
@@ -80,7 +84,7 @@ class TestJob: Job {
         XCTAssertEqual(expected, onRunCount, file: file, line: line)
     }
     public func assertRunCount(atLeast: Int, file: StaticString = #file, line: UInt = #line) {
-        XCTAssertTrue(onRunCount > atLeast, file: file, line: line)
+        XCTAssertTrue(onRunCount > atLeast, "\(onRunCount) is smaller than \(atLeast)", file: file, line: line)
     }
     public func assertCompletedCount(expected: Int, file: StaticString = #file, line: UInt = #line) {
         XCTAssertEqual(expected, onCompletedCount, file: file, line: line)

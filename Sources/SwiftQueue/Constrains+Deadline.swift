@@ -15,11 +15,16 @@ internal final class DeadlineConstraint: JobConstraint {
     }
 
     func run(operation: SqOperation) -> Bool {
-        if let delay = operation.info.deadline {
-            runInBackgroundAfter(delay.timeIntervalSince(Date()), callback: { [weak operation] in
-                operation?.run()
-            })
+        guard let delay = operation.info.deadline else {
+            return true
         }
+
+        runInBackgroundAfter(delay.timeIntervalSince(Date()), callback: { [weak operation] in
+            guard let ope = operation else { return }
+            guard !ope.isFinished else { return }
+
+            ope.cancel(with: .deadline)
+        })
         return true
     }
 
