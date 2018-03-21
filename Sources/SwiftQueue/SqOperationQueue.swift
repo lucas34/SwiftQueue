@@ -56,7 +56,7 @@ internal final class SqOperationQueue: OperationQueue {
         job.completionBlock = { [weak self] in
             self?.completed(job)
         }
-        super.addOperation(ope)
+        super.addOperation(job)
     }
 
     func cancelOperations(tag: String) {

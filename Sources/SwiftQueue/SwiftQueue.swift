@@ -54,15 +54,18 @@ public enum JobCompletion {
 public protocol Job {
 
     /// Perform your operation
+    /// Will be called in background thread
     func onRun(callback: JobResult)
 
     /// Fail has failed with the 
     /// Will only gets called if the job can be retried
     /// Not applicable for 'ConstraintError'
     /// Not application if the retry(value) is less than 2 which is the case by default
+    /// Will be called in background thread
     func onRetry(error: Swift.Error) -> RetryConstraint
 
     /// Job is removed from the queue and will never run again
+    /// May be called in background or main thread
     func onRemove(result: JobCompletion)
 
 }

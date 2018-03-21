@@ -120,6 +120,8 @@ internal final class SqOperation: Operation {
 extension SqOperation: JobResult {
 
     func done(_ result: JobCompletion) {
+        guard !isFinished else { return }
+
         switch result {
         case .success:
             completionSuccess()
