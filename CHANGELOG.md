@@ -12,6 +12,7 @@
 - Change signature of Limit(Int) to Limit(Double)
 
 #### Fix 
+- Fix calling `done` after termination will remove the lastError (#97)
 - Breaking support for Swift 3.2 (#75)
 
 #### Improvement
