@@ -66,6 +66,12 @@ internal final class SqOperation: Operation {
         super.cancel()
     }
 
+    func cancel(with: SwiftQueueError) {
+        lastError = with
+        onTerminate()
+        super.cancel()
+    }
+
     func onTerminate() {
         if isExecuting {
             isFinished = true
