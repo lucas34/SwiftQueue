@@ -33,7 +33,9 @@ public final class JobBuilder {
     }
 
     /// Delay the execution of the job.
-    /// Only start the countdown when the job should run and not when scheduled
+    /// Base on the job creation, when the job is supposed to run,
+    /// If the delay is already pass (longer job before) it will run immediately
+    /// Otherwise it will wait for the remaining time
     public func delay(time: TimeInterval) -> Self {
         assert(time >= 0)
         info.delay = time

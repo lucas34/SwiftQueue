@@ -159,17 +159,11 @@ extension SqOperation: JobResult {
             }
 
             // Retry after time in parameter
-            runInBackgroundAfter(after) { [weak self] in
-                self?.info.retries.decreaseValue(by: 1)
-                self?.run()
-            }
+            retryInBackgroundAfter(after)
         case .exponential(let initial):
             info.currentRepetition += 1
             let delay = info.currentRepetition == 1 ? initial : initial * pow(2, Double(info.currentRepetition - 1))
-            runInBackgroundAfter(delay) { [weak self] in
-                self?.info.retries.decreaseValue(by: 1)
-                self?.run()
-            }
+            retryInBackgroundAfter(delay)
         }
     }
 
@@ -244,6 +238,17 @@ extension SqOperation {
             return false
         }
         return true
+    }
+
+}
+
+extension SqOperation {
+
+    private func retryInBackgroundAfter(_ delay: TimeInterval) {
+        runInBackgroundAfter(delay) { [weak self] in
+            self?.info.retries.decreaseValue(by: 1)
+            self?.run()
+        }
     }
 
 }
