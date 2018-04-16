@@ -244,7 +244,7 @@ extension SqOperation {
 
 extension SqOperation {
 
-    private func retryInBackgroundAfter(_ delay: TimeInterval) {
+    fileprivate func retryInBackgroundAfter(_ delay: TimeInterval) {
         runInBackgroundAfter(delay) { [weak self] in
             self?.info.retries.decreaseValue(by: 1)
             self?.run()
