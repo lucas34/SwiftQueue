@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.6.1](https://github.com/lucas34/SwiftQueue/tree/1.6.1)
+
+#### Improvement
+- Fix compatibility with Swift 3.2 (#100) 
+- Fix warning for Swift 4.1 (#102)
+
 ## [1.6.0](https://github.com/lucas34/SwiftQueue/tree/1.6.0)
 
 #### Breaking Changes
