@@ -26,7 +26,7 @@ internal final class SqOperationQueue: OperationQueue {
     }
 
     private func loadSerializedTasks(name: String) {
-        persister?.restore(queueName: name).flatMap { string -> SqOperation? in
+        persister?.restore(queueName: name).flatMapCompact { string -> SqOperation? in
             SqOperation(json: string, creator: creator)
         }.sorted {
             $0.info.createTime < $1.info.createTime
