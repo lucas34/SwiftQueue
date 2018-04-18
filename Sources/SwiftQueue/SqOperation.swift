@@ -65,10 +65,10 @@ internal final class SqOperation: Operation {
     }
 
     override func cancel() {
-        self.cancel(with: .canceled)
+        self.cancel(with: SwiftQueueError.canceled)
     }
 
-    func cancel(with: SwiftQueueError) {
+    func cancel(with: Swift.Error) {
         logger.log(.verbose, jobId: info.uuid, message: "Job has been canceled")
         lastError = with
         onTerminate()
@@ -103,8 +103,8 @@ internal final class SqOperation: Operation {
         } catch let error {
             logger.log(.warning, jobId: info.uuid, message: "Job cannot run due to \(error.localizedDescription)")
             // Will never run again
-            lastError = error
-            onTerminate()
+            cancel(with: error)
+            return
         }
 
         guard self.checkIfJobCanRunNow() else {
