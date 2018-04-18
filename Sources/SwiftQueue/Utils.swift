@@ -70,8 +70,8 @@ extension Limit: Equatable {
 
     public static func == (lhs: Limit, rhs: Limit) -> Bool {
         switch (lhs, rhs) {
-        case let (.limited(a), .limited(b)):
-            return a == b
+        case let (.limited(lValue), .limited(rValue)):
+            return lValue == rValue
         case (.unlimited, .unlimited):
             return true
         default:
