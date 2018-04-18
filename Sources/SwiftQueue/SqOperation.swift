@@ -61,12 +61,10 @@ internal final class SqOperation: Operation {
     }
 
     override func cancel() {
-        lastError = SwiftQueueError.canceled
-        onTerminate()
-        super.cancel()
+        self.cancel(with: SwiftQueueError.canceled)
     }
 
-    func cancel(with: SwiftQueueError) {
+    func cancel(with: Swift.Error) {
         lastError = with
         onTerminate()
         super.cancel()
@@ -97,8 +95,8 @@ internal final class SqOperation: Operation {
             try self.willRunJob()
         } catch let error {
             // Will never run again
-            lastError = error
-            onTerminate()
+            cancel(with: error)
+            return
         }
 
         guard self.checkIfJobCanRunNow() else {
