@@ -3,7 +3,7 @@
 
 [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome)
 [![platform](https://img.shields.io/cocoapods/p/SwiftQueue.svg)](https://cocoapods.org/pods/SwiftQueue)
-[![swift](https://img.shields.io/badge/Swift-3.0%20%7C%203.2%20%7C%204.0-orange.svg)](https://swift.org)
+[![swift](https://img.shields.io/badge/Swift-3.2%20%7C%204.0%20%7C%204.1-orange.svg)](https://swift.org)
 [![travis](https://travis-ci.org/lucas34/SwiftQueue.svg?branch=master)](https://travis-ci.org/lucas34/SwiftQueue)
 [![codecov](https://codecov.io/gh/lucas34/SwiftQueue/branch/master/graph/badge.svg)](https://codecov.io/gh/lucas34/SwiftQueue)
 [![pod](https://img.shields.io/cocoapods/v/SwiftQueue.svg?style=flat)](https://cocoapods.org/pods/SwiftQueue)
