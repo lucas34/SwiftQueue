@@ -23,7 +23,7 @@ internal final class DeadlineConstraint: JobConstraint {
             guard let ope = operation else { return }
             guard !ope.isFinished else { return }
 
-            ope.cancel(with: .deadline)
+            ope.cancel(with: SwiftQueueError.deadline)
         })
         return true
     }
