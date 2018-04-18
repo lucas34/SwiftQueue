@@ -18,13 +18,15 @@ public final class SwiftQueueManager {
     private var isPaused = true
 
     /// Create a new QueueManager with creators to instantiate Job
-    public init(creator: JobCreator, persister: JobPersister? = nil) {
+    /// Synchronous indicate that serialized task will be added synchronously.
+    /// This can be a time consuming operation.
+    public init(creator: JobCreator, persister: JobPersister? = nil, synchronous: Bool = true) {
         self.creator = creator
         self.persister = persister
 
         if let data = persister {
             for queueName in data.restore() {
-                manage[queueName] = SqOperationQueue(queueName, creator, persister, isPaused)
+                manage[queueName] = SqOperationQueue(queueName, creator, persister, isPaused, synchronous: synchronous)
             }
         }
         start()
@@ -51,7 +53,7 @@ public final class SwiftQueueManager {
     }
 
     private func createQueue(queueName: String) -> SqOperationQueue {
-        let queue = SqOperationQueue(queueName, creator, persister, isPaused)
+        let queue = SqOperationQueue(queueName, creator, persister, isPaused, synchronous: true)
         manage[queueName] = queue
         return queue
     }

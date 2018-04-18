@@ -226,11 +226,12 @@ class SerializerTests: XCTestCase {
         tasks[lastTaskType] = lastJob
 
         let creator = TestCreator(tasks)
-        let manager = SwiftQueueManager(creator: creator, persister: persister)
+        let manager = SwiftQueueManager(creator: creator, persister: persister, synchronous: false)
 
         JobBuilder(type: lastTaskType)
                 .singleInstance(forId: lastTaskType)
                 .group(name: queueId)
+                .persist(required: true)
                 .schedule(manager: manager)
 
         lastJob.awaitForRemoval()

@@ -13,7 +13,7 @@ internal final class SqOperationQueue: OperationQueue {
 
     private let trigger: TriggerOperation
 
-    init(_ queueName: String, _ creator: JobCreator, _ persister: JobPersister? = nil, _ isPaused: Bool = false) {
+    init(_ queueName: String, _ creator: JobCreator, _ persister: JobPersister? = nil, _ isPaused: Bool = false, synchronous: Bool) {
         self.creator = creator
         self.persister = persister
         self.queueName = queueName
@@ -26,8 +26,12 @@ internal final class SqOperationQueue: OperationQueue {
         self.name = queueName
         self.maxConcurrentOperationCount = 1
 
-        DispatchQueue.global(qos: DispatchQoS.QoSClass.utility).async { () -> Void in
+        if synchronous {
             self.loadSerializedTasks(name: queueName)
+        } else {
+            DispatchQueue.global(qos: DispatchQoS.QoSClass.utility).async { () -> Void in
+                self.loadSerializedTasks(name: queueName)
+            }
         }
     }
 
