@@ -49,7 +49,7 @@ open class ConsoleLogger: SwiftQueueLogger {
 
     /// Check for log level and create the output message
     public final func log(_ level: LogLevel, jobId: @autoclosure () -> String, message: @autoclosure () -> String) {
-        if min.rawValue >= level.rawValue {
+        if min.rawValue <= level.rawValue {
             printComputed(output: "[SwiftQueue] level=\(level.description) jobId=\(jobId()) message=\(message())")
         }
     }
