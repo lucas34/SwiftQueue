@@ -6,8 +6,6 @@ line_length: 140
 
 identifier_name:
   excluded:
+    - i
     - id
     - by
-    - at
-    - to
-    - in

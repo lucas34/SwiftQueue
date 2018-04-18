@@ -107,5 +107,4 @@ internal final class SqOperationQueue: OperationQueue {
 
 }
 
-
 internal class TriggerOperation: Operation {}
