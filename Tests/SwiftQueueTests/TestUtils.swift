@@ -106,7 +106,8 @@ class TestJob: Job {
         guard let base: SwiftQueueError = lastError as? SwiftQueueError else { return }
         switch (base, queueError) {
 
-        case let (.onRetryCancel(l), .onRetryCancel(r)): XCTAssertEqual(l as? JobError, r as? JobError, file: file, line: line)
+        case let (.onRetryCancel(lErr), .onRetryCancel(rErr)):
+            XCTAssertEqual(lErr as? JobError, rErr as? JobError, file: file, line: line)
 
         case (.duplicate, .duplicate): return
         case (.deadline, .deadline): return
@@ -188,7 +189,7 @@ class PersisterTracker: UserDefaultsPersister {
 
 class JobError: Error {
 
-    private let id = UUID().uuidString
+    let id = UUID().uuidString
 
 }
 

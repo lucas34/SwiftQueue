@@ -53,8 +53,8 @@ internal final class SqOperationQueue: OperationQueue {
         }
 
         // Serialize this operation
-        if job.info.isPersisted, let sp = persister, let data = job.toJSONString() {
-            sp.put(queueName: queueName, taskId: job.info.uuid, data: data)
+        if job.info.isPersisted, let database = persister, let data = job.toJSONString() {
+            database.put(queueName: queueName, taskId: job.info.uuid, data: data)
         }
         job.completionBlock = { [weak self] in
             self?.completed(job)
@@ -76,8 +76,8 @@ internal final class SqOperationQueue: OperationQueue {
 
     private func completed(_ job: SqOperation) {
         // Remove this operation from serialization
-        if job.info.isPersisted, let sp = persister {
-            sp.remove(queueName: queueName, taskId: job.info.uuid)
+        if job.info.isPersisted, let database = persister {
+            database.remove(queueName: queueName, taskId: job.info.uuid)
         }
 
         job.remove()

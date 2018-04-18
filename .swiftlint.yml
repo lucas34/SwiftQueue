@@ -2,7 +2,7 @@ excluded:
   - Carthage
   - .build
 
-line_length: 130
+line_length: 140
 
 identifier_name:
   excluded:
