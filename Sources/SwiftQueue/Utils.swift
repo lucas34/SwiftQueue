@@ -82,7 +82,7 @@ extension Limit: Equatable {
 
 extension Sequence {
 
-    public func flatMapCompact<ElementOfResult>(_ transform: (Self.Element) throws -> ElementOfResult?) rethrows -> [ElementOfResult] {
+    func flatMapCompact<ElementOfResult>(_ transform: (Self.Element) throws -> ElementOfResult?) rethrows -> [ElementOfResult] {
         #if swift(>=4.1)
             return try compactMap(transform)
         #else
