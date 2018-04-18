@@ -188,7 +188,7 @@ class PersisterTracker: UserDefaultsPersister {
 
 class JobError: Error {
 
-    private let id = UUID().uuidString
+    let id = UUID().uuidString
 
 }
 
