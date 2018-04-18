@@ -40,7 +40,6 @@ struct JobInfo {
 
     init?(dictionary: [String: Any]) {
         guard let type = dictionary["type"] as? String else {
-            assertionFailure("Unable to retrieve Job type")
             return nil
         }
 
