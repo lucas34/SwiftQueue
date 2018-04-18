@@ -11,10 +11,14 @@ internal final class SqOperationQueue: OperationQueue {
 
     private let queueName: String
 
+    private let trigger: TriggerOperation
+
     init(_ queueName: String, _ creator: JobCreator, _ persister: JobPersister? = nil, _ isPaused: Bool = false) {
         self.creator = creator
         self.persister = persister
         self.queueName = queueName
+
+        self.trigger = TriggerOperation()
 
         super.init()
 
@@ -22,7 +26,9 @@ internal final class SqOperationQueue: OperationQueue {
         self.name = queueName
         self.maxConcurrentOperationCount = 1
 
-        loadSerializedTasks(name: queueName)
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.utility).async { () -> Void in
+            self.loadSerializedTasks(name: queueName)
+        }
     }
 
     private func loadSerializedTasks(name: String) {
@@ -30,11 +36,22 @@ internal final class SqOperationQueue: OperationQueue {
             SqOperation(json: string, creator: creator)
         }.sorted {
             $0.info.createTime < $1.info.createTime
-        }.forEach(addOperation)
+        }.forEach { operation in
+            self.addOperationInternal(operation, wait: false)
+        }
+        super.addOperation(trigger)
     }
 
     override func addOperation(_ ope: Operation) {
+        self.addOperationInternal(ope, wait: true)
+    }
+
+    private func addOperationInternal(_ ope: Operation, wait: Bool) {
         guard !ope.isFinished else { return }
+
+        if wait {
+            ope.addDependency(trigger)
+        }
 
         guard let job = ope as? SqOperation else {
             // Not a job Task I don't care
@@ -85,3 +102,6 @@ internal final class SqOperationQueue: OperationQueue {
     }
 
 }
+
+
+internal class TriggerOperation: Operation {}
