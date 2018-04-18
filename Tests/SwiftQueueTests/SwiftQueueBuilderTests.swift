@@ -153,8 +153,7 @@ class SwiftQueueBuilderTests: XCTestCase {
 
         builder.persist(required: true).schedule(manager: manager)
 
-        let actual = SqOperation(json: persister.putData[0], creator: creator)
-        return actual?.info
+        return SqOperation(json: persister.putData[0], creator: creator, logger: manager.logger)?.info
     }
 
 }

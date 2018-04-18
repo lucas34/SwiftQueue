@@ -14,6 +14,8 @@ internal final class SqOperation: Operation {
 
     var lastError: Swift.Error?
 
+    let logger: SwiftQueueLogger
+
     override var name: String? { get { return info.uuid } set { } }
 
     private var jobIsExecuting: Bool = false
@@ -36,9 +38,10 @@ internal final class SqOperation: Operation {
         }
     }
 
-    internal init(job: Job, info: JobInfo) {
+    internal init(job: Job, info: JobInfo, logger: SwiftQueueLogger) {
         self.handler = job
         self.info = info
+        self.logger = logger
 
         self.constraints = [
             DeadlineConstraint(),
@@ -56,23 +59,24 @@ internal final class SqOperation: Operation {
 
     override func start() {
         super.start()
+        logger.log(.verbose, jobId: info.uuid, message: "Job has been started by the system")
         isExecuting = true
         run()
     }
 
     override func cancel() {
-        lastError = SwiftQueueError.canceled
-        onTerminate()
-        super.cancel()
+        self.cancel(with: .canceled)
     }
 
     func cancel(with: SwiftQueueError) {
+        logger.log(.verbose, jobId: info.uuid, message: "Job has been canceled")
         lastError = with
         onTerminate()
         super.cancel()
     }
 
     func onTerminate() {
+        logger.log(.verbose, jobId: info.uuid, message: "Job will not run anymore")
         if isExecuting {
             isFinished = true
         }
@@ -80,6 +84,7 @@ internal final class SqOperation: Operation {
 
     // cancel before schedule and serialise
     internal func abort(error: Swift.Error) {
+        logger.log(.verbose, jobId: info.uuid, message: "Job has not been scheduled due to \(error.localizedDescription)")
         lastError = error
         // Need to be called manually since the task is actually not in the queue. So cannot call cancel()
         handler.onRemove(result: .fail(error))
@@ -96,6 +101,7 @@ internal final class SqOperation: Operation {
         do {
             try self.willRunJob()
         } catch let error {
+            logger.log(.warning, jobId: info.uuid, message: "Job cannot run due to \(error.localizedDescription)")
             // Will never run again
             lastError = error
             onTerminate()
@@ -104,14 +110,17 @@ internal final class SqOperation: Operation {
         guard self.checkIfJobCanRunNow() else {
             // Constraint fail.
             // Constraint will call run when it's ready
+            logger.log(.verbose, jobId: info.uuid, message: "Job cannot run now. Execution is postponed")
             return
         }
 
+        logger.log(.verbose, jobId: info.uuid, message: "Job is running")
         handler.onRun(callback: self)
     }
 
     internal func remove() {
         let result = lastError.map(JobCompletion.fail) ?? JobCompletion.success
+        logger.log(.verbose, jobId: info.uuid, message: "Job is removed from the queue result=\(result)")
         handler.onRemove(result: result)
     }
 
@@ -131,6 +140,7 @@ extension SqOperation: JobResult {
     }
 
     private func completionFail(error: Swift.Error) {
+        logger.log(.warning, jobId: info.uuid, message: "Job completed with error \(error.localizedDescription)")
         lastError = error
 
         switch info.retries {
@@ -168,6 +178,7 @@ extension SqOperation: JobResult {
     }
 
     private func completionSuccess() {
+        logger.log(.verbose, jobId: info.uuid, message: "Job completed successfully")
         lastError = nil
         info.currentRepetition = 0
 
@@ -197,20 +208,17 @@ extension SqOperation: JobResult {
 
 extension SqOperation {
 
-    convenience init?(dictionary: [String: Any], creator: JobCreator) {
+    convenience init?(json: String, creator: JobCreator, logger: SwiftQueueLogger) {
+        let dictionary = fromJSON(json) as? [String: Any] ?? [:]
+
         guard let info = JobInfo(dictionary: dictionary) else {
-            assertionFailure("Unable to un-serialise job")
+            logger.log(.error, jobId: "UNKNOWN", message: "Unable to un-serialise job [\(json)]")
             return nil
         }
 
         let job = creator.create(type: info.type, params: info.params)
 
-        self.init(job: job, info: info)
-    }
-
-    convenience init?(json: String, creator: JobCreator) {
-        let dict = fromJSON(json) as? [String: Any] ?? [:]
-        self.init(dictionary: dict, creator: creator)
+        self.init(job: job, info: info, logger: logger)
     }
 
     func toJSONString() -> String? {
