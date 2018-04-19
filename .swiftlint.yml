@@ -4,6 +4,10 @@ excluded:
 
 line_length: 140
 
+opt_in_rules:
+  - empty_count
+  - force_unwrapping
+
 identifier_name:
   excluded:
     - i

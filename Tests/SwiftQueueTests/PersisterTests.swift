@@ -22,13 +22,13 @@ class SerializerTests: XCTestCase {
                 .singleInstance(forId: job1Id)
                 .group(name: queueId)
                 .build(job: job1)
-                .toJSONString()!
+                .toJSONStringSafe()
 
         let task2 = JobBuilder(type: type2)
                 .singleInstance(forId: job2Id)
                 .group(name: queueId)
                 .build(job: job2)
-                .toJSONString()!
+                .toJSONStringSafe()
 
         // Should invert when deserialize
         let persister = PersisterTracker(key: UUID().uuidString)
