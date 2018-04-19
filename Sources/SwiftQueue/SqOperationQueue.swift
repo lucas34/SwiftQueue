@@ -13,10 +13,13 @@ internal final class SqOperationQueue: OperationQueue {
 
     private let trigger: TriggerOperation
 
-    init(_ queueName: String, _ creator: JobCreator, _ persister: JobPersister? = nil, _ isPaused: Bool = false, synchronous: Bool) {
+    private let logger: SwiftQueueLogger
+
+    init(_ queueName: String, _ creator: JobCreator, _ persister: JobPersister? = nil, _ isPaused: Bool = false, synchronous: Bool, logger: SwiftQueueLogger) {
         self.creator = creator
         self.persister = persister
         self.queueName = queueName
+        self.logger = logger
 
         self.trigger = TriggerOperation()
 
@@ -37,7 +40,7 @@ internal final class SqOperationQueue: OperationQueue {
 
     private func loadSerializedTasks(name: String) {
         persister?.restore(queueName: name).flatMapCompact { string -> SqOperation? in
-            SqOperation(json: string, creator: creator)
+            return SqOperation(json: string, creator: creator, logger: logger)
         }.sorted {
             $0.info.createTime < $1.info.createTime
         }.forEach { operation in

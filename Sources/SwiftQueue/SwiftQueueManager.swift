@@ -7,7 +7,7 @@ import Foundation
 
 /// Global manager to perform operations on all your queues/
 /// You will have to keep this instance. We highly recommend you to store this instance in a Singleton
-/// Creating and instance of this class will automatically un-serialise your jobs and schedule them 
+/// Creating and instance of this class will automatically un-serialise your jobs and schedule them
 public final class SwiftQueueManager {
 
     private let creator: JobCreator
@@ -17,16 +17,19 @@ public final class SwiftQueueManager {
 
     private var isPaused = true
 
+    internal let logger: SwiftQueueLogger
+
     /// Create a new QueueManager with creators to instantiate Job
     /// Synchronous indicate that serialized task will be added synchronously.
     /// This can be a time consuming operation.
-    public init(creator: JobCreator, persister: JobPersister? = nil, synchronous: Bool = true) {
+    public init(creator: JobCreator, persister: JobPersister? = nil, synchronous: Bool = true, logger: SwiftQueueLogger = NoLogger.shared) {
         self.creator = creator
         self.persister = persister
+        self.logger = logger
 
         if let data = persister {
             for queueName in data.restore() {
-                manage[queueName] = SqOperationQueue(queueName, creator, persister, isPaused, synchronous: synchronous)
+                manage[queueName] = SqOperationQueue(queueName, creator, persister, isPaused, synchronous: synchronous, logger: logger)
             }
         }
         start()
@@ -53,7 +56,7 @@ public final class SwiftQueueManager {
     }
 
     private func createQueue(queueName: String) -> SqOperationQueue {
-        let queue = SqOperationQueue(queueName, creator, persister, isPaused, synchronous: true)
+        let queue = SqOperationQueue(queueName, creator, persister, isPaused, synchronous: true, logger: logger)
         manage[queueName] = queue
         return queue
     }
