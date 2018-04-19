@@ -59,7 +59,7 @@ class ConstraintDeadlineTests: XCTestCase {
                 .group(name: group)
                 .deadline(date: Date())
                 .build(job: job)
-                .toJSONString()!
+                .toJSONStringSafe()
 
         let persister = PersisterTracker(key: UUID().uuidString)
         persister.put(queueName: group, taskId: UUID().uuidString, data: json)
