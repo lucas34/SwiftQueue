@@ -199,3 +199,11 @@ extension JobError: Equatable {
         return lhs.id == rhs.id
     }
 }
+
+extension SqOperation {
+
+    func toJSONStringSafe() -> String {
+        return self.toJSONString() ?? "{}"
+    }
+
+}
