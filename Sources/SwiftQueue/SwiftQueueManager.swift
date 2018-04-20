@@ -11,7 +11,8 @@ import Foundation
 public final class SwiftQueueManager {
 
     private let creator: JobCreator
-    private let persister: JobPersister?
+
+    private let persister: JobPersister
 
     private var manage = [String: SqOperationQueue]()
 
@@ -20,16 +21,15 @@ public final class SwiftQueueManager {
     internal let logger: SwiftQueueLogger
 
     /// Create a new QueueManager with creators to instantiate Job
-    public init(creator: JobCreator, persister: JobPersister? = nil, logger: SwiftQueueLogger = NoLogger.shared) {
+    public init(creator: JobCreator, persister: JobPersister = UserDefaultsPersister(), logger: SwiftQueueLogger = NoLogger.shared) {
         self.creator = creator
         self.persister = persister
         self.logger = logger
 
-        if let data = persister {
-            for queueName in data.restore() {
-                manage[queueName] = SqOperationQueue(queueName, creator, persister, isPaused, logger: logger)
-            }
+        for queueName in persister.restore() {
+            manage[queueName] = SqOperationQueue(queueName, creator, persister, isPaused, logger)
         }
+
         start()
     }
 
@@ -54,7 +54,7 @@ public final class SwiftQueueManager {
     }
 
     private func createQueue(queueName: String) -> SqOperationQueue {
-        let queue = SqOperationQueue(queueName, creator, persister, isPaused, logger: logger)
+        let queue = SqOperationQueue(queueName, creator, persister, isPaused, logger)
         manage[queueName] = queue
         return queue
     }

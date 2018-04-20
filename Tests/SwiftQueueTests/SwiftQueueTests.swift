@@ -121,7 +121,7 @@ class SwiftQueueManagerTests: XCTestCase {
     }
 
     func testAddOperationNotJobTask() {
-        let queue = SqOperationQueue(UUID().uuidString, TestCreator([:]), logger: NoLogger.shared)
+        let queue = SqOperationQueue(id: UUID().uuidString)
         let operation = Operation()
         queue.addOperation(operation) // Should not crash
     }
@@ -136,6 +136,16 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertNotEqual(Limit.unlimited, Limit.limited(1))
         XCTAssertNotEqual(Limit.unlimited, Limit.limited(0))
         XCTAssertNotEqual(Limit.unlimited, Limit.limited(-1))
+    }
+
+}
+
+
+extension SqOperationQueue {
+
+    convenience init(id: String) {
+        self.init(id, TestCreator([:]), UserDefaultsPersister(), false, NoLogger.shared)
+
     }
 
 }
