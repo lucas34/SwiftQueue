@@ -66,6 +66,29 @@ internal extension Limit {
 
 }
 
+extension Limit: Codable {
+
+    private enum CodingKeys: String, CodingKey { case value }
+
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let value = try values.decode(Double.self, forKey: .value)
+        self = value < 0 ? Limit.unlimited : Limit.limited(value)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        switch self {
+        case .unlimited:
+            try container.encode(-1, forKey: .value)
+        case .limited(let value):
+            assert(value >= 0)
+            try container.encode(value, forKey: .value)
+        }
+    }
+
+}
+
 extension Limit: Equatable {
 
     public static func == (lhs: Limit, rhs: Limit) -> Bool {
