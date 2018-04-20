@@ -208,19 +208,6 @@ extension SqOperation: JobResult {
 
 extension SqOperation {
 
-    convenience init?(json: String, creator: JobCreator, logger: SwiftQueueLogger) {
-        let dictionary = fromJSON(json) as? [String: Any] ?? [:]
-
-        guard let info = JobInfo(dictionary: dictionary) else {
-            logger.log(.error, jobId: "UNKNOWN", message: "Unable to un-serialise job [\(json)]")
-            return nil
-        }
-
-        let job = creator.create(type: info.type, params: info.params)
-
-        self.init(job: job, info: info, logger: logger)
-    }
-
     func toJSONString() -> String? {
         return toJSON(info.toDictionary())
     }

@@ -214,9 +214,9 @@ extension KeyedEncodingContainer {
 
 extension JobInfo {
 
-    init?(dictionary: [String: Any]) {
+    init(dictionary: [String: Any]) throws {
         guard let type = dictionary["type"] as? String else {
-            return nil
+            throw SwiftQueueError.parsingError("Unable to find Job.type")
         }
 
         self.init(type: type)
