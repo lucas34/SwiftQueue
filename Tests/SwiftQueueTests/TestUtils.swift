@@ -203,7 +203,7 @@ extension JobError: Equatable {
 extension SqOperation {
 
     func toJSONStringSafe() -> String {
-        return self.toJSONString() ?? "{}"
+        return (try? self.toJSONString()) ?? "{}"
     }
 
 }

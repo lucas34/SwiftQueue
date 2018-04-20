@@ -208,8 +208,11 @@ extension SqOperation: JobResult {
 
 extension SqOperation {
 
-    func toJSONString() -> String? {
-        return toJSON(info.toDictionary())
+    func toJSONString() throws -> String {
+        guard let result = toJSON(info.toDictionary()) else {
+            throw SwiftQueueError.parsingError("Unable to serialise")
+        }
+        return result
     }
 
 }

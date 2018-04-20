@@ -83,13 +83,23 @@ internal final class SqOperationQueue: OperationQueue {
         }
 
         // Serialize this operation
-        if job.info.isPersisted, let data = job.toJSONString() {
-            persister.put(queueName: queueName, taskId: job.info.uuid, data: data)
+        if job.info.isPersisted {
+            persistJob(job: job)
         }
         job.completionBlock = { [weak self] in
             self?.completed(job)
         }
         super.addOperation(job)
+    }
+
+    func persistJob(job: SqOperation) {
+        do {
+            let data = try job.toJSONString()
+            persister.put(queueName: queueName, taskId: job.info.uuid, data: data)
+        } catch let error {
+            // In this case we still try to run the job
+            logger.log(.error, jobId: job.info.uuid, message: "Unable to serialise job error=\(error.localizedDescription)")
+        }
     }
 
     func cancelOperations(tag: String) {

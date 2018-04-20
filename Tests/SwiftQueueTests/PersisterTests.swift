@@ -213,7 +213,7 @@ class SerializerTests: XCTestCase {
                     .singleInstance(forId: "\(i)")
                     .group(name: queueId)
                     .build(job: job)
-                    .toJSONString()!
+                    .toJSONStringSafe()
 
             persister.put(queueName: queueId, taskId: "\(i)", data: task)
 
