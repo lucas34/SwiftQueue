@@ -140,11 +140,10 @@ class SwiftQueueManagerTests: XCTestCase {
 
 }
 
-
 extension SqOperationQueue {
 
     convenience init(id: String) {
-        self.init(id, TestCreator([:]), UserDefaultsPersister(), false, true, NoLogger.shared)
+        self.init(id, TestCreator([:]), UserDefaultsPersister(), DecodableSerializer(), false, true, NoLogger.shared)
 
     }
 

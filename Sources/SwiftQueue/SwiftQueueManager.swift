@@ -12,6 +12,8 @@ public final class SwiftQueueManager {
 
     private let creator: JobCreator
     private let persister: JobPersister
+    private let serializer: JobInfoSerialiser
+
     internal let logger: SwiftQueueLogger
 
     private var manage = [String: SqOperationQueue]()
@@ -21,13 +23,17 @@ public final class SwiftQueueManager {
     /// Create a new QueueManager with creators to instantiate Job
     /// Synchronous indicate that serialized task will be added synchronously.
     /// This can be a time consuming operation.
-    public init(creator: JobCreator, persister: JobPersister = UserDefaultsPersister(), synchronous: Bool = true, logger: SwiftQueueLogger = NoLogger.shared) {
+    public init(creator: JobCreator,
+                persister: JobPersister = UserDefaultsPersister(), serializer: JobInfoSerialiser = DecodableSerializer(),
+                synchronous: Bool = true, logger: SwiftQueueLogger = NoLogger.shared) {
+
         self.creator = creator
         self.persister = persister
+        self.serializer = serializer
         self.logger = logger
 
         for queueName in persister.restore() {
-            manage[queueName] = SqOperationQueue(queueName, creator, persister, isPaused, synchronous, logger)
+            manage[queueName] = SqOperationQueue(queueName, creator, persister, serializer, isPaused, synchronous, logger)
         }
 
         start()
@@ -55,7 +61,7 @@ public final class SwiftQueueManager {
 
     private func createQueue(queueName: String) -> SqOperationQueue {
         // At this point the queue should be totally new so it's safe to start the queue synchronously
-        let queue = SqOperationQueue(queueName, creator, persister, isPaused, true, logger)
+        let queue = SqOperationQueue(queueName, creator, persister, serializer, isPaused, true, logger)
         manage[queueName] = queue
         return queue
     }

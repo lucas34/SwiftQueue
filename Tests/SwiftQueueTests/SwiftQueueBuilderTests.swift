@@ -56,7 +56,7 @@ class SwiftQueueBuilderTests: XCTestCase {
         let deadline = Date(timeIntervalSinceNow: TimeInterval(30))
 
         let jobInfo = try toJobInfo(type: type, JobBuilder(type: type).deadline(date: deadline))
-        XCTAssertEqual(jobInfo?.deadline.map(dateFormatter.string), dateFormatter.string(from: deadline))
+        XCTAssertEqual(jobInfo?.deadline, deadline)
     }
 
     public func testBuilderPeriodicUnlimited() throws {
@@ -153,10 +153,7 @@ class SwiftQueueBuilderTests: XCTestCase {
 
         builder.persist(required: true).schedule(manager: manager)
 
-        let dictionary = try fromJSON(persister.putData[0]) as? [String: Any] ?? [:]
-        let info = try JobInfo(dictionary: dictionary)
-
-        return info
+        return try DecodableSerializer().deserialize(json: persister.putData[0])
     }
 
 }

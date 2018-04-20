@@ -31,6 +31,14 @@ public protocol JobPersister {
 
 }
 
+public protocol JobInfoSerialiser {
+
+    func serialise(info: JobInfo) throws -> String
+
+    func deserialize(json: String) throws -> JobInfo
+
+}
+
 /// Callback to give result in synchronous or asynchronous job
 public protocol JobResult {
 
