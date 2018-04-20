@@ -8,7 +8,7 @@ import Reachability
 #endif
 
 /// Kind of connectivity required for the job to run
-public enum NetworkType: Int {
+public enum NetworkType: Int, Codable {
     /// Job will run regardless the connectivity of the platform
     case any = 0
     /// Requires at least cellular such as 2G, 3G, 4G, LTE or Wifi
