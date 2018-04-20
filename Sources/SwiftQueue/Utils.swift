@@ -80,13 +80,12 @@ extension Limit: Equatable {
     }
 }
 
-extension Sequence {
 
-    func flatMapCompact<ElementOfResult>(_ transform: (Self.Element) throws -> ElementOfResult?) rethrows -> [ElementOfResult] {
-        #if swift(>=4.1)
-            return try compactMap(transform)
-        #else
-            return try self.flatMap(transform)
-        #endif
+#if !swift(>=4.1)
+extension Sequence {
+    func compactMap<T>(_ fn: (Self.Iterator.Element) throws -> T?) rethrows -> [T] {
+        return try flatMap(fn)
     }
 }
+#endif
+
