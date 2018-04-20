@@ -6,44 +6,99 @@ import Foundation
 
 struct JobInfo {
 
+    /// Type of job to create actual `Job` instance
     let type: String
 
-    var uuid: String = UUID().uuidString
-    var override = false
+    /// Unique identifier for a job
+    var uuid: String
 
-    var group: String = "GLOBAL"
+    /// Override job when scheduling a job with same uuid
+    var override: Bool
 
-    var tags = Set<String>()
+    /// Queue name
+    var group: String
 
+    /// Set of identifiers
+    var tags: Set<String>
+
+    /// Delay for the first execution of the job
     var delay: TimeInterval?
+
+    /// Cancel the job after a certain date
     var deadline: Date?
 
-    var requireNetwork: NetworkType = NetworkType.any
+    /// Require a certain connectivity type
+    var requireNetwork: NetworkType
 
-    var isPersisted: Bool = false
+    /// Indicates if the job should be persisted inside a database
+    var isPersisted: Bool
 
-    var params: [String: Any] = [:]
+    /// Custom params set by the user
+    var params: [String: Any]
 
-    var createTime: Date = Date()
+    /// Date of the job's creation
+    var createTime: Date
 
-    var interval: TimeInterval = -1.0
-    var maxRun: Limit = .limited(0)
+    /// Time between each repetition of the job
+    var interval: TimeInterval
 
-    var retries: Limit = .limited(0)
+    /// Number of run maximum
+    var maxRun: Limit
 
-    var runCount: Double = 0
-    var currentRepetition: Int = 0 // Do not serialize
+    /// Maximum number of authorised retried
+    var retries: Limit
 
-    init(type: String) {
+    /// Current number of run
+    var runCount: Double
+
+    /// Current number of repetition. Transient value
+    var currentRepetition: Int
+
+    init(type: String,
+         uuid: String = UUID().uuidString,
+         override: Bool = false,
+         group: String = "GLOBAL",
+         tags: Set<String> = Set<String>(),
+         delay: TimeInterval? = nil,
+         deadline: Date? = nil,
+         requireNetwork: NetworkType = NetworkType.any,
+         isPersisted: Bool = false,
+         params: [String: Any] = [:],
+         createTime: Date = Date(),
+         interval: TimeInterval = -1.0,
+         maxRun: Limit = .limited(0),
+         retries: Limit = .limited(0),
+         runCount: Double = 0) {
+
         self.type = type
+        self.uuid = uuid
+        self.override = override
+        self.group = group
+        self.tags = tags
+        self.delay = delay
+        self.deadline = deadline
+        self.requireNetwork = requireNetwork
+        self.isPersisted = isPersisted
+        self.params = params
+        self.createTime = createTime
+        self.interval = interval
+        self.maxRun = maxRun
+        self.retries = retries
+        self.runCount = runCount
+
+        /// Transient
+        self.currentRepetition = 0
     }
+}
+
+extension JobInfo {
 
     init?(dictionary: [String: Any]) {
         guard let type = dictionary["type"] as? String else {
             return nil
         }
 
-        self.type = type
+        self.init(type: type)
 
         dictionary.assign(&self.uuid, key: "uuid")
         dictionary.assign(&self.override, key: "override")
