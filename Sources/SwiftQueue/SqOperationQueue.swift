@@ -38,8 +38,18 @@ internal final class SqOperationQueue: OperationQueue {
     }
 
     private func loadSerializedTasks(name: String) {
-        persister.restore(queueName: name).compactMap { string -> SqOperation? in
-            return SqOperation(json: string, creator: creator, logger: logger)
+        persister.restore(queueName: name).compactMap { json -> SqOperation? in
+            do {
+                let dictionary = try fromJSON(json) as? [String: Any] ?? [:]
+
+                let info = try JobInfo(dictionary: dictionary)
+                let job = creator.create(type: info.type, params: info.params)
+
+                return SqOperation(job: job, info: info, logger: logger)
+            } catch let error {
+                logger.log(.error, jobId: "UNKNOWN", message: "Unable to deserialize job error=\(error.localizedDescription)")
+                return nil
+            }
         }.sorted { operation, operation2 in
             operation.info.createTime < operation2.info.createTime
         }.forEach { operation in
