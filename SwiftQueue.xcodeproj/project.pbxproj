@@ -35,9 +35,13 @@
 		95A210264F99EAC94629D786 /* SwiftQueueLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A217FDB8197696002CE25C /* SwiftQueueLogger.swift */; };
 		95A21098F14759AF02D73544 /* JobSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A217FA18971D3F8975799F /* JobSerializer.swift */; };
 		95A211A33B257E2CDF8A28CE /* JobSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A217FA18971D3F8975799F /* JobSerializer.swift */; };
+		95A21335BEF5A3A6156C23BF /* Constraints+Charging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A21340563EEB2B78652488 /* Constraints+Charging.swift */; };
 		95A214C332FB7115C12F88D2 /* LoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A2193AF039008357A8D362 /* LoggerTests.swift */; };
 		95A21576964E9A1FE1EDC5DB /* SwiftQueueLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A217FDB8197696002CE25C /* SwiftQueueLogger.swift */; };
+		95A2157751ECFD926FF6B22D /* Constraints+Charging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A21340563EEB2B78652488 /* Constraints+Charging.swift */; };
 		95A21659F4E8DB28294A29B1 /* JobSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A217FA18971D3F8975799F /* JobSerializer.swift */; };
+		95A21665413E1C77BF03A36B /* Constraints+Charging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A21340563EEB2B78652488 /* Constraints+Charging.swift */; };
+		95A2190E7A97E0D1B826E8A1 /* Constraints+Charging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A21340563EEB2B78652488 /* Constraints+Charging.swift */; };
 		95A21B708B2910C7CF8BD39D /* SwiftQueueLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A217FDB8197696002CE25C /* SwiftQueueLogger.swift */; };
 		95A21F692195368087359CE6 /* JobSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A217FA18971D3F8975799F /* JobSerializer.swift */; };
 		95A21FA05AABFA4A59096E8E /* SwiftQueueLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A217FDB8197696002CE25C /* SwiftQueueLogger.swift */; };
@@ -105,6 +109,7 @@
 		1E68E82C1E071C7AA1AC4BB6 /* Constrains+Network.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Constrains+Network.swift"; path = "SwiftQueue/Constrains+Network.swift"; sourceTree = "<group>"; };
 		1E68E940C8373221E3EDC771 /* Constrains+Delay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Constrains+Delay.swift"; path = "SwiftQueue/Constrains+Delay.swift"; sourceTree = "<group>"; };
 		1E68EF96F1DE038FFF94FCD8 /* Constrains+Deadline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Constrains+Deadline.swift"; path = "SwiftQueue/Constrains+Deadline.swift"; sourceTree = "<group>"; };
+		95A21340563EEB2B78652488 /* Constraints+Charging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Constraints+Charging.swift"; sourceTree = "<group>"; };
 		95A217FA18971D3F8975799F /* JobSerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JobSerializer.swift; path = SwiftQueue/JobSerializer.swift; sourceTree = "<group>"; };
 		95A217FDB8197696002CE25C /* SwiftQueueLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftQueueLogger.swift; path = SwiftQueue/SwiftQueueLogger.swift; sourceTree = "<group>"; };
 		95A2193AF039008357A8D362 /* LoggerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggerTests.swift; sourceTree = "<group>"; };
@@ -232,6 +237,7 @@
 				D0B7CB571CECEEA34DD07398 /* SqOperationQueue.swift */,
 				95A217FDB8197696002CE25C /* SwiftQueueLogger.swift */,
 				95A217FA18971D3F8975799F /* JobSerializer.swift */,
+				95A21340563EEB2B78652488 /* Constraints+Charging.swift */,
 			);
 			path = Sources;
 			sourceTree = SOURCE_ROOT;
@@ -377,6 +383,7 @@
 				D0B7C9AE1E4717DE474FD804 /* SqOperationQueue.swift in Sources */,
 				95A21FA05AABFA4A59096E8E /* SwiftQueueLogger.swift in Sources */,
 				95A21F692195368087359CE6 /* JobSerializer.swift in Sources */,
+				95A21665413E1C77BF03A36B /* Constraints+Charging.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -399,6 +406,7 @@
 				D0B7C2F3F465996A939596F7 /* SqOperationQueue.swift in Sources */,
 				95A21576964E9A1FE1EDC5DB /* SwiftQueueLogger.swift in Sources */,
 				95A21098F14759AF02D73544 /* JobSerializer.swift in Sources */,
+				95A2190E7A97E0D1B826E8A1 /* Constraints+Charging.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -421,6 +429,7 @@
 				D0B7C276BFD64AF0EA757C55 /* SqOperationQueue.swift in Sources */,
 				95A21B708B2910C7CF8BD39D /* SwiftQueueLogger.swift in Sources */,
 				95A211A33B257E2CDF8A28CE /* JobSerializer.swift in Sources */,
+				95A21335BEF5A3A6156C23BF /* Constraints+Charging.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -443,6 +452,7 @@
 				D0B7CD1E797A69C89CB0ADE2 /* SqOperationQueue.swift in Sources */,
 				95A210264F99EAC94629D786 /* SwiftQueueLogger.swift in Sources */,
 				95A21659F4E8DB28294A29B1 /* JobSerializer.swift in Sources */,
+				95A2157751ECFD926FF6B22D /* Constraints+Charging.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

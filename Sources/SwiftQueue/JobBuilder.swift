@@ -93,6 +93,11 @@ public final class JobBuilder {
         return self
     }
 
+    public func requireCharging(value: Bool) -> Self {
+        info.requireCharging = value
+        return self
+    }
+
     internal func build(job: Job, logger: SwiftQueueLogger) -> SqOperation {
         return SqOperation(job: job, info: info, logger: logger)
     }
