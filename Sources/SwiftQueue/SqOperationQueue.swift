@@ -11,13 +11,17 @@ internal final class SqOperationQueue: OperationQueue {
 
     private let queueName: String
 
+    private let trigger: TriggerOperation
+
     private let logger: SwiftQueueLogger
 
-    init(_ queueName: String, _ creator: JobCreator, _ persister: JobPersister? = nil, _ isPaused: Bool = false, logger: SwiftQueueLogger) {
+    init(_ queueName: String, _ creator: JobCreator, _ persister: JobPersister? = nil, _ isPaused: Bool = false, synchronous: Bool, logger: SwiftQueueLogger) {
         self.creator = creator
         self.persister = persister
         self.queueName = queueName
         self.logger = logger
+
+        self.trigger = TriggerOperation()
 
         super.init()
 
@@ -25,7 +29,13 @@ internal final class SqOperationQueue: OperationQueue {
         self.name = queueName
         self.maxConcurrentOperationCount = 1
 
-        loadSerializedTasks(name: queueName)
+        if synchronous {
+            self.loadSerializedTasks(name: queueName)
+        } else {
+            DispatchQueue.global(qos: DispatchQoS.QoSClass.utility).async { () -> Void in
+                self.loadSerializedTasks(name: queueName)
+            }
+        }
     }
 
     private func loadSerializedTasks(name: String) {
@@ -33,11 +43,22 @@ internal final class SqOperationQueue: OperationQueue {
             return SqOperation(json: string, creator: creator, logger: logger)
         }.sorted { operation, operation2 in
             operation.info.createTime < operation2.info.createTime
-        }.forEach(addOperation)
+        }.forEach { operation in
+            self.addOperationInternal(operation, wait: false)
+        }
+        super.addOperation(trigger)
     }
 
     override func addOperation(_ ope: Operation) {
+        self.addOperationInternal(ope, wait: true)
+    }
+
+    private func addOperationInternal(_ ope: Operation, wait: Bool) {
         guard !ope.isFinished else { return }
+
+        if wait {
+            ope.addDependency(trigger)
+        }
 
         guard let job = ope as? SqOperation else {
             // Not a job Task I don't care
@@ -88,3 +109,5 @@ internal final class SqOperationQueue: OperationQueue {
     }
 
 }
+
+internal class TriggerOperation: Operation {}
