@@ -6,16 +6,15 @@ import Foundation
 
 internal final class SqOperationQueue: OperationQueue {
 
-    private let creator: JobCreator
-    private let persister: JobPersister?
-
     private let queueName: String
+
+    private let creator: JobCreator
+    private let persister: JobPersister
+    private let logger: SwiftQueueLogger
 
     private let trigger: TriggerOperation
 
-    private let logger: SwiftQueueLogger
-
-    init(_ queueName: String, _ creator: JobCreator, _ persister: JobPersister? = nil, _ isPaused: Bool = false, synchronous: Bool, logger: SwiftQueueLogger) {
+    init(_ queueName: String, _ creator: JobCreator, _ persister: JobPersister, _ isPaused: Bool, _ synchronous: Bool, _ logger: SwiftQueueLogger) {
         self.creator = creator
         self.persister = persister
         self.queueName = queueName
@@ -39,7 +38,7 @@ internal final class SqOperationQueue: OperationQueue {
     }
 
     private func loadSerializedTasks(name: String) {
-        persister?.restore(queueName: name).compactMap { string -> SqOperation? in
+        persister.restore(queueName: name).compactMap { string -> SqOperation? in
             return SqOperation(json: string, creator: creator, logger: logger)
         }.sorted { operation, operation2 in
             operation.info.createTime < operation2.info.createTime
@@ -74,8 +73,8 @@ internal final class SqOperationQueue: OperationQueue {
         }
 
         // Serialize this operation
-        if job.info.isPersisted, let database = persister, let data = job.toJSONString() {
-            database.put(queueName: queueName, taskId: job.info.uuid, data: data)
+        if job.info.isPersisted, let data = job.toJSONString() {
+            persister.put(queueName: queueName, taskId: job.info.uuid, data: data)
         }
         job.completionBlock = { [weak self] in
             self?.completed(job)
@@ -97,8 +96,8 @@ internal final class SqOperationQueue: OperationQueue {
 
     private func completed(_ job: SqOperation) {
         // Remove this operation from serialization
-        if job.info.isPersisted, let database = persister {
-            database.remove(queueName: queueName, taskId: job.info.uuid)
+        if job.info.isPersisted {
+            persister.remove(queueName: queueName, taskId: job.info.uuid)
         }
 
         job.remove()
