@@ -29,10 +29,10 @@ internal final class SqOperationQueue: OperationQueue {
     }
 
     private func loadSerializedTasks(name: String) {
-        persister?.restore(queueName: name).flatMapCompact { string -> SqOperation? in
+        persister?.restore(queueName: name).compactMap { string -> SqOperation? in
             return SqOperation(json: string, creator: creator, logger: logger)
-        }.sorted {
-            $0.info.createTime < $1.info.createTime
+        }.sorted { operation, operation2 in
+            operation.info.createTime < operation2.info.createTime
         }.forEach(addOperation)
     }
 
