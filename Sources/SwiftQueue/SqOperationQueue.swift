@@ -10,14 +10,19 @@ internal final class SqOperationQueue: OperationQueue {
 
     private let creator: JobCreator
     private let persister: JobPersister
+    private let serializer: JobInfoSerialiser
     private let logger: SwiftQueueLogger
 
-    private let trigger: TriggerOperation
+    private let trigger: Operation
 
-    init(_ queueName: String, _ creator: JobCreator, _ persister: JobPersister, _ isPaused: Bool, _ synchronous: Bool, _ logger: SwiftQueueLogger) {
+    init(_ queueName: String, _ creator: JobCreator, _ persister: JobPersister, _ serializer: JobInfoSerialiser,
+         _ isPaused: Bool, _ synchronous: Bool, _ logger: SwiftQueueLogger) {
+
+        self.queueName = queueName
+
         self.creator = creator
         self.persister = persister
-        self.queueName = queueName
+        self.serializer = serializer
         self.logger = logger
 
         self.trigger = TriggerOperation()
@@ -38,11 +43,9 @@ internal final class SqOperationQueue: OperationQueue {
     }
 
     private func loadSerializedTasks(name: String) {
-        persister.restore(queueName: name).compactMap { json -> SqOperation? in
+        persister.restore(queueName: name).compactMap { string -> SqOperation? in
             do {
-                let dictionary = try fromJSON(json) as? [String: Any] ?? [:]
-
-                let info = try JobInfo(dictionary: dictionary)
+                let info = try serializer.deserialize(json: string)
                 let job = creator.create(type: info.type, params: info.params)
 
                 return SqOperation(job: job, info: info, logger: logger)
@@ -94,7 +97,7 @@ internal final class SqOperationQueue: OperationQueue {
 
     func persistJob(job: SqOperation) {
         do {
-            let data = try job.toJSONString()
+            let data = try serializer.serialise(info: job.info)
             persister.put(queueName: queueName, taskId: job.info.uuid, data: data)
         } catch let error {
             // In this case we still try to run the job

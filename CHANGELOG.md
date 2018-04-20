@@ -1,5 +1,31 @@
 # Change Log
 
+## [2.0.0] (DEV)
+
+#### Breaking Changes
+- Custom serializer and switch to `codable` by default (#115)
+- Minimum version required is `Swift 3.2`
+- Add a persister by default to avoid having `persist(required: true)` but no `persister` (#119)
+
+#### Improvement
+- Revise JobInfo and make it conform to Codable protocol (#117) (#120)
+
+#### New features
+- Deserialize tasks in background (#112)
+- Add internal logger (#105) 
+
+Cleanup JobInfo structure 
+
+#### Fix 
+- Fix constraint does not properly cancel the job and execution flow should stop (#113)
+- Execution flow does not stop immediately after a constraint not satisfied (#113)
+- Parsing error not forwarded and not reported with the logger (#121)
+- Parsing error not reported and prevent the job to be serialised (#122)
+
+## MISC
+- Update for Swift 3.3 and 4.1 (#110) (#111) (#107)
+- Add proper implementation of support compactMap (#116)
+
 ## [1.6.1](https://github.com/lucas34/SwiftQueue/tree/1.6.1)
 
 #### Improvement

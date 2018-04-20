@@ -208,17 +208,6 @@ extension SqOperation: JobResult {
 
 extension SqOperation {
 
-    func toJSONString() throws -> String {
-        guard let result = toJSON(info.toDictionary()) else {
-            throw SwiftQueueError.parsingError("Unable to serialise")
-        }
-        return result
-    }
-
-}
-
-extension SqOperation {
-
     func willScheduleJob(queue: SqOperationQueue) throws {
         for constraint in self.constraints {
             try constraint.willSchedule(queue: queue, operation: self)
