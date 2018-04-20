@@ -10,8 +10,6 @@ opt_in_rules:
 
 identifier_name:
   excluded:
+    - i
     - id
     - by
-    - at
-    - to
-    - in

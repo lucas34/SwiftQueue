@@ -64,12 +64,14 @@ class ConstraintDeadlineTests: XCTestCase {
         let persister = PersisterTracker(key: UUID().uuidString)
         persister.put(queueName: group, taskId: UUID().uuidString, data: json)
 
-        _ = SwiftQueueManager(creator: creator, persister: persister)
-
-        XCTAssertEqual(group, persister.restoreQueueName)
+        let manager = SwiftQueueManager(creator: creator, persister: persister)
 
         job.awaitForRemoval()
         job.assertRemovedBeforeRun(reason: .deadline)
+
+        XCTAssertEqual(group, persister.restoreQueueName)
+
+        manager.waitUntilAllOperationsAreFinished()
     }
 
     func testDeadlineAfterSchedule() {

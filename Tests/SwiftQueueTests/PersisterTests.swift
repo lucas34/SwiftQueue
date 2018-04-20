@@ -199,4 +199,52 @@ class SerializerTests: XCTestCase {
         XCTAssertEqual([group], persister.removeQueueName)
     }
 
+    func testScheduleWhileDeserialize() {
+        let queueId = UUID().uuidString
+
+        let persister = PersisterTracker(key: UUID().uuidString)
+
+        var tasks = [String: TestJob]()
+
+        for i in 0..<100 {
+            let (type, job) = (UUID().uuidString, TestJob())
+
+            let task = JobBuilder(type: type)
+                    .singleInstance(forId: "\(i)")
+                    .group(name: queueId)
+                    .build(job: job)
+                    .toJSONString()!
+
+            persister.put(queueName: queueId, taskId: "\(i)", data: task)
+
+            tasks[type] = job
+        }
+
+        let lastTaskType = UUID().uuidString
+        let lastJob = TestJob()
+
+        tasks[lastTaskType] = lastJob
+
+        let creator = TestCreator(tasks)
+        let manager = SwiftQueueManager(creator: creator, persister: persister, synchronous: false)
+
+        JobBuilder(type: lastTaskType)
+                .singleInstance(forId: lastTaskType)
+                .group(name: queueId)
+                .persist(required: true)
+                .schedule(manager: manager)
+
+        lastJob.awaitForRemoval()
+
+        // At this point all the other jobs should be completed
+        manager.cancelAllOperations()
+
+        lastJob.assertSingleCompletion()
+
+        for (_, task) in tasks {
+            task.assertSingleCompletion()
+        }
+
+    }
+
 }

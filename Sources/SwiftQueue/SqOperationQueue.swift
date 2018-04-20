@@ -6,19 +6,21 @@ import Foundation
 
 internal final class SqOperationQueue: OperationQueue {
 
-    private let creator: JobCreator
-
-    private let persister: JobPersister
-
     private let queueName: String
 
+    private let creator: JobCreator
+    private let persister: JobPersister
     private let logger: SwiftQueueLogger
 
-    init(_ queueName: String, _ creator: JobCreator, _ persister: JobPersister, _ isPaused: Bool, _ logger: SwiftQueueLogger) {
+    private let trigger: TriggerOperation
+
+    init(_ queueName: String, _ creator: JobCreator, _ persister: JobPersister, _ isPaused: Bool, _ synchronous: Bool, _ logger: SwiftQueueLogger) {
         self.creator = creator
         self.persister = persister
         self.queueName = queueName
         self.logger = logger
+
+        self.trigger = TriggerOperation()
 
         super.init()
 
@@ -26,7 +28,13 @@ internal final class SqOperationQueue: OperationQueue {
         self.name = queueName
         self.maxConcurrentOperationCount = 1
 
-        loadSerializedTasks(name: queueName)
+        if synchronous {
+            self.loadSerializedTasks(name: queueName)
+        } else {
+            DispatchQueue.global(qos: DispatchQoS.QoSClass.utility).async { () -> Void in
+                self.loadSerializedTasks(name: queueName)
+            }
+        }
     }
 
     private func loadSerializedTasks(name: String) {
@@ -34,11 +42,22 @@ internal final class SqOperationQueue: OperationQueue {
             return SqOperation(json: string, creator: creator, logger: logger)
         }.sorted { operation, operation2 in
             operation.info.createTime < operation2.info.createTime
-        }.forEach(addOperation)
+        }.forEach { operation in
+            self.addOperationInternal(operation, wait: false)
+        }
+        super.addOperation(trigger)
     }
 
     override func addOperation(_ ope: Operation) {
+        self.addOperationInternal(ope, wait: true)
+    }
+
+    private func addOperationInternal(_ ope: Operation, wait: Bool) {
         guard !ope.isFinished else { return }
+
+        if wait {
+            ope.addDependency(trigger)
+        }
 
         guard let job = ope as? SqOperation else {
             // Not a job Task I don't care
@@ -89,3 +108,5 @@ internal final class SqOperationQueue: OperationQueue {
     }
 
 }
+
+internal class TriggerOperation: Operation {}
