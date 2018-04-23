@@ -164,8 +164,6 @@ class SwiftQueueBuilderTests: XCTestCase {
         let params: [String: Any] = [UUID().uuidString: expected]
 
         let jobInfo = try toJobInfo(type: type, JobBuilder(type: type).with(params: params))
-        print(params)
-        print(jobInfo!.params)
         XCTAssertTrue(NSDictionary(dictionary: params).isEqual(to: jobInfo?.params), file: file, line: line)
     }
 

@@ -73,7 +73,6 @@ extension Limit: Equatable {
     }
 }
 
-
 #if !swift(>=4.1)
 extension Sequence {
     func compactMap<T>(_ fn: (Self.Iterator.Element) throws -> T?) rethrows -> [T] {
@@ -81,4 +80,3 @@ extension Sequence {
     }
 }
 #endif
-
