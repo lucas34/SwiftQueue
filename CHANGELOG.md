@@ -3,6 +3,7 @@
 ## [2.0.0] (DEV)
 
 #### Breaking Changes
+- `SwiftQueueManager` need to be built with `SwiftQueueManagerBuilder` (#126)  
 - Custom serializer and switch to `codable` by default (#115)
 - Minimum version required is `Swift 3.2`
 - Add a persister by default to avoid having `persist(required: true)` but no `persister` (#119)
