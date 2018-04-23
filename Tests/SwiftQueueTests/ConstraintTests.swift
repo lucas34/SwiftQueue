@@ -223,4 +223,19 @@ class ConstraintTests: XCTestCase {
         job.assertCanceledCount(expected: 1)
         job.assertError(queueError: .canceled)
     }
+
+    func testChargingConstraintShouldRunNow() {
+        let (type, job) = (UUID().uuidString, TestJob())
+
+        let creator = TestCreator([type: job])
+
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
+        JobBuilder(type: type)
+                .requireCharging(value: true)
+                .schedule(manager: manager)
+
+        job.awaitForRemoval()
+        job.assertSingleCompletion()
+    }
+
 }

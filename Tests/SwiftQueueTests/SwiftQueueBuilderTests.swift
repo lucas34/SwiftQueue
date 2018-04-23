@@ -148,6 +148,13 @@ class SwiftQueueBuilderTests: XCTestCase {
         JobBuilder(type: type).with(params: params).schedule(manager: manager)
     }
 
+    public func testBuilderRequireCharging() throws {
+        let type = UUID().uuidString
+
+        let jobInfo = try toJobInfo(type: type, JobBuilder(type: type).requireCharging(value: true))
+        XCTAssertEqual(jobInfo?.requireCharging, true)
+    }
+
     private func toJobInfo(type: String, _ builder: JobBuilder) throws -> JobInfo? {
         let creator = TestCreator([type: TestJob()])
         let persister = PersisterTracker(key: UUID().uuidString)

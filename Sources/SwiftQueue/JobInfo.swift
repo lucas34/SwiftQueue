@@ -51,6 +51,8 @@ public struct JobInfo {
     /// Current number of run
     var runCount: Double
 
+    var requireCharging: Bool
+
     /// Current number of repetition. Transient value
     var currentRepetition: Int
 
@@ -68,7 +70,8 @@ public struct JobInfo {
          interval: TimeInterval = -1.0,
          maxRun: Limit = .limited(0),
          retries: Limit = .limited(0),
-         runCount: Double = 0) {
+         runCount: Double = 0,
+         requireCharging: Bool = true) {
 
         self.type = type
         self.uuid = uuid
@@ -85,6 +88,7 @@ public struct JobInfo {
         self.maxRun = maxRun
         self.retries = retries
         self.runCount = runCount
+        self.requireCharging = requireCharging
 
         /// Transient
         self.currentRepetition = 0
@@ -109,6 +113,7 @@ extension JobInfo: Decodable {
         case maxRun = "maxRun"
         case retries = "retries"
         case runCount = "interval"
+        case requireCharging = "requireCharging"
     }
 
     public init(from decoder: Decoder) throws {
@@ -129,6 +134,7 @@ extension JobInfo: Decodable {
         let maxRun: Limit = try container.decode(Limit.self, forKey: .maxRun)
         let retries: Limit = try container.decode(Limit.self, forKey: .retries)
         let runCount: Double = try container.decode(Double.self, forKey: .runCount)
+        let requireCharging: Bool = try container.decode(Bool.self, forKey: .requireCharging)
 
         self.init(
                 type: type,
@@ -145,7 +151,8 @@ extension JobInfo: Decodable {
                 interval: interval,
                 maxRun: maxRun,
                 retries: retries,
-                runCount: runCount)
+                runCount: runCount,
+                requireCharging: requireCharging)
     }
 }
 
@@ -168,6 +175,7 @@ extension JobInfo: Encodable {
         try container.encode(maxRun, forKey: .maxRun)
         try container.encode(retries, forKey: .retries)
         try container.encode(runCount, forKey: .runCount)
+        try container.encode(requireCharging, forKey: .requireCharging)
     }
 }
 
