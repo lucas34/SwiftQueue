@@ -13,7 +13,7 @@ class ConstraintDeadlineTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManager(creator: creator)
+        let manager = SwiftQueueManager(creator: creator, persister: NoSerializer.shared)
         JobBuilder(type: type)
                 .deadline(date: Date(timeIntervalSinceNow: TimeInterval(-10)))
                 .schedule(manager: manager)
@@ -27,7 +27,7 @@ class ConstraintDeadlineTests: XCTestCase {
         let (type2, job2) = (UUID().uuidString, TestJob())
 
         let creator = TestCreator([type1: job1, type2: job2])
-        let manager = SwiftQueueManager(creator: creator)
+        let manager = SwiftQueueManager(creator: creator, persister: NoSerializer.shared)
 
         JobBuilder(type: type1)
                 .delay(time: Double.leastNonzeroMagnitude)
@@ -79,7 +79,7 @@ class ConstraintDeadlineTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManager(creator: creator)
+        let manager = SwiftQueueManager(creator: creator, persister: NoSerializer.shared)
         JobBuilder(type: type)
                 .delay(time: 60)
                 .deadline(date: Date(timeIntervalSinceNow: Double.leastNonzeroMagnitude))
@@ -97,7 +97,7 @@ class ConstraintDeadlineTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManager(creator: creator)
+        let manager = SwiftQueueManager(creator: creator, persister: NoSerializer.shared)
         JobBuilder(type: type)
                 .deadline(date: Date(timeIntervalSinceNow: 0.1))
                 .periodic(limit: .unlimited, interval: 0)
@@ -120,7 +120,7 @@ class ConstraintDeadlineTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManager(creator: creator)
+        let manager = SwiftQueueManager(creator: creator, persister: NoSerializer.shared)
         JobBuilder(type: type)
                 .delay(time: 0.1)
                 .schedule(manager: manager)
