@@ -16,27 +16,23 @@ public final class SwiftQueueManager {
 
     internal let logger: SwiftQueueLogger
 
-    private var manage = [String: SqOperationQueue]()
+    private var isPaused: Bool
 
-    private var isPaused = true
+    private var manage = [String: SqOperationQueue]()
 
     /// Create a new QueueManager with creators to instantiate Job
     /// Synchronous indicate that serialized task will be added synchronously.
     /// This can be a time consuming operation.
-    public init(creator: JobCreator,
-                persister: JobPersister = UserDefaultsPersister(), serializer: JobInfoSerialiser = DecodableSerializer(),
-                synchronous: Bool = true, logger: SwiftQueueLogger = NoLogger.shared) {
-
-        self.creator = creator
-        self.persister = persister
-        self.serializer = serializer
-        self.logger = logger
+    internal init(params: SqManagerParams) {
+        self.creator = params.creator
+        self.persister = params.persister
+        self.serializer = params.serializer
+        self.logger = params.logger
+        self.isPaused = params.isPaused
 
         for queueName in persister.restore() {
-            manage[queueName] = SqOperationQueue(queueName, creator, persister, serializer, isPaused, synchronous, logger)
+            manage[queueName] = SqOperationQueue(queueName, creator, persister, serializer, isPaused, params.synchronous, logger)
         }
-
-        start()
     }
 
     /// Jobs queued will run again
@@ -94,6 +90,77 @@ public final class SwiftQueueManager {
         for element in manage.values {
             element.waitUntilAllOperationsAreFinished()
         }
+    }
+
+}
+
+internal class SqManagerParams {
+
+    let creator: JobCreator
+
+    var persister: JobPersister
+
+    var serializer: JobInfoSerialiser
+
+    var logger: SwiftQueueLogger
+
+    var isPaused: Bool
+
+    var synchronous: Bool
+
+    init(creator: JobCreator,
+         persister: JobPersister = UserDefaultsPersister(),
+         serializer: JobInfoSerialiser = DecodableSerializer(),
+         logger: SwiftQueueLogger = NoLogger.shared,
+         isPaused: Bool = false,
+         synchronous: Bool = true) {
+
+        self.creator = creator
+        self.persister = persister
+        self.serializer = serializer
+        self.logger = logger
+        self.isPaused = isPaused
+        self.synchronous = synchronous
+    }
+
+}
+
+public final class SwiftQueueManagerBuilder {
+
+    private var params: SqManagerParams
+
+    public init(creator: JobCreator) {
+        params = SqManagerParams(creator: creator)
+    }
+
+    func set(persister: JobPersister) -> Self {
+        params.persister = persister
+        return self
+    }
+
+    func set(serializer: JobInfoSerialiser) -> Self {
+        params.serializer = serializer
+        return self
+    }
+
+    func set(logger: SwiftQueueLogger) -> Self {
+        params.logger = logger
+        return self
+    }
+
+    func set(isPaused: Bool) -> Self {
+        params.isPaused = isPaused
+        return self
+    }
+
+    func set(synchronous: Bool) -> Self {
+        params.synchronous = synchronous
+        return self
+    }
+
+    func build() -> SwiftQueueManager {
+        return SwiftQueueManager(params: params)
+
     }
 
 }

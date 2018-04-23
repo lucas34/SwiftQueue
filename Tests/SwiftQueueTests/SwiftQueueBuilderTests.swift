@@ -141,16 +141,17 @@ class SwiftQueueBuilderTests: XCTestCase {
         let params: [String: Any] = [UUID().uuidString: [UUID().uuidString: self]]
 
         let creator = TestCreator([type: TestJob()])
-        let manager = SwiftQueueManager(creator: creator, persister: NoSerializer.shared)
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
 
         // No assert expected
+        // This is just to test if the serialization failed on self
         JobBuilder(type: type).with(params: params).schedule(manager: manager)
     }
 
     private func toJobInfo(type: String, _ builder: JobBuilder) throws -> JobInfo? {
         let creator = TestCreator([type: TestJob()])
         let persister = PersisterTracker(key: UUID().uuidString)
-        let manager = SwiftQueueManager(creator: creator, persister: persister)
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: persister).build()
 
         builder.persist(required: true).schedule(manager: manager)
 
