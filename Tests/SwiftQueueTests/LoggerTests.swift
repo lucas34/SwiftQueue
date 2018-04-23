@@ -18,7 +18,7 @@ class LoggerTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManager(creator: creator, logger: debugLogger)
+        let manager = SwiftQueueManager(creator: creator, persister: NoSerializer.shared, logger: debugLogger)
         JobBuilder(type: type)
                 .singleInstance(forId: id)
                 .internet(atLeast: .wifi)

@@ -13,7 +13,7 @@ class StartStopTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManager(creator: creator)
+        let manager = SwiftQueueManager(creator: creator, persister: NoSerializer.shared)
 
         manager.pause()
 
@@ -33,7 +33,7 @@ class StartStopTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManager(creator: creator)
+        let manager = SwiftQueueManager(creator: creator, persister: NoSerializer.shared)
 
         manager.pause()
 
@@ -65,7 +65,7 @@ class StartStopTests: XCTestCase {
 
         let creator = TestCreator([type1: job1, type2: job2])
 
-        let manager = SwiftQueueManager(creator: creator)
+        let manager = SwiftQueueManager(creator: creator, persister: NoSerializer.shared)
 
         JobBuilder(type: type1).schedule(manager: manager)
 
