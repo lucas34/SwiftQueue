@@ -15,7 +15,7 @@ internal final class BatteryChargingConstraint: JobConstraint {
 
     func batteryStateDidChange(notification: NSNotification) {
         if UIDevice.current.batteryState == .charging {
-            actual?.main()
+            actual?.run()
             NotificationCenter.default.removeObserver(self)
         }
     }
