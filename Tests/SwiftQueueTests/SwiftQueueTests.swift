@@ -14,7 +14,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManager(creator: creator, persister: NoSerializer.shared)
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
         JobBuilder(type: type)
                 .internet(atLeast: .wifi)
                 .schedule(manager: manager)
@@ -34,7 +34,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         let persister = PersisterTracker(key: UUID().uuidString)
 
-        let manager = SwiftQueueManager(creator: creator, persister: persister)
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: persister).build()
 
         JobBuilder(type: type)
                 .singleInstance(forId: id)
@@ -66,7 +66,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         let persister = PersisterTracker(key: UUID().uuidString)
 
-        let manager = SwiftQueueManager(creator: creator, persister: persister)
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: persister).build()
 
         JobBuilder(type: type)
                 .singleInstance(forId: id)
@@ -98,7 +98,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         let persister = PersisterTracker(key: UUID().uuidString)
 
-        let manager = SwiftQueueManager(creator: creator, persister: persister)
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: persister).build()
 
         JobBuilder(type: type)
                 .singleInstance(forId: id)
