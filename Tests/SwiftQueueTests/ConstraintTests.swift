@@ -229,7 +229,7 @@ class ConstraintTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManager(creator: creator)
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
         JobBuilder(type: type)
                 .requireCharging(value: true)
                 .schedule(manager: manager)
