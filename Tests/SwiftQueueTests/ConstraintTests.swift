@@ -13,7 +13,7 @@ class ConstraintTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManager(creator: creator)
+        let manager = SwiftQueueManager(creator: creator, persister: NoSerializer.shared)
         JobBuilder(type: type)
                 .periodic(limit: .limited(5))
                 .schedule(manager: manager)
@@ -31,7 +31,7 @@ class ConstraintTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManager(creator: creator)
+        let manager = SwiftQueueManager(creator: creator, persister: NoSerializer.shared)
         JobBuilder(type: type)
                 .periodic(limit: .unlimited)
                 .schedule(manager: manager)
@@ -51,7 +51,7 @@ class ConstraintTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManager(creator: creator)
+        let manager = SwiftQueueManager(creator: creator, persister: NoSerializer.shared)
         JobBuilder(type: type)
                 .retry(limit: .limited(2))
                 .schedule(manager: manager)
@@ -70,7 +70,7 @@ class ConstraintTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManager(creator: creator)
+        let manager = SwiftQueueManager(creator: creator, persister: NoSerializer.shared)
         JobBuilder(type: type)
                 .retry(limit: .limited(2))
                 .schedule(manager: manager)
@@ -89,7 +89,7 @@ class ConstraintTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManager(creator: creator)
+        let manager = SwiftQueueManager(creator: creator, persister: NoSerializer.shared)
         JobBuilder(type: type)
                 .retry(limit: .unlimited)
                 .schedule(manager: manager)
@@ -109,7 +109,7 @@ class ConstraintTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManager(creator: creator)
+        let manager = SwiftQueueManager(creator: creator, persister: NoSerializer.shared)
         JobBuilder(type: type)
                 .retry(limit: .limited(2))
                 .schedule(manager: manager)
@@ -128,7 +128,7 @@ class ConstraintTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManager(creator: creator)
+        let manager = SwiftQueueManager(creator: creator, persister: NoSerializer.shared)
         JobBuilder(type: type)
                 .retry(limit: .limited(2))
                 .schedule(manager: manager)
@@ -147,7 +147,7 @@ class ConstraintTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManager(creator: creator)
+        let manager = SwiftQueueManager(creator: creator, persister: NoSerializer.shared)
         JobBuilder(type: type)
                 .retry(limit: .limited(1))
                 .periodic()
@@ -166,7 +166,7 @@ class ConstraintTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManager(creator: creator)
+        let manager = SwiftQueueManager(creator: creator, persister: NoSerializer.shared)
         JobBuilder(type: type)
                 .periodic(limit: .limited(2), interval: Double.leastNonzeroMagnitude)
                 .schedule(manager: manager)
@@ -184,7 +184,7 @@ class ConstraintTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManager(creator: creator)
+        let manager = SwiftQueueManager(creator: creator, persister: NoSerializer.shared)
         JobBuilder(type: type)
                 .schedule(manager: manager)
 
@@ -207,7 +207,7 @@ class ConstraintTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManager(creator: creator)
+        let manager = SwiftQueueManager(creator: creator, persister: NoSerializer.shared)
         JobBuilder(type: type)
                 .addTag(tag: tag)
                 .schedule(manager: manager)

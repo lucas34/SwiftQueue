@@ -207,3 +207,18 @@ extension SqOperation {
     }
 
 }
+
+class NoSerializer: JobPersister {
+
+    public static let shared = NoSerializer()
+
+    private init() {}
+
+    func restore() -> [String] { return [] }
+
+    func restore(queueName: String) -> [String] { return [] }
+
+    func put(queueName: String, taskId: String, data: String) {}
+
+    func remove(queueName: String, taskId: String) {}
+}

@@ -14,7 +14,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManager(creator: creator)
+        let manager = SwiftQueueManager(creator: creator, persister: NoSerializer.shared)
         JobBuilder(type: type)
                 .internet(atLeast: .wifi)
                 .schedule(manager: manager)

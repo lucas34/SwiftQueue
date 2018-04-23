@@ -140,7 +140,7 @@ class SwiftQueueBuilderTests: XCTestCase {
         let params: [String: Any] = [UUID().uuidString: [UUID().uuidString: self]]
 
         let creator = TestCreator([type: TestJob()])
-        let manager = SwiftQueueManager(creator: creator)
+        let manager = SwiftQueueManager(creator: creator, persister: NoSerializer.shared)
 
         // No assert expected
         JobBuilder(type: type).with(params: params).schedule(manager: manager)
