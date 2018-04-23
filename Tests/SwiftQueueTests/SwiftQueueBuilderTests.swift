@@ -128,11 +128,12 @@ class SwiftQueueBuilderTests: XCTestCase {
     }
 
     public func testBuilderWith() throws {
-        let type = UUID().uuidString
-        let params: [String: Any] = [UUID().uuidString: [UUID().uuidString: UUID().uuidString]]
-
-        let jobInfo = try toJobInfo(type: type, JobBuilder(type: type).with(params: params))
-        XCTAssertTrue(NSDictionary(dictionary: params).isEqual(to: jobInfo?.params))
+        try assertUnicode(expected: UUID().uuidString)
+        try assertUnicode(expected: "Hello world")
+        try assertUnicode(expected: "Powerلُلُصّبُلُلصّبُررً ॣ ॣh ॣ ॣ冗")
+        try assertUnicode(expected: "🏳0🌈")
+        try assertUnicode(expected: "🤪🤯🧐")
+        try assertUnicode(expected: "జ్ఞ‌ా")
     }
 
     public func testBuilderWithFreeArgs() {
@@ -163,8 +164,6 @@ class SwiftQueueBuilderTests: XCTestCase {
         let params: [String: Any] = [UUID().uuidString: expected]
 
         let jobInfo = try toJobInfo(type: type, JobBuilder(type: type).with(params: params))
-        print(params)
-        print(jobInfo!.params)
         XCTAssertTrue(NSDictionary(dictionary: params).isEqual(to: jobInfo?.params), file: file, line: line)
     }
 
