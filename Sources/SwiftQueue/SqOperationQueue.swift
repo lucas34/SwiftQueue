@@ -10,12 +10,12 @@ internal final class SqOperationQueue: OperationQueue {
 
     private let creator: JobCreator
     private let persister: JobPersister
-    private let serializer: JobInfoSerialiser
+    private let serializer: JobInfoSerializer
     private let logger: SwiftQueueLogger
 
     private let trigger: Operation
 
-    init(_ queueName: String, _ creator: JobCreator, _ persister: JobPersister, _ serializer: JobInfoSerialiser,
+    init(_ queueName: String, _ creator: JobCreator, _ persister: JobPersister, _ serializer: JobInfoSerializer,
          _ isPaused: Bool, _ synchronous: Bool, _ logger: SwiftQueueLogger) {
 
         self.queueName = queueName
@@ -97,11 +97,11 @@ internal final class SqOperationQueue: OperationQueue {
 
     func persistJob(job: SqOperation) {
         do {
-            let data = try serializer.serialise(info: job.info)
+            let data = try serializer.serialize(info: job.info)
             persister.put(queueName: queueName, taskId: job.info.uuid, data: data)
         } catch let error {
             // In this case we still try to run the job
-            logger.log(.error, jobId: job.info.uuid, message: "Unable to serialise job error=\(error.localizedDescription)")
+            logger.log(.error, jobId: job.info.uuid, message: "Unable to serialize job error=\(error.localizedDescription)")
         }
     }
 

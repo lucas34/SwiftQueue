@@ -24,7 +24,7 @@ public class UserDefaultsPersister: JobPersister {
     }
 
     /// Restore jobs for a single queue
-    /// Returns an array of String. Serialised job
+    /// Returns an array of String. serialized job
     public func restore(queueName: String) -> [String] {
         let values: [String: [String: String]] = store.value(forKey: key) as? [String: [String: String]] ?? [:]
         let tasks: [String: String] = values[queueName] ?? [:]

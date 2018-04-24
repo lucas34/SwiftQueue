@@ -203,7 +203,7 @@ extension JobError: Equatable {
 extension SqOperation {
 
     func toJSONStringSafe() -> String {
-        return (try? DecodableSerializer().serialise(info: self.info)) ?? "{}"
+        return (try? DecodableSerializer().serialize(info: self.info)) ?? "{}"
     }
 
 }
