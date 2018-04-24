@@ -83,7 +83,7 @@ internal final class SqOperation: Operation {
         }
     }
 
-    // cancel before schedule and serialise
+    // cancel before schedule and serialize
     internal func abort(error: Swift.Error) {
         logger.log(.verbose, jobId: info.uuid, message: "Job has not been scheduled due to \(error.localizedDescription)")
         lastError = error

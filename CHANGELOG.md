@@ -9,7 +9,7 @@
 - Add a persister by default to avoid having `persist(required: true)` but no `persister` (#119)
 
 #### Improvement
-- Revise JobInfo and make it conform to Codable protocol (#117) (#120)
+- Revise JobInfo and make it conform to `Codable` protocol (#117) (#120)
 
 #### New features
 - Deserialize tasks in background (#112)
@@ -21,7 +21,7 @@ Cleanup JobInfo structure
 - Fix constraint does not properly cancel the job and execution flow should stop (#113)
 - Execution flow does not stop immediately after a constraint not satisfied (#113)
 - Parsing error not forwarded and not reported with the logger (#121)
-- Parsing error not reported and prevent the job to be serialised (#122)
+- Parsing error not reported and prevent the job to be serialized (#122)
 
 ## MISC
 - Update for Swift 3.3 and 4.1 (#110) (#111) (#107)
@@ -136,7 +136,7 @@ Develop 1.3.0 Re-write 90% of the code (#22)
 #### Bug fix and improvements 
 - Improve documentation and publish (#24) 
 - Constraints should be public (#25) 
-- Add assertion to validate the [String: Any] when serialise
+- Add assertion to validate the [String: Any] when serialize
 
 ## [v1.2.3](https://github.com/lucas34/SwiftQueue/tree/1.2.3)
 
