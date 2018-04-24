@@ -179,9 +179,9 @@ extension JobInfo: Encodable {
     }
 }
 
-extension KeyedDecodingContainer {
+internal extension KeyedDecodingContainer {
 
-    public func decode(_ type: Data.Type, forKey key: KeyedDecodingContainer.Key) throws -> Data {
+    func decode(_ type: Data.Type, forKey key: KeyedDecodingContainer.Key) throws -> Data {
         let json = try self.decode(String.self, forKey: key)
         guard let data = json.data(using: .utf8) else {
             throw DecodingError.dataCorrupted(DecodingError.Context(
@@ -192,7 +192,7 @@ extension KeyedDecodingContainer {
         return data
     }
 
-    public func decode(_ type: [String: Any].Type, forKey key: KeyedDecodingContainer.Key) throws -> [String: Any] {
+    func decode(_ type: [String: Any].Type, forKey key: KeyedDecodingContainer.Key) throws -> [String: Any] {
         let data = try self.decode(Data.self, forKey: key)
         guard let dict = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] else {
             throw DecodingError.dataCorrupted(DecodingError.Context(
@@ -205,9 +205,9 @@ extension KeyedDecodingContainer {
 
 }
 
-extension KeyedEncodingContainer {
+internal extension KeyedEncodingContainer {
 
-    public mutating func encode(_ value: [String: Any], forKey key: KeyedEncodingContainer.Key) throws {
+    mutating func encode(_ value: [String: Any], forKey key: KeyedEncodingContainer.Key) throws {
         let jsonData = try JSONSerialization.data(withJSONObject: value)
         guard let utf8 = String(data: jsonData, encoding: .utf8) else {
             throw DecodingError.dataCorrupted(DecodingError.Context(
