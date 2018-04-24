@@ -20,9 +20,6 @@ public final class SwiftQueueManager {
 
     private var manage = [String: SqOperationQueue]()
 
-    /// Create a new QueueManager with creators to instantiate Job
-    /// Synchronous indicate that serialized task will be added synchronously.
-    /// This can be a time consuming operation.
     internal init(params: SqManagerParams) {
         self.creator = params.creator
         self.persister = params.persister
@@ -125,39 +122,49 @@ internal class SqManagerParams {
 
 }
 
+/// Entry point to create a `SwiftQueueManager`
 public final class SwiftQueueManagerBuilder {
 
     private var params: SqManagerParams
 
+    /// Creator to convert `JobInfo.type` to `Job` instance
     public init(creator: JobCreator) {
         params = SqManagerParams(creator: creator)
     }
 
+    /// Custom way of saving `JobInfo`. Will use `UserDefaultsPersister` by default
     func set(persister: JobPersister) -> Self {
         params.persister = persister
         return self
     }
 
+    /// Custom way of serializing `JobInfo`. Will use `DecodableSerializer` by default
     func set(serializer: JobInfoSerialiser) -> Self {
         params.serializer = serializer
         return self
     }
 
+    /// Internal event logger. `NoLogger` by default
+    /// Use `ConsoleLogger` to print to the console. This is not recommended since the print is synchronous
+    /// and it can be and expensive operation. Prefer using a asynchronous logger like `SwiftyBeaver`.
     func set(logger: SwiftQueueLogger) -> Self {
         params.logger = logger
         return self
     }
 
+    /// Start jobs directly when they are scheduled or not. `false` by default
     func set(isPaused: Bool) -> Self {
         params.isPaused = isPaused
         return self
     }
 
+    /// Deserialize jobs synchronously after creating the `SwiftQueueManager` instance. `true` by default
     func set(synchronous: Bool) -> Self {
         params.synchronous = synchronous
         return self
     }
 
+    /// Get an instance of `SwiftQueueManager`
     func build() -> SwiftQueueManager {
         return SwiftQueueManager(params: params)
 

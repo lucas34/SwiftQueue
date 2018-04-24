@@ -109,7 +109,7 @@ class SendTweetJob: Job {
 Create your `SwiftQueueManager` and **keep the reference**. If you want to cancel a job it has to be done with the same instance.
 
 ```swift
-let manager = SwiftQueueManager(creators: [TweetJobCreator()])
+let manager = SwiftQueueManagerBuilder(creator: TweetJobCreator()).build()
 ```
 
 Schedule your job and specify the constraints.
@@ -130,13 +130,14 @@ Bind your `job` type with an actual instance.
 class TweetJobCreator: JobCreator {
 
     // Base on type, return the actual job implementation
-    func create(type: String, params: [String: Any]?) -> Job? {
+    func create(type: String, params: [String: Any]?) -> Job {
         // check for job and params type
         if type == SendTweetJob.type  {
             return SendTweetJob(params: params)
         } else {
             // Nothing match
-            return nil
+            // You can use `fatalError` or create an empty job to report this issue.
+            fatalError("No Job !")
         }
     }
 }
