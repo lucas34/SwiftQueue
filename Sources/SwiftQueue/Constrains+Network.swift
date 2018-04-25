@@ -48,6 +48,8 @@ internal final class NetworkConstraint: JobConstraint {
             reachability.whenReachable = nil
             operation.run()
         }
+
+        operation.logger.log(.verbose, jobId: operation.info.uuid, message: "Unsatisfied network requirement")
         return false
     }
 
