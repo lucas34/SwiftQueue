@@ -104,7 +104,4 @@ public enum SwiftQueueError: Swift.Error {
     /// Job canceled inside onError. Parameter contains the origin error
     case onRetryCancel(Error)
 
-    /// Unable to parse
-    case parsingError(String)
-
 }
