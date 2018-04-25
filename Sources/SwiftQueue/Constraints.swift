@@ -36,3 +36,13 @@ public enum RetryConstraint {
     /// Exponential back-off
     case exponential(initial: TimeInterval)
 }
+
+internal class DefaultNoConstraint: JobConstraint {
+
+    func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {}
+
+    func willRun(operation: SqOperation) throws {}
+
+    func run(operation: SqOperation) -> Bool { return true }
+
+}

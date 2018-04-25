@@ -106,7 +106,7 @@ public final class JobBuilder {
     /// Add job to the JobQueue
     public func schedule(manager: SwiftQueueManager) {
         if info.isPersisted {
-            // Check if we will be able to serialise args
+            // Check if we will be able to serialize args
             assert(JSONSerialization.isValidJSONObject(info.params))
         }
 

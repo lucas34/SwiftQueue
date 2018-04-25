@@ -5,8 +5,7 @@
 import Foundation
 
 /// Implementation of `JobInfoSerializer` with `JSONEncoder` and `JSONDecoder`
-public class DecodableSerializer: JobInfoSerialiser {
-
+public class DecodableSerializer: JobInfoSerializer {
     private let encoder: JSONEncoder
     private let decoder: JSONDecoder
 
@@ -17,7 +16,7 @@ public class DecodableSerializer: JobInfoSerialiser {
     }
 
     /// Convert `JobInfo` to Json with `JSONEncoder`
-    public func serialise(info: JobInfo) throws -> String {
+    public func serialize(info: JobInfo) throws -> String {
         let encoded = try encoder.encode(info)
         guard let string = String(data: encoded, encoding: .utf8) else {
             throw DecodingError.dataCorrupted(DecodingError.Context(
