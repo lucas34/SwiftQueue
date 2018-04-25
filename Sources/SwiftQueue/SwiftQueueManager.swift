@@ -133,32 +133,32 @@ public final class SwiftQueueManagerBuilder {
         params = SqManagerParams(creator: creator)
     }
 
-    func set(persister: JobPersister) -> Self {
+    public func set(persister: JobPersister) -> Self {
         params.persister = persister
         return self
     }
 
-    func set(serializer: JobInfoSerializer) -> Self {
+    public func set(serializer: JobInfoSerializer) -> Self {
         params.serializer = serializer
         return self
     }
 
-    func set(logger: SwiftQueueLogger) -> Self {
+    public func set(logger: SwiftQueueLogger) -> Self {
         params.logger = logger
         return self
     }
 
-    func set(isPaused: Bool) -> Self {
+    public func set(isPaused: Bool) -> Self {
         params.isPaused = isPaused
         return self
     }
 
-    func set(synchronous: Bool) -> Self {
+    public func set(synchronous: Bool) -> Self {
         params.synchronous = synchronous
         return self
     }
 
-    func build() -> SwiftQueueManager {
+    public func build() -> SwiftQueueManager {
         return SwiftQueueManager(params: params)
 
     }
