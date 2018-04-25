@@ -31,9 +31,9 @@ public protocol JobPersister {
 
 }
 
-public protocol JobInfoSerialiser {
+public protocol JobInfoSerializer {
 
-    func serialise(info: JobInfo) throws -> String
+    func serialize(info: JobInfo) throws -> String
 
     func deserialize(json: String) throws -> JobInfo
 
@@ -103,8 +103,5 @@ public enum SwiftQueueError: Swift.Error {
 
     /// Job canceled inside onError. Parameter contains the origin error
     case onRetryCancel(Error)
-
-    /// Unable to parse
-    case parsingError(String)
 
 }
