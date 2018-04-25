@@ -16,8 +16,8 @@ public enum LogLevel: Int {
 
 }
 
-internal extension LogLevel {
-    var description: String {
+public extension LogLevel {
+    public var description: String {
         switch self {
         case .verbose:
             return "verbose"
@@ -43,7 +43,7 @@ open class ConsoleLogger: SwiftQueueLogger {
     private let min: LogLevel
 
     /// Define minimum level to log. By default, it will log everything
-    init(min: LogLevel = .verbose) {
+    public init(min: LogLevel = .verbose) {
         self.min = min
     }
 
