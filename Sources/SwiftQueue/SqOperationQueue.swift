@@ -16,7 +16,7 @@ internal final class SqOperationQueue: OperationQueue {
     private let trigger: Operation
 
     init(_ queueName: String, _ creator: JobCreator, _ persister: JobPersister, _ serializer: JobInfoSerializer,
-         _ isPaused: Bool, _ synchronous: Bool, _ logger: SwiftQueueLogger) {
+         _ isSuspended: Bool, _ synchronous: Bool, _ logger: SwiftQueueLogger) {
 
         self.queueName = queueName
 
@@ -29,7 +29,7 @@ internal final class SqOperationQueue: OperationQueue {
 
         super.init()
 
-        self.isSuspended = isPaused
+        self.isSuspended = isSuspended
         self.name = queueName
         self.maxConcurrentOperationCount = 1
 
