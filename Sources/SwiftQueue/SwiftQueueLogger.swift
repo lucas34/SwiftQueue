@@ -17,6 +17,8 @@ public enum LogLevel: Int {
 }
 
 public extension LogLevel {
+
+    /// Describe type of level in human-way
     public var description: String {
         switch self {
         case .verbose:
@@ -29,7 +31,7 @@ public extension LogLevel {
     }
 }
 
-/// Func
+/// Protocol to implement for implementing your custom logger
 public protocol SwiftQueueLogger {
 
     /// Function called by the library to log an event
