@@ -73,7 +73,7 @@ public struct JobInfo {
          maxRun: Limit = .limited(0),
          retries: Limit = .limited(0),
          runCount: Double = 0,
-         requireCharging: Bool = true) {
+         requireCharging: Bool = false) {
 
         self.type = type
         self.uuid = uuid

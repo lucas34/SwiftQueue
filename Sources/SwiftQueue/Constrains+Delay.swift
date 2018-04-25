@@ -26,13 +26,16 @@ internal final class DelayConstraint: JobConstraint {
             return true
         }
 
-        runInBackgroundAfter(abs(epoch - delay), callback: { [weak operation] in
+        let time: Double = abs(epoch - delay)
+
+        runInBackgroundAfter(time, callback: { [weak operation] in
             // If the operation in already deInit, it may have been canceled
             // It's safe to ignore the nil check
             // This is mostly to prevent job retention when cancelling operation with delay
             operation?.run()
         })
 
+        operation.logger.log(.verbose, jobId: operation.info.uuid, message: "Job delayed by \(time)s")
         return false
     }
 }

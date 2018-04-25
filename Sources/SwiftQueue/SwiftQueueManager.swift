@@ -16,7 +16,7 @@ public final class SwiftQueueManager {
 
     internal let logger: SwiftQueueLogger
 
-    private var isPaused: Bool
+    private var isSuspended: Bool
 
     private var manage = [String: SqOperationQueue]()
 
@@ -25,16 +25,16 @@ public final class SwiftQueueManager {
         self.persister = params.persister
         self.serializer = params.serializer
         self.logger = params.logger
-        self.isPaused = params.isPaused
+        self.isSuspended = params.isSuspended
 
         for queueName in persister.restore() {
-            manage[queueName] = SqOperationQueue(queueName, creator, persister, serializer, isPaused, params.synchronous, logger)
+            manage[queueName] = SqOperationQueue(queueName, creator, persister, serializer, isSuspended, params.synchronous, logger)
         }
     }
 
     /// Jobs queued will run again
     public func start() {
-        isPaused = false
+        isSuspended = false
         for element in manage.values {
             element.isSuspended = false
         }
@@ -42,7 +42,7 @@ public final class SwiftQueueManager {
 
     /// Avoid new job to run. Not application for current running job.
     public func pause() {
-        isPaused = true
+        isSuspended = true
         for element in manage.values {
             element.isSuspended = true
         }
@@ -54,7 +54,7 @@ public final class SwiftQueueManager {
 
     private func createQueue(queueName: String) -> SqOperationQueue {
         // At this point the queue should be totally new so it's safe to start the queue synchronously
-        let queue = SqOperationQueue(queueName, creator, persister, serializer, isPaused, true, logger)
+        let queue = SqOperationQueue(queueName, creator, persister, serializer, isSuspended, true, logger)
         manage[queueName] = queue
         return queue
     }
@@ -101,7 +101,7 @@ internal class SqManagerParams {
 
     var logger: SwiftQueueLogger
 
-    var isPaused: Bool
+    var isSuspended: Bool
 
     var synchronous: Bool
 
@@ -109,14 +109,14 @@ internal class SqManagerParams {
          persister: JobPersister = UserDefaultsPersister(),
          serializer: JobInfoSerializer = DecodableSerializer(),
          logger: SwiftQueueLogger = NoLogger.shared,
-         isPaused: Bool = false,
+         isSuspended: Bool = false,
          synchronous: Bool = true) {
 
         self.creator = creator
         self.persister = persister
         self.serializer = serializer
         self.logger = logger
-        self.isPaused = isPaused
+        self.isSuspended = isSuspended
         self.synchronous = synchronous
     }
 
@@ -153,8 +153,8 @@ public final class SwiftQueueManagerBuilder {
     }
 
     /// Start jobs directly when they are scheduled or not. `false` by default
-    public func set(isPaused: Bool) -> Self {
-        params.isPaused = isPaused
+    public func set(isSuspended: Bool) -> Self {
+        params.isSuspended = isSuspended
         return self
     }
 
