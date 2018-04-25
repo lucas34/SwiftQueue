@@ -41,14 +41,6 @@ internal final class BatteryChargingConstraint: JobConstraint {
 
 #else
 
-internal final class BatteryChargingConstraint: JobConstraint {
-
-    func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {}
-
-    func willRun(operation: SqOperation) throws {}
-
-    func run(operation: SqOperation) -> Bool { return true }
-
-}
+internal final class BatteryChargingConstraint: DefaultNoConstraint {}
 
 #endif

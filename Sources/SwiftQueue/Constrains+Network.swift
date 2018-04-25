@@ -65,19 +65,6 @@ internal final class NetworkConstraint: JobConstraint {
 }
 #else
 
-internal final class NetworkConstraint: JobConstraint {
-
-    func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {
-
-    }
-
-    func willRun(operation: SqOperation) throws {
-
-    }
-
-    func run(operation: SqOperation) -> Bool {
-        return true
-    }
-}
+internal final class NetworkConstraint: DefaultNoConstraint {}
 
 #endif

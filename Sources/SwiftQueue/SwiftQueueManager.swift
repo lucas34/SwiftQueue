@@ -7,12 +7,12 @@ import Foundation
 
 /// Global manager to perform operations on all your queues/
 /// You will have to keep this instance. We highly recommend you to store this instance in a Singleton
-/// Creating and instance of this class will automatically un-serialise your jobs and schedule them
+/// Creating and instance of this class will automatically un-serialize your jobs and schedule them
 public final class SwiftQueueManager {
 
     private let creator: JobCreator
     private let persister: JobPersister
-    private let serializer: JobInfoSerialiser
+    private let serializer: JobInfoSerializer
 
     internal let logger: SwiftQueueLogger
 
@@ -100,7 +100,7 @@ internal class SqManagerParams {
 
     var persister: JobPersister
 
-    var serializer: JobInfoSerialiser
+    var serializer: JobInfoSerializer
 
     var logger: SwiftQueueLogger
 
@@ -110,7 +110,7 @@ internal class SqManagerParams {
 
     init(creator: JobCreator,
          persister: JobPersister = UserDefaultsPersister(),
-         serializer: JobInfoSerialiser = DecodableSerializer(),
+         serializer: JobInfoSerializer = DecodableSerializer(),
          logger: SwiftQueueLogger = NoLogger.shared,
          isPaused: Bool = false,
          synchronous: Bool = true) {
@@ -138,7 +138,7 @@ public final class SwiftQueueManagerBuilder {
         return self
     }
 
-    func set(serializer: JobInfoSerialiser) -> Self {
+    func set(serializer: JobInfoSerializer) -> Self {
         params.serializer = serializer
         return self
     }
