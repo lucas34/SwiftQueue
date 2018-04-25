@@ -133,13 +133,13 @@ public final class SwiftQueueManagerBuilder {
     }
 
     /// Custom way of saving `JobInfo`. Will use `UserDefaultsPersister` by default
-    func set(persister: JobPersister) -> Self {
+    public func set(persister: JobPersister) -> Self {
         params.persister = persister
         return self
     }
 
     /// Custom way of serializing `JobInfo`. Will use `DecodableSerializer` by default
-    func set(serializer: JobInfoSerializer) -> Self {
+    public func set(serializer: JobInfoSerializer) -> Self {
         params.serializer = serializer
         return self
     }
@@ -147,27 +147,26 @@ public final class SwiftQueueManagerBuilder {
     /// Internal event logger. `NoLogger` by default
     /// Use `ConsoleLogger` to print to the console. This is not recommended since the print is synchronous
     /// and it can be and expensive operation. Prefer using a asynchronous logger like `SwiftyBeaver`.
-    func set(logger: SwiftQueueLogger) -> Self {
+    public func set(logger: SwiftQueueLogger) -> Self {
         params.logger = logger
         return self
     }
 
     /// Start jobs directly when they are scheduled or not. `false` by default
-    func set(isPaused: Bool) -> Self {
+    public func set(isPaused: Bool) -> Self {
         params.isPaused = isPaused
         return self
     }
 
     /// Deserialize jobs synchronously after creating the `SwiftQueueManager` instance. `true` by default
-    func set(synchronous: Bool) -> Self {
+    public func set(synchronous: Bool) -> Self {
         params.synchronous = synchronous
         return self
     }
 
     /// Get an instance of `SwiftQueueManager`
-    func build() -> SwiftQueueManager {
+    public func build() -> SwiftQueueManager {
         return SwiftQueueManager(params: params)
-
     }
 
 }
