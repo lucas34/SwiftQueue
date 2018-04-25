@@ -23,6 +23,8 @@ GEM
       no_proxy_fix
       octokit (~> 4.7)
       terminal-table (~> 1)
+    danger-prose (2.0.7)
+      danger
     danger-swiftlint (0.16.0)
       danger
       rake (> 10)
@@ -53,6 +55,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  danger-prose
   danger-swiftlint
 
 BUNDLED WITH
