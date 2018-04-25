@@ -244,7 +244,39 @@ class SerializerTests: XCTestCase {
         for (_, task) in tasks {
             task.assertSingleCompletion()
         }
+    }
 
+    func testCustomSerializer() {
+        let (type1, job1) = (UUID().uuidString, TestJob())
+
+        let persistance = PersisterTracker(key: UUID().uuidString)
+        let serializer = MemorySerializer()
+
+        let manager = SwiftQueueManagerBuilder(creator: TestCreator([type1: job1]))
+                .set(persister: persistance)
+                .set(serializer: serializer)
+                .set(isSuspended: true)
+                .build()
+
+        JobBuilder(type: type1)
+                .group(name: UUID().uuidString)
+                .persist(required: true)
+                .schedule(manager: manager)
+
+        // at this point the job should have been serialised
+        job1.assertNoRun()
+
+        // Re-create manager
+        let manager2 = SwiftQueueManagerBuilder(creator: TestCreator([type1: job1]))
+                .set(persister: persistance)
+                .set(serializer: serializer)
+                .set(isSuspended: false)
+                .build()
+
+        manager2.waitUntilAllOperationsAreFinished()
+
+        job1.awaitForRemoval()
+        job1.assertSingleCompletion()
     }
 
 }

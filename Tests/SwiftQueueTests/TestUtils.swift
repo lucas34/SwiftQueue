@@ -222,3 +222,17 @@ class NoSerializer: JobPersister {
 
     func remove(queueName: String, taskId: String) {}
 }
+
+class MemorySerializer: JobInfoSerializer {
+
+    private var data: [String: JobInfo] = [:]
+
+    func serialize(info: JobInfo) throws -> String {
+        data[info.uuid] = info
+        return info.uuid
+    }
+
+    func deserialize(json: String) throws -> JobInfo {
+        return data[json] ?? JobInfo(type: json)
+    }
+}
