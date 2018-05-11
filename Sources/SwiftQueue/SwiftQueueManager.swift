@@ -16,7 +16,14 @@ public final class SwiftQueueManager {
 
     internal let logger: SwiftQueueLogger
 
-    private var isSuspended: Bool
+    /// Allow jobs in queue to be executed.
+    public var isSuspended: Bool {
+        didSet {
+            for element in manage.values {
+                element.isSuspended = isSuspended
+            }
+        }
+    }
 
     private var manage = [String: SqOperationQueue]()
 
@@ -35,20 +42,14 @@ public final class SwiftQueueManager {
         }
     }
 
-    /// Jobs queued will run again
+    @available(*, deprecated: 2.0, message: "Please use `isSuspended = false`")
     public func start() {
         isSuspended = false
-        for element in manage.values {
-            element.isSuspended = false
-        }
     }
 
-    /// Avoid new job to run. Not application for current running job.
+    @available(*, deprecated: 2.0, message: "Please use `isSuspended = true`")
     public func pause() {
         isSuspended = true
-        for element in manage.values {
-            element.isSuspended = true
-        }
     }
 
     internal func getQueue(queueName: String) -> SqOperationQueue {
