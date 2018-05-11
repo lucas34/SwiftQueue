@@ -23,7 +23,7 @@ class StartStopTests: XCTestCase {
         // No run
         job.assertNoRun()
 
-        manager.start()
+        manager.isSuspended = false
 
         job.awaitForRemoval()
         job.assertSingleCompletion()
@@ -36,20 +36,20 @@ class StartStopTests: XCTestCase {
 
         let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
 
-        manager.pause()
+        manager.isSuspended = true
 
         JobBuilder(type: type).periodic(limit: .limited(4), interval: 0).schedule(manager: manager)
 
         // No run
         job.assertNoRun()
 
-        manager.start()
-        manager.start()
-        manager.start()
-        manager.start()
-        manager.start()
-        manager.start()
-        manager.start()
+        manager.isSuspended = false
+        manager.isSuspended = false
+        manager.isSuspended = false
+        manager.isSuspended = false
+        manager.isSuspended = false
+        manager.isSuspended = false
+        manager.isSuspended = false
 
         job.awaitForRemoval()
 

@@ -9,6 +9,7 @@
 - Add a persister by default to avoid having `persist(required: true)` but no `persister` (#119)
 
 #### Improvement
+- Expose `isSuspended` from `SwiftQueueManager` (#145)
 - Revise JobInfo and make it conform to `Codable` protocol (#117) (#120)
 
 #### New features
