@@ -65,3 +65,6 @@ end
 
 # Run SwiftLint
 swiftlint.lint_files
+
+# Run prose
+prose.check_spelling

@@ -1,6 +1,6 @@
 # Change Log
 
-## [2.0.0] (DEV)
+## [2.0.0](https://github.com/lucas34/SwiftQueue/tree/2.0.0)
 
 #### Breaking Changes
 - `SwiftQueueManager` need to be built with `SwiftQueueManagerBuilder` (#126)  
@@ -9,11 +9,13 @@
 - Add a persister by default to avoid having `persist(required: true)` but no `persister` (#119)
 
 #### Improvement
+- Expose `isSuspended` from `SwiftQueueManager` (#145)
 - Revise JobInfo and make it conform to `Codable` protocol (#117) (#120)
 
 #### New features
+- Charging constraint (#123) 
 - Deserialize tasks in background (#112)
-- Add internal logger (#105) 
+- Add internal logger (#105)
 
 Cleanup JobInfo structure 
 
@@ -23,7 +25,7 @@ Cleanup JobInfo structure
 - Parsing error not forwarded and not reported with the logger (#121)
 - Parsing error not reported and prevent the job to be serialized (#122)
 
-## MISC
+#### MISC
 - Update for Swift 3.3 and 4.1 (#110) (#111) (#107)
 - Add proper implementation of support compactMap (#116)
 
@@ -82,7 +84,7 @@ Cleanup JobInfo structure
     - `func retry(Int)`
     - `func periodic(Int, TimeInterval)`
 
-## [v1.4.1](https://github.com/lucas34/SwiftQueue/tree/1.4.1)
+## [1.4.1](https://github.com/lucas34/SwiftQueue/tree/1.4.1)
 
 #### Bug fix 
 - Fix an issue where a periodic job will not be re-scheduled (#63)
@@ -92,7 +94,7 @@ Cleanup JobInfo structure
 - Make unavailable methods crash if called #64
 - Raise warning if something went wrong during the deserialization (#58)
 
-## [v1.4.0](https://github.com/lucas34/SwiftQueue/tree/1.4.0)
+## [1.4.0](https://github.com/lucas34/SwiftQueue/tree/1.4.0)
 
 Develop 1.4.0 (#52)
 
@@ -104,7 +106,7 @@ Develop 1.4.0 (#52)
 - JobBuilder.retry(Limit)
 - JobBuilder.periodic(Limit, TimeInterval)
 
-## [v1.3.2](https://github.com/lucas34/SwiftQueue/tree/1.3.2)
+## [1.3.2](https://github.com/lucas34/SwiftQueue/tree/1.3.2)
 
 #### New features
 - Allow overriding previous job for SingleInstance constraint (#38)
@@ -118,12 +120,12 @@ Develop 1.4.0 (#52)
 - Setup danger (#31)
 - Support travis cache builds (#39)
 
-## [v1.3.1](https://github.com/lucas34/SwiftQueue/tree/1.3.1)
+## [1.3.1](https://github.com/lucas34/SwiftQueue/tree/1.3.1)
 
 - Fix crash in exponential retry
 - Fix exponential retry not reset after a success run
 
-## [v1.3.0](https://github.com/lucas34/SwiftQueue/tree/1.3.0)
+## [1.3.0](https://github.com/lucas34/SwiftQueue/tree/1.3.0)
 Develop 1.3.0 Re-write 90% of the code (#22) 
 
 #### Breaking changes 
@@ -138,19 +140,19 @@ Develop 1.3.0 Re-write 90% of the code (#22)
 - Constraints should be public (#25) 
 - Add assertion to validate the [String: Any] when serialize
 
-## [v1.2.3](https://github.com/lucas34/SwiftQueue/tree/1.2.3)
+## [1.2.3](https://github.com/lucas34/SwiftQueue/tree/1.2.3)
 
 - Job is now immediately canceled when the deadline is reached
 
-## [v1.2.2](https://github.com/lucas34/SwiftQueue/tree/1.2.2)
+## [1.2.2](https://github.com/lucas34/SwiftQueue/tree/1.2.2)
 
 - Add support for Swift Package Manager
 
-## [v1.2.1](https://github.com/lucas34/SwiftQueue/tree/1.2.1)
+## [1.2.1](https://github.com/lucas34/SwiftQueue/tree/1.2.1)
 
 - Fix job retained longer after cancellation
 
-## [v1.2.0](https://github.com/lucas34/SwiftQueue/tree/1.2.0)
+## [1.2.0](https://github.com/lucas34/SwiftQueue/tree/1.2.0)
 
 #### Bug Fix
 - Job constraint error should not call onRetry
@@ -166,7 +168,7 @@ Develop 1.3.0 Re-write 90% of the code (#22)
 - Remove throw in Run method to avoid confusion with onError callback
 - User will need to keep a strong reference to SwiftQueueManager
 
-## [v1.1.0](https://github.com/lucas34/SwiftQueue/tree/1.1.0)
+## [1.1.0](https://github.com/lucas34/SwiftQueue/tree/1.1.0)
 
 #### Carthage
 Support all targets when using carthage
@@ -181,12 +183,12 @@ Support all targets when using carthage
 - Job not delayed properly
 - Crash when delaying the job with a high value
 
-## [v1.0.1](https://github.com/lucas34/SwiftQueue/tree/1.0.1)
+## [1.0.1](https://github.com/lucas34/SwiftQueue/tree/1.0.1)
 
 #### Breaking changes
 - Add delay to retry()
 - Pause and restart will match behaviour of OperationQueue to avoid job running 2 times
 
-## [v1.0.0](https://github.com/lucas34/SwiftQueue/tree/1.0.0)
+## [1.0.0](https://github.com/lucas34/SwiftQueue/tree/1.0.0)
 
 - First stable release
