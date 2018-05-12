@@ -4,6 +4,7 @@
 
 import Foundation
 
+/// Using Key value serializer to match with V1 behavior
 public class V1Serializer: JobInfoSerializer {
 
     func toJSON(_ obj: [String: Any]) throws -> String? {

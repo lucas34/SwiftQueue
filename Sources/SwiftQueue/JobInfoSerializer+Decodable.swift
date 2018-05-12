@@ -4,11 +4,13 @@
 
 import Foundation
 
+/// `JSONEncoder` and `JSONDecoder` to serialize JobInfo
 public class DecodableSerializer: JobInfoSerializer {
 
     private let encoder: JSONEncoder
     private let decoder: JSONDecoder
 
+    /// Init decodable with custom `JSONEncoder` and `JSONDecoder`
     public init(encoder: JSONEncoder = JSONEncoder(), decoder: JSONDecoder = JSONDecoder()) {
         self.encoder = encoder
         self.decoder = decoder
