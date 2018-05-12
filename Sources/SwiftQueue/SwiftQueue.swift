@@ -31,10 +31,13 @@ public protocol JobPersister {
 
 }
 
+/// Class to serialize and deserialize `JobInfo`
 public protocol JobInfoSerializer {
 
+    /// Convert `JobInfo` to a representable string
     func serialize(info: JobInfo) throws -> String
 
+    /// Convert back a string to a `JobInfo`
     func deserialize(json: String) throws -> JobInfo
 
 }

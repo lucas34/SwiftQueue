@@ -16,13 +16,17 @@ public final class SwiftQueueManager {
 
     internal let logger: SwiftQueueLogger
 
-    private var isSuspended: Bool
+    /// Allow jobs in queue to be executed.
+    public var isSuspended: Bool {
+        didSet {
+            for element in manage.values {
+                element.isSuspended = isSuspended
+            }
+        }
+    }
 
     private var manage = [String: SqOperationQueue]()
 
-    /// Create a new QueueManager with creators to instantiate Job
-    /// Synchronous indicate that serialized task will be added synchronously.
-    /// This can be a time consuming operation.
     internal init(params: SqManagerParams) {
         self.creator = params.creator
         self.persister = params.persister
@@ -35,20 +39,14 @@ public final class SwiftQueueManager {
         }
     }
 
-    /// Jobs queued will run again
+    @available(*, deprecated: 2.0, message: "Please use `isSuspended = false`")
     public func start() {
         isSuspended = false
-        for element in manage.values {
-            element.isSuspended = false
-        }
     }
 
-    /// Avoid new job to run. Not application for current running job.
+    @available(*, deprecated: 2.0, message: "Please use `isSuspended = true`")
     public func pause() {
         isSuspended = true
-        for element in manage.values {
-            element.isSuspended = true
-        }
     }
 
     internal func getQueue(queueName: String) -> SqOperationQueue {
@@ -125,42 +123,51 @@ internal class SqManagerParams {
 
 }
 
+/// Entry point to create a `SwiftQueueManager`
 public final class SwiftQueueManagerBuilder {
 
     private var params: SqManagerParams
 
+    /// Creator to convert `JobInfo.type` to `Job` instance
     public init(creator: JobCreator) {
         params = SqManagerParams(creator: creator)
     }
 
+    /// Custom way of saving `JobInfo`. Will use `UserDefaultsPersister` by default
     public func set(persister: JobPersister) -> Self {
         params.persister = persister
         return self
     }
 
+    /// Custom way of serializing `JobInfo`. Will use `DecodableSerializer` by default
     public func set(serializer: JobInfoSerializer) -> Self {
         params.serializer = serializer
         return self
     }
 
+    /// Internal event logger. `NoLogger` by default
+    /// Use `ConsoleLogger` to print to the console. This is not recommended since the print is synchronous
+    /// and it can be and expensive operation. Prefer using a asynchronous logger like `SwiftyBeaver`.
     public func set(logger: SwiftQueueLogger) -> Self {
         params.logger = logger
         return self
     }
 
+    /// Start jobs directly when they are scheduled or not. `false` by default
     public func set(isSuspended: Bool) -> Self {
         params.isSuspended = isSuspended
         return self
     }
 
+    /// Deserialize jobs synchronously after creating the `SwiftQueueManager` instance. `true` by default
     public func set(synchronous: Bool) -> Self {
         params.synchronous = synchronous
         return self
     }
 
+    /// Get an instance of `SwiftQueueManager`
     public func build() -> SwiftQueueManager {
         return SwiftQueueManager(params: params)
-
     }
 
 }
