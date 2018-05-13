@@ -4,6 +4,8 @@
 
 import Foundation
 
+/// Info related to a single job. Those information may be serialized and persisted
+/// In order to re-create the job in the future.
 public struct JobInfo {
 
     /// Type of job to create actual `Job` instance

@@ -93,6 +93,7 @@ public final class JobBuilder {
         return self
     }
 
+    /// Set to `true` if the job can only run when the device is charging
     public func requireCharging(value: Bool) -> Self {
         info.requireCharging = value
         return self
