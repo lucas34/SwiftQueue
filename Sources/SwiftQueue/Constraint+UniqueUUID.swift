@@ -7,14 +7,10 @@ import Foundation
 internal final class UniqueUUIDConstraint: JobConstraint {
 
     func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {
-        if operation.info.override {
-            for ope in queue.operations where ope.name == operation.info.uuid {
-                // Cancel previous job
+        for ope in queue.operations where ope.name == operation.info.uuid {
+            if operation.info.override {
                 ope.cancel()
-            }
-        } else {
-            for ope in queue.operations where ope.name == operation.info.uuid {
-                // Cancel new job
+            } else {
                 throw SwiftQueueError.duplicate
             }
         }
