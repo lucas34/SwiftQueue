@@ -4,6 +4,7 @@
 
 #### Breaking Changes
 - Remove deprecated methods (#156)
+
 #### Fix
 - Fix leaking queue (#155)
 - Prevent missing CFBundleVersion (#153)
