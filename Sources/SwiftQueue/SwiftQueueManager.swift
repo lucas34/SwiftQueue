@@ -39,18 +39,6 @@ public final class SwiftQueueManager {
         }
     }
 
-    /// DEPRECATED: Please use `isSuspended = false`
-    @available(*, deprecated: 2.0, message: "Please use `isSuspended = false`")
-    public func start() {
-        isSuspended = false
-    }
-
-    /// DEPRECATED:Please use `isSuspended = true`
-    @available(*, deprecated: 2.0, message: "Please use `isSuspended = true`")
-    public func pause() {
-        isSuspended = true
-    }
-
     internal func getQueue(queueName: String) -> SqOperationQueue {
         return manage[queueName] ?? createQueue(queueName: queueName)
     }
