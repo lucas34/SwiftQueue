@@ -6,7 +6,6 @@
 - Remove deprecated methods (#156)
 
 #### Fix
-- Fix leaking queue (#155)
 - Prevent missing CFBundleVersion (#153)
 
 ## [2.0.0](https://github.com/lucas34/SwiftQueue/tree/2.0.0)
