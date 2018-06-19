@@ -80,7 +80,7 @@ public final class SwiftQueueManager {
         }
     }
 
-    /// numbner of queue
+    /// number of queue
     public func queueCount() -> Int {
         return manage.values.count
     }
