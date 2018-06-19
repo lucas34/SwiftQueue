@@ -79,6 +79,20 @@ public final class SwiftQueueManager {
             element.waitUntilAllOperationsAreFinished()
         }
     }
+  
+    /// numbner of queue
+    public func queueCount() -> Int {
+        return manage.values.count
+    }
+  
+    /// numbner of jobs for all queues
+    public func jobCount() -> Int {
+        var count = 0;
+        for element in manage.values {
+            count = count + element.operationCount
+        }
+        return count
+    }
 
 }
 
