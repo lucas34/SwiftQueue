@@ -85,7 +85,7 @@ public final class SwiftQueueManager {
         return manage.values.count
     }
 
-    /// numbner of jobs for all queues
+    /// number of jobs for all queues
     public func jobCount() -> Int {
         var count = 0
         for element in manage.values {
