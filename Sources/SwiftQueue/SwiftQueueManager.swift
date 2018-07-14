@@ -80,6 +80,20 @@ public final class SwiftQueueManager {
         }
     }
 
+    /// number of queue
+    public func queueCount() -> Int {
+        return manage.values.count
+    }
+
+    /// number of jobs for all queues
+    public func jobCount() -> Int {
+        var count = 0
+        for element in manage.values {
+            count += element.operationCount
+        }
+        return count
+    }
+
 }
 
 internal class SqManagerParams {
