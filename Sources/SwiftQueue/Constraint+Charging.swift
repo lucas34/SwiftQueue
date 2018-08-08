@@ -3,11 +3,9 @@
 //
 
 import Foundation
-#if os(iOS)
+#if canImport(UIKit)
 import UIKit
-#endif
 
-#if os(iOS)
 internal final class BatteryChargingConstraint: JobConstraint {
 
     // To avoid cyclic ref
