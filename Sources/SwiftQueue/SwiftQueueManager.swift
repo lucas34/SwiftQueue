@@ -64,8 +64,9 @@ public final class SwiftQueueManager {
 
     /// All operations in all queues will be removed
     public func cancelAllOperations() {
-        for element in manage.values {
+        for (key, element) in manage {
             element.cancelAllOperations()
+            manage.removeValue(forKey: key)
         }
     }
 
