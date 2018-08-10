@@ -11,7 +11,7 @@ GEM
     colored2 (3.1.2)
     cork (0.3.0)
       colored2 (~> 3.1)
-    danger (5.6.2)
+    danger (5.6.4)
       claide (~> 1.0)
       claide-plugins (>= 0.9.2)
       colored2 (~> 3.1)
@@ -25,7 +25,7 @@ GEM
       terminal-table (~> 1)
     danger-prose (2.0.7)
       danger
-    danger-swiftlint (0.17.0)
+    danger-swiftlint (0.17.3)
       danger
       rake (> 10)
       thor (~> 0.19)
@@ -59,4 +59,4 @@ DEPENDENCIES
   danger-swiftlint
 
 BUNDLED WITH
-   1.16.2
+   1.16.3
