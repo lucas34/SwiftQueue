@@ -7,7 +7,7 @@ let package = Package(
             .library(name: "SwiftQueue", targets: ["SwiftQueue"])
         ],
         dependencies: [
-            .package(url: "https://github.com/lucas34/Reachability.swift.git", .upToNextMajor(from: "5.0.0"))
+            .package(url: "https://github.com/ashleymills/Reachability.swift", .upToNextMajor(from: "5.0.0"))
         ],
         targets: [
             .target(
