@@ -1,5 +1,17 @@
 # Change Log
 
+## [2.2.0](https://github.com/lucas34/SwiftQueue/tree/2.2.0)
+
+#### New features
+- Expose `count` inside `SwiftQueueManager` (#160)
+
+#### Improvement
+- Change SPM deps for reachability to original #167
+
+#### Chore
+- Update copyrights (#162)
+- Bump DEPS (#161) (#163) (#165) (#168)
+
 ## [2.1.0](https://github.com/lucas34/SwiftQueue/tree/2.1.0)
 
 #### Breaking Changes
