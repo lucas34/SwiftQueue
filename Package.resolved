@@ -3,11 +3,11 @@
     "pins": [
       {
         "package": "Reachability",
-        "repositoryURL": "https://github.com/lucas34/Reachability.swift.git",
+        "repositoryURL": "https://github.com/ashleymills/Reachability.swift",
         "state": {
-          "branch": null,
-          "revision": "31b72208fcc563e3213fbd260b9300b2c0b8609f",
-          "version": "5.0.0"
+          "branch": "master",
+          "revision": "403d9ba1b4dc23c06af982615809588fbbba4d6a",
+          "version": null
         }
       }
     ]
