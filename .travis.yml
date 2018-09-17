@@ -53,9 +53,9 @@ script:
   - if [ $TYPE == "SPM" ]; then
       swift test;
     fi
-    
+
   - if [ $TYPE == "POD" ]; then
-      pod lib lint --allow-warnings;
+      pod lib lint --allow-warnings --verbose;
     fi
 
 after_success:
