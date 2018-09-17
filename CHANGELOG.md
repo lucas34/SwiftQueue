@@ -1,5 +1,14 @@
 # Change Log
 
+## [2.2.1 - Master]
+
+#### Bug Fix
+- Revise charging constraint implementation (#177)
+
+#### Chore
+- Bump Reachability to 4.2.1 for carthage (#174)
+- Bump Reachability and change origin for SPM (#175)
+
 ## [2.2.0](https://github.com/lucas34/SwiftQueue/tree/2.2.0)
 
 #### New features
