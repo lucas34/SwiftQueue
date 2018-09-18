@@ -55,7 +55,8 @@ script:
     fi
 
   - if [ $TYPE == "POD" ]; then
-      pod lib lint --allow-warnings --verbose;
+      pod setup --silent;
+      pod lib lint;
     fi
 
 after_success:

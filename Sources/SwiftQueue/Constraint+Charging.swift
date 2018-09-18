@@ -27,13 +27,24 @@ internal final class BatteryChargingConstraint: JobConstraint {
     private weak var actual: SqOperation?
 
     func batteryStateDidChange(notification: NSNotification) {
-        if UIDevice.current.batteryState == .charging {
-            actual?.run()
-            NotificationCenter.default.removeObserver(self)
+        if let job = actual, UIDevice.current.batteryState == .charging {
+            // Avoid job to run multiple times
+            actual = nil
+            job.run()
         }
     }
 
-    func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {}
+    func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {
+        guard operation.info.requireCharging else { return }
+
+        /// Start listening
+        NotificationCenter.default.addObserver(
+                self,
+                selector: Selector(("batteryStateDidChange:")),
+                name: NSNotification.Name.UIDeviceBatteryStateDidChange,
+                object: nil
+        )
+    }
 
     func willRun(operation: SqOperation) throws {}
 
@@ -42,14 +53,19 @@ internal final class BatteryChargingConstraint: JobConstraint {
             return true
         }
 
-        if UIDevice.current.batteryState == .charging {
+        guard UIDevice.current.batteryState != .charging else {
             return true
         }
 
-        NotificationCenter.default.addObserver(self, selector: Selector(("batteryStateDidChange:")), name: NSNotification.Name.UIDeviceBatteryStateDidChange, object: nil)
-
         operation.logger.log(.verbose, jobId: operation.info.uuid, message: "Unsatisfied charging requirement")
+
+        /// Keep actual job
+        actual = operation
         return false
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
 }
