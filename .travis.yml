@@ -53,9 +53,10 @@ script:
   - if [ $TYPE == "SPM" ]; then
       swift test;
     fi
-    
+
   - if [ $TYPE == "POD" ]; then
-      pod lib lint --allow-warnings;
+      pod setup --silent;
+      pod lib lint;
     fi
 
 after_success:
