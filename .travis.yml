@@ -30,6 +30,10 @@ before_install:
       brew install swiftlint;
       bundle install --path vendor/bundle;
     fi
+  - if [ $TYPE == "POD" ]; then
+      gem install cocoapods --pre;
+      pod setup --silent;
+    fi
 
 script:
   - set -o pipefail
@@ -55,7 +59,6 @@ script:
     fi
 
   - if [ $TYPE == "POD" ]; then
-      pod setup --silent;
       pod lib lint;
     fi
 
