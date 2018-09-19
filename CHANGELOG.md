@@ -8,6 +8,7 @@
 #### Chore
 - Bump Reachability to 4.2.1 for carthage (#174)
 - Bump Reachability and change origin for SPM (#175)
+- Bump Rechability for pod #172
 
 ## [2.2.0](https://github.com/lucas34/SwiftQueue/tree/2.2.0)
 
