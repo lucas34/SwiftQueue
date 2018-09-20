@@ -1,6 +1,6 @@
 # Change Log
 
-## [2.2.1 - Master]
+## [2.3.0](https://github.com/lucas34/SwiftQueue/tree/2.3.0)
 
 #### Bug Fix
 - Revise charging constraint implementation (#177)
