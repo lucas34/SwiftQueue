@@ -41,7 +41,7 @@ internal final class BatteryChargingConstraint: JobConstraint {
         NotificationCenter.default.addObserver(
                 self,
                 selector: Selector(("batteryStateDidChange:")),
-                name: NSNotification.Name.UIDevice.batteryStateDidChangeNotification,
+                name: UIDevice.batteryStateDidChangeNotification,
                 object: nil
         )
     }

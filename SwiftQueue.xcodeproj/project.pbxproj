@@ -348,6 +348,9 @@
 			attributes = {
 				LastUpgradeCheck = 0930;
 				TargetAttributes = {
+					B06405011FA04AA000086C69 = {
+						LastSwiftMigration = 1000;
+					};
 					OBJ_15 = {
 						LastSwiftMigration = 1000;
 					};
@@ -522,7 +525,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGET_NAME = SwiftQueue;
 			};
 			name = Debug;
@@ -547,7 +550,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGET_NAME = SwiftQueue;
 			};
 			name = Release;
