@@ -158,20 +158,13 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertEqual(0, manager.queueCount())
         XCTAssertEqual(0, manager.jobCount())
 
-        for _ in 0..<10 {
+        JobBuilder(type: type)
+                .group(name: UUID().uuidString)
+                .delay(time: 3600)
+                .schedule(manager: manager)
 
-            let queueName = UUID().uuidString
-
-            for _ in 0..<10 {
-                JobBuilder(type: type)
-                        .group(name: queueName)
-                        .delay(time: 3600)
-                        .schedule(manager: manager)
-            }
-        }
-
-        XCTAssertEqual(10, manager.queueCount())
-        XCTAssertEqual(100, manager.jobCount())
+        XCTAssertEqual(1, manager.queueCount())
+        XCTAssertEqual(1, manager.jobCount())
     }
 
 }
