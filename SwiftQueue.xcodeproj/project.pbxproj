@@ -351,6 +351,12 @@
 					B06405011FA04AA000086C69 = {
 						LastSwiftMigration = 1000;
 					};
+					B06405101FA04AAC00086C69 = {
+						LastSwiftMigration = 1000;
+					};
+					B064051F1FA04CCF00086C69 = {
+						LastSwiftMigration = 1000;
+					};
 					OBJ_15 = {
 						LastSwiftMigration = 1000;
 					};
@@ -574,6 +580,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "watchsimulator watchos";
+				SWIFT_VERSION = 4.2;
 				TARGET_NAME = SwiftQueue;
 			};
 			name = Debug;
@@ -597,6 +604,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "watchsimulator watchos";
+				SWIFT_VERSION = 4.2;
 				TARGET_NAME = SwiftQueue;
 			};
 			name = Release;
@@ -620,6 +628,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "appletvsimulator appletvos";
+				SWIFT_VERSION = 4.2;
 				TARGET_NAME = SwiftQueue;
 			};
 			name = Debug;
@@ -643,6 +652,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "appletvsimulator appletvos";
+				SWIFT_VERSION = 4.2;
 				TARGET_NAME = SwiftQueue;
 			};
 			name = Release;
