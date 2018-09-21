@@ -6,7 +6,7 @@
 - Revise charging constraint implementation (#177)
 
 #### Chore
-- Swift 4.2 and Xcode 10 support (#181) (#182)
+- Swift 4.2 and Xcode 10 support (#181) (#182) (#187)
 - Bump Reachability to 4.2.1 for carthage (#174)
 - Bump Reachability and change origin for SPM (#175)
 - Bump Rechability for pod #172
