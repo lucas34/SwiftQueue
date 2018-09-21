@@ -163,7 +163,7 @@ Develop 1.3.0 Re-write 90% of the code (#22)
 - Scheduling a job without a creator will throw an error (Assertion)
 - Replace Any params type to [String: Any] (#20) 
 - Callback result now use enum to avoid passing nil error as success (#26)
-- onRemove will foward JobCompletion (#32)
+- onRemove will forward JobCompletion (#32)
 - Remove delay(inSecond) use delay(time) instead 
 
 #### Bug fix and improvements 
