@@ -67,4 +67,7 @@ end
 swiftlint.lint_files
 
 # Run prose
+prose.ignored_words = ["SPM", "CFBundleVersion", "JobInfo", "compactMap", "lastError", "args", "enum", "SwiftQueue", "JobBuilder", "SwiftQueueManager", "onError"]
+prose.ignore_numbers = true
+prose.lint_files
 prose.check_spelling
