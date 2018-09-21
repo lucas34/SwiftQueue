@@ -1,11 +1,12 @@
 # Change Log
 
-## [2.2.1 - Master]
+## [2.3.0](https://github.com/lucas34/SwiftQueue/tree/2.3.0)
 
 #### Bug Fix
 - Revise charging constraint implementation (#177)
 
 #### Chore
+- Swift 4.2 and Xcode 10 support (#181) (#182) (#187)
 - Bump Reachability to 4.2.1 for carthage (#174)
 - Bump Reachability and change origin for SPM (#175)
 - Bump Rechability for pod #172
@@ -162,7 +163,7 @@ Develop 1.3.0 Re-write 90% of the code (#22)
 - Scheduling a job without a creator will throw an error (Assertion)
 - Replace Any params type to [String: Any] (#20) 
 - Callback result now use enum to avoid passing nil error as success (#26)
-- onRemove will foward JobCompletion (#32)
+- onRemove will forward JobCompletion (#32)
 - Remove delay(inSecond) use delay(time) instead 
 
 #### Bug fix and improvements 
