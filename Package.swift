@@ -1,4 +1,4 @@
-// swift-tools-version:4.2
+// swift-tools-version:4.1
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -25,5 +25,5 @@ let package = Package(
             name: "SwiftQueueTests",
             dependencies: ["SwiftQueue"]),
     ],
-    swiftLanguageVersions: [.v4, .v4_2]
+    swiftLanguageVersions: [4]
 )

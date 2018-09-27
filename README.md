@@ -2,8 +2,8 @@
 > Schedule tasks with constraints made easy.
 
 [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome)
-[![platform](https://img.shields.io/cocoapods/p/SwiftQueue.svg)](https://cocoapods.org/pods/SwiftQueue)
-[![swift](https://img.shields.io/badge/Swift-3.2%20%20%7C%204.1-orange.svg)](https://swift.org)
+[![platform](https://img.shields.io/badge/platforms-iOS%20%7C%20macOS%20%7C%20tvOS%20%7C%20watchOS%20%7C%20Linux-333333.svg)](https://cocoapods.org/pods/SwiftQueue)
+[![swift](https://img.shields.io/badge/Swift-4.0%20%20%7C%204.2-orange.svg)](https://swift.org)
 [![travis](https://travis-ci.org/lucas34/SwiftQueue.svg?branch=master)](https://travis-ci.org/lucas34/SwiftQueue)
 [![codecov](https://codecov.io/gh/lucas34/SwiftQueue/branch/master/graph/badge.svg)](https://codecov.io/gh/lucas34/SwiftQueue)
 [![pod](https://img.shields.io/cocoapods/v/SwiftQueue.svg?style=flat)](https://cocoapods.org/pods/SwiftQueue)
