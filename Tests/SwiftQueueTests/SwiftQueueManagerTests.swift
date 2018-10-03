@@ -150,23 +150,6 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertNotEqual(Limit.unlimited, Limit.limited(-1))
     }
 
-    func testJobCount() {
-        let (type, job) = (UUID().uuidString, TestJob())
-        let creator = TestCreator([type: job])
-        let manager = SwiftQueueManagerBuilder(creator: creator).build()
-
-        XCTAssertEqual(0, manager.queueCount())
-        XCTAssertEqual(0, manager.jobCount())
-
-        JobBuilder(type: type)
-                .group(name: UUID().uuidString)
-                .delay(time: 3600)
-                .schedule(manager: manager)
-
-        XCTAssertEqual(1, manager.queueCount())
-        XCTAssertEqual(1, manager.jobCount())
-    }
-
 }
 
 extension SqOperationQueue {
