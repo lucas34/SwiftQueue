@@ -19,8 +19,8 @@ Pod::Spec.new do |s|
 
   s.source_files = 'Sources/SwiftQueue/**.swift'
   
-  s.ios.dependency 'ReachabilitySwift', '~> 4.2'
-  s.tvos.dependency 'ReachabilitySwift', '~> 4.2'
-  s.osx.dependency 'ReachabilitySwift', '~> 4.2'
+  s.ios.dependency 'ReachabilitySwift', '~> 4.3'
+  s.tvos.dependency 'ReachabilitySwift', '~> 4.3'
+  s.osx.dependency 'ReachabilitySwift', '~> 4.3'
   
 end
