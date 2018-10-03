@@ -20,7 +20,7 @@ import XCTest
 import Dispatch
 @testable import SwiftQueue
 
-class SerializerTests: XCTestCase {
+class PersisterTests: XCTestCase {
 
     func testLoadSerializedSortedJobShouldRunSuccess() {
         let (type1, job1, job1Id) = (UUID().uuidString, TestJob(), UUID().uuidString)
