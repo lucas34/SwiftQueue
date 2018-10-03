@@ -151,20 +151,3 @@ class SwiftQueueManagerTests: XCTestCase {
     }
 
 }
-
-extension SqOperationQueue {
-
-    convenience init(id: String) {
-        self.init(id, TestCreator([:]), UserDefaultsPersister(), DecodableSerializer(), false, true, NoLogger.shared)
-
-    }
-
-}
-
-extension JobBuilder {
-
-    internal func build(job: Job) -> SqOperation {
-        return self.build(job: job, logger: NoLogger.shared)
-    }
-
-}
