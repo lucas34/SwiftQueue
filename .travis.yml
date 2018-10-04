@@ -18,12 +18,20 @@ env:
   - WORKSPACE="SwiftQueue.xcodeproj"
   - DESTINATION="arch=x86_64"
 
-  matrix:
-    - TYPE="DANGER"  
-    - TYPE="CARTHAGE"
-    - TYPE="SPM"     
-    - TYPE="XCODE"   
-    - TYPE="POD"     
+matrix:
+    include:
+        - os: osx
+          env: TYPE="DANGER"
+        - os: osx
+          env: TYPE="CARTHAGE"
+        - os: osx
+          env: TYPE="SPM"
+        - os: osx
+          env: TYPE="XCODE"
+        - os: osx
+          env: TYPE="POD"
+        - os: linux
+          env: TYPE="LINUX"   
 
 before_install:
   - if [ $TYPE == "DANGER" ]; then
@@ -35,10 +43,18 @@ before_install:
       pod setup --silent;
     fi
 
+install:
+  - if [ `uname` == "Linux" ] ; then 
+        eval "$(curl -sL https://raw.githubusercontent.com/kylef/swiftenv/a479969009fbe5279f9981a2edfeebaf3d8f9256/docs/install.sh)";
+    fi
+
 script:
-  - set -o pipefail
-  - xcodebuild -version
-  - xcodebuild -showsdks
+
+  - if [[ `uname` == "Darwin" ]] ; then
+      set -o pipefail;
+      xcodebuild -version;
+      xcodebuild -showsdks;
+    fi
 
   - if [ $TYPE == "DANGER" ]; then
       bundle exec danger;
@@ -60,6 +76,11 @@ script:
 
   - if [ $TYPE == "POD" ]; then
       pod lib lint;
+    fi
+
+  - if [ $TYPE == "LINUX" ]; then
+      swiftenv install swift-4.2 || true;
+      swift test;
     fi
 
 after_success:
