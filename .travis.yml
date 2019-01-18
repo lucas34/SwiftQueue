@@ -79,7 +79,7 @@ script:
     fi
 
   - if [ $TYPE == "LINUX" ]; then
-      swiftenv install swift-4.2 || true;
+      swiftenv install swift-4.2.1;
       swift test;
     fi
 
