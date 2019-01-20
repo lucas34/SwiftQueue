@@ -1,5 +1,13 @@
 # Change Log
 
+## [2.4.0](https://github.com/lucas34/SwiftQueue/tree/2.4.0)
+
+#### Linux Support 🙌
+- SwiftQueue is now avaiable on Linux (#189)
+
+#### Chore
+- Bump Reachability to 4.3.0 (#190)
+
 ## [2.3.0](https://github.com/lucas34/SwiftQueue/tree/2.3.0)
 
 #### Bug Fix
