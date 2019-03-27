@@ -1,5 +1,5 @@
 language: swift
-osx_image: xcode10.1
+osx_image: xcode10.2
 
 cache:
   directories:
@@ -79,7 +79,7 @@ script:
     fi
 
   - if [ $TYPE == "LINUX" ]; then
-      swiftenv install swift-4.2.1;
+      swiftenv install swift-5.0;
       swift test;
     fi
 
