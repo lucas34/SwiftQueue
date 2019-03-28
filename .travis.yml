@@ -1,4 +1,4 @@
-language: swift
+language: generic
 osx_image: xcode10.2
 
 cache:
@@ -32,6 +32,8 @@ matrix:
           env: TYPE="POD"
         - os: linux
           env: TYPE="LINUX"   
+          dist: trusty
+          sudo: required
 
 before_install:
   - if [ $TYPE == "DANGER" ]; then
@@ -45,7 +47,7 @@ before_install:
 
 install:
   - if [ `uname` == "Linux" ] ; then 
-        eval "$(curl -sL https://raw.githubusercontent.com/kylef/swiftenv/a479969009fbe5279f9981a2edfeebaf3d8f9256/docs/install.sh)";
+      eval "$(curl -sL https://swiftenv.fuller.li/install.sh)";
     fi
 
 script:
