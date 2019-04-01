@@ -32,7 +32,7 @@ public enum LogLevel: Int {
 public extension LogLevel {
 
     /// Describe type of level in human-way
-    public var description: String {
+    var description: String {
         switch self {
         case .verbose:
             return "verbose"
