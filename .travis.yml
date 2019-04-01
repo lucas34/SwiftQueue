@@ -30,10 +30,6 @@ matrix:
           env: TYPE="XCODE"
         - os: osx
           env: TYPE="POD"
-        - os: linux
-          env: TYPE="LINUX"   
-          dist: trusty
-          sudo: required
 
 before_install:
   - if [ $TYPE == "DANGER" ]; then
@@ -43,11 +39,6 @@ before_install:
   - if [ $TYPE == "POD" ]; then
       gem install cocoapods --pre;
       pod setup --silent;
-    fi
-
-install:
-  - if [ `uname` == "Linux" ] ; then 
-      eval "$(curl -sL https://swiftenv.fuller.li/install.sh)";
     fi
 
 script:
@@ -78,11 +69,6 @@ script:
 
   - if [ $TYPE == "POD" ]; then
       pod lib lint;
-    fi
-
-  - if [ $TYPE == "LINUX" ]; then
-      swiftenv install swift-5.0;
-      swift test;
     fi
 
 after_success:
