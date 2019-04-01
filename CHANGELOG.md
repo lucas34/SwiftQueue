@@ -1,5 +1,12 @@
 # Change Log
 
+## [3.0.0](https://github.com/lucas34/SwiftQueue/tree/3.0.0)
+
+#### Chore
+- Swift 5 support. Source was already compatiable 🙌 (#206)
+- Drop linux support (#206)
+
+
 ## [2.4.0](https://github.com/lucas34/SwiftQueue/tree/2.4.0)
 
 #### Linux Support 🙌
