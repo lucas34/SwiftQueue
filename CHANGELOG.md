@@ -1,5 +1,12 @@
 # Change Log
 
+## [3.0.0](https://github.com/lucas34/SwiftQueue/tree/3.0.0)
+
+#### Chore
+- Swift 5 support. Source was already compatible 🙌 (#206)
+- Drop Linux support (#206)
+
+
 ## [2.4.0](https://github.com/lucas34/SwiftQueue/tree/2.4.0)
 
 #### Linux Support 🙌
@@ -25,7 +32,7 @@
 - Expose `count` inside `SwiftQueueManager` (#160)
 
 #### Improvement
-- Change SPM deps for reachability to original #167
+- Change SPM dependency for reachability to original #167
 
 #### Chore
 - Update copyrights (#162)
