@@ -238,7 +238,7 @@ class PersisterTests: XCTestCase {
         tasks[lastTaskType] = lastJob
 
         let creator = TestCreator(tasks)
-        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: persister).set(synchronous: false).build()
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: persister).set(initIntBackground: true).build()
 
         JobBuilder(type: lastTaskType)
                 .singleInstance(forId: lastTaskType)
