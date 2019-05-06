@@ -58,7 +58,7 @@ extension JobInfo: Decodable {
         case type = "type"
         case uuid = "uuid"
         case override = "override"
-        case group = "group"
+        case queueName = "group"
         case tags = "tags"
         case delay = "delay"
         case deadline = "deadline"
@@ -79,7 +79,7 @@ extension JobInfo: Decodable {
         let type: String = try container.decode(String.self, forKey: .type)
         let uuid: String = try container.decode(String.self, forKey: .uuid)
         let override: Bool = try container.decode(Bool.self, forKey: .override)
-        let group: String = try container.decode(String.self, forKey: .group)
+        let queueName: String = try container.decode(String.self, forKey: .queueName)
         let tags: Set<String> = try container.decode(Set.self, forKey: .tags)
         let delay: TimeInterval? = try container.decodeIfPresent(TimeInterval.self, forKey: .delay)
         let deadline: Date? = try container.decodeIfPresent(Date.self, forKey: .deadline)
@@ -95,9 +95,9 @@ extension JobInfo: Decodable {
 
         self.init(
                 type: type,
+                queueName: queueName,
                 uuid: uuid,
                 override: override,
-                group: group,
                 tags: tags,
                 delay: delay,
                 deadline: deadline,
@@ -120,7 +120,7 @@ extension JobInfo: Encodable {
         try container.encode(type, forKey: .type)
         try container.encode(uuid, forKey: .uuid)
         try container.encode(override, forKey: .override)
-        try container.encode(group, forKey: .group)
+        try container.encode(queueName, forKey: .queueName)
         try container.encode(tags, forKey: .tags)
         try container.encode(delay, forKey: .delay)
         try container.encode(deadline, forKey: .deadline)

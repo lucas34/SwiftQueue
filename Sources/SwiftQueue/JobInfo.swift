@@ -24,14 +24,14 @@ public struct JobInfo {
     /// Type of job to create actual `Job` instance
     let type: String
 
+    /// Queue name
+    var queueName: String
+
     /// Unique identifier for a job
     var uuid: String
 
     /// Override job when scheduling a job with same uuid
     var override: Bool
-
-    /// Queue name
-    var group: String
 
     /// Set of identifiers
     var tags: Set<String>
@@ -72,9 +72,9 @@ public struct JobInfo {
     var currentRepetition: Int
 
     init(type: String,
+         queueName: String = "GLOBAL",
          uuid: String = UUID().uuidString,
          override: Bool = false,
-         group: String = "GLOBAL",
          tags: Set<String> = Set<String>(),
          delay: TimeInterval? = nil,
          deadline: Date? = nil,
@@ -89,9 +89,9 @@ public struct JobInfo {
          requireCharging: Bool = false) {
 
         self.type = type
+        self.queueName = queueName
         self.uuid = uuid
         self.override = override
-        self.group = group
         self.tags = tags
         self.delay = delay
         self.deadline = deadline

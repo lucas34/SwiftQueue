@@ -76,7 +76,7 @@ internal extension JobInfo {
         dict[JobInfoKeys.type.stringValue]            = self.type
         dict[JobInfoKeys.uuid.stringValue]            = self.uuid
         dict[JobInfoKeys.override.stringValue]        = self.override
-        dict[JobInfoKeys.group.stringValue]           = self.group
+        dict[JobInfoKeys.queueName.stringValue]       = self.queueName
         dict[JobInfoKeys.tags.stringValue]            = Array(self.tags)
         dict[JobInfoKeys.delay.stringValue]           = self.delay
         dict[JobInfoKeys.deadline.stringValue]        = self.deadline.map(dateFormatter.string)
@@ -95,7 +95,7 @@ internal extension JobInfo {
     mutating func bind(dictionary: [String: Any]) throws {
         dictionary.assign(JobInfoKeys.uuid.stringValue, &self.uuid)
         dictionary.assign(JobInfoKeys.override.stringValue, &self.override)
-        dictionary.assign(JobInfoKeys.group.stringValue, &self.group)
+        dictionary.assign(JobInfoKeys.queueName.stringValue, &self.queueName)
         dictionary.assign(JobInfoKeys.tags.stringValue, &self.tags) { (array: [String]) -> Set<String> in Set(array) }
         dictionary.assign(JobInfoKeys.delay.stringValue, &self.delay)
         dictionary.assign(JobInfoKeys.deadline.stringValue, &self.deadline, dateFormatter.date)
