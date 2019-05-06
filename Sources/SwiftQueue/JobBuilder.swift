@@ -120,7 +120,7 @@ public final class JobBuilder {
         return self
     }
 
-    internal func build(job: Job, logger: SwiftQueueLogger) -> SqOperation {
+    internal func build(job: Job, logger: SwiftQueueLogger = NoLogger.shared) -> SqOperation {
         return SqOperation(job: job, info: info, logger: logger)
     }
 
