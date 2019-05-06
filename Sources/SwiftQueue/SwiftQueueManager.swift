@@ -22,7 +22,8 @@ import Foundation
 /// Creating and instance of this class will automatically un-serialize your jobs and schedule them
 public final class SwiftQueueManager {
 
-    private let creator: JobCreator
+    private let jobCreator: JobCreator
+    private let queueCreator: QueueCreator
     private let persister: JobPersister
     private let serializer: JobInfoSerializer
 
@@ -40,26 +41,26 @@ public final class SwiftQueueManager {
     private var manage = [String: SqOperationQueue]()
 
     internal init(params: SqManagerParams) {
-        self.creator = params.creator
+        self.jobCreator = params.jobCreator
+        self.queueCreator = params.queueCreator
         self.persister = params.persister
         self.serializer = params.serializer
         self.logger = params.logger
         self.isSuspended = params.isSuspended
 
         for queueName in persister.restore() {
-            manage[queueName] = SqOperationQueue(queueName, creator, persister, serializer, isSuspended, params.initInBackground, logger)
+            _ = createQueue(queueName: queueName, initInBackground: params.initInBackground)
         }
     }
 
     internal func getQueue(queueName: String) -> SqOperationQueue {
-        return manage[queueName] ?? createQueue(queueName: queueName)
+        return manage[queueName] ?? createQueue(queueName: queueName, initInBackground: false)
     }
 
-    private func createQueue(queueName: String) -> SqOperationQueue {
-        // At this point the queue should be totally new so it's safe to start the queue synchronously
-        let queue = SqOperationQueue(queueName, creator, persister, serializer, isSuspended, false, logger)
-        manage[queueName] = queue
-        return queue
+    private func createQueue(queueName: String, initInBackground: Bool) -> SqOperationQueue {
+        let operationQueue = SqOperationQueue(queueCreator.create(queueName: queueName), jobCreator, persister, serializer, isSuspended, initInBackground, logger)
+        manage[queueName] = operationQueue
+        return operationQueue
     }
 
     /// All operations in all queues will be removed
@@ -110,7 +111,9 @@ public final class SwiftQueueManager {
 
 internal class SqManagerParams {
 
-    let creator: JobCreator
+    let jobCreator: JobCreator
+
+    let queueCreator: QueueCreator
 
     var persister: JobPersister
 
@@ -122,14 +125,16 @@ internal class SqManagerParams {
 
     var initInBackground: Bool
 
-    init(creator: JobCreator,
+    init(jobCreator: JobCreator,
+         queueCreator: QueueCreator,
          persister: JobPersister = UserDefaultsPersister(),
          serializer: JobInfoSerializer = DecodableSerializer(),
          logger: SwiftQueueLogger = NoLogger.shared,
          isSuspended: Bool = false,
          initInBackground: Bool = false) {
 
-        self.creator = creator
+        self.jobCreator = jobCreator
+        self.queueCreator = queueCreator
         self.persister = persister
         self.serializer = serializer
         self.logger = logger
@@ -145,8 +150,8 @@ public final class SwiftQueueManagerBuilder {
     private var params: SqManagerParams
 
     /// Creator to convert `JobInfo.type` to `Job` instance
-    public init(creator: JobCreator) {
-        params = SqManagerParams(creator: creator)
+    public init(creator: JobCreator, queueCreator: QueueCreator = BasicQueueCreator()) {
+        params = SqManagerParams(jobCreator: creator, queueCreator: queueCreator)
     }
 
     /// Custom way of saving `JobInfo`. Will use `UserDefaultsPersister` by default

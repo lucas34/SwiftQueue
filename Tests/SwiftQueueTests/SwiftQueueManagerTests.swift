@@ -133,7 +133,7 @@ class SwiftQueueManagerTests: XCTestCase {
     }
 
     func testAddOperationNotJobTask() {
-        let queue = SqOperationQueue(UUID().uuidString, TestCreator([:]), UserDefaultsPersister(), DecodableSerializer(), false, true, NoLogger.shared)
+        let queue = SqOperationQueue(BasicQueue.synchronous, TestCreator([:]), UserDefaultsPersister(), DecodableSerializer(), false, true, NoLogger.shared)
         let operation = Operation()
         queue.addOperation(operation) // Should not crash
     }
