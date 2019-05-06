@@ -26,6 +26,13 @@ public protocol JobCreator {
 
 }
 
+public protocol QueueCreator {
+
+    func create(queueName: String) -> Queue
+
+}
+
+
 /// Method to implement to have a custom persister
 public protocol JobPersister {
 
@@ -92,6 +99,55 @@ public protocol Job {
     func onRemove(result: JobCompletion)
 
 }
+
+public protocol Queue {
+
+    var name: String { get }
+
+    var maxConcurrent: Int { get }
+
+}
+
+public enum BasicQueue {
+    case synchronous
+    case concurrent
+    case custom(String)
+}
+
+public class BasicQueueCreator: QueueCreator {
+
+    public init() {}
+
+    public func create(queueName: String) -> Queue {
+        switch queueName {
+        case "GLOBAL": return BasicQueue.synchronous
+        case "MULTIPLE": return BasicQueue.concurrent
+        default: return BasicQueue.custom(queueName)
+        }
+    }
+
+}
+
+extension BasicQueue: Queue {
+
+    public var name: String {
+        switch self {
+        case .synchronous : return "GLOBAL"
+        case .concurrent : return "MULTIPLE"
+        case .custom(let variable) : return variable
+        }
+    }
+
+    public var maxConcurrent: Int {
+        switch self {
+        case .synchronous : return 1
+        case .concurrent : return 2
+        case .custom : return 1
+        }
+    }
+
+}
+
 
 /// Enum to specify a limit
 public enum Limit {
