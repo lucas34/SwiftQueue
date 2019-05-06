@@ -29,7 +29,7 @@ internal final class SqOperationQueue: OperationQueue {
     private let trigger: Operation
 
     init(_ queueName: String, _ creator: JobCreator, _ persister: JobPersister, _ serializer: JobInfoSerializer,
-         _ isSuspended: Bool, _ initIntBackground: Bool, _ logger: SwiftQueueLogger) {
+         _ isSuspended: Bool, _ initInBackground: Bool, _ logger: SwiftQueueLogger) {
 
         self.queueName = queueName
 
@@ -46,7 +46,7 @@ internal final class SqOperationQueue: OperationQueue {
         self.name = queueName
         self.maxConcurrentOperationCount = 1
 
-        if initIntBackground {
+        if initInBackground {
             DispatchQueue.global(qos: DispatchQoS.QoSClass.utility).async { () -> Void in
                 self.loadSerializedTasks(name: queueName)
             }

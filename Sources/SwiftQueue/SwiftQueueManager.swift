@@ -47,7 +47,7 @@ public final class SwiftQueueManager {
         self.isSuspended = params.isSuspended
 
         for queueName in persister.restore() {
-            manage[queueName] = SqOperationQueue(queueName, creator, persister, serializer, isSuspended, params.initIntBackground, logger)
+            manage[queueName] = SqOperationQueue(queueName, creator, persister, serializer, isSuspended, params.initInBackground, logger)
         }
     }
 
@@ -120,21 +120,21 @@ internal class SqManagerParams {
 
     var isSuspended: Bool
 
-    var initIntBackground: Bool
+    var initInBackground: Bool
 
     init(creator: JobCreator,
          persister: JobPersister = UserDefaultsPersister(),
          serializer: JobInfoSerializer = DecodableSerializer(),
          logger: SwiftQueueLogger = NoLogger.shared,
          isSuspended: Bool = false,
-         initIntBackground: Bool = false) {
+         initInBackground: Bool = false) {
 
         self.creator = creator
         self.persister = persister
         self.serializer = serializer
         self.logger = logger
         self.isSuspended = isSuspended
-        self.initIntBackground = initIntBackground
+        self.initInBackground = initInBackground
     }
 
 }
