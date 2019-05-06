@@ -48,10 +48,10 @@ internal final class SqOperationQueue: OperationQueue {
 
         if initIntBackground {
             DispatchQueue.global(qos: DispatchQoS.QoSClass.utility).async { () -> Void in
-                self.loadSerializedTasks(name: queue.name)
+                self.loadSerializedTasks(name: queueName)
             }
         } else {
-            self.loadSerializedTasks(name: queue.name)
+            self.loadSerializedTasks(name: queueName)
         }
     }
 
