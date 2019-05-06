@@ -46,9 +46,6 @@ internal final class SqOperationQueue: OperationQueue {
         self.name = queueName
         self.maxConcurrentOperationCount = 1
 
-        if synchronous {
-            self.loadSerializedTasks(name: queueName)
-        } else {
         if initIntBackground {
             DispatchQueue.global(qos: DispatchQoS.QoSClass.utility).async { () -> Void in
                 self.loadSerializedTasks(name: queue.name)
