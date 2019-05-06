@@ -39,9 +39,17 @@ public final class JobBuilder {
     }
 
     /// Job in different groups can run in parallel
+    @available(*, deprecated, renamed: "parallel")
     public func group(name: String) -> Self {
         assertNotEmptyString(name)
         info.queueName = name
+        return self
+    }
+
+    /// Job in different groups can run in parallel
+    public func parallel(queueName: String) -> Self {
+        assertNotEmptyString(queueName)
+        info.queueName = queueName
         return self
     }
 
