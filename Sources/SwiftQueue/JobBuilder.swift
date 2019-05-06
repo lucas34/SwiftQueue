@@ -41,7 +41,7 @@ public final class JobBuilder {
     /// Job in different groups can run in parallel
     public func group(name: String) -> Self {
         assertNotEmptyString(name)
-        info.group = name
+        info.queueName = name
         return self
     }
 
@@ -123,7 +123,7 @@ public final class JobBuilder {
             assert(JSONSerialization.isValidJSONObject(info.params))
         }
 
-        let queue = manager.getQueue(queueName: info.group)
+        let queue = manager.getQueue(queueName: info.queueName)
         let job = queue.createHandler(type: info.type, params: info.params)
 
         queue.addOperation(build(job: job, logger: manager.logger))
