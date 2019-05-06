@@ -1,5 +1,21 @@
 # Change Log
 
+## [3.1.0](https://github.com/lucas34/SwiftQueue/tree/3.1.0)
+
+#### New features
+
+- Allow a queue to run multiple jobs in parallel (#215)
+For a better support of concurrency, you can now define now many jobs schedule in a queue can run in parallel.
+
+#### Breaking changes
+- Rename synchronous to initInBackground (#213)
+- Rename group() to parallel() (#212)
+
+#### Enhancement
+
+- Add no logger by default (#211)
+
+
 ## [3.0.0](https://github.com/lucas34/SwiftQueue/tree/3.0.0)
 
 #### Chore
@@ -10,7 +26,7 @@
 ## [2.4.0](https://github.com/lucas34/SwiftQueue/tree/2.4.0)
 
 #### Linux Support 🙌
-- SwiftQueue is now avaiable on Linux (#189)
+- SwiftQueue is now available on Linux (#189)
 
 #### Chore
 - Bump Reachability to 4.3.0 (#190)
