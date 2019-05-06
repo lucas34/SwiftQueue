@@ -32,13 +32,13 @@ class PersisterTests: XCTestCase {
 
         let task1 = JobBuilder(type: type1)
                 .singleInstance(forId: job1Id)
-                .group(name: queueId)
+                .parallel(queueName: queueId)
                 .build(job: job1)
                 .toJSONStringSafe()
 
         let task2 = JobBuilder(type: type2)
                 .singleInstance(forId: job2Id)
-                .group(name: queueId)
+                .parallel(queueName: queueId)
                 .build(job: job2)
                 .toJSONStringSafe()
 
@@ -83,14 +83,14 @@ class PersisterTests: XCTestCase {
 
         JobBuilder(type: type1)
                 .singleInstance(forId: job1Id)
-                .group(name: group)
+                .parallel(queueName: group)
                 .delay(time: 3600)
                 .persist(required: true)
                 .schedule(manager: manager)
 
         JobBuilder(type: type2)
                 .singleInstance(forId: job2Id)
-                .group(name: group)
+                .parallel(queueName: group)
                 .delay(time: 3600)
                 .persist(required: true)
                 .schedule(manager: manager)
@@ -119,7 +119,7 @@ class PersisterTests: XCTestCase {
         let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: persister).build()
         JobBuilder(type: type)
                 .singleInstance(forId: taskID)
-                .group(name: queueId)
+                .parallel(queueName: queueId)
                 .persist(required: true)
                 .schedule(manager: manager)
 
@@ -145,7 +145,7 @@ class PersisterTests: XCTestCase {
         let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: persister).build()
         JobBuilder(type: type)
                 .singleInstance(forId: taskID)
-                .group(name: queueId)
+                .parallel(queueName: queueId)
                 .persist(required: true)
                 .schedule(manager: manager)
 
@@ -196,7 +196,7 @@ class PersisterTests: XCTestCase {
 
         JobBuilder(type: type)
                 .singleInstance(forId: id)
-                .group(name: group)
+                .parallel(queueName: group)
                 .delay(time: 3600)
                 .addTag(tag: tag)
                 .persist(required: true)
@@ -223,7 +223,7 @@ class PersisterTests: XCTestCase {
 
             let task = JobBuilder(type: type)
                     .singleInstance(forId: "\(i)")
-                    .group(name: queueId)
+                    .parallel(queueName: queueId)
                     .build(job: job)
                     .toJSONStringSafe()
 
@@ -242,7 +242,7 @@ class PersisterTests: XCTestCase {
 
         JobBuilder(type: lastTaskType)
                 .singleInstance(forId: lastTaskType)
-                .group(name: queueId)
+                .parallel(queueName: queueId)
                 .persist(required: true)
                 .schedule(manager: manager)
 
@@ -271,7 +271,7 @@ class PersisterTests: XCTestCase {
                 .build()
 
         JobBuilder(type: type1)
-                .group(name: UUID().uuidString)
+                .parallel(queueName: UUID().uuidString)
                 .persist(required: true)
                 .schedule(manager: manager)
 

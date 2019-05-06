@@ -19,8 +19,7 @@ import Foundation
 
 internal final class SqOperationQueue: OperationQueue {
 
-    private let queueName: String
-
+    private let queue: Queue
     private let creator: JobCreator
     private let persister: JobPersister
     private let serializer: JobInfoSerializer
@@ -28,10 +27,10 @@ internal final class SqOperationQueue: OperationQueue {
 
     private let trigger: Operation
 
-    init(_ queueName: String, _ creator: JobCreator, _ persister: JobPersister, _ serializer: JobInfoSerializer,
+    init(_ queue: Queue, _ creator: JobCreator, _ persister: JobPersister, _ serializer: JobInfoSerializer,
          _ isSuspended: Bool, _ initInBackground: Bool, _ logger: SwiftQueueLogger) {
 
-        self.queueName = queueName
+        self.queue = queue
 
         self.creator = creator
         self.persister = persister
@@ -43,15 +42,16 @@ internal final class SqOperationQueue: OperationQueue {
         super.init()
 
         self.isSuspended = isSuspended
-        self.name = queueName
-        self.maxConcurrentOperationCount = 1
+
+        self.name = queue.name
+        self.maxConcurrentOperationCount = queue.maxConcurrent
 
         if initInBackground {
             DispatchQueue.global(qos: DispatchQoS.QoSClass.utility).async { () -> Void in
-                self.loadSerializedTasks(name: queueName)
+                self.loadSerializedTasks(name: queue.name)
             }
         } else {
-            self.loadSerializedTasks(name: queueName)
+            self.loadSerializedTasks(name: queue.name)
         }
     }
 
@@ -111,7 +111,7 @@ internal final class SqOperationQueue: OperationQueue {
     func persistJob(job: SqOperation) {
         do {
             let data = try serializer.serialize(info: job.info)
-            persister.put(queueName: queueName, taskId: job.info.uuid, data: data)
+            persister.put(queueName: queue.name, taskId: job.info.uuid, data: data)
         } catch let error {
             // In this case we still try to run the job
             logger.log(.error, jobId: job.info.uuid, message: "Unable to serialize job error=\(error.localizedDescription)")
@@ -133,7 +133,7 @@ internal final class SqOperationQueue: OperationQueue {
     private func completed(_ job: SqOperation) {
         // Remove this operation from serialization
         if job.info.isPersisted {
-            persister.remove(queueName: queueName, taskId: job.info.uuid)
+            persister.remove(queueName: queue.name, taskId: job.info.uuid)
         }
 
         job.remove()
