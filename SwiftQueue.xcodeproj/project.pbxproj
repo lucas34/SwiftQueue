@@ -85,7 +85,6 @@
 		D0B7CD1E797A69C89CB0ADE2 /* SqOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7CB571CECEEA34DD07398 /* SqOperationQueue.swift */; };
 		D0B7CE62CE9A0DB7DF08FB57 /* ConstraintUniqueUUIDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C37E250DEE9A9B55C8ED /* ConstraintUniqueUUIDTests.swift */; };
 		D0B7CFA2089DFF576E0D765B /* JobBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7CB3B79E039D3B11D8921 /* JobBuilder.swift */; };
-		OBJ_27 /* SwiftQueueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* SwiftQueueTests.swift */; };
 		OBJ_29 /* SwiftQueue.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* SwiftQueue.framework */; };
 /* End PBXBuildFile section */
 
@@ -132,7 +131,6 @@
 		D0B7C898344F1EB3A0815D67 /* ConstraintDeadlineTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstraintDeadlineTests.swift; sourceTree = "<group>"; };
 		D0B7CB3B79E039D3B11D8921 /* JobBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JobBuilder.swift; path = SwiftQueue/JobBuilder.swift; sourceTree = "<group>"; };
 		D0B7CB571CECEEA34DD07398 /* SqOperationQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SqOperationQueue.swift; path = SwiftQueue/SqOperationQueue.swift; sourceTree = "<group>"; };
-		OBJ_11 /* SwiftQueueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftQueueTests.swift; sourceTree = "<group>"; };
 		OBJ_13 /* SwiftQueue.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftQueue.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_14 /* SwiftQueueTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = SwiftQueueTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -192,7 +190,6 @@
 				1D7B3D2E1F5C1EC7000D49B6 /* ConstraintTests.swift */,
 				1D7B3D2F1F5C1EC7000D49B6 /* StartStopTests.swift */,
 				1D7B3D311F5C1EC7000D49B6 /* TestUtils.swift */,
-				OBJ_11 /* SwiftQueueTests.swift */,
 				D0B7C37E250DEE9A9B55C8ED /* ConstraintUniqueUUIDTests.swift */,
 				D0B7C812F675CD459799C2DD /* ConstraintNetworkTests.swift */,
 				D0B7C62E5894FA6EE00D3160 /* PersisterTests.swift */,
@@ -492,7 +489,6 @@
 			buildActionMask = 0;
 			files = (
 				1D7B3D361F5C1EDC000D49B6 /* StartStopTests.swift in Sources */,
-				OBJ_27 /* SwiftQueueTests.swift in Sources */,
 				1D7B3D391F5C1EE4000D49B6 /* TestUtils.swift in Sources */,
 				1D7B3D371F5C1EDE000D49B6 /* ConstraintTests.swift in Sources */,
 				D0B7C94CAD20ADBB67BE5192 /* SwiftQueueBuilderTests.swift in Sources */,
