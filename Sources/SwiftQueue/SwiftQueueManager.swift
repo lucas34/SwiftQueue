@@ -47,7 +47,7 @@ public final class SwiftQueueManager {
         self.isSuspended = params.isSuspended
 
         for queueName in persister.restore() {
-            manage[queueName] = SqOperationQueue(queueName, creator, persister, serializer, isSuspended, params.synchronous, logger)
+            manage[queueName] = SqOperationQueue(queueName, creator, persister, serializer, isSuspended, params.initInBackground, logger)
         }
     }
 
@@ -57,7 +57,7 @@ public final class SwiftQueueManager {
 
     private func createQueue(queueName: String) -> SqOperationQueue {
         // At this point the queue should be totally new so it's safe to start the queue synchronously
-        let queue = SqOperationQueue(queueName, creator, persister, serializer, isSuspended, true, logger)
+        let queue = SqOperationQueue(queueName, creator, persister, serializer, isSuspended, false, logger)
         manage[queueName] = queue
         return queue
     }
@@ -120,21 +120,21 @@ internal class SqManagerParams {
 
     var isSuspended: Bool
 
-    var synchronous: Bool
+    var initInBackground: Bool
 
     init(creator: JobCreator,
          persister: JobPersister = UserDefaultsPersister(),
          serializer: JobInfoSerializer = DecodableSerializer(),
          logger: SwiftQueueLogger = NoLogger.shared,
          isSuspended: Bool = false,
-         synchronous: Bool = true) {
+         initInBackground: Bool = false) {
 
         self.creator = creator
         self.persister = persister
         self.serializer = serializer
         self.logger = logger
         self.isSuspended = isSuspended
-        self.synchronous = synchronous
+        self.initInBackground = initInBackground
     }
 
 }
@@ -176,8 +176,15 @@ public final class SwiftQueueManagerBuilder {
     }
 
     /// Deserialize jobs synchronously after creating the `SwiftQueueManager` instance. `true` by default
+    @available(*, deprecated, renamed: "initInBackground")
     public func set(synchronous: Bool) -> Self {
-        params.synchronous = synchronous
+        params.initInBackground = !synchronous
+        return self
+    }
+
+    /// Deserialize jobs synchronously after creating the `SwiftQueueManager` instance. `true` by default
+    public func set(initInBackground: Bool) -> Self {
+        params.initInBackground = initInBackground
         return self
     }
 
