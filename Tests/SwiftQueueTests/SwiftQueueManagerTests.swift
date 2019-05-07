@@ -81,7 +81,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         JobBuilder(type: type)
                 .singleInstance(forId: id)
-                .group(name: group)
+                .parallel(queueName: group)
                 .delay(time: 3600)
                 .addTag(tag: tag)
                 .schedule(manager: manager)
@@ -113,7 +113,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         JobBuilder(type: type)
                 .singleInstance(forId: id)
-                .group(name: group)
+                .parallel(queueName: group)
                 .delay(time: 3600)
                 .schedule(manager: manager)
 
@@ -145,7 +145,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         JobBuilder(type: type)
                 .singleInstance(forId: id)
-                .group(name: group)
+                .parallel(queueName: group)
                 .delay(time: 3600)
                 .addTag(tag: tag)
                 .schedule(manager: manager)
