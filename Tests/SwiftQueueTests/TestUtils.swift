@@ -199,6 +199,25 @@ class PersisterTracker: UserDefaultsPersister {
     }
 }
 
+class JobListenerTest: JobListener {
+
+    var onBeforeRun: [JobInfo] = [JobInfo]()
+    var onAfterRun: [(JobInfo, JobCompletion)] = [(JobInfo, JobCompletion)]()
+    var onTerminated: [(JobInfo, JobCompletion)] = [(JobInfo, JobCompletion)]()
+
+    func onBeforeRun(job: JobInfo) {
+        onBeforeRun.append(job)
+    }
+
+    func onAfterRun(job: JobInfo, result: JobCompletion) {
+        onAfterRun.append((job, result))
+    }
+
+    func onTerminated(job: JobInfo, result: JobCompletion) {
+        onTerminated.append((job, result))
+    }
+}
+
 class JobError: Error {
 
     let id = UUID().uuidString

@@ -64,7 +64,7 @@ class SwiftQueueBuilderTests: XCTestCase {
             let type = UUID().uuidString
             let groupName = UUID().uuidString
 
-            let jobInfo = try toJobInfo(serializer, type: type, JobBuilder(type: type).group(name: groupName))
+            let jobInfo = try toJobInfo(serializer, type: type, JobBuilder(type: type).parallel(queueName: groupName))
             XCTAssertEqual(jobInfo?.queueName, groupName)
         }
     }

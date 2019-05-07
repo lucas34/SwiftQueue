@@ -20,6 +20,7 @@ import Foundation
 internal final class SqOperation: Operation {
 
     let handler: Job
+
     var info: JobInfo
 
     let constraints: [JobConstraint]
@@ -27,6 +28,8 @@ internal final class SqOperation: Operation {
     var lastError: Swift.Error?
 
     let logger: SwiftQueueLogger
+
+    let listener: JobListener?
 
     override var name: String? { get { return info.uuid } set { } }
 
@@ -50,10 +53,11 @@ internal final class SqOperation: Operation {
         }
     }
 
-    internal init(job: Job, info: JobInfo, logger: SwiftQueueLogger) {
+    internal init(job: Job, info: JobInfo, logger: SwiftQueueLogger, listener: JobListener?) {
         self.handler = job
         self.info = info
         self.logger = logger
+        self.listener = listener
 
         self.constraints = [
             DeadlineConstraint(),
@@ -101,6 +105,7 @@ internal final class SqOperation: Operation {
         lastError = error
         // Need to be called manually since the task is actually not in the queue. So cannot call cancel()
         handler.onRemove(result: .fail(error))
+        listener?.onTerminated(job: info, result: .fail(error))
     }
 
     internal func run() {
@@ -128,6 +133,7 @@ internal final class SqOperation: Operation {
         }
 
         logger.log(.verbose, jobId: info.uuid, message: "Job is running")
+        listener?.onBeforeRun(job: info)
         handler.onRun(callback: self)
     }
 
@@ -135,6 +141,7 @@ internal final class SqOperation: Operation {
         let result = lastError.map(JobCompletion.fail) ?? JobCompletion.success
         logger.log(.verbose, jobId: info.uuid, message: "Job is removed from the queue result=\(result)")
         handler.onRemove(result: result)
+        listener?.onTerminated(job: info, result: result)
     }
 
 }
@@ -143,6 +150,8 @@ extension SqOperation: JobResult {
 
     func done(_ result: JobCompletion) {
         guard !isFinished else { return }
+
+        listener?.onAfterRun(job: info, result: result)
 
         switch result {
         case .success:

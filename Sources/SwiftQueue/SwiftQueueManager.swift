@@ -28,6 +28,7 @@ public final class SwiftQueueManager {
     private let serializer: JobInfoSerializer
 
     internal let logger: SwiftQueueLogger
+    internal let listener: JobListener?
 
     /// Allow jobs in queue to be executed.
     public var isSuspended: Bool {
@@ -46,6 +47,7 @@ public final class SwiftQueueManager {
         self.persister = params.persister
         self.serializer = params.serializer
         self.logger = params.logger
+        self.listener = params.listener
         self.isSuspended = params.isSuspended
 
         for queueName in persister.restore() {
@@ -58,7 +60,7 @@ public final class SwiftQueueManager {
     }
 
     private func createQueue(queueName: String, initInBackground: Bool) -> SqOperationQueue {
-        let operationQueue = SqOperationQueue(queueCreator.create(queueName: queueName), jobCreator, persister, serializer, isSuspended, initInBackground, logger)
+        let operationQueue = SqOperationQueue(queueCreator.create(queueName: queueName), jobCreator, persister, serializer, isSuspended, initInBackground, logger, listener)
         manage[queueName] = operationQueue
         return operationQueue
     }
@@ -121,6 +123,8 @@ internal class SqManagerParams {
 
     var logger: SwiftQueueLogger
 
+    var listener: JobListener?
+
     var isSuspended: Bool
 
     var initInBackground: Bool
@@ -130,6 +134,7 @@ internal class SqManagerParams {
          persister: JobPersister = UserDefaultsPersister(),
          serializer: JobInfoSerializer = DecodableSerializer(),
          logger: SwiftQueueLogger = NoLogger.shared,
+         listener: JobListener? = nil,
          isSuspended: Bool = false,
          initInBackground: Bool = false) {
 
@@ -138,6 +143,7 @@ internal class SqManagerParams {
         self.persister = persister
         self.serializer = serializer
         self.logger = logger
+        self.listener = listener
         self.isSuspended = isSuspended
         self.initInBackground = initInBackground
     }
@@ -190,6 +196,12 @@ public final class SwiftQueueManagerBuilder {
     /// Deserialize jobs synchronously after creating the `SwiftQueueManager` instance. `true` by default
     public func set(initInBackground: Bool) -> Self {
         params.initInBackground = initInBackground
+        return self
+    }
+
+    /// Listen for job
+    public func set(listener: JobListener) -> Self {
+        params.listener = listener
         return self
     }
 
