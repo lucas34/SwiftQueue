@@ -120,8 +120,8 @@ public final class JobBuilder {
         return self
     }
 
-    internal func build(job: Job, logger: SwiftQueueLogger = NoLogger.shared) -> SqOperation {
-        return SqOperation(job: job, info: info, logger: logger)
+    internal func build(job: Job, logger: SwiftQueueLogger = NoLogger.shared, listener: JobListener? = nil) -> SqOperation {
+        return SqOperation(job: job, info: info, logger: logger, listener: listener)
     }
 
     /// Add job to the JobQueue
@@ -134,6 +134,6 @@ public final class JobBuilder {
         let queue = manager.getQueue(queueName: info.queueName)
         let job = queue.createHandler(type: info.type, params: info.params)
 
-        queue.addOperation(build(job: job, logger: manager.logger))
+        queue.addOperation(build(job: job, logger: manager.logger, listener: manager.listener))
     }
 }

@@ -24,11 +24,12 @@ internal final class SqOperationQueue: OperationQueue {
     private let persister: JobPersister
     private let serializer: JobInfoSerializer
     private let logger: SwiftQueueLogger
+    private let listener: JobListener?
 
     private let trigger: Operation
 
     init(_ queue: Queue, _ creator: JobCreator, _ persister: JobPersister, _ serializer: JobInfoSerializer,
-         _ isSuspended: Bool, _ initInBackground: Bool, _ logger: SwiftQueueLogger) {
+         _ isSuspended: Bool, _ initInBackground: Bool, _ logger: SwiftQueueLogger, _ listener: JobListener?) {
 
         self.queue = queue
 
@@ -36,6 +37,7 @@ internal final class SqOperationQueue: OperationQueue {
         self.persister = persister
         self.serializer = serializer
         self.logger = logger
+        self.listener = listener
 
         self.trigger = TriggerOperation()
 
@@ -61,7 +63,7 @@ internal final class SqOperationQueue: OperationQueue {
                 let info = try serializer.deserialize(json: string)
                 let job = creator.create(type: info.type, params: info.params)
 
-                return SqOperation(job: job, info: info, logger: logger)
+                return SqOperation(job: job, info: info, logger: logger, listener: listener)
             } catch let error {
                 logger.log(.error, jobId: "UNKNOWN", message: "Unable to deserialize job error=\(error.localizedDescription)")
                 return nil

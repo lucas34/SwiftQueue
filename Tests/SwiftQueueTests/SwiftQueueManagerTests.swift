@@ -35,6 +35,37 @@ class SwiftQueueManagerTests: XCTestCase {
         job.assertSingleCompletion()
     }
 
+
+    func testJobListener() {
+        let (type, job) = (UUID().uuidString, TestJob())
+
+        let creator = TestCreator([type: job])
+        let listener = JobListenerTest()
+
+        let manager = SwiftQueueManagerBuilder(creator: creator)
+                .set(persister: NoSerializer.shared)
+                .set(isSuspended: true)
+                .set(listener: listener)
+                .build()
+
+        JobBuilder(type: type).schedule(manager: manager)
+
+        // No run
+        job.assertNoRun()
+        XCTAssertEqual(0, listener.onBeforeRun.count)
+        XCTAssertEqual(0, listener.onAfterRun.count)
+        XCTAssertEqual(0, listener.onTerminated.count)
+
+        manager.isSuspended = false
+
+        job.awaitForRemoval()
+        job.assertSingleCompletion()
+
+        XCTAssertEqual(1, listener.onBeforeRun.count)
+        XCTAssertEqual(1, listener.onAfterRun.count)
+        XCTAssertEqual(1, listener.onTerminated.count)
+    }
+
     func testCancelWithTag() {
         let (type, job) = (UUID().uuidString, TestJob())
 
@@ -133,7 +164,7 @@ class SwiftQueueManagerTests: XCTestCase {
     }
 
     func testAddOperationNotJobTask() {
-        let queue = SqOperationQueue(BasicQueue.synchronous, TestCreator([:]), UserDefaultsPersister(), DecodableSerializer(), false, true, NoLogger.shared)
+        let queue = SqOperationQueue(BasicQueue.synchronous, TestCreator([:]), UserDefaultsPersister(), DecodableSerializer(), false, true, NoLogger.shared, nil)
         let operation = Operation()
         queue.addOperation(operation) // Should not crash
     }

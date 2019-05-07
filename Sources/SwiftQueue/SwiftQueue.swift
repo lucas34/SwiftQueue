@@ -149,6 +149,20 @@ extension BasicQueue: Queue {
 }
 
 
+/// Listen from job status
+public protocol JobListener {
+
+    /// Job will start executing
+    func onBeforeRun(job: JobInfo)
+
+    /// Job completed execution
+    func onAfterRun(job: JobInfo, result: JobCompletion)
+
+    /// Job is removed from the queue and will not run anymore
+    func onTerminated(job: JobInfo, result: JobCompletion)
+
+}
+
 /// Enum to specify a limit
 public enum Limit {
 
