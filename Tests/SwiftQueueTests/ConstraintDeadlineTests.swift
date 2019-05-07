@@ -69,7 +69,7 @@ class ConstraintDeadlineTests: XCTestCase {
         let group = UUID().uuidString
 
         let json = JobBuilder(type: type)
-                .group(name: group)
+                .parallel(queueName: group)
                 .deadline(date: Date())
                 .build(job: job)
                 .toJSONStringSafe()
