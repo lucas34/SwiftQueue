@@ -35,7 +35,6 @@ class SwiftQueueManagerTests: XCTestCase {
         job.assertSingleCompletion()
     }
 
-
     func testJobListener() {
         let (type, job) = (UUID().uuidString, TestJob())
 
