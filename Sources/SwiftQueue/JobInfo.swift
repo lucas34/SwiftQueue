@@ -33,6 +33,9 @@ public struct JobInfo {
     /// Override job when scheduling a job with same uuid
     var override: Bool
 
+    //// Including job that are executing when scheduling with same uuid
+    var includeExecutingJob: Bool
+
     /// Set of identifiers
     var tags: Set<String>
 
@@ -75,6 +78,7 @@ public struct JobInfo {
          queueName: String = "GLOBAL",
          uuid: String = UUID().uuidString,
          override: Bool = false,
+         includeExecutingJob: Bool = true,
          tags: Set<String> = Set<String>(),
          delay: TimeInterval? = nil,
          deadline: Date? = nil,
@@ -92,6 +96,7 @@ public struct JobInfo {
         self.queueName = queueName
         self.uuid = uuid
         self.override = override
+        self.includeExecutingJob = includeExecutingJob
         self.tags = tags
         self.delay = delay
         self.deadline = deadline

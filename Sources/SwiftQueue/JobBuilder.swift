@@ -28,13 +28,14 @@ public final class JobBuilder {
         self.info = JobInfo(type: type)
     }
 
-    /// Allow only 1 job at the time with this ID scheduled or running
+    /// Allow only 1 job at the time with this ID scheduled or running if includeExecutingJob is true
     /// Same job scheduled with same id will result in onRemove(SwiftQueueError.duplicate) if override = false
     /// If override = true the previous job will be canceled and the new job will be scheduled
-    public func singleInstance(forId: String, override: Bool = false) -> Self {
+    public func singleInstance(forId: String, override: Bool = false, includeExecutingJob: Bool = true) -> Self {
         assertNotEmptyString(forId)
         info.uuid = forId
         info.override = override
+        info.includeExecutingJob = includeExecutingJob
         return self
     }
 
