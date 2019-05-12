@@ -58,6 +58,7 @@ extension JobInfo: Decodable {
         case type = "type"
         case uuid = "uuid"
         case override = "override"
+        case includeExecutingJob = "includeExecutingJob"
         case queueName = "group"
         case tags = "tags"
         case delay = "delay"
@@ -79,6 +80,7 @@ extension JobInfo: Decodable {
         let type: String = try container.decode(String.self, forKey: .type)
         let uuid: String = try container.decode(String.self, forKey: .uuid)
         let override: Bool = try container.decode(Bool.self, forKey: .override)
+        let includeExecutingJob: Bool = try container.decode(Bool.self, forKey: .includeExecutingJob)
         let queueName: String = try container.decode(String.self, forKey: .queueName)
         let tags: Set<String> = try container.decode(Set.self, forKey: .tags)
         let delay: TimeInterval? = try container.decodeIfPresent(TimeInterval.self, forKey: .delay)
@@ -120,6 +122,7 @@ extension JobInfo: Encodable {
         try container.encode(type, forKey: .type)
         try container.encode(uuid, forKey: .uuid)
         try container.encode(override, forKey: .override)
+        try container.encode(includeExecutingJob, forKey: .includeExecutingJob)
         try container.encode(queueName, forKey: .queueName)
         try container.encode(tags, forKey: .tags)
         try container.encode(delay, forKey: .delay)
