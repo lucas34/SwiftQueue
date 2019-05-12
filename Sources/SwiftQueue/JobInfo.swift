@@ -74,23 +74,44 @@ public struct JobInfo {
     /// Current number of repetition. Transient value
     var currentRepetition: Int
 
+    init(type: String) {
+        self.init(
+                type: type,
+                queueName: "GLOBAL",
+                uuid: UUID().uuidString,
+                override: false,
+                includeExecutingJob: true,
+                tags: Set<String>(),
+                delay: nil,
+                deadline:  nil,
+                requireNetwork:  NetworkType.any,
+                isPersisted: false,
+                params: [:],
+                createTime: Date(),
+                interval: -1.0,
+                maxRun: .limited(0),
+                retries: .limited(0),
+                runCount: 0,
+                requireCharging: false)
+    }
+
     init(type: String,
-         queueName: String = "GLOBAL",
-         uuid: String = UUID().uuidString,
-         override: Bool = false,
-         includeExecutingJob: Bool = true,
-         tags: Set<String> = Set<String>(),
-         delay: TimeInterval? = nil,
-         deadline: Date? = nil,
-         requireNetwork: NetworkType = NetworkType.any,
-         isPersisted: Bool = false,
-         params: [String: Any] = [:],
-         createTime: Date = Date(),
-         interval: TimeInterval = -1.0,
-         maxRun: Limit = .limited(0),
-         retries: Limit = .limited(0),
-         runCount: Double = 0,
-         requireCharging: Bool = false) {
+         queueName: String,
+         uuid: String,
+         override: Bool,
+         includeExecutingJob: Bool,
+         tags: Set<String>,
+         delay: TimeInterval?,
+         deadline: Date?,
+         requireNetwork: NetworkType,
+         isPersisted: Bool,
+         params: [String: Any],
+         createTime: Date,
+         interval: TimeInterval,
+         maxRun: Limit,
+         retries: Limit,
+         runCount: Double,
+         requireCharging: Bool) {
 
         self.type = type
         self.queueName = queueName

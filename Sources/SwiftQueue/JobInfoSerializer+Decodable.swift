@@ -100,6 +100,7 @@ extension JobInfo: Decodable {
                 queueName: queueName,
                 uuid: uuid,
                 override: override,
+                includeExecutingJob: includeExecutingJob,
                 tags: tags,
                 delay: delay,
                 deadline: deadline,
