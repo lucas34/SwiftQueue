@@ -4,11 +4,8 @@
 
 #### New features
 
-- Job callback (#217)
-Add a global listener from SwiftQueueManager and get notification for job run and completion
-
+- Job status listener (#217)
 - Allow a queue to run multiple jobs in parallel (#215)
-For a better support of concurrency, you can now define how many jobs schedule in a queue can run in parallel.
 
 #### Breaking changes
 - Rename synchronous to initInBackground (#213)
@@ -16,6 +13,7 @@ For a better support of concurrency, you can now define how many jobs schedule i
 
 #### Enhancement
 
+- Better control on running for duplicate job constraint (#219)
 - Add no logger by default (#211)
 
 

@@ -32,7 +32,6 @@ public protocol QueueCreator {
 
 }
 
-
 /// Method to implement to have a custom persister
 public protocol JobPersister {
 
@@ -147,7 +146,6 @@ extension BasicQueue: Queue {
     }
 
 }
-
 
 /// Listen from job status
 public protocol JobListener {

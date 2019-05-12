@@ -73,28 +73,30 @@ internal extension JobInfo {
 
     func toDictionary() -> [String: Any] {
         var dict = [String: Any]()
-        dict[JobInfoKeys.type.stringValue]            = self.type
-        dict[JobInfoKeys.uuid.stringValue]            = self.uuid
-        dict[JobInfoKeys.override.stringValue]        = self.override
-        dict[JobInfoKeys.queueName.stringValue]       = self.queueName
-        dict[JobInfoKeys.tags.stringValue]            = Array(self.tags)
-        dict[JobInfoKeys.delay.stringValue]           = self.delay
-        dict[JobInfoKeys.deadline.stringValue]        = self.deadline.map(dateFormatter.string)
-        dict[JobInfoKeys.requireNetwork.stringValue]  = self.requireNetwork.rawValue
-        dict[JobInfoKeys.isPersisted.stringValue]     = self.isPersisted
-        dict[JobInfoKeys.params.stringValue]          = self.params
-        dict[JobInfoKeys.createTime.stringValue]      = dateFormatter.string(from: self.createTime)
-        dict[JobInfoKeys.runCount.stringValue]        = self.runCount
-        dict[JobInfoKeys.maxRun.stringValue]          = self.maxRun.rawValue
-        dict[JobInfoKeys.retries.stringValue]         = self.retries.rawValue
-        dict[JobInfoKeys.interval.stringValue]        = self.interval
-        dict[JobInfoKeys.requireCharging.stringValue] = self.requireCharging
+        dict[JobInfoKeys.type.stringValue]                = self.type
+        dict[JobInfoKeys.uuid.stringValue]                = self.uuid
+        dict[JobInfoKeys.override.stringValue]            = self.override
+        dict[JobInfoKeys.includeExecutingJob.stringValue] = self.includeExecutingJob
+        dict[JobInfoKeys.queueName.stringValue]           = self.queueName
+        dict[JobInfoKeys.tags.stringValue]                = Array(self.tags)
+        dict[JobInfoKeys.delay.stringValue]               = self.delay
+        dict[JobInfoKeys.deadline.stringValue]            = self.deadline.map(dateFormatter.string)
+        dict[JobInfoKeys.requireNetwork.stringValue]      = self.requireNetwork.rawValue
+        dict[JobInfoKeys.isPersisted.stringValue]         = self.isPersisted
+        dict[JobInfoKeys.params.stringValue]              = self.params
+        dict[JobInfoKeys.createTime.stringValue]          = dateFormatter.string(from: self.createTime)
+        dict[JobInfoKeys.runCount.stringValue]            = self.runCount
+        dict[JobInfoKeys.maxRun.stringValue]              = self.maxRun.rawValue
+        dict[JobInfoKeys.retries.stringValue]             = self.retries.rawValue
+        dict[JobInfoKeys.interval.stringValue]            = self.interval
+        dict[JobInfoKeys.requireCharging.stringValue]     = self.requireCharging
         return dict
     }
 
     mutating func bind(dictionary: [String: Any]) throws {
         dictionary.assign(JobInfoKeys.uuid.stringValue, &self.uuid)
         dictionary.assign(JobInfoKeys.override.stringValue, &self.override)
+        dictionary.assign(JobInfoKeys.includeExecutingJob.stringValue, &self.includeExecutingJob)
         dictionary.assign(JobInfoKeys.queueName.stringValue, &self.queueName)
         dictionary.assign(JobInfoKeys.tags.stringValue, &self.tags) { (array: [String]) -> Set<String> in Set(array) }
         dictionary.assign(JobInfoKeys.delay.stringValue, &self.delay)

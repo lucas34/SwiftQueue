@@ -21,12 +21,19 @@ internal final class UniqueUUIDConstraint: JobConstraint {
 
     func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {
         for ope in queue.operations where ope.name == operation.info.uuid {
-            if operation.info.override {
-                ope.cancel()
-            } else {
-                throw SwiftQueueError.duplicate
+            if shouldAbort(ope: ope, operation: operation) {
+                if operation.info.override {
+                    ope.cancel()
+                    break
+                } else {
+                    throw SwiftQueueError.duplicate
+                }
             }
         }
+    }
+
+    private func shouldAbort(ope: Operation, operation: SqOperation) -> Bool {
+        return (ope.isExecuting && operation.info.includeExecutingJob) || !ope.isExecuting
     }
 
     func willRun(operation: SqOperation) throws {
