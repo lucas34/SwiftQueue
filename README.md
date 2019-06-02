@@ -41,6 +41,14 @@ Job Constraints:
 
 ## Installation
 
+#### SwiftPackageManager (SPM)
+
+To integrate using Apple's Swift package manager, add the following as a dependency to your Package.swift:
+
+```swift
+.package(url: "https://github.com/lucas34/SwiftQueue.git", .upToNextMajor(from: "4.0.0"))
+```
+
 #### Carthage
 `SwiftQueue` is `carthage` compatible. Add the following entry in your `Cartfile`:
 
@@ -49,14 +57,6 @@ github "lucas34/SwiftQueue"
 ```
 
 Then run `carthage update`.
-
-#### SwiftPackageManager (SPM)
-
-To integrate using Apple's Swift package manager, add the following as a dependency to your Package.swift:
-
-```
-.package(url: "https://github.com/lucas34/SwiftQueue.git", .upToNextMajor(from: "4.0.0"))
-```
 
 #### CocoaPods
 You can use [CocoaPods](https://cocoapods.org/pods/SwiftQueue) to install `SwiftQueue` by adding it to your `Podfile`:
