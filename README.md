@@ -21,13 +21,18 @@ Library will rely on `Operation` and `OperationQueue` to make sure all tasks wil
 - [x] Concurrent run
 - [x] Persistence
 - [x] Cancel all, by id or by tag
+- [x] Start / Stop queue
+
+Job Constraints:
+
 - [x] Delay
 - [x] Deadline
-- [x] Internet constraint
+- [x] Internet
+- [x] Charging
 - [x] Single instance in queue
 - [x] Retry: Max count, exponential backoff
 - [x] Periodic: Max run, interval delay
-- [x] Start / Stop queue
+
 
 ## Requirements
 
@@ -44,6 +49,14 @@ github "lucas34/SwiftQueue"
 ```
 
 Then run `carthage update`.
+
+#### SwiftPackageManager (SPM)
+
+To integrate using Apple's Swift package manager, add the following as a dependency to your Package.swift:
+
+```
+.package(url: "https://github.com/lucas34/SwiftQueue.git", .upToNextMajor(from: "4.0.0"))
+```
 
 #### CocoaPods
 You can use [CocoaPods](https://cocoapods.org/pods/SwiftQueue) to install `SwiftQueue` by adding it to your `Podfile`:
@@ -142,6 +155,10 @@ class TweetJobCreator: JobCreator {
     }
 }
 ```
+
+## 3rd Party Extensions
+
+* [SQLitePersisterForSwiftQueue](https://github.com/gumbright/SQLitePersisterForSwiftQueue): A SQLite3 based persister for SwiftQueue
 
 ## Contributors
 
