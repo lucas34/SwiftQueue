@@ -153,6 +153,25 @@ class ConstraintTests: XCTestCase {
         job.assertError()
     }
 
+    func testRetryFailJobWithExponentialMaxDelayConstraint() {
+        let job = TestJob(completion: .fail(JobError()), retry: .exponentialWithMaxDelay(initial: 0, maxDelay: 1))
+        let type = UUID().uuidString
+
+        let creator = TestCreator([type: job])
+
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
+        JobBuilder(type: type)
+                .retry(limit: .limited(2))
+                .schedule(manager: manager)
+
+        job.awaitForRemoval()
+        job.assertRunCount(expected: 3)
+        job.assertCompletedCount(expected: 0)
+        job.assertRetriedCount(expected: 2)
+        job.assertCanceledCount(expected: 1)
+        job.assertError()
+    }
+
     func testRepeatableJobWithExponentialBackoffRetry() {
         let type = UUID().uuidString
         let job = TestJob(completion: .fail(JobError()), retry: .exponential(initial: Double.leastNonzeroMagnitude))

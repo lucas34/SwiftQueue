@@ -178,6 +178,12 @@ extension SqOperation: JobResult {
     }
 
     private func retryJob(retry: RetryConstraint, origin: Error) {
+
+        func exponentialBackoff(initial: TimeInterval) -> TimeInterval {
+            info.currentRepetition += 1
+            return info.currentRepetition == 1 ? initial : initial * pow(2, Double(info.currentRepetition - 1))
+        }
+
         switch retry {
         case .cancel:
             lastError = SwiftQueueError.onRetryCancel(origin)
@@ -193,9 +199,9 @@ extension SqOperation: JobResult {
             // Retry after time in parameter
             retryInBackgroundAfter(after)
         case .exponential(let initial):
-            info.currentRepetition += 1
-            let delay = info.currentRepetition == 1 ? initial : initial * pow(2, Double(info.currentRepetition - 1))
-            retryInBackgroundAfter(delay)
+            retryInBackgroundAfter(exponentialBackoff(initial: initial))
+        case .exponentialWithMaxDelay(let initial, let maxDelay):
+            retryInBackgroundAfter(min(maxDelay, exponentialBackoff(initial: initial)))
         }
     }
 
