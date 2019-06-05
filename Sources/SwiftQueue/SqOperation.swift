@@ -200,7 +200,7 @@ extension SqOperation: JobResult {
             retryInBackgroundAfter(after)
         case .exponential(let initial):
             retryInBackgroundAfter(exponentialBackoff(initial: initial))
-        case .exponentialWithMaxDelay(let initial, let maxDelay):
+        case .exponentialWithLimit(let initial, let maxDelay):
             retryInBackgroundAfter(min(maxDelay, exponentialBackoff(initial: initial)))
         }
     }

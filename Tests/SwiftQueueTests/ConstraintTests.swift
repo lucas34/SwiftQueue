@@ -154,7 +154,7 @@ class ConstraintTests: XCTestCase {
     }
 
     func testRetryFailJobWithExponentialMaxDelayConstraint() {
-        let job = TestJob(completion: .fail(JobError()), retry: .exponentialWithMaxDelay(initial: 0, maxDelay: 1))
+        let job = TestJob(completion: .fail(JobError()), retry: .exponentialWithLimit(initial: 0, maxDelay: 1))
         let type = UUID().uuidString
 
         let creator = TestCreator([type: job])

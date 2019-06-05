@@ -48,7 +48,7 @@ public enum RetryConstraint {
     /// Exponential back-off
     case exponential(initial: TimeInterval)
     /// Exponential back-off with max delay
-    case exponentialWithMaxDelay(initial: TimeInterval, maxDelay: TimeInterval)
+    case exponentialWithLimit(initial: TimeInterval, maxDelay: TimeInterval)
 }
 
 internal class DefaultNoConstraint: JobConstraint {
