@@ -59,7 +59,7 @@ public final class SwiftQueueManager {
         let queue = getQueue(queueName: info.queueName)
         let job = queue.createHandler(type: info.type, params: info.params)
 
-        let operation = SqOperation(job: job, info: info, logger: params.logger, listener: listener, dispatchQueue: params.dispatchQueue)
+        let operation = SqOperation(job: job, info: info, logger: logger, listener: listener)
         queue.addOperation(operation)
     }
 
@@ -141,7 +141,6 @@ internal struct SqManagerParams {
         self.logger = logger
         self.listener = listener
         self.initInBackground = initInBackground
-        self.dispatchQueue = dispatchQueue
     }
 
 }
