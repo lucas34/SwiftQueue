@@ -18,9 +18,13 @@
 import Foundation
 import Dispatch
 
-func runInBackgroundAfter(_ seconds: TimeInterval, callback: @escaping () -> Void) {
-    let delta = DispatchTime.now() + seconds
-    DispatchQueue.global(qos: DispatchQoS.QoSClass.utility).asyncAfter(deadline: delta, execute: callback)
+extension DispatchQueue {
+
+    func runAfter(_ seconds: TimeInterval, callback: @escaping () -> Void) {
+        let delta = DispatchTime.now() + seconds
+        asyncAfter(deadline: delta, execute: callback)
+    }
+
 }
 
 func assertNotEmptyString(_ string: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {

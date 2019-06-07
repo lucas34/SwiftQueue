@@ -31,6 +31,8 @@ internal final class SqOperation: Operation {
 
     let listener: JobListener?
 
+    let dispatchQueue: DispatchQueue
+
     override var name: String? { get { return info.uuid } set { } }
 
     private var jobIsExecuting: Bool = false
@@ -53,11 +55,12 @@ internal final class SqOperation: Operation {
         }
     }
 
-    internal init(job: Job, info: JobInfo, logger: SwiftQueueLogger, listener: JobListener?) {
+    internal init(job: Job, info: JobInfo, logger: SwiftQueueLogger, listener: JobListener?, dispatchQueue: DispatchQueue) {
         self.handler = job
         self.info = info
         self.logger = logger
         self.listener = listener
+        self.dispatchQueue = dispatchQueue
 
         self.constraints = [
             DeadlineConstraint(),
@@ -226,7 +229,7 @@ extension SqOperation: JobResult {
         }
 
         // Schedule run after interval
-        runInBackgroundAfter(info.interval, callback: { [weak self] in
+        dispatchQueue.runAfter(info.interval, callback: { [weak self] in
             self?.info.runCount += 1
             self?.run()
         })
@@ -260,7 +263,7 @@ extension SqOperation {
 extension SqOperation {
 
     fileprivate func retryInBackgroundAfter(_ delay: TimeInterval) {
-        runInBackgroundAfter(delay) { [weak self] in
+        dispatchQueue.runAfter(delay) { [weak self] in
             self?.info.retries.decreaseValue(by: 1)
             self?.run()
         }

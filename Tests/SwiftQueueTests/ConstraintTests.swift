@@ -16,6 +16,7 @@
 // under the License.
 
 import XCTest
+import Dispatch
 @testable import SwiftQueue
 
 class ConstraintTests: XCTestCase {
@@ -219,7 +220,7 @@ class ConstraintTests: XCTestCase {
         JobBuilder(type: type)
                 .schedule(manager: manager)
 
-        runInBackgroundAfter(0.01) {
+        DispatchQueue.main.runAfter(0.01) {
             manager.cancelAllOperations()
         }
 
@@ -243,7 +244,7 @@ class ConstraintTests: XCTestCase {
                 .addTag(tag: tag)
                 .schedule(manager: manager)
 
-        runInBackgroundAfter(0.01) {
+        DispatchQueue.main.runAfter(0.01) {
             manager.cancelOperations(tag: tag)
         }
 

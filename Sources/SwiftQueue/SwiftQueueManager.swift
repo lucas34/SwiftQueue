@@ -16,6 +16,7 @@
 // under the License.
 
 import Foundation
+import Dispatch
 
 /// Global manager to perform operations on all your queues/
 /// You will have to keep this instance. We highly recommend you to store this instance in a Singleton
@@ -123,6 +124,8 @@ internal struct SqManagerParams {
 
     var listener: JobListener?
 
+    var dispatchQueue: DispatchQueue
+
     var initInBackground: Bool
 
     init(jobCreator: JobCreator,
@@ -200,6 +203,10 @@ public final class SwiftQueueManagerBuilder {
         return self
     }
 
+    public func set(dispatchQueue: DispatchQueue) -> Self {
+        params.dispatchQueue = dispatchQueue
+        return self
+    }
     /// Get an instance of `SwiftQueueManager`
     public func build() -> SwiftQueueManager {
         return SwiftQueueManager(params: params, isSuspended: isSuspended)

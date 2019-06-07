@@ -51,7 +51,7 @@ class TestJob: Job {
         if runSemaphoreValue == onRunCount {
             onRunSemaphore.signal()
         }
-        runInBackgroundAfter(completionTimeout) {
+        DispatchQueue.main.runAfter(completionTimeout) {
             callback.done(self.withCompletion)
         }
     }
