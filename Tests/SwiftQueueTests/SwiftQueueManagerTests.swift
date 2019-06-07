@@ -163,7 +163,16 @@ class SwiftQueueManagerTests: XCTestCase {
     }
 
     func testAddOperationNotJobTask() {
-        let queue = SqOperationQueue(BasicQueue.synchronous, TestCreator([:]), UserDefaultsPersister(), DecodableSerializer(), false, true, NoLogger.shared, nil)
+        let params = SqManagerParams(
+                jobCreator: TestCreator([:]),
+                queueCreator: BasicQueueCreator(),
+                persister: UserDefaultsPersister(),
+                serializer: DecodableSerializer(),
+                logger: NoLogger.shared,
+                listener: nil,
+                initInBackground: false
+        )
+        let queue = SqOperationQueue(params, BasicQueue.synchronous, true)
         let operation = Operation()
         queue.addOperation(operation) // Should not crash
     }
