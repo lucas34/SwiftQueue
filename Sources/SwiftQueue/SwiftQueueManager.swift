@@ -22,11 +22,7 @@ import Foundation
 /// Creating and instance of this class will automatically un-serialize your jobs and schedule them
 public final class SwiftQueueManager {
 
-    private let params: SqManagerParams
-
-    internal lazy var listener: JobListener? = {
-        return params.listener
-    }()
+    internal let params: SqManagerParams
 
     /// Allow jobs in queue to be executed.
     public var isSuspended: Bool {
@@ -48,7 +44,7 @@ public final class SwiftQueueManager {
         }
     }
 
-    private func getQueue(queueName: String) -> SqOperationQueue {
+    internal func getQueue(queueName: String) -> SqOperationQueue {
         return manage[queueName] ?? createQueue(queueName: queueName, initInBackground: false)
     }
 

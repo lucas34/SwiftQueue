@@ -135,6 +135,6 @@ public final class JobBuilder {
         let queue = manager.getQueue(queueName: info.queueName)
         let job = queue.createHandler(type: info.type, params: info.params)
 
-        queue.addOperation(build(job: job, logger: manager.logger, listener: manager.listener))
+        queue.addOperation(build(job: job, logger: manager.params.logger, listener: manager.params.listener))
     }
 }
