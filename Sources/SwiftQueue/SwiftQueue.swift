@@ -188,3 +188,4 @@ public enum SwiftQueueError: Swift.Error {
     case onRetryCancel(Error)
 
 }
+

@@ -81,7 +81,11 @@ class ConstraintUniqueUUIDTests: XCTestCase {
 
         let creator = TestCreator([type1: job1, type2: job2, type3: job3])
 
-        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
+        let manager = SwiftQueueManagerBuilder(creator: creator)
+                .set(persister: NoSerializer.shared)
+                .set(dispatchQueue: DispatchQueue.global(qos: .default))
+                .build()
+
         JobBuilder(type: type1)
                 .singleInstance(forId: id)
                 .delay(time: 3600)

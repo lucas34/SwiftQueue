@@ -90,6 +90,8 @@ internal extension JobInfo {
         dict[JobInfoKeys.retries.stringValue]             = self.retries.rawValue
         dict[JobInfoKeys.interval.stringValue]            = self.interval
         dict[JobInfoKeys.requireCharging.stringValue]     = self.requireCharging
+        dict[JobInfoKeys.priority.stringValue]            = self.priority.rawValue
+        dict[JobInfoKeys.qualityOfService.stringValue]    = self.qualityOfService.rawValue
         return dict
     }
 
@@ -101,7 +103,7 @@ internal extension JobInfo {
         dictionary.assign(JobInfoKeys.tags.stringValue, &self.tags) { (array: [String]) -> Set<String> in Set(array) }
         dictionary.assign(JobInfoKeys.delay.stringValue, &self.delay)
         dictionary.assign(JobInfoKeys.deadline.stringValue, &self.deadline, dateFormatter.date)
-        dictionary.assign(JobInfoKeys.requireNetwork.stringValue, &self.requireNetwork) { NetworkType(rawValue: $0) }
+        dictionary.assign(JobInfoKeys.requireNetwork.stringValue, &self.requireNetwork, NetworkType.init)
         dictionary.assign(JobInfoKeys.isPersisted.stringValue, &self.isPersisted)
         dictionary.assign(JobInfoKeys.params.stringValue, &self.params)
         dictionary.assign(JobInfoKeys.createTime.stringValue, &self.createTime, dateFormatter.date)
@@ -110,6 +112,8 @@ internal extension JobInfo {
         dictionary.assign(JobInfoKeys.retries.stringValue, &self.retries, Limit.fromRawValue)
         dictionary.assign(JobInfoKeys.runCount.stringValue, &self.runCount)
         dictionary.assign(JobInfoKeys.requireCharging.stringValue, &self.requireCharging)
+        dictionary.assign(JobInfoKeys.priority.stringValue, &self.priority, Operation.QueuePriority.init)
+        dictionary.assign(JobInfoKeys.qualityOfService.stringValue, &self.qualityOfService, QualityOfService.init)
     }
 }
 
