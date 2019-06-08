@@ -121,8 +121,9 @@ public final class JobBuilder {
         return self
     }
 
-    internal func build(job: Job, logger: SwiftQueueLogger = NoLogger.shared, listener: JobListener? = nil) -> SqOperation {
-        return SqOperation(job: job, info: info, logger: logger, listener: listener)
+    /// Get the JobInfo built
+    public func build() -> JobInfo {
+        return info
     }
 
     /// Add job to the JobQueue
@@ -132,9 +133,6 @@ public final class JobBuilder {
             assert(JSONSerialization.isValidJSONObject(info.params))
         }
 
-        let queue = manager.getQueue(queueName: info.queueName)
-        let job = queue.createHandler(type: info.type, params: info.params)
-
-        queue.addOperation(build(job: job, logger: manager.params.logger, listener: manager.params.listener))
+        manager.enqueue(info: info)
     }
 }

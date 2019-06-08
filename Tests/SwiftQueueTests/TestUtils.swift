@@ -267,3 +267,11 @@ class MemorySerializer: JobInfoSerializer {
         return data[json] ?? JobInfo(type: json)
     }
 }
+
+extension JobBuilder {
+
+    internal func build(job: Job, logger: SwiftQueueLogger = NoLogger.shared, listener: JobListener? = nil) -> SqOperation {
+        return SqOperation(job: job, info: build(), logger: logger, listener: listener)
+    }
+
+}

@@ -54,6 +54,15 @@ public final class SwiftQueueManager {
         return operationQueue
     }
 
+    /// Schedule a job to the queue
+    public func enqueue(info: JobInfo) {
+        let queue = getQueue(queueName: info.queueName)
+        let job = queue.createHandler(type: info.type, params: info.params)
+
+        let operation = SqOperation(job: job, info: info, logger: params.logger, listener: params.listener)
+        queue.addOperation(operation)
+    }
+
     /// All operations in all queues will be removed
     public func cancelAllOperations() {
         for element in manage.values {
