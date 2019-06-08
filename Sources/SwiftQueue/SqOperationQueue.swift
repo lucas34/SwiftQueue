@@ -19,27 +19,27 @@ import Foundation
 
 internal final class SqOperationQueue: OperationQueue {
 
-    private let queue: Queue
+    private let params: SqManagerParams
+
     private let creator: JobCreator
+    private let queue: Queue
+
     private let persister: JobPersister
     private let serializer: JobInfoSerializer
     private let logger: SwiftQueueLogger
     private let listener: JobListener?
 
-    private let trigger: Operation
+    private let trigger: Operation = TriggerOperation()
 
-    init(_ queue: Queue, _ creator: JobCreator, _ persister: JobPersister, _ serializer: JobInfoSerializer,
-         _ isSuspended: Bool, _ initInBackground: Bool, _ logger: SwiftQueueLogger, _ listener: JobListener?) {
-
+    init(_ params: SqManagerParams, _ queue: Queue, _ isSuspended: Bool) {
+        self.params = params
         self.queue = queue
+        self.creator = params.jobCreator
 
-        self.creator = creator
-        self.persister = persister
-        self.serializer = serializer
-        self.logger = logger
-        self.listener = listener
-
-        self.trigger = TriggerOperation()
+        self.persister = params.persister
+        self.serializer = params.serializer
+        self.logger = params.logger
+        self.listener = params.listener
 
         super.init()
 
@@ -48,7 +48,7 @@ internal final class SqOperationQueue: OperationQueue {
         self.name = queue.name
         self.maxConcurrentOperationCount = queue.maxConcurrent
 
-        if initInBackground {
+        if params.initInBackground {
             DispatchQueue.global(qos: DispatchQoS.QoSClass.utility).async { () -> Void in
                 self.loadSerializedTasks(name: queue.name)
             }

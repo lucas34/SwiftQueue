@@ -22,13 +22,7 @@ import Foundation
 /// Creating and instance of this class will automatically un-serialize your jobs and schedule them
 public final class SwiftQueueManager {
 
-    private let jobCreator: JobCreator
-    private let queueCreator: QueueCreator
-    private let persister: JobPersister
-    private let serializer: JobInfoSerializer
-
-    internal let logger: SwiftQueueLogger
-    internal let listener: JobListener?
+    internal let params: SqManagerParams
 
     /// Allow jobs in queue to be executed.
     public var isSuspended: Bool {
@@ -41,16 +35,11 @@ public final class SwiftQueueManager {
 
     private var manage = [String: SqOperationQueue]()
 
-    internal init(params: SqManagerParams) {
-        self.jobCreator = params.jobCreator
-        self.queueCreator = params.queueCreator
-        self.persister = params.persister
-        self.serializer = params.serializer
-        self.logger = params.logger
-        self.listener = params.listener
-        self.isSuspended = params.isSuspended
+    internal init(params: SqManagerParams, isSuspended: Bool) {
+        self.params = params
+        self.isSuspended = isSuspended
 
-        for queueName in persister.restore() {
+        for queueName in params.persister.restore() {
             _ = createQueue(queueName: queueName, initInBackground: params.initInBackground)
         }
     }
@@ -60,7 +49,7 @@ public final class SwiftQueueManager {
     }
 
     private func createQueue(queueName: String, initInBackground: Bool) -> SqOperationQueue {
-        let operationQueue = SqOperationQueue(queueCreator.create(queueName: queueName), jobCreator, persister, serializer, isSuspended, initInBackground, logger, listener)
+        let operationQueue = SqOperationQueue(params, params.queueCreator.create(queueName: queueName), isSuspended)
         manage[queueName] = operationQueue
         return operationQueue
     }
@@ -111,7 +100,7 @@ public final class SwiftQueueManager {
 
 }
 
-internal class SqManagerParams {
+internal struct SqManagerParams {
 
     let jobCreator: JobCreator
 
@@ -125,8 +114,6 @@ internal class SqManagerParams {
 
     var listener: JobListener?
 
-    var isSuspended: Bool
-
     var initInBackground: Bool
 
     init(jobCreator: JobCreator,
@@ -135,7 +122,6 @@ internal class SqManagerParams {
          serializer: JobInfoSerializer = DecodableSerializer(),
          logger: SwiftQueueLogger = NoLogger.shared,
          listener: JobListener? = nil,
-         isSuspended: Bool = false,
          initInBackground: Bool = false) {
 
         self.jobCreator = jobCreator
@@ -144,7 +130,6 @@ internal class SqManagerParams {
         self.serializer = serializer
         self.logger = logger
         self.listener = listener
-        self.isSuspended = isSuspended
         self.initInBackground = initInBackground
     }
 
@@ -154,6 +139,7 @@ internal class SqManagerParams {
 public final class SwiftQueueManagerBuilder {
 
     private var params: SqManagerParams
+    private var isSuspended: Bool = false
 
     /// Creator to convert `JobInfo.type` to `Job` instance
     public init(creator: JobCreator, queueCreator: QueueCreator = BasicQueueCreator()) {
@@ -182,7 +168,7 @@ public final class SwiftQueueManagerBuilder {
 
     /// Start jobs directly when they are scheduled or not. `false` by default
     public func set(isSuspended: Bool) -> Self {
-        params.isSuspended = isSuspended
+        self.isSuspended = isSuspended
         return self
     }
 
@@ -207,7 +193,7 @@ public final class SwiftQueueManagerBuilder {
 
     /// Get an instance of `SwiftQueueManager`
     public func build() -> SwiftQueueManager {
-        return SwiftQueueManager(params: params)
+        return SwiftQueueManager(params: params, isSuspended: isSuspended)
     }
 
 }
