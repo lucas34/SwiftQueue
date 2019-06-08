@@ -89,6 +89,31 @@ extension Limit: Equatable {
     }
 }
 
+internal extension Operation.QueuePriority {
+
+    init(fromValue: Int?) {
+        guard let value = fromValue, let priority = Operation.QueuePriority(rawValue: value) else {
+            self = Operation.QueuePriority.normal
+            return
+        }
+        self = priority
+    }
+
+}
+
+internal extension QualityOfService {
+
+    init(fromValue: Int?) {
+        guard let value = fromValue, let service = QualityOfService(rawValue: value) else {
+            self = QualityOfService.default
+            return
+        }
+        self = service
+    }
+
+}
+
+
 #if !swift(>=4.1)
 extension Sequence {
     func compactMap<T>(_ fn: (Self.Iterator.Element) throws -> T?) rethrows -> [T] {
