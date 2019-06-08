@@ -74,6 +74,12 @@ public struct JobInfo {
     /// Current number of repetition. Transient value
     var currentRepetition: Int
 
+    /// This value is used to influence the order in which operations are dequeued and executed
+    var priority: Operation.QueuePriority
+
+    /// The relative amount of importance for granting system resources to the operation.
+    var qualityOfService: QualityOfService
+
     init(type: String) {
         self.init(
                 type: type,
@@ -92,7 +98,10 @@ public struct JobInfo {
                 maxRun: .limited(0),
                 retries: .limited(0),
                 runCount: 0,
-                requireCharging: false)
+                requireCharging: false,
+                priority: .normal,
+                qualityOfService: .utility
+        )
     }
 
     init(type: String,
@@ -111,7 +120,10 @@ public struct JobInfo {
          maxRun: Limit,
          retries: Limit,
          runCount: Double,
-         requireCharging: Bool) {
+         requireCharging: Bool,
+         priority: Operation.QueuePriority,
+         qualityOfService: QualityOfService
+    ) {
 
         self.type = type
         self.queueName = queueName
@@ -130,6 +142,8 @@ public struct JobInfo {
         self.retries = retries
         self.runCount = runCount
         self.requireCharging = requireCharging
+        self.priority = priority
+        self.qualityOfService = qualityOfService
 
         /// Transient
         self.currentRepetition = 0

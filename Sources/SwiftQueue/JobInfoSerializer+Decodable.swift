@@ -72,6 +72,8 @@ extension JobInfo: Decodable {
         case retries = "retries"
         case runCount = "interval"
         case requireCharging = "requireCharging"
+        case priority = "priority"
+        case qualityOfService = "qualityOfService"
     }
 
     public init(from decoder: Decoder) throws {
@@ -94,6 +96,8 @@ extension JobInfo: Decodable {
         let retries: Limit = try container.decode(Limit.self, forKey: .retries)
         let runCount: Double = try container.decode(Double.self, forKey: .runCount)
         let requireCharging: Bool = try container.decode(Bool.self, forKey: .requireCharging)
+        let priority: Operation.QueuePriority = try container.decode(Bool.self, forKey: .priority)
+        let qualityOfService: QualityOfService = try container.decode(Bool.self, forKey: .qualityOfService)
 
         self.init(
                 type: type,
@@ -112,7 +116,10 @@ extension JobInfo: Decodable {
                 maxRun: maxRun,
                 retries: retries,
                 runCount: runCount,
-                requireCharging: requireCharging)
+                requireCharging: requireCharging,
+                priority: priority,
+                qualityOfService: qualityOfService
+        )
     }
 }
 
@@ -137,6 +144,8 @@ extension JobInfo: Encodable {
         try container.encode(retries, forKey: .retries)
         try container.encode(runCount, forKey: .runCount)
         try container.encode(requireCharging, forKey: .requireCharging)
+        try container.encode(QueuePriority, forKey: .priority)
+        try container.encode(QualityOfService, forKey: .qualityOfService)
     }
 }
 

@@ -90,6 +90,8 @@ internal extension JobInfo {
         dict[JobInfoKeys.retries.stringValue]             = self.retries.rawValue
         dict[JobInfoKeys.interval.stringValue]            = self.interval
         dict[JobInfoKeys.requireCharging.stringValue]     = self.requireCharging
+        dict[JobInfoKeys.priority.stringValue]            = self.priority
+        dict[JobInfoKeys.qualityOfService.stringValue]    = self.qualityOfService
         return dict
     }
 
@@ -110,6 +112,8 @@ internal extension JobInfo {
         dictionary.assign(JobInfoKeys.retries.stringValue, &self.retries, Limit.fromRawValue)
         dictionary.assign(JobInfoKeys.runCount.stringValue, &self.runCount)
         dictionary.assign(JobInfoKeys.requireCharging.stringValue, &self.requireCharging)
+        dictionary.assign(JobInfoKeys.priority.stringValue, &self.priority)
+        dictionary.assign(JobInfoKeys.qualityOfService.stringValue, &self.qualityOfService)
     }
 }
 

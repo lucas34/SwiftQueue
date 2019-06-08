@@ -34,6 +34,8 @@ internal final class SqOperation: Operation {
     let dispatchQueue: DispatchQueue
 
     override var name: String? { get { return info.uuid } set { } }
+    override var queuePriority: QueuePriority { get { return info.priority } set { } }
+    override var qualityOfService: QualityOfService { get { return info.qualityOfService } set { } }
 
     private var jobIsExecuting: Bool = false
     override var isExecuting: Bool {
@@ -71,10 +73,6 @@ internal final class SqOperation: Operation {
         ]
 
         super.init()
-
-        self.queuePriority = .normal
-        self.qualityOfService = .utility
-
     }
 
     override func start() {
