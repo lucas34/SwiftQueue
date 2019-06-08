@@ -18,7 +18,7 @@
 import Foundation
 import Dispatch
 
-extension DispatchQueue {
+internal extension DispatchQueue {
 
     func runAfter(_ seconds: TimeInterval, callback: @escaping () -> Void) {
         let delta = DispatchTime.now() + seconds

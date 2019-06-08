@@ -60,7 +60,7 @@ public final class SwiftQueueManager {
         let queue = getQueue(queueName: info.queueName)
         let job = queue.createHandler(type: info.type, params: info.params)
 
-        let operation = SqOperation(job: job, info: info, logger: params.logger, listener: params.listener)
+        let operation = SqOperation(job: job, info: info, logger: params.logger, listener: params.listener, dispatchQueue: params.dispatchQueue)
         queue.addOperation(operation)
     }
 
@@ -134,8 +134,9 @@ internal struct SqManagerParams {
          serializer: JobInfoSerializer = DecodableSerializer(),
          logger: SwiftQueueLogger = NoLogger.shared,
          listener: JobListener? = nil,
-         initInBackground: Bool = false) {
-
+         initInBackground: Bool = false,
+         dispatchQueue: DispatchQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.utility)
+    ) {
         self.jobCreator = jobCreator
         self.queueCreator = queueCreator
         self.persister = persister
@@ -143,6 +144,7 @@ internal struct SqManagerParams {
         self.logger = logger
         self.listener = listener
         self.initInBackground = initInBackground
+        self.dispatchQueue = dispatchQueue
     }
 
 }
