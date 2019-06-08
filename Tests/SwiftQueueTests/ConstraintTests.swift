@@ -220,7 +220,7 @@ class ConstraintTests: XCTestCase {
         JobBuilder(type: type)
                 .schedule(manager: manager)
 
-        DispatchQueue.main.runAfter(0.01) {
+        runInBackgroundAfter(0.01) {
             manager.cancelAllOperations()
         }
 
@@ -244,7 +244,7 @@ class ConstraintTests: XCTestCase {
                 .addTag(tag: tag)
                 .schedule(manager: manager)
 
-        DispatchQueue.main.runAfter(0.01) {
+        runInBackgroundAfter(0.01) {
             manager.cancelOperations(tag: tag)
         }
 

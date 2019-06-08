@@ -51,7 +51,7 @@ class TestJob: Job {
         if runSemaphoreValue == onRunCount {
             onRunSemaphore.signal()
         }
-        DispatchQueue.main.runAfter(completionTimeout) {
+        runInBackgroundAfter(completionTimeout) {
             callback.done(self.withCompletion)
         }
     }
@@ -275,3 +275,9 @@ extension JobBuilder {
     }
 
 }
+
+func runInBackgroundAfter(_ seconds: TimeInterval, callback: @escaping () -> Void) {
+    let delta = DispatchTime.now() + seconds
+    DispatchQueue.global(qos: DispatchQoS.QoSClass.utility).asyncAfter(deadline: delta, execute: callback)
+}
+
