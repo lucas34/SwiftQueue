@@ -16,6 +16,7 @@
 // under the License.
 
 import XCTest
+import Dispatch
 @testable import SwiftQueue
 
 class ConstraintTests: XCTestCase {

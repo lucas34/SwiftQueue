@@ -16,6 +16,7 @@
 // under the License.
 
 import Foundation
+import Dispatch
 
 /// Global manager to perform operations on all your queues/
 /// You will have to keep this instance. We highly recommend you to store this instance in a Singleton
@@ -59,7 +60,7 @@ public final class SwiftQueueManager {
         let queue = getQueue(queueName: info.queueName)
         let job = queue.createHandler(type: info.type, params: info.params)
 
-        let operation = SqOperation(job: job, info: info, logger: params.logger, listener: params.listener)
+        let operation = SqOperation(job: job, info: info, logger: params.logger, listener: params.listener, dispatchQueue: params.dispatchQueue)
         queue.addOperation(operation)
     }
 
@@ -123,6 +124,8 @@ internal struct SqManagerParams {
 
     var listener: JobListener?
 
+    var dispatchQueue: DispatchQueue
+
     var initInBackground: Bool
 
     init(jobCreator: JobCreator,
@@ -131,8 +134,9 @@ internal struct SqManagerParams {
          serializer: JobInfoSerializer = DecodableSerializer(),
          logger: SwiftQueueLogger = NoLogger.shared,
          listener: JobListener? = nil,
-         initInBackground: Bool = false) {
-
+         initInBackground: Bool = false,
+         dispatchQueue: DispatchQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.utility)
+    ) {
         self.jobCreator = jobCreator
         self.queueCreator = queueCreator
         self.persister = persister
@@ -140,6 +144,7 @@ internal struct SqManagerParams {
         self.logger = logger
         self.listener = listener
         self.initInBackground = initInBackground
+        self.dispatchQueue = dispatchQueue
     }
 
 }
@@ -200,6 +205,10 @@ public final class SwiftQueueManagerBuilder {
         return self
     }
 
+    public func set(dispatchQueue: DispatchQueue) -> Self {
+        params.dispatchQueue = dispatchQueue
+        return self
+    }
     /// Get an instance of `SwiftQueueManager`
     public func build() -> SwiftQueueManager {
         return SwiftQueueManager(params: params, isSuspended: isSuspended)

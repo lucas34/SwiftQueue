@@ -49,8 +49,8 @@ internal final class SqOperationQueue: OperationQueue {
         self.maxConcurrentOperationCount = queue.maxConcurrent
 
         if params.initInBackground {
-            DispatchQueue.global(qos: DispatchQoS.QoSClass.utility).async { () -> Void in
-                self.loadSerializedTasks(name: queue.name)
+            params.dispatchQueue.async { [weak self] in
+                self?.loadSerializedTasks(name: queue.name)
             }
         } else {
             self.loadSerializedTasks(name: queue.name)
@@ -63,7 +63,7 @@ internal final class SqOperationQueue: OperationQueue {
                 let info = try serializer.deserialize(json: string)
                 let job = creator.create(type: info.type, params: info.params)
 
-                return SqOperation(job: job, info: info, logger: logger, listener: listener)
+                return SqOperation(job: job, info: info, logger: logger, listener: listener, dispatchQueue: params.dispatchQueue)
             } catch let error {
                 logger.log(.error, jobId: "UNKNOWN", message: "Unable to deserialize job error=\(error.localizedDescription)")
                 return nil
