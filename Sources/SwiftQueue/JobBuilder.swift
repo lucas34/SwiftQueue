@@ -20,7 +20,7 @@ import Foundation
 /// Builder to create your job with behaviour
 public final class JobBuilder {
 
-    internal var info: JobInfo
+    private var info: JobInfo
 
     /// Type of your job that you will receive in JobCreator.create(type)
     public init(type: String) {
@@ -119,6 +119,11 @@ public final class JobBuilder {
     public func requireCharging(value: Bool) -> Self {
         info.requireCharging = value
         return self
+    }
+
+    /// Get the JobInfo built
+    public func build() -> JobInfo {
+        return info
     }
 
     /// Add job to the JobQueue

@@ -63,7 +63,6 @@ public final class SwiftQueueManager {
         queue.addOperation(operation)
     }
 
-
     /// All operations in all queues will be removed
     public func cancelAllOperations() {
         for element in manage.values {

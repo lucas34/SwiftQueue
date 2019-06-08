@@ -271,7 +271,7 @@ class MemorySerializer: JobInfoSerializer {
 extension JobBuilder {
 
     internal func build(job: Job, logger: SwiftQueueLogger = NoLogger.shared, listener: JobListener? = nil) -> SqOperation {
-        return SqOperation(job: job, info: info, logger: logger, listener: listener)
+        return SqOperation(job: job, info: build(), logger: logger, listener: listener)
     }
 
 }
