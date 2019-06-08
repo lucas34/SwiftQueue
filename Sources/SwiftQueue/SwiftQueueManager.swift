@@ -59,7 +59,7 @@ public final class SwiftQueueManager {
         let queue = getQueue(queueName: info.queueName)
         let job = queue.createHandler(type: info.type, params: info.params)
 
-        let operation = SqOperation(job: job, info: info, logger: logger, listener: listener)
+        let operation = SqOperation(job: job, info: info, logger: params.logger, listener: params.listener)
         queue.addOperation(operation)
     }
 
