@@ -72,36 +72,4 @@ class ConstraintUniqueUUIDTests: XCTestCase {
         manager.waitUntilAllOperationsAreFinished()
     }
 
-    func testUniqueIdConstraintShouldNotCancelRunningJob() {
-        let (type1, job1) = (UUID().uuidString, TestJob())
-        let (type2, job2) = (UUID().uuidString, TestJob())
-        let (type3, job3) = (UUID().uuidString, TestJob())
-
-        let id = UUID().uuidString
-
-        let creator = TestCreator([type1: job1, type2: job2, type3: job3])
-
-        let manager = SwiftQueueManagerBuilder(creator: creator)
-                .set(persister: NoSerializer.shared)
-                .build()
-
-        JobBuilder(type: type1)
-                .singleInstance(forId: id)
-                .delay(time: 3600)
-                .schedule(manager: manager)
-
-        JobBuilder(type: type2).singleInstance(forId: id, includeExecutingJob: false).schedule(manager: manager)
-        JobBuilder(type: type3).singleInstance(forId: id, includeExecutingJob: false).schedule(manager: manager)
-
-        job3.awaitForRemoval()
-        job3.assertRunCount(expected: 0)
-        job3.assertCompletedCount(expected: 0)
-        job3.assertRetriedCount(expected: 0)
-        job3.assertCanceledCount(expected: 1)
-        job3.assertError(queueError: .duplicate)
-
-        manager.cancelAllOperations()
-        manager.waitUntilAllOperationsAreFinished()
-    }
-
 }

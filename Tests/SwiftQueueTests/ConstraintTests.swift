@@ -40,7 +40,19 @@ class ConstraintTests: XCTestCase {
     }
 
     func testPeriodicJobUnlimited() {
-        let (type, job) = (UUID().uuidString, TestJob())
+        let runLimit = 100
+        let type = UUID().uuidString
+
+        var runCount = 0
+
+        let job = TestJob(retry: .retry(delay: 0)) {
+            runCount = runCount + 1
+            if (runCount == runLimit) {
+                $0.done(.fail(JobError()))
+            } else {
+                $0.done(.success)
+            }
+        }
 
         let creator = TestCreator([type: job])
 
@@ -49,11 +61,12 @@ class ConstraintTests: XCTestCase {
                 .periodic(limit: .unlimited)
                 .schedule(manager: manager)
 
-        job.awaitForRun(value: 100)
-        manager.cancelAllOperations()
-
-        job.assertRunCount(atLeast: 100)
+        job.awaitForRemoval()
+        job.assertRunCount(expected: runLimit)
+        job.assertCompletedCount(expected: 0)
         job.assertRetriedCount(expected: 0)
+        job.assertCanceledCount(expected: 1)
+        job.assertError()
     }
 
     func testRetryFailJobWithRetryConstraint() {
@@ -94,7 +107,18 @@ class ConstraintTests: XCTestCase {
     }
 
     func testRetryUnlimitedShouldRetryManyTimes() {
-        let job = TestJob(retry: .retry(delay: 0)) { $0.done(.fail(JobError())) }
+        let runLimit = 100
+        var runCount = 0
+
+        let job = TestJob(retry: .retry(delay: 0)) {
+            runCount = runCount + 1
+            if (runCount == runLimit) {
+                $0.done(.success)
+            } else {
+                $0.done(.fail(JobError()))
+            }
+        }
+
         let type = UUID().uuidString
 
         let creator = TestCreator([type: job])
@@ -104,11 +128,12 @@ class ConstraintTests: XCTestCase {
                 .retry(limit: .unlimited)
                 .schedule(manager: manager)
 
-        job.awaitForRun(value: 100)
-        manager.cancelAllOperations()
-
-        job.assertRunCount(atLeast: 50)
-        job.assertRetriedCount(atLeast: 50)
+        job.awaitForRemoval()
+        job.assertRunCount(expected: runLimit)
+        job.assertCompletedCount(expected: 1)
+        job.assertRetriedCount(expected: runLimit - 1)
+        job.assertCanceledCount(expected: 0)
+        job.assertNoError()
     }
 
     func testRetryFailJobWithCancelConstraint() {
