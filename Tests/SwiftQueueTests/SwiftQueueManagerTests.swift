@@ -29,6 +29,9 @@ class SwiftQueueManagerTests: XCTestCase {
         let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
         JobBuilder(type: type)
                 .internet(atLeast: .wifi)
+                .priority(priority: .veryHigh)
+                .service(quality: .background)
+
                 .schedule(manager: manager)
 
         job.awaitForRemoval()

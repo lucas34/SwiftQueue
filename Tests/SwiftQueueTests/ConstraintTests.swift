@@ -54,7 +54,6 @@ class ConstraintTests: XCTestCase {
 
         job.assertRunCount(atLeast: 100)
         job.assertRetriedCount(expected: 0)
-        job.assertNoError()
     }
 
     func testRetryFailJobWithRetryConstraint() {
@@ -110,7 +109,6 @@ class ConstraintTests: XCTestCase {
 
         job.assertRunCount(atLeast: 50)
         job.assertRetriedCount(atLeast: 50)
-        job.assertError()
     }
 
     func testRetryFailJobWithCancelConstraint() {
