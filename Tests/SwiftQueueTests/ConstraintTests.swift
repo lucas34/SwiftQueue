@@ -53,7 +53,6 @@ class ConstraintTests: XCTestCase {
         manager.cancelAllOperations()
 
         job.assertRunCount(atLeast: 100)
-        job.assertCompletedCount(expected: 1)
         job.assertRetriedCount(expected: 0)
         job.assertNoError()
     }
@@ -110,7 +109,6 @@ class ConstraintTests: XCTestCase {
         manager.cancelAllOperations()
 
         job.assertRunCount(atLeast: 50)
-        job.assertCompletedCount(expected: 0)
         job.assertRetriedCount(atLeast: 50)
         job.assertError()
     }

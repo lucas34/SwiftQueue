@@ -37,7 +37,7 @@ class TestJob: Job {
 
     private var lastError: Error?
 
-    init(retry: RetryConstraint = .retry(delay: 0), _ onRunCallback: @escaping (JobResult) -> Void = { $0.done(.success) }) {
+    init(retry: RetryConstraint = .retry(delay: 0), onRunCallback: @escaping (JobResult) -> Void = { $0.done(.success) }) {
         self.onRunCallback = onRunCallback
         self.withRetry = retry
     }
