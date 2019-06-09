@@ -22,8 +22,7 @@ import Dispatch
 
 class TestJob: Job {
 
-    private let withCompletion: JobCompletion
-    private let completionTimeout: TimeInterval
+    private let onRunCallback: (JobResult) -> Void
     private var withRetry: RetryConstraint
 
     private var onRunCount = 0
@@ -38,10 +37,9 @@ class TestJob: Job {
 
     private var lastError: Error?
 
-    init(completion: JobCompletion = .success, retry: RetryConstraint = .retry(delay: 0), _ completionTimeout: TimeInterval = 0) {
-        self.withCompletion = completion
+    init(retry: RetryConstraint = .retry(delay: 0), _ onRunCallback: @escaping (JobResult) -> Void = { $0.done(.success) }) {
+        self.onRunCallback = onRunCallback
         self.withRetry = retry
-        self.completionTimeout = completionTimeout
     }
 
     func onRun(callback: JobResult) {
@@ -51,9 +49,8 @@ class TestJob: Job {
         if runSemaphoreValue == onRunCount {
             onRunSemaphore.signal()
         }
-        runInBackgroundAfter(completionTimeout) {
-            callback.done(self.withCompletion)
-        }
+
+        onRunCallback(callback)
     }
 
     func onRetry(error: Error) -> RetryConstraint {
@@ -93,25 +90,25 @@ class TestJob: Job {
     // Assertion
 
     public func assertRunCount(expected: Int, file: StaticString = #file, line: UInt = #line) {
-        XCTAssertEqual(expected, onRunCount, file: file, line: line)
+        XCTAssertEqual(expected, onRunCount)
     }
     public func assertRunCount(atLeast: Int, file: StaticString = #file, line: UInt = #line) {
-        XCTAssertTrue(onRunCount > atLeast, "\(onRunCount) is smaller than \(atLeast)", file: file, line: line)
+        XCTAssertTrue(onRunCount > atLeast, "\(onRunCount) is smaller than \(atLeast)")
     }
     public func assertCompletedCount(expected: Int, file: StaticString = #file, line: UInt = #line) {
-        XCTAssertEqual(expected, onCompletedCount, file: file, line: line)
+        XCTAssertEqual(expected, onCompletedCount)
     }
     public func assertRetriedCount(expected: Int, file: StaticString = #file, line: UInt = #line) {
-        XCTAssertEqual(expected, onRetryCount, file: file, line: line)
+        XCTAssertEqual(expected, onRetryCount)
     }
     public func assertRetriedCount(atLeast: Int, file: StaticString = #file, line: UInt = #line) {
-        XCTAssertTrue(onRetryCount > atLeast, file: file, line: line)
+        XCTAssertTrue(onRetryCount > atLeast)
     }
     public func assertCanceledCount(expected: Int, file: StaticString = #file, line: UInt = #line) {
-        XCTAssertEqual(expected, onCanceledCount, file: file, line: line)
+        XCTAssertEqual(expected, onCanceledCount)
     }
     public func assertError(file: StaticString = #file, line: UInt = #line) {
-        XCTAssertTrue(lastError is JobError, file: file, line: line)
+        XCTAssertTrue(lastError is JobError)
     }
     public func assertError(queueError: SwiftQueueError, file: StaticString = #file, line: UInt = #line) {
         XCTAssertTrue(lastError is SwiftQueueError)
@@ -119,41 +116,49 @@ class TestJob: Job {
         switch (base, queueError) {
 
         case let (.onRetryCancel(lErr), .onRetryCancel(rErr)):
-            XCTAssertEqual(lErr as? JobError, rErr as? JobError, file: file, line: line)
+            XCTAssertEqual(lErr as? JobError, rErr as? JobError)
 
         case (.duplicate, .duplicate): return
         case (.deadline, .deadline): return
         case (.canceled, .canceled): return
 
-        default: XCTFail("Type mismatch", file: file, line: line)
+        default: XCTFail("Type mismatch")
         }
     }
 
     public func assertNoError(file: StaticString = #file, line: UInt = #line) {
-        XCTAssertNil(lastError, file: file, line: line)
+        XCTAssertNil(lastError)
     }
     public func assertNoRun(file: StaticString = #file, line: UInt = #line) {
-        self.assertRunCount(expected: 0, file: file, line: line)
-        self.assertCompletedCount(expected: 0, file: file, line: line)
-        self.assertRetriedCount(expected: 0, file: file, line: line)
-        self.assertCanceledCount(expected: 0, file: file, line: line)
+        self.assertRunCount(expected: 0)
+        self.assertCompletedCount(expected: 0)
+        self.assertRetriedCount(expected: 0)
+        self.assertCanceledCount(expected: 0)
         self.assertNoError(file: file, line: line)
     }
     // Job has run once without error and completed
     public func assertSingleCompletion(file: StaticString = #file, line: UInt = #line) {
-        self.assertRunCount(expected: 1, file: file, line: line)
-        self.assertCompletedCount(expected: 1, file: file, line: line)
-        self.assertRetriedCount(expected: 0, file: file, line: line)
-        self.assertCanceledCount(expected: 0, file: file, line: line)
+        self.assertRunCount(expected: 1)
+        self.assertCompletedCount(expected: 1)
+        self.assertRetriedCount(expected: 0)
+        self.assertCanceledCount(expected: 0)
         self.assertNoError(file: file, line: line)
     }
 
     public func assertRemovedBeforeRun(reason: SwiftQueueError, file: StaticString = #file, line: UInt = #line) {
-        self.assertRunCount(expected: 0, file: file, line: line)
-        self.assertCompletedCount(expected: 0, file: file, line: line)
-        self.assertRetriedCount(expected: 0, file: file, line: line)
-        self.assertCanceledCount(expected: 1, file: file, line: line)
-        self.assertError(queueError: reason, file: file, line: line)
+        self.assertRunCount(expected: 0)
+        self.assertCompletedCount(expected: 0)
+        self.assertRetriedCount(expected: 0)
+        self.assertCanceledCount(expected: 1)
+        self.assertError(queueError: reason)
+    }
+
+}
+
+class TestJobFail: TestJob {
+
+    required init(retry: RetryConstraint = .retry(delay: 0), error: Swift.Error = JobError()) {
+        super.init(retry: retry) { $0.done(.fail(error))}
     }
 
 }
@@ -274,10 +279,5 @@ extension JobBuilder {
         return SqOperation(job: job, info: build(), logger: logger, listener: listener, dispatchQueue: DispatchQueue.global(qos: DispatchQoS.QoSClass.utility))
     }
 
-}
-
-func runInBackgroundAfter(_ seconds: TimeInterval, callback: @escaping () -> Void) {
-    let delta = DispatchTime.now() + seconds
-    DispatchQueue.global(qos: DispatchQoS.QoSClass.utility).asyncAfter(deadline: delta, execute: callback)
 }
 

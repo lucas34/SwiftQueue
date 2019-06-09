@@ -105,29 +105,6 @@ class ConstraintDeadlineTests: XCTestCase {
         job.assertRemovedBeforeRun(reason: .deadline)
     }
 
-    func testDeadlineBasic() {
-        let (type, job) = (UUID().uuidString, TestJob())
-
-        let creator = TestCreator([type: job])
-
-        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
-        JobBuilder(type: type)
-                .deadline(date: Date(timeIntervalSinceNow: 0.1))
-                .periodic(limit: .unlimited, interval: 0)
-                .retry(limit: .unlimited)
-                .schedule(manager: manager)
-
-        manager.waitUntilAllOperationsAreFinished()
-
-        job.awaitForRemoval()
-
-        job.assertRunCount(atLeast: 10)
-        job.assertCompletedCount(expected: 0)
-        job.assertRetriedCount(expected: 0)
-        job.assertCanceledCount(expected: 1)
-        job.assertError(queueError: .deadline)
-    }
-
     func testDelay() {
         let (type, job) = (UUID().uuidString, TestJob())
 
