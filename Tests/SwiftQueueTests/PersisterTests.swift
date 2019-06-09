@@ -133,7 +133,7 @@ class PersisterTests: XCTestCase {
     func testCompleteFailTaskRemoveFromSerializer() {
         let queueId = UUID().uuidString
 
-        let job = TestJob(completion: .fail(JobError()))
+        let job = TestJobFail()
         let type = UUID().uuidString
 
         let creator = TestCreator([type: job])
