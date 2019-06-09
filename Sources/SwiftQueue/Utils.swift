@@ -113,7 +113,6 @@ internal extension QualityOfService {
 
 }
 
-
 #if !swift(>=4.1)
 extension Sequence {
     func compactMap<T>(_ fn: (Self.Iterator.Element) throws -> T?) rethrows -> [T] {

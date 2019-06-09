@@ -64,6 +64,7 @@ class TestJob: Job {
     func onRemove(result: JobCompletion) {
         switch result {
         case .success:
+            lastError = nil
             onCompletedCount += 1
             onRemoveSemaphore.signal()
 
@@ -81,28 +82,16 @@ class TestJob: Job {
         _ = onRemoveSemaphore.wait(timeout: delta)
     }
 
-    func awaitForRun(value: Int, _ seconds: TimeInterval = TimeInterval(5)) {
-        let delta = DispatchTime.now() + Double(Int64(seconds) * Int64(NSEC_PER_SEC)) / Double(NSEC_PER_SEC)
-        runSemaphoreValue = value
-        _ = onRunSemaphore.wait(timeout: delta)
-    }
-
     // Assertion
 
     public func assertRunCount(expected: Int, file: StaticString = #file, line: UInt = #line) {
         XCTAssertEqual(expected, onRunCount)
-    }
-    public func assertRunCount(atLeast: Int, file: StaticString = #file, line: UInt = #line) {
-        XCTAssertTrue(onRunCount > atLeast, "\(onRunCount) is smaller than \(atLeast)")
     }
     public func assertCompletedCount(expected: Int, file: StaticString = #file, line: UInt = #line) {
         XCTAssertEqual(expected, onCompletedCount)
     }
     public func assertRetriedCount(expected: Int, file: StaticString = #file, line: UInt = #line) {
         XCTAssertEqual(expected, onRetryCount)
-    }
-    public func assertRetriedCount(atLeast: Int, file: StaticString = #file, line: UInt = #line) {
-        XCTAssertTrue(onRetryCount > atLeast)
     }
     public func assertCanceledCount(expected: Int, file: StaticString = #file, line: UInt = #line) {
         XCTAssertEqual(expected, onCanceledCount)
@@ -121,6 +110,7 @@ class TestJob: Job {
         case (.duplicate, .duplicate): return
         case (.deadline, .deadline): return
         case (.canceled, .canceled): return
+        case (.timeout, .timeout): return
 
         default: XCTFail("Type mismatch")
         }
@@ -280,4 +270,3 @@ extension JobBuilder {
     }
 
 }
-

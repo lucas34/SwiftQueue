@@ -115,9 +115,27 @@ public final class JobBuilder {
         return self
     }
 
+    /// Set priority of the job. May affect execution order
+    public func priority(priority: Operation.QueuePriority) -> Self {
+        info.priority = priority
+        return self
+    }
+
+    /// Set quality of service to define importance of the job system wise
+    public func service(quality: QualityOfService) -> Self {
+        info.qualityOfService = quality
+        return self
+    }
+
     /// Set to `true` if the job can only run when the device is charging
     public func requireCharging(value: Bool) -> Self {
         info.requireCharging = value
+        return self
+    }
+
+    /// Maximum time in second that the job is allowed to run
+    public func timeout(value: TimeInterval) -> Self {
+        info.timeout = value
         return self
     }
 

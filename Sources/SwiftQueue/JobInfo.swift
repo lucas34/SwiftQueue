@@ -80,6 +80,36 @@ public struct JobInfo {
     /// The relative amount of importance for granting system resources to the operation.
     var qualityOfService: QualityOfService
 
+    var timeout: TimeInterval?
+
+    func buildConstraints() -> [JobConstraint] {
+        var constraints = [JobConstraint]()
+
+        constraints.append(UniqueUUIDConstraint())
+
+        if (requireCharging) {
+            constraints.append(BatteryChargingConstraint())
+        }
+
+        if (deadline != nil) {
+            constraints.append(DeadlineConstraint())
+        }
+
+        if (delay != nil) {
+            constraints.append(DelayConstraint())
+        }
+
+        if (requireNetwork != NetworkType.any) {
+            constraints.append(NetworkConstraint())
+        }
+
+        if (timeout != nil) {
+            constraints.append(TimeoutConstraint())
+        }
+
+        return constraints
+    }
+
     init(type: String) {
         self.init(
                 type: type,
@@ -100,29 +130,31 @@ public struct JobInfo {
                 runCount: 0,
                 requireCharging: false,
                 priority: .normal,
-                qualityOfService: .utility
+                qualityOfService: .utility,
+                timeout: nil
         )
     }
 
-    init(type: String,
-         queueName: String,
-         uuid: String,
-         override: Bool,
-         includeExecutingJob: Bool,
-         tags: Set<String>,
-         delay: TimeInterval?,
-         deadline: Date?,
-         requireNetwork: NetworkType,
-         isPersisted: Bool,
-         params: [String: Any],
-         createTime: Date,
-         interval: TimeInterval,
-         maxRun: Limit,
-         retries: Limit,
-         runCount: Double,
-         requireCharging: Bool,
-         priority: Operation.QueuePriority,
-         qualityOfService: QualityOfService
+    internal init(type: String,
+                  queueName: String,
+                  uuid: String,
+                  override: Bool,
+                  includeExecutingJob: Bool,
+                  tags: Set<String>,
+                  delay: TimeInterval?,
+                  deadline: Date?,
+                  requireNetwork: NetworkType,
+                  isPersisted: Bool,
+                  params: [String: Any],
+                  createTime: Date,
+                  interval: TimeInterval,
+                  maxRun: Limit,
+                  retries: Limit,
+                  runCount: Double,
+                  requireCharging: Bool,
+                  priority: Operation.QueuePriority,
+                  qualityOfService: QualityOfService,
+                  timeout: TimeInterval?
     ) {
 
         self.type = type
@@ -144,6 +176,7 @@ public struct JobInfo {
         self.requireCharging = requireCharging
         self.priority = priority
         self.qualityOfService = qualityOfService
+        self.timeout = timeout
 
         /// Transient
         self.currentRepetition = 0
