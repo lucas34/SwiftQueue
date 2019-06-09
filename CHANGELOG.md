@@ -1,5 +1,14 @@
 # Change Log
 
+## [3.2.0](https://github.com/lucas34/SwiftQueue/tree/3.2.0)
+
+#### New features
+- Job execution timeout constraint (#50)
+- Exponential backoff with max delay (#226)
+- Better threading configuration for Queue and Manager (#228) (#229) (230)
+- Jobs can be enqueue from manager with `.enqueue(JobInfo)` (#231)
+
+
 ## [3.1.0](https://github.com/lucas34/SwiftQueue/tree/3.1.0)
 
 #### New features
