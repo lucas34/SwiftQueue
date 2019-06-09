@@ -187,5 +187,7 @@ public enum SwiftQueueError: Swift.Error {
     /// Job canceled inside onError. Parameter contains the origin error
     case onRetryCancel(Error)
 
-}
+    /// Job took too long to run
+    case timeout
 
+}

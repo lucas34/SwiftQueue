@@ -210,9 +210,9 @@ class ConstraintTests: XCTestCase {
     }
 
     func testCancelRunningOperation() {
-        var manager: SwiftQueueManager? = nil
+        var manager: SwiftQueueManager?
 
-        let (type, job) = (UUID().uuidString, TestJob() {
+        let (type, job) = (UUID().uuidString, TestJob {
             manager?.cancelAllOperations()
             $0.done(.fail(JobError()))
         })
@@ -237,9 +237,9 @@ class ConstraintTests: XCTestCase {
     func testCancelRunningOperationByTag() {
         let tag = UUID().uuidString
 
-        var manager: SwiftQueueManager? = nil
+        var manager: SwiftQueueManager?
 
-        let (type, job) = (UUID().uuidString, TestJob() {
+        let (type, job) = (UUID().uuidString, TestJob {
             manager?.cancelOperations(tag: tag)
             $0.done(.fail(JobError()))
         })
@@ -270,6 +270,25 @@ class ConstraintTests: XCTestCase {
 
         job.awaitForRemoval()
         job.assertSingleCompletion()
+    }
+
+    func testRunTimeoutConstraint() {
+        let (type, job) = (UUID().uuidString, TestJob(onRunCallback: { _ in }) )
+
+        let creator = TestCreator([type: job])
+
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
+
+        JobBuilder(type: type)
+                .timeout(value: 0)
+                .schedule(manager: manager)
+
+        job.awaitForRemoval()
+        job.assertRunCount(expected: 1)
+        job.assertCompletedCount(expected: 0)
+        job.assertRetriedCount(expected: 0)
+        job.assertCanceledCount(expected: 1)
+        job.assertError(queueError: .timeout)
     }
 
 }

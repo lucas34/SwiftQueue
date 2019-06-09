@@ -121,6 +121,7 @@ class TestJob: Job {
         case (.duplicate, .duplicate): return
         case (.deadline, .deadline): return
         case (.canceled, .canceled): return
+        case (.timeout, .timeout): return
 
         default: XCTFail("Type mismatch")
         }
@@ -280,4 +281,3 @@ extension JobBuilder {
     }
 
 }
-

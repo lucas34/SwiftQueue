@@ -11,7 +11,7 @@ extension ConstraintDeadlineTests {
         ("testDeadlineWhenDeserialize", testDeadlineWhenDeserialize),
         ("testDeadlineWhenRun", testDeadlineWhenRun),
         ("testDeadlineWhenSchedule", testDeadlineWhenSchedule),
-        ("testDelay", testDelay),
+        ("testDelay", testDelay)
     ]
 }
 
@@ -21,7 +21,7 @@ extension ConstraintNetworkTests {
     // to regenerate.
     static let __allTests__ConstraintNetworkTests = [
         ("testNetworkConstraint", testNetworkConstraint),
-        ("testNetworkConstraintWifi", testNetworkConstraintWifi),
+        ("testNetworkConstraintWifi", testNetworkConstraintWifi)
     ]
 }
 
@@ -41,7 +41,7 @@ extension ConstraintTests {
         ("testRetryFailJobWithExponentialConstraint", testRetryFailJobWithExponentialConstraint),
         ("testRetryFailJobWithRetryConstraint", testRetryFailJobWithRetryConstraint),
         ("testRetryFailJobWithRetryDelayConstraint", testRetryFailJobWithRetryDelayConstraint),
-        ("testRetryUnlimitedShouldRetryManyTimes", testRetryUnlimitedShouldRetryManyTimes),
+        ("testRetryUnlimitedShouldRetryManyTimes", testRetryUnlimitedShouldRetryManyTimes)
     ]
 }
 
@@ -51,7 +51,7 @@ extension ConstraintUniqueUUIDTests {
     // to regenerate.
     static let __allTests__ConstraintUniqueUUIDTests = [
         ("testUniqueIdConstraintShouldCancelTheFirst", testUniqueIdConstraintShouldCancelTheFirst),
-        ("testUniqueIdConstraintShouldCancelTheSecond", testUniqueIdConstraintShouldCancelTheSecond),
+        ("testUniqueIdConstraintShouldCancelTheSecond", testUniqueIdConstraintShouldCancelTheSecond)
     ]
 }
 
@@ -61,7 +61,7 @@ extension LoggerTests {
     // to regenerate.
     static let __allTests__LoggerTests = [
         ("testLoggerLevel", testLoggerLevel),
-        ("testRunSuccessJobLogger", testRunSuccessJobLogger),
+        ("testRunSuccessJobLogger", testRunSuccessJobLogger)
     ]
 }
 
@@ -77,7 +77,7 @@ extension PersisterTests {
         ("testCustomSerializer", testCustomSerializer),
         ("testLoadSerializedSortedJobShouldRunSuccess", testLoadSerializedSortedJobShouldRunSuccess),
         ("testNonPersistedJobShouldNotBePersisted", testNonPersistedJobShouldNotBePersisted),
-        ("testScheduleWhileDeserialize", testScheduleWhileDeserialize),
+        ("testScheduleWhileDeserialize", testScheduleWhileDeserialize)
     ]
 }
 
@@ -87,7 +87,7 @@ extension StartStopTests {
     // to regenerate.
     static let __allTests__StartStopTests = [
         ("testSchedulePeriodicJobThenStart", testSchedulePeriodicJobThenStart),
-        ("testScheduleWhenQueueStop", testScheduleWhenQueueStop),
+        ("testScheduleWhenQueueStop", testScheduleWhenQueueStop)
     ]
 }
 
@@ -113,7 +113,7 @@ extension SwiftQueueBuilderTests {
         ("testBuilderSingleInstance", testBuilderSingleInstance),
         ("testBuilderSingleInstanceOverride", testBuilderSingleInstanceOverride),
         ("testBuilderWith", testBuilderWith),
-        ("testBuilderWithFreeArgs", testBuilderWithFreeArgs),
+        ("testBuilderWithFreeArgs", testBuilderWithFreeArgs)
     ]
 }
 
@@ -127,7 +127,7 @@ extension SwiftQueueManagerTests {
         ("testCancelWithTag", testCancelWithTag),
         ("testCancelWithUUID", testCancelWithUUID),
         ("testLimitEquatable", testLimitEquatable),
-        ("testRunSuccessJob", testRunSuccessJob),
+        ("testRunSuccessJob", testRunSuccessJob)
     ]
 }
 
@@ -141,7 +141,7 @@ public func __allTests() -> [XCTestCaseEntry] {
         testCase(PersisterTests.__allTests__PersisterTests),
         testCase(StartStopTests.__allTests__StartStopTests),
         testCase(SwiftQueueBuilderTests.__allTests__SwiftQueueBuilderTests),
-        testCase(SwiftQueueManagerTests.__allTests__SwiftQueueManagerTests),
+        testCase(SwiftQueueManagerTests.__allTests__SwiftQueueManagerTests)
     ]
 }
 #endif

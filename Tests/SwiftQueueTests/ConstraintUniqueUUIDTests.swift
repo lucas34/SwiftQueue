@@ -94,7 +94,11 @@ class ConstraintUniqueUUIDTests: XCTestCase {
         JobBuilder(type: type3).singleInstance(forId: id, includeExecutingJob: false).schedule(manager: manager)
 
         job3.awaitForRemoval()
-        job3.assertRemovedBeforeRun(reason: .duplicate)
+        job3.assertRunCount(expected: 0)
+        job3.assertCompletedCount(expected: 0)
+        job3.assertRetriedCount(expected: 0)
+        job3.assertCanceledCount(expected: 1)
+        job3.assertError(queueError: .duplicate)
 
         manager.cancelAllOperations()
         manager.waitUntilAllOperationsAreFinished()
