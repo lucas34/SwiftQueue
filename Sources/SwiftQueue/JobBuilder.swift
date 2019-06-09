@@ -133,6 +133,12 @@ public final class JobBuilder {
         return self
     }
 
+    /// Maximum time in second that the job is allowed to run
+    public func timeout(value: TimeInterval) -> Self {
+        info.timeout = value
+        return self
+    }
+
     /// Get the JobInfo built
     public func build() -> JobInfo {
         return info

@@ -74,6 +74,7 @@ extension JobInfo: Decodable {
         case requireCharging = "requireCharging"
         case priority = "priority"
         case qualityOfService = "qualityOfService"
+        case timeout = "timeout"
     }
 
     public init(from decoder: Decoder) throws {
@@ -98,6 +99,7 @@ extension JobInfo: Decodable {
         let requireCharging: Bool = try container.decode(Bool.self, forKey: .requireCharging)
         let priority: Int? = try container.decode(Int?.self, forKey: .priority)
         let qualityOfService: Int? = try container.decode(Int?.self, forKey: .qualityOfService)
+        let timeout: TimeInterval? = try container.decode(TimeInterval?.self, forKey: .timeout)
 
         self.init(
                 type: type,
@@ -118,7 +120,8 @@ extension JobInfo: Decodable {
                 runCount: runCount,
                 requireCharging: requireCharging,
                 priority: Operation.QueuePriority(fromValue: priority),
-                qualityOfService: QualityOfService(fromValue: qualityOfService)
+                qualityOfService: QualityOfService(fromValue: qualityOfService),
+                timeout: timeout
         )
     }
 }
@@ -146,6 +149,7 @@ extension JobInfo: Encodable {
         try container.encode(requireCharging, forKey: .requireCharging)
         try container.encode(priority.rawValue, forKey: .priority)
         try container.encode(qualityOfService.rawValue, forKey: .qualityOfService)
+        try container.encode(timeout, forKey: .timeout)
     }
 }
 
