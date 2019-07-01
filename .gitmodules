@@ -1,0 +1,3 @@
+[submodule "Example/SwiftQueueExample"]
+	path = Example/SwiftQueueExample
+	url = https://github.com/hadanischal/SwiftQueueExample.git
