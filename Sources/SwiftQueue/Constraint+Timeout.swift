@@ -38,7 +38,7 @@ internal final class TimeoutConstraint: JobConstraint {
         }
 
         operation.dispatchQueue.runAfter(timeout) {
-            if (operation.isExecuting && !operation.isFinished) {
+            if operation.isExecuting && !operation.isFinished {
                 operation.cancel(with: SwiftQueueError.timeout)
             }
         }
