@@ -92,23 +92,23 @@ public struct JobInfo {
 
         constraints.append(UniqueUUIDConstraint())
 
-        if (requireCharging) {
+        if requireCharging {
             constraints.append(BatteryChargingConstraint())
         }
 
-        if (deadline != nil) {
+        if deadline != nil {
             constraints.append(DeadlineConstraint())
         }
 
-        if (delay != nil) {
+        if delay != nil {
             constraints.append(DelayConstraint())
         }
 
-        if (requireNetwork != NetworkType.any) {
+        if requireNetwork != NetworkType.any {
             constraints.append(NetworkConstraint())
         }
 
-        if (timeout != nil) {
+        if timeout != nil {
             constraints.append(TimeoutConstraint())
         }
 
