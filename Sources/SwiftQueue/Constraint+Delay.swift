@@ -38,7 +38,7 @@ internal final class DelayConstraint: JobConstraint {
             return true
         }
 
-        let epoch = operation.info.createTime.timeIntervalSinceNow
+        let epoch = Date().timeIntervalSince(operation.info.createTime)
         guard epoch < delay else {
             // Epoch already greater than delay
             return true
