@@ -26,7 +26,7 @@ import Dispatch
 internal extension DispatchQueue {
 
     func runAfter(_ seconds: TimeInterval, callback: @escaping () -> Void) {
-        let delta = DispatchTime.now() + abs(seconds)
+        let delta = DispatchTime.now() + seconds
         asyncAfter(deadline: delta, execute: callback)
     }
 
