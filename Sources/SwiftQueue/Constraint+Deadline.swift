@@ -37,7 +37,7 @@ internal final class DeadlineConstraint: JobConstraint {
             return true
         }
 
-        operation.dispatchQueue.runAfter(delay.timeIntervalSince(Date()), callback: { [weak operation] in
+        operation.dispatchQueue.runAfter(delay.timeIntervalSinceNow, callback: { [weak operation] in
             guard let ope = operation else { return }
             guard !ope.isFinished else { return }
 
