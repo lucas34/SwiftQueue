@@ -79,11 +79,12 @@ public final class JobBuilder {
     /// Repeat job a certain number of time and with a interval between each run
     /// Limit of period to reproduce
     /// interval between each run. Does not affect the first iteration. Please add delay if so
-    public func periodic(limit: Limit = .unlimited, interval: TimeInterval = 0) -> Self {
+    public func periodic(limit: Limit = .unlimited, interval: TimeInterval = 0, allowBackground: Bool = false) -> Self {
         assert(limit.validate)
         assert(interval >= 0)
         info.maxRun = limit
         info.interval = interval
+        info.allowBackground = allowBackground
         return self
     }
 

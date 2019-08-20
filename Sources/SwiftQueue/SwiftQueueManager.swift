@@ -118,7 +118,25 @@ public final class SwiftQueueManager {
         }
         return count
     }
+}
 
+internal extension SwiftQueueManager {
+
+    func getAllAllowBackgroundOperation() -> [SqOperation] {
+        return manage.values
+                .flatMap { $0.operations }
+                .compactMap { $0 as? SqOperation }
+                .filter { $0.info.allowBackground }
+    }
+
+    func getOperation(forUUID: String) -> SqOperation? {
+        for queue: SqOperationQueue in manage.values {
+            for operation in queue.operations where operation.name == forUUID {
+                return operation as? SqOperation
+            }
+        }
+        return nil
+    }
 }
 
 internal struct SqManagerParams {
@@ -220,6 +238,7 @@ public final class SwiftQueueManagerBuilder {
         params.dispatchQueue = dispatchQueue
         return self
     }
+
     /// Get an instance of `SwiftQueueManager`
     public func build() -> SwiftQueueManager {
         return SwiftQueueManager(params: params, isSuspended: isSuspended)

@@ -197,4 +197,52 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertNotEqual(Limit.unlimited, Limit.limited(-1))
     }
 
+    public func testGetAllAllowBackgroundOperation() {
+        let (type, job) = (UUID().uuidString, TestJob())
+
+        let id = UUID().uuidString
+        let id2 = UUID().uuidString
+
+        let group = UUID().uuidString
+        let group2 = UUID().uuidString
+
+        let creator = TestCreator([type: job])
+
+        let persister = PersisterTracker(key: UUID().uuidString)
+
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(isSuspended: true).set(persister: persister).build()
+
+        JobBuilder(type: type).periodic(allowBackground: false).parallel(queueName: group).schedule(manager: manager)
+        JobBuilder(type: type).periodic(allowBackground: false).parallel(queueName: group2).schedule(manager: manager)
+
+        JobBuilder(type: type).singleInstance(forId: id).periodic(allowBackground: true).parallel(queueName: group).schedule(manager: manager)
+        JobBuilder(type: type).singleInstance(forId: id2).periodic(allowBackground: true).parallel(queueName: group2).schedule(manager: manager)
+
+        let result = manager.getAllAllowBackgroundOperation()
+
+        XCTAssertEqual(2, result.count)
+        XCTAssertTrue([id, id2].contains(result[0].info.uuid))
+        XCTAssertTrue([id, id2].contains(result[1].info.uuid))
+    }
+
+
+    public func testGetOperation() {
+        let (type, job) = (UUID().uuidString, TestJob())
+        let id = UUID().uuidString
+        let creator = TestCreator([type: job])
+        let persister = PersisterTracker(key: UUID().uuidString)
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(isSuspended: true).set(persister: persister).build()
+
+        for _ in 0..<100 {
+            JobBuilder(type: type).parallel(queueName: UUID().uuidString).schedule(manager: manager)
+        }
+
+        JobBuilder(type: type).singleInstance(forId: id).parallel(queueName: UUID().uuidString).schedule(manager: manager)
+
+        let operation = manager.getOperation(forUUID: id)
+
+        XCTAssertNotNil(operation)
+        XCTAssertEqual(id, operation?.info.uuid)
+    }
+
 }

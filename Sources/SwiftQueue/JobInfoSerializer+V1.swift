@@ -91,6 +91,7 @@ internal extension JobInfo {
         dict[JobInfoKeys.params.stringValue]              = self.params
         dict[JobInfoKeys.createTime.stringValue]          = dateFormatter.string(from: self.createTime)
         dict[JobInfoKeys.runCount.stringValue]            = self.runCount
+        dict[JobInfoKeys.allowBackground.stringValue]     = self.allowBackground
         dict[JobInfoKeys.maxRun.stringValue]              = self.maxRun.rawValue
         dict[JobInfoKeys.retries.stringValue]             = self.retries.rawValue
         dict[JobInfoKeys.interval.stringValue]            = self.interval
@@ -114,6 +115,7 @@ internal extension JobInfo {
         dictionary.assign(JobInfoKeys.createTime.stringValue, &self.createTime, dateFormatter.date)
         dictionary.assign(JobInfoKeys.interval.stringValue, &self.interval)
         dictionary.assign(JobInfoKeys.maxRun.stringValue, &self.maxRun, Limit.fromRawValue)
+        dictionary.assign(JobInfoKeys.allowBackground.stringValue, &self.allowBackground)
         dictionary.assign(JobInfoKeys.retries.stringValue, &self.retries, Limit.fromRawValue)
         dictionary.assign(JobInfoKeys.runCount.stringValue, &self.runCount)
         dictionary.assign(JobInfoKeys.requireCharging.stringValue, &self.requireCharging)
