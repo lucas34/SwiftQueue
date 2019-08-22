@@ -38,7 +38,7 @@ public struct JobInfo {
     /// Override job when scheduling a job with same uuid
     var override: Bool
 
-    //// Including job that are executing when scheduling with same uuid
+    /// Including job that are executing when scheduling with same uuid
     var includeExecutingJob: Bool
 
     /// Set of identifiers
@@ -64,6 +64,9 @@ public struct JobInfo {
 
     /// Time between each repetition of the job
     var interval: TimeInterval
+
+    /// Allow job to run in background task
+    var allowBackground: Bool
 
     /// Number of run maximum
     var maxRun: Limit
@@ -131,6 +134,7 @@ public struct JobInfo {
                 createTime: Date(),
                 interval: -1.0,
                 maxRun: .limited(0),
+                allowBackground: false,
                 retries: .limited(0),
                 runCount: 0,
                 requireCharging: false,
@@ -154,6 +158,7 @@ public struct JobInfo {
                   createTime: Date,
                   interval: TimeInterval,
                   maxRun: Limit,
+                  allowBackground: Bool,
                   retries: Limit,
                   runCount: Double,
                   requireCharging: Bool,
@@ -176,6 +181,7 @@ public struct JobInfo {
         self.createTime = createTime
         self.interval = interval
         self.maxRun = maxRun
+        self.allowBackground = allowBackground
         self.retries = retries
         self.runCount = runCount
         self.requireCharging = requireCharging

@@ -38,6 +38,8 @@ internal final class SqOperation: Operation {
 
     let dispatchQueue: DispatchQueue
 
+    var nextRunSchedule: Date? = nil
+
     override var name: String? { get { return info.uuid } set { } }
     override var queuePriority: QueuePriority { get { return info.priority } set { } }
     override var qualityOfService: QualityOfService { get { return info.qualityOfService } set { } }
@@ -225,6 +227,7 @@ extension SqOperation: JobResult {
         }
 
         // Schedule run after interval
+        nextRunSchedule = Date().addingTimeInterval(info.interval)
         dispatchQueue.runAfter(info.interval, callback: { [weak self] in
             self?.info.runCount += 1
             self?.run()
@@ -259,6 +262,7 @@ extension SqOperation {
 extension SqOperation {
 
     fileprivate func retryInBackgroundAfter(_ delay: TimeInterval) {
+        nextRunSchedule = Date().addingTimeInterval(delay)
         dispatchQueue.runAfter(delay) { [weak self] in
             self?.info.retries.decreaseValue(by: 1)
             self?.run()

@@ -18,6 +18,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.source_files = 'Sources/SwiftQueue/**.swift'
+  s.ios.source_files   = 'Sources/ios/*.swift', 'Sources/SwiftQueue/**.swift'
   
   s.ios.dependency 'ReachabilitySwift', '~> 4.3'
   s.tvos.dependency 'ReachabilitySwift', '~> 4.3'
