@@ -46,6 +46,7 @@ internal final class DelayConstraint: JobConstraint {
 
         let time: Double = abs(epoch - delay)
 
+        nextRunSchedule = Date().addingTimeInterval(time)
         operation.dispatchQueue.runAfter(time, callback: { [weak operation] in
             // If the operation in already deInit, it may have been canceled
             // It's safe to ignore the nil check
