@@ -74,7 +74,7 @@ extension JobInfo: Decodable {
         case createTime = "createTime"
         case interval = "runCount"
         case maxRun = "maxRun"
-        case allowBackground = "allowBackground"
+        case executor = "executor"
         case retries = "retries"
         case runCount = "interval"
         case requireCharging = "requireCharging"
@@ -100,7 +100,7 @@ extension JobInfo: Decodable {
         let createTime: Date = try container.decode(Date.self, forKey: .createTime)
         let interval: TimeInterval = try container.decode(TimeInterval.self, forKey: .interval)
         let maxRun: Limit = try container.decode(Limit.self, forKey: .maxRun)
-        let allowBackground: Bool = try container.decode(Bool.self, forKey: .allowBackground)
+        let executor: Executor = try container.decode(Executor.self, forKey: .executor)
         let retries: Limit = try container.decode(Limit.self, forKey: .retries)
         let runCount: Double = try container.decode(Double.self, forKey: .runCount)
         let requireCharging: Bool = try container.decode(Bool.self, forKey: .requireCharging)
@@ -123,7 +123,7 @@ extension JobInfo: Decodable {
                 createTime: createTime,
                 interval: interval,
                 maxRun: maxRun,
-                allowBackground: allowBackground,
+                executor: executor,
                 retries: retries,
                 runCount: runCount,
                 requireCharging: requireCharging,
@@ -152,7 +152,7 @@ extension JobInfo: Encodable {
         try container.encode(createTime, forKey: .createTime)
         try container.encode(interval, forKey: .interval)
         try container.encode(maxRun, forKey: .maxRun)
-        try container.encode(allowBackground, forKey: .allowBackground)
+        try container.encode(executor, forKey: .executor)
         try container.encode(retries, forKey: .retries)
         try container.encode(runCount, forKey: .runCount)
         try container.encode(requireCharging, forKey: .requireCharging)

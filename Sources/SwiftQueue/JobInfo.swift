@@ -65,8 +65,8 @@ public struct JobInfo {
     /// Time between each repetition of the job
     var interval: TimeInterval
 
-    /// Allow job to run in background task
-    var allowBackground: Bool
+    /// Executor to run job in foreground or background
+    var executor: Executor
 
     /// Number of run maximum
     var maxRun: Limit
@@ -94,6 +94,7 @@ public struct JobInfo {
         var constraints = [JobConstraint]()
 
         constraints.append(UniqueUUIDConstraint())
+        constraints.append(ExecutorConstraint())
 
         if requireCharging {
             constraints.append(BatteryChargingConstraint())
@@ -134,7 +135,7 @@ public struct JobInfo {
                 createTime: Date(),
                 interval: -1.0,
                 maxRun: .limited(0),
-                allowBackground: false,
+                executor: .foreground,
                 retries: .limited(0),
                 runCount: 0,
                 requireCharging: false,
@@ -158,7 +159,7 @@ public struct JobInfo {
                   createTime: Date,
                   interval: TimeInterval,
                   maxRun: Limit,
-                  allowBackground: Bool,
+                  executor: Executor,
                   retries: Limit,
                   runCount: Double,
                   requireCharging: Bool,
@@ -181,7 +182,7 @@ public struct JobInfo {
         self.createTime = createTime
         self.interval = interval
         self.maxRun = maxRun
-        self.allowBackground = allowBackground
+        self.executor = executor
         self.retries = retries
         self.runCount = runCount
         self.requireCharging = requireCharging
