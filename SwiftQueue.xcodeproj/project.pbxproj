@@ -38,6 +38,10 @@
 		61A65B7822ABD175009AC9B7 /* Constraint+Timeout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A65B7622ABD172009AC9B7 /* Constraint+Timeout.swift */; };
 		61A65B7922ABD175009AC9B7 /* Constraint+Timeout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A65B7622ABD172009AC9B7 /* Constraint+Timeout.swift */; };
 		61A65B7A22ABD176009AC9B7 /* Constraint+Timeout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A65B7622ABD172009AC9B7 /* Constraint+Timeout.swift */; };
+		61F41E27231BDD08001A4B62 /* Constraint+Executor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F41E26231BDD08001A4B62 /* Constraint+Executor.swift */; };
+		61F41E28231BDD08001A4B62 /* Constraint+Executor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F41E26231BDD08001A4B62 /* Constraint+Executor.swift */; };
+		61F41E29231BDD08001A4B62 /* Constraint+Executor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F41E26231BDD08001A4B62 /* Constraint+Executor.swift */; };
+		61F41E2A231BDD08001A4B62 /* Constraint+Executor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F41E26231BDD08001A4B62 /* Constraint+Executor.swift */; };
 		95A210264F99EAC94629D786 /* SwiftQueueLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A217FDB8197696002CE25C /* SwiftQueueLogger.swift */; };
 		95A213CFEA10D6FD5672A64A /* JobInfoSerializer+V1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A210DDE517DF37DE5A7EC1 /* JobInfoSerializer+V1.swift */; };
 		95A2142AD4929198F8C2534D /* Constraint+Charging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A21C01EDB773B7F17134AF /* Constraint+Charging.swift */; };
@@ -121,6 +125,7 @@
 		1E68EF96F1DE038FFF94FCD8 /* Constraint+Deadline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Constraint+Deadline.swift"; path = "SwiftQueue/Constraint+Deadline.swift"; sourceTree = "<group>"; };
 		618E9CE2230E1F1000856158 /* SwiftQueueManager+BackgroundTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "SwiftQueueManager+BackgroundTask.swift"; path = "ios/SwiftQueueManager+BackgroundTask.swift"; sourceTree = "<group>"; };
 		61A65B7622ABD172009AC9B7 /* Constraint+Timeout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Constraint+Timeout.swift"; path = "SwiftQueue/Constraint+Timeout.swift"; sourceTree = "<group>"; };
+		61F41E26231BDD08001A4B62 /* Constraint+Executor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Constraint+Executor.swift"; path = "SwiftQueue/Constraint+Executor.swift"; sourceTree = "<group>"; };
 		95A210DDE517DF37DE5A7EC1 /* JobInfoSerializer+V1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "JobInfoSerializer+V1.swift"; path = "SwiftQueue/JobInfoSerializer+V1.swift"; sourceTree = "<group>"; };
 		95A2169E6968B5F155D5B612 /* JobInfoSerializer+Decodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "JobInfoSerializer+Decodable.swift"; path = "SwiftQueue/JobInfoSerializer+Decodable.swift"; sourceTree = "<group>"; };
 		95A217FDB8197696002CE25C /* SwiftQueueLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftQueueLogger.swift; path = SwiftQueue/SwiftQueueLogger.swift; sourceTree = "<group>"; };
@@ -234,6 +239,7 @@
 		OBJ_7 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				61F41E26231BDD08001A4B62 /* Constraint+Executor.swift */,
 				618E9CE2230E1F1000856158 /* SwiftQueueManager+BackgroundTask.swift */,
 				61A65B7622ABD172009AC9B7 /* Constraint+Timeout.swift */,
 				1D8479A61F82A84B00B3BBFB /* Constraint.swift */,
@@ -416,6 +422,7 @@
 				D0B7C8729FA2F6EF3A6C42F8 /* JobBuilder.swift in Sources */,
 				D0B7C9AE1E4717DE474FD804 /* SqOperationQueue.swift in Sources */,
 				95A21FA05AABFA4A59096E8E /* SwiftQueueLogger.swift in Sources */,
+				61F41E28231BDD08001A4B62 /* Constraint+Executor.swift in Sources */,
 				95A21FA0723161F6908B133B /* Constraint+Charging.swift in Sources */,
 				618E9CE4230E1F1300856158 /* SwiftQueueManager+BackgroundTask.swift in Sources */,
 				95A21B7D3F013BAF87216CF0 /* JobInfoSerializer+Decodable.swift in Sources */,
@@ -427,6 +434,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
+				61F41E29231BDD08001A4B62 /* Constraint+Executor.swift in Sources */,
 				B06405121FA04AAC00086C69 /* UserDefaultsPersister.swift in Sources */,
 				B06405131FA04AAC00086C69 /* SwiftQueue.swift in Sources */,
 				61A65B7922ABD175009AC9B7 /* Constraint+Timeout.swift in Sources */,
@@ -452,6 +460,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
+				61F41E2A231BDD08001A4B62 /* Constraint+Executor.swift in Sources */,
 				B06405211FA04CCF00086C69 /* UserDefaultsPersister.swift in Sources */,
 				B06405221FA04CCF00086C69 /* SwiftQueue.swift in Sources */,
 				61A65B7822ABD175009AC9B7 /* Constraint+Timeout.swift in Sources */,
@@ -477,6 +486,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
+				61F41E27231BDD08001A4B62 /* Constraint+Executor.swift in Sources */,
 				1D8479A81F82A84B00B3BBFB /* UserDefaultsPersister.swift in Sources */,
 				1D8479A91F82A84B00B3BBFB /* SwiftQueue.swift in Sources */,
 				61A65B7722ABD172009AC9B7 /* Constraint+Timeout.swift in Sources */,

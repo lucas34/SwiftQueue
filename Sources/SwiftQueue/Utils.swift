@@ -117,3 +117,36 @@ internal extension QualityOfService {
     }
 
 }
+
+internal extension Executor {
+
+    static func fromRawValue(value: Int) -> Executor {
+        assert(value == 0 || value == 1 || value == 2)
+        switch value {
+        case 1:
+            return Executor.background
+        case 2:
+            return Executor.any
+        default:
+            return Executor.foreground
+        }
+    }
+
+}
+
+extension Executor: Codable {
+
+    private enum CodingKeys: String, CodingKey { case value }
+
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let value = try values.decode(Int.self, forKey: .value)
+        self = Executor.fromRawValue(value: value)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self.rawValue, forKey: .value)
+    }
+
+}
