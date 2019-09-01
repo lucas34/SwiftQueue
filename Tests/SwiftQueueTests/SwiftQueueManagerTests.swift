@@ -212,11 +212,11 @@ class SwiftQueueManagerTests: XCTestCase {
 
         let manager = SwiftQueueManagerBuilder(creator: creator).set(isSuspended: true).set(persister: persister).build()
 
-        JobBuilder(type: type).periodic(allowBackground: false).parallel(queueName: group).schedule(manager: manager)
-        JobBuilder(type: type).periodic(allowBackground: false).parallel(queueName: group2).schedule(manager: manager)
+        JobBuilder(type: type).periodic(executor: .foreground).parallel(queueName: group).schedule(manager: manager)
+        JobBuilder(type: type).periodic(executor: .foreground).parallel(queueName: group2).schedule(manager: manager)
 
-        JobBuilder(type: type).singleInstance(forId: id).periodic(allowBackground: true).parallel(queueName: group).schedule(manager: manager)
-        JobBuilder(type: type).singleInstance(forId: id2).periodic(allowBackground: true).parallel(queueName: group2).schedule(manager: manager)
+        JobBuilder(type: type).singleInstance(forId: id).periodic(executor: .background).parallel(queueName: group).schedule(manager: manager)
+        JobBuilder(type: type).singleInstance(forId: id2).periodic(executor: .any).parallel(queueName: group2).schedule(manager: manager)
 
         let result = manager.getAllAllowBackgroundOperation()
 
@@ -224,7 +224,6 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertTrue([id, id2].contains(result[0].info.uuid))
         XCTAssertTrue([id, id2].contains(result[1].info.uuid))
     }
-
 
     public func testGetOperation() {
         let (type, job) = (UUID().uuidString, TestJob())
@@ -243,6 +242,22 @@ class SwiftQueueManagerTests: XCTestCase {
 
         XCTAssertNotNil(operation)
         XCTAssertEqual(id, operation?.info.uuid)
+    }
+
+    public func testBackgroundOperationShouldNotRun() {
+        let (type, job) = (UUID().uuidString, TestJob())
+
+        let creator = TestCreator([type: job])
+
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
+        JobBuilder(type: type)
+                .periodic(executor: .background)
+                .internet(atLeast: .wifi)
+                .priority(priority: .veryHigh)
+                .service(quality: .background)
+                .schedule(manager: manager)
+
+        job.assertNoRun()
     }
 
 }

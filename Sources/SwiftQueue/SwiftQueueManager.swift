@@ -126,7 +126,7 @@ internal extension SwiftQueueManager {
         return manage.values
                 .flatMap { $0.operations }
                 .compactMap { $0 as? SqOperation }
-                .filter { $0.info.allowBackground }
+                .filter { $0.info.executor.rawValue > 0 }
     }
 
     func getOperation(forUUID: String) -> SqOperation? {

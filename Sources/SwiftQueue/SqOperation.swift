@@ -38,7 +38,7 @@ internal final class SqOperation: Operation {
 
     let dispatchQueue: DispatchQueue
 
-    var nextRunSchedule: Date? = nil
+    var nextRunSchedule: Date?
 
     override var name: String? { get { return info.uuid } set { } }
     override var queuePriority: QueuePriority { get { return info.priority } set { } }
