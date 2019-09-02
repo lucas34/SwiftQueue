@@ -3,7 +3,7 @@
 ## Next Version
 
 #### New features
-- Experiemental support of BackgroundTask API (iOS 13+) 
+- Experimental support of BackgroundTask API (iOS 13+) 
 
 ## [3.2.0](https://github.com/lucas34/SwiftQueue/tree/3.2.0)
 
