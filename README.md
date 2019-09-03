@@ -17,8 +17,7 @@ Library will rely on `Operation` and `OperationQueue` to make sure all tasks wil
 
 ## Features
 
-- [x] Sequential execution
-- [x] Concurrent run
+- [x] Sequential or Concurrent execution
 - [x] Persistence
 - [x] Cancel all, by id or by tag
 - [x] Start / Stop queue
@@ -27,17 +26,19 @@ Job Constraints:
 
 - [x] Delay
 - [x] Deadline
+- [x] Timeout
 - [x] Internet
 - [x] Charging
 - [x] Single instance in queue
 - [x] Retry: Max count, exponential backoff
 - [x] Periodic: Max run, interval delay
+- [x] *Experimental* Foreground or Background execution
 
 
 ## Requirements
 
 - iOS 8.0+, watchOS 2.0+, macOS 10.10+, tvOS 9.0+
-- Xcode 7.3
+- Xcode 13.0
 
 ## Installation
 
