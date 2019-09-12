@@ -86,50 +86,31 @@ extension JobInfo: Decodable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: JobInfoKeys.self)
 
-        let type: String = try container.decode(String.self, forKey: .type)
-        let uuid: String = try container.decode(String.self, forKey: .uuid)
-        let override: Bool = try container.decode(Bool.self, forKey: .override)
-        let includeExecutingJob: Bool = try container.decode(Bool.self, forKey: .includeExecutingJob)
-        let queueName: String = try container.decode(String.self, forKey: .queueName)
-        let tags: Set<String> = try container.decode(Set.self, forKey: .tags)
-        let delay: TimeInterval? = try container.decodeIfPresent(TimeInterval.self, forKey: .delay)
-        let deadline: Date? = try container.decodeIfPresent(Date.self, forKey: .deadline)
-        let requireNetwork: NetworkType = try container.decode(NetworkType.self, forKey: .requireNetwork)
-        let isPersisted: Bool = try container.decode(Bool.self, forKey: .isPersisted)
-        let params: [String: Any] = try container.decode([String: Any].self, forKey: .params)
-        let createTime: Date = try container.decode(Date.self, forKey: .createTime)
-        let interval: TimeInterval = try container.decode(TimeInterval.self, forKey: .interval)
-        let maxRun: Limit = try container.decode(Limit.self, forKey: .maxRun)
-        let executor: Executor = try container.decode(Executor.self, forKey: .executor)
-        let retries: Limit = try container.decode(Limit.self, forKey: .retries)
-        let runCount: Double = try container.decode(Double.self, forKey: .runCount)
-        let requireCharging: Bool = try container.decode(Bool.self, forKey: .requireCharging)
         let priority: Int? = try container.decode(Int?.self, forKey: .priority)
         let qualityOfService: Int? = try container.decode(Int?.self, forKey: .qualityOfService)
-        let timeout: TimeInterval? = try container.decode(TimeInterval?.self, forKey: .timeout)
 
         self.init(
-                type: type,
-                queueName: queueName,
-                uuid: uuid,
-                override: override,
-                includeExecutingJob: includeExecutingJob,
-                tags: tags,
-                delay: delay,
-                deadline: deadline,
-                requireNetwork: requireNetwork,
-                isPersisted: isPersisted,
-                params: params,
-                createTime: createTime,
-                interval: interval,
-                maxRun: maxRun,
-                executor: executor,
-                retries: retries,
-                runCount: runCount,
-                requireCharging: requireCharging,
+                type: try container.decode(String.self, forKey: .type),
+                queueName: try container.decode(String.self, forKey: .queueName),
+                uuid: try container.decode(String.self, forKey: .uuid),
+                override: try container.decode(Bool.self, forKey: .override),
+                includeExecutingJob: try container.decode(Bool.self, forKey: .includeExecutingJob),
+                tags: try container.decode(Set.self, forKey: .tags),
+                delay: try container.decodeIfPresent(TimeInterval.self, forKey: .delay),
+                deadline: try container.decodeIfPresent(Date.self, forKey: .deadline),
+                requireNetwork: try container.decode(NetworkType.self, forKey: .requireNetwork),
+                isPersisted: try container.decode(Bool.self, forKey: .isPersisted),
+                params: try container.decode([String: Any].self, forKey: .params),
+                createTime: try container.decode(Date.self, forKey: .createTime),
+                interval: try container.decode(TimeInterval.self, forKey: .interval),
+                maxRun: try container.decode(Limit.self, forKey: .maxRun),
+                executor: try container.decode(Executor.self, forKey: .executor),
+                retries: try container.decode(Limit.self, forKey: .retries),
+                runCount: try container.decode(Double.self, forKey: .runCount),
+                requireCharging: try container.decode(Bool.self, forKey: .requireCharging),
                 priority: Operation.QueuePriority(fromValue: priority),
                 qualityOfService: QualityOfService(fromValue: qualityOfService),
-                timeout: timeout
+                timeout: try container.decode(TimeInterval?.self, forKey: .timeout)
         )
     }
 }
