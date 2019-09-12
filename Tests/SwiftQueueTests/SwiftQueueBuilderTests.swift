@@ -96,7 +96,10 @@ class SwiftQueueBuilderTests: XCTestCase {
         let type = UUID().uuidString
         let deadline = Date(timeIntervalSinceNow: TimeInterval(30))
 
-        let jobInfo = try toJobInfo(V1Serializer(), type: type, JobBuilder(type: type).deadline(date: deadline))
+        let v1Serializer = V1Serializer()
+        let dateFormatter = v1Serializer.dateFormatter
+
+        let jobInfo = try toJobInfo(v1Serializer, type: type, JobBuilder(type: type).deadline(date: deadline))
         /// V1 have a precision loss
         XCTAssertEqual(jobInfo?.deadline.map(dateFormatter.string), Optional(deadline).map(dateFormatter.string))
     }
