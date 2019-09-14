@@ -33,7 +33,6 @@
 		1E68ED598FA15EF36B431571 /* Constraint+Deadline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E68EF96F1DE038FFF94FCD8 /* Constraint+Deadline.swift */; };
 		1E68EDC2230D2FACC61E7868 /* Constraint+Delay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E68E940C8373221E3EDC771 /* Constraint+Delay.swift */; };
 		1E68EE914B5B51CDB2BD7C4D /* Constraint+UniqueUUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E68E002DC39E9BBE4A0A06A /* Constraint+UniqueUUID.swift */; };
-		611C0BA6232A7E7B004C5F92 /* SwiftQueueManager+BackgroundTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618E9CE2230E1F1000856158 /* SwiftQueueManager+BackgroundTask.swift */; };
 		611C0BA7232A7E80004C5F92 /* SwiftQueueManager+BackgroundTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618E9CE2230E1F1000856158 /* SwiftQueueManager+BackgroundTask.swift */; };
 		618E9CE4230E1F1300856158 /* SwiftQueueManager+BackgroundTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618E9CE2230E1F1000856158 /* SwiftQueueManager+BackgroundTask.swift */; };
 		61A65B7722ABD172009AC9B7 /* Constraint+Timeout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A65B7622ABD172009AC9B7 /* Constraint+Timeout.swift */; };
@@ -505,7 +504,6 @@
 				D0B7C437539F0BEE35FBE8F0 /* JobBuilder.swift in Sources */,
 				D0B7CD1E797A69C89CB0ADE2 /* SqOperationQueue.swift in Sources */,
 				95A210264F99EAC94629D786 /* SwiftQueueLogger.swift in Sources */,
-				611C0BA6232A7E7B004C5F92 /* SwiftQueueManager+BackgroundTask.swift in Sources */,
 				95A215E3804561CFBDE4EAB1 /* Constraint+Charging.swift in Sources */,
 				95A21CA23302F5A747C56040 /* JobInfoSerializer+Decodable.swift in Sources */,
 				95A2187C9276ED640CDADEEF /* JobInfoSerializer+V1.swift in Sources */,
