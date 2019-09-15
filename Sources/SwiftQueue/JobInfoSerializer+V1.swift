@@ -25,6 +25,12 @@ import Foundation
 /// Using Key value serializer to match with V1 behavior
 public class V1Serializer: JobInfoSerializer {
 
+    internal let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+        return formatter
+    }()
+
     func toJSON(_ obj: [String: Any]) throws -> String? {
         assert(JSONSerialization.isValidJSONObject(obj))
         let jsonData = try JSONSerialization.data(withJSONObject: obj)
@@ -32,7 +38,7 @@ public class V1Serializer: JobInfoSerializer {
     }
 
     public func serialize(info: JobInfo) throws -> String {
-        guard let json = try toJSON(info.toDictionary()) else {
+        guard let json = try toJSON(info.toDictionary(dateFormatter)) else {
             throw DecodingError.dataCorrupted(DecodingError.Context(
                     codingPath: [],
                     debugDescription: "The given data was not valid JSON.")
@@ -68,7 +74,7 @@ public class V1Serializer: JobInfoSerializer {
         }
 
         var jobInfo = JobInfo(type: type)
-        try jobInfo.bind(dictionary: dictionary)
+        try jobInfo.bind(dictionary: dictionary, dateFormatter)
         return jobInfo
     }
 
@@ -76,7 +82,7 @@ public class V1Serializer: JobInfoSerializer {
 
 internal extension JobInfo {
 
-    func toDictionary() -> [String: Any] {
+    func toDictionary(_ dateFormatter: DateFormatter) -> [String: Any] {
         var dict = [String: Any]()
         dict[JobInfoKeys.type.stringValue]                = self.type
         dict[JobInfoKeys.uuid.stringValue]                = self.uuid
@@ -101,7 +107,7 @@ internal extension JobInfo {
         return dict
     }
 
-    mutating func bind(dictionary: [String: Any]) throws {
+    mutating func bind(dictionary: [String: Any], _ dateFormatter: DateFormatter) throws {
         dictionary.assign(JobInfoKeys.uuid.stringValue, &self.uuid)
         dictionary.assign(JobInfoKeys.override.stringValue, &self.override)
         dictionary.assign(JobInfoKeys.includeExecutingJob.stringValue, &self.includeExecutingJob)
@@ -155,9 +161,3 @@ internal extension Limit {
         }
     }
 }
-
-internal let dateFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
-    return formatter
-}()
