@@ -1,9 +1,21 @@
 # Change Log
 
-## Next Version
+## [4.0.0](https://github.com/lucas34/SwiftQueue/tree/4.0.0)
+
+#### Breaking Changes
+
+- Increased minimal support to 4.1 and XCode 11 (#248) (#246)
 
 #### New features
-- Experimental support of BackgroundTask API (iOS 13+) 
+
+- Experimental support of BackgroundTask API (iOS/tvOS 13+) (#252) (#251) (#254) (#257) 
+
+#### Enhancement
+
+- Stop init variable at runtime (#258)
+- Avoid object creation (#250)
+- Cleanup (#247)
+
 
 ## [3.2.0](https://github.com/lucas34/SwiftQueue/tree/3.2.0)
 
