@@ -216,13 +216,6 @@ public final class SwiftQueueManagerBuilder {
     }
 
     /// Deserialize jobs synchronously after creating the `SwiftQueueManager` instance. `true` by default
-    @available(*, deprecated, renamed: "initInBackground")
-    public func set(synchronous: Bool) -> Self {
-        params.initInBackground = !synchronous
-        return self
-    }
-
-    /// Deserialize jobs synchronously after creating the `SwiftQueueManager` instance. `true` by default
     public func set(initInBackground: Bool) -> Self {
         params.initInBackground = initInBackground
         return self
