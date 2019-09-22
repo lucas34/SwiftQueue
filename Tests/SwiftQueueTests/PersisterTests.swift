@@ -296,4 +296,14 @@ class PersisterTests: XCTestCase {
         job1.assertSingleCompletion()
     }
 
+    func testEncodingDecoding() {
+        XCTAssertEqual(QualityOfService(fromValue: nil), QualityOfService.default)
+
+        XCTAssertEqual(Operation.QueuePriority(fromValue: nil), Operation.QueuePriority.normal)
+
+        XCTAssertEqual(Executor.fromRawValue(value: 0), Executor.foreground)
+        XCTAssertEqual(Executor.fromRawValue(value: 1), Executor.background)
+        XCTAssertEqual(Executor.fromRawValue(value: 2), Executor.any)
+    }
+
 }

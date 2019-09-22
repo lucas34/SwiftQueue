@@ -260,4 +260,24 @@ class SwiftQueueManagerTests: XCTestCase {
         job.assertNoRun()
     }
 
+    func testJobCount() {
+        let (type, job) = (UUID().uuidString, TestJob())
+
+        let creator = TestCreator([type: job])
+
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
+
+        XCTAssertEqual(manager.queueCount(), 0)
+        XCTAssertEqual(manager.jobCount(), 0)
+
+        JobBuilder(type: type).delay(time: 10000).schedule(manager: manager)
+
+        XCTAssertEqual(manager.queueCount(), 1)
+        XCTAssertEqual(manager.jobCount(), 1)
+
+        manager.cancelAllOperations()
+        manager.waitUntilAllOperationsAreFinished()
+    }
+
+
 }
