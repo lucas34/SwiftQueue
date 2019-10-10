@@ -139,7 +139,7 @@ internal final class SqOperation: Operation {
     }
 
     internal func remove() {
-        let result = lastError.map(JobCompletion.fail) ?? JobCompletion.success
+        let result = lastError.map(JobCompletion<Any>.fail) ?? JobCompletion<Any>.success
         logger.log(.verbose, jobId: info.uuid, message: "Job is removed from the queue result=\(result)")
         handler.onRemove(result: result)
         listener?.onTerminated(job: info, result: result)
