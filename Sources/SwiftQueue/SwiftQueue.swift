@@ -77,7 +77,7 @@ public protocol JobResult {
 public enum JobCompletion<T> {
 
     /// Job completed successfully
-    case success(T)
+    case success(T?)
 
     /// Job completed with error
     case fail(Swift.Error)
