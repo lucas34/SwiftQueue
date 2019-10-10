@@ -1,5 +1,18 @@
 # Change Log
 
+## [4.0.1](https://github.com/lucas34/SwiftQueue/tree/4.0.1)
+
+#### Bug Fix
+
+- Make all params in JobBuilder public (#266)
+
+#### Breaking Changes
+- Remove Depreacted methods (#263)
+
+#### Chore
+Update dependencies (#262)
+
+
 ## [4.0.0](https://github.com/lucas34/SwiftQueue/tree/4.0.0)
 
 #### Breaking Changes
