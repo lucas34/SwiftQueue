@@ -69,7 +69,7 @@ public protocol JobInfoSerializer {
 public protocol JobResult {
 
     /// Method callback to notify the completion of your 
-    func done(_ result: JobCompletion)
+    func done(_ result: JobCompletion<Any>)
 
 }
 
@@ -100,7 +100,7 @@ public protocol Job {
 
     /// Job is removed from the queue and will never run again
     /// May be called in background or main thread
-    func onRemove(result: JobCompletion)
+    func onRemove(result: JobCompletion<Any>)
 
 }
 
@@ -159,10 +159,10 @@ public protocol JobListener {
     func onBeforeRun(job: JobInfo)
 
     /// Job completed execution
-    func onAfterRun(job: JobInfo, result: JobCompletion)
+    func onAfterRun(job: JobInfo, result: JobCompletion<Any>)
 
     /// Job is removed from the queue and will not run anymore
-    func onTerminated(job: JobInfo, result: JobCompletion)
+    func onTerminated(job: JobInfo, result: JobCompletion<Any>)
 
 }
 

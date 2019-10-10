@@ -149,7 +149,7 @@ internal final class SqOperation: Operation {
 
 extension SqOperation: JobResult {
 
-    func done(_ result: JobCompletion) {
+    func done(_ result: JobCompletion<Any>) {
         guard !isFinished else { return }
 
         listener?.onAfterRun(job: info, result: result)

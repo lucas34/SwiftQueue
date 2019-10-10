@@ -66,7 +66,7 @@ class TestJob: Job {
         return withRetry
     }
 
-    func onRemove(result: JobCompletion) {
+    func onRemove(result: JobCompletion<Any>) {
         switch result {
         case .success:
             lastError = nil
@@ -202,18 +202,18 @@ class PersisterTracker: UserDefaultsPersister {
 class JobListenerTest: JobListener {
 
     var onBeforeRun: [JobInfo] = [JobInfo]()
-    var onAfterRun: [(JobInfo, JobCompletion)] = [(JobInfo, JobCompletion)]()
-    var onTerminated: [(JobInfo, JobCompletion)] = [(JobInfo, JobCompletion)]()
+    var onAfterRun = [(JobInfo, JobCompletion<Any>)]()
+    var onTerminated = [(JobInfo, JobCompletion<Any>)]()
 
     func onBeforeRun(job: JobInfo) {
         onBeforeRun.append(job)
     }
 
-    func onAfterRun(job: JobInfo, result: JobCompletion) {
+    func onAfterRun(job: JobInfo, result: JobCompletion<Any>) {
         onAfterRun.append((job, result))
     }
 
-    func onTerminated(job: JobInfo, result: JobCompletion) {
+    func onTerminated(job: JobInfo, result: JobCompletion<Any>) {
         onTerminated.append((job, result))
     }
 }
