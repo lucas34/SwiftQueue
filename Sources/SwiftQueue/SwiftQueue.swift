@@ -74,10 +74,10 @@ public protocol JobResult {
 }
 
 /// Enum to define possible Job completion values
-public enum JobCompletion {
+public enum JobCompletion<T> {
 
     /// Job completed successfully
-    case success
+    case success(T)
 
     /// Job completed with error
     case fail(Swift.Error)
