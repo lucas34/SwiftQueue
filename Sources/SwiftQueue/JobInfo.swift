@@ -27,68 +27,68 @@ import Foundation
 public struct JobInfo {
 
     /// Type of job to create actual `Job` instance
-    let type: String
+    public let type: String
 
     /// Queue name
-    var queueName: String
+    public var queueName: String
 
     /// Unique identifier for a job
-    var uuid: String
+    public var uuid: String
 
     /// Override job when scheduling a job with same uuid
-    var override: Bool
+    public var override: Bool
 
     /// Including job that are executing when scheduling with same uuid
-    var includeExecutingJob: Bool
+    public var includeExecutingJob: Bool
 
     /// Set of identifiers
-    var tags: Set<String>
+    public var tags: Set<String>
 
     /// Delay for the first execution of the job
-    var delay: TimeInterval?
+    public var delay: TimeInterval?
 
     /// Cancel the job after a certain date
-    var deadline: Date?
+    public var deadline: Date?
 
     /// Require a certain connectivity type
-    var requireNetwork: NetworkType
+    public var requireNetwork: NetworkType
 
     /// Indicates if the job should be persisted inside a database
-    var isPersisted: Bool
+    public var isPersisted: Bool
 
     /// Custom params set by the user
-    var params: [String: Any]
+    public var params: [String: Any]
 
     /// Date of the job's creation
-    var createTime: Date
+    public var createTime: Date
 
     /// Time between each repetition of the job
-    var interval: TimeInterval
+    public var interval: TimeInterval
 
     /// Executor to run job in foreground or background
-    var executor: Executor
+    public var executor: Executor
 
     /// Number of run maximum
-    var maxRun: Limit
+    public var maxRun: Limit
 
     /// Maximum number of authorised retried
-    var retries: Limit
+    public var retries: Limit
 
     /// Current number of run
-    var runCount: Double
+    public var runCount: Double
 
-    var requireCharging: Bool
+    public var requireCharging: Bool
 
     /// Current number of repetition. Transient value
-    var currentRepetition: Int
+    public var currentRepetition: Int
 
     /// This value is used to influence the order in which operations are dequeued and executed
-    var priority: Operation.QueuePriority
+    public var priority: Operation.QueuePriority
 
     /// The relative amount of importance for granting system resources to the operation.
-    var qualityOfService: QualityOfService
+    public var qualityOfService: QualityOfService
 
-    var timeout: TimeInterval?
+    public var timeout: TimeInterval?
 
     func buildConstraints() -> [JobConstraint] {
         var constraints = [JobConstraint]()
