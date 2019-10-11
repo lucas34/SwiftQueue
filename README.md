@@ -92,8 +92,8 @@ class SendTweetJob: Job {
 
     func onRun(callback: JobResult) {
         let api = Api()
-        api.sendTweet(data: tweet).execute(onSuccess: {
-            callback.done(.success)
+        api.sendTweet(data: tweet).execute(onSuccess: { response in
+            callback.done(.success(response))
         }, onError: { error in
             callback.done(.fail(error))
         })
@@ -107,7 +107,7 @@ class SendTweetJob: Job {
     func onRemove(result: JobCompletion) {
         // This job will never run anymore  
         switch result {
-            case .success:
+            case .success(let response):
                 // Job success
             break
             
