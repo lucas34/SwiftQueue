@@ -69,15 +69,15 @@ public protocol JobInfoSerializer {
 public protocol JobResult {
 
     /// Method callback to notify the completion of your 
-    func done(_ result: JobCompletion)
+    func done(_ result: JobCompletion<Any>)
 
 }
 
 /// Enum to define possible Job completion values
-public enum JobCompletion {
+public enum JobCompletion<T> {
 
     /// Job completed successfully
-    case success
+    case success(T?)
 
     /// Job completed with error
     case fail(Swift.Error)
@@ -100,7 +100,7 @@ public protocol Job {
 
     /// Job is removed from the queue and will never run again
     /// May be called in background or main thread
-    func onRemove(result: JobCompletion)
+    func onRemove(result: JobCompletion<Any>)
 
 }
 
@@ -154,15 +154,14 @@ extension BasicQueue: Queue {
 
 /// Listen from job status
 public protocol JobListener {
-
     /// Job will start executing
     func onBeforeRun(job: JobInfo)
 
     /// Job completed execution
-    func onAfterRun(job: JobInfo, result: JobCompletion)
+    func onAfterRun(job: JobInfo, result: JobCompletion<Any>)
 
     /// Job is removed from the queue and will not run anymore
-    func onTerminated(job: JobInfo, result: JobCompletion)
+    func onTerminated(job: JobInfo, result: JobCompletion<Any>)
 
 }
 

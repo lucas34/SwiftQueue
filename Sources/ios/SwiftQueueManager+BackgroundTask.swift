@@ -86,7 +86,7 @@ private class TaskJobResult: JobResult {
         self.task = task
     }
 
-    public func done(_ result: JobCompletion) {
+    public func done(_ result: JobCompletion<Any>) {
         actual.done(result)
 
         switch result {
