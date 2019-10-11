@@ -154,7 +154,6 @@ extension BasicQueue: Queue {
 
 /// Listen from job status
 public protocol JobListener {
-
     /// Job will start executing
     func onBeforeRun(job: JobInfo)
 

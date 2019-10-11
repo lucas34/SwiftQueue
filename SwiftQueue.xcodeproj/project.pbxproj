@@ -60,6 +60,8 @@
 		95A21D7F9EA08E843CB77B73 /* JobInfoSerializer+Decodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A2169E6968B5F155D5B612 /* JobInfoSerializer+Decodable.swift */; };
 		95A21FA05AABFA4A59096E8E /* SwiftQueueLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A217FDB8197696002CE25C /* SwiftQueueLogger.swift */; };
 		95A21FA0723161F6908B133B /* Constraint+Charging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A21C01EDB773B7F17134AF /* Constraint+Charging.swift */; };
+		A1A9DC47234F6C83004E4253 /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DFCD8731F811FD6000568B9 /* Reachability.framework */; };
+		A1A9DC48234F6C83004E4253 /* Reachability.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1DFCD8731F811FD6000568B9 /* Reachability.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B06405031FA04AA000086C69 /* UserDefaultsPersister.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A11F82A84A00B3BBFB /* UserDefaultsPersister.swift */; };
 		B06405041FA04AA000086C69 /* SwiftQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A21F82A84A00B3BBFB /* SwiftQueue.swift */; };
 		B06405061FA04AA000086C69 /* Constraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8479A61F82A84B00B3BBFB /* Constraint.swift */; };
@@ -107,6 +109,20 @@
 			remoteInfo = SwiftQueue;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A1A9DC49234F6C83004E4253 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				A1A9DC48234F6C83004E4253 /* Reachability.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1D7B3D2E1F5C1EC7000D49B6 /* ConstraintTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstraintTests.swift; sourceTree = "<group>"; };
@@ -174,6 +190,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
 			files = (
+				A1A9DC47234F6C83004E4253 /* Reachability.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,6 +346,7 @@
 			buildPhases = (
 				OBJ_19 /* Sources */,
 				OBJ_21 /* Frameworks */,
+				A1A9DC49234F6C83004E4253 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

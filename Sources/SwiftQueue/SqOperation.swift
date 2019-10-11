@@ -34,7 +34,7 @@ internal final class SqOperation: Operation {
 
     let logger: SwiftQueueLogger
 
-    let listener: JobListener?
+    let listener: [JobListener]?
 
     let dispatchQueue: DispatchQueue
 
@@ -64,7 +64,7 @@ internal final class SqOperation: Operation {
         }
     }
 
-    internal init(job: Job, info: JobInfo, logger: SwiftQueueLogger, listener: JobListener?, dispatchQueue: DispatchQueue) {
+    internal init(job: Job, info: JobInfo, logger: SwiftQueueLogger, listener: [JobListener]? = [], dispatchQueue: DispatchQueue) {
         self.handler = job
         self.info = info
         self.logger = logger
@@ -106,7 +106,9 @@ internal final class SqOperation: Operation {
         lastError = error
         // Need to be called manually since the task is actually not in the queue. So cannot call cancel()
         handler.onRemove(result: .fail(error))
-        listener?.onTerminated(job: info, result: .fail(error))
+        listener?.forEach{
+            $0.onTerminated(job: info, result: .fail(error))
+        }
     }
 
     internal func run() {
@@ -134,15 +136,19 @@ internal final class SqOperation: Operation {
         }
 
         logger.log(.verbose, jobId: info.uuid, message: "Job is running")
-        listener?.onBeforeRun(job: info)
+        listener?.forEach{
+            $0.onBeforeRun(job: info)
+        }
         handler.onRun(callback: self)
     }
 
     internal func remove() {
-        let result = lastError.map(JobCompletion<Any>.fail) ?? JobCompletion<Any>.success
+        let result = lastError.map(JobCompletion<Any>.fail) ?? JobCompletion<Any>.success(nil)
         logger.log(.verbose, jobId: info.uuid, message: "Job is removed from the queue result=\(result)")
         handler.onRemove(result: result)
-        listener?.onTerminated(job: info, result: result)
+        listener?.forEach{
+            $0.onTerminated(job: info, result: result)
+        }
     }
 
 }
@@ -152,7 +158,9 @@ extension SqOperation: JobResult {
     func done(_ result: JobCompletion<Any>) {
         guard !isFinished else { return }
 
-        listener?.onAfterRun(job: info, result: result)
+        listener?.forEach{
+            $0.onAfterRun(job: info, result: result)
+        }
 
         switch result {
         case .success:

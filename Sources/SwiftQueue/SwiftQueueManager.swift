@@ -151,7 +151,7 @@ internal struct SqManagerParams {
 
     var logger: SwiftQueueLogger
 
-    var listener: JobListener?
+    var listener: [JobListener]? = []
 
     var dispatchQueue: DispatchQueue
 
@@ -162,7 +162,7 @@ internal struct SqManagerParams {
          persister: JobPersister = UserDefaultsPersister(),
          serializer: JobInfoSerializer = DecodableSerializer(),
          logger: SwiftQueueLogger = NoLogger.shared,
-         listener: JobListener? = nil,
+         listener: [JobListener]? = [],
          initInBackground: Bool = false,
          dispatchQueue: DispatchQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.utility)
     ) {
@@ -186,7 +186,7 @@ public final class SwiftQueueManagerBuilder {
 
     /// Creator to convert `JobInfo.type` to `Job` instance
     public init(creator: JobCreator, queueCreator: QueueCreator = BasicQueueCreator()) {
-        params = SqManagerParams(jobCreator: creator, queueCreator: queueCreator)
+        params = SqManagerParams(jobCreator: creator, queueCreator: queueCreator, listener: [])
     }
 
     /// Custom way of saving `JobInfo`. Will use `UserDefaultsPersister` by default
@@ -222,8 +222,8 @@ public final class SwiftQueueManagerBuilder {
     }
 
     /// Listen for job
-    public func set(listener: JobListener) -> Self {
-        params.listener = listener
+    public func append(listener: JobListener) -> Self {
+        params.listener?.append(listener)
         return self
     }
 
