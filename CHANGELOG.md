@@ -7,7 +7,7 @@
 - Make all params in JobBuilder public (#266)
 
 #### Breaking Changes
-- Remove Depreacted methods (#263)
+- Remove Deprecated methods (#263)
 
 #### Chore
 Update dependencies (#262)
