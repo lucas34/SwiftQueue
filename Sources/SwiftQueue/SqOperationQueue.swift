@@ -134,6 +134,7 @@ internal final class SqOperationQueue: OperationQueue {
     func cancelOperations(uuid: String) {
         for case let operation as SqOperation in operations where operation.info.uuid == uuid {
             operation.cancel()
+            return
         }
     }
 
