@@ -105,6 +105,26 @@ public final class SwiftQueueManager {
         }
     }
 
+    /// number of jobs with this tag in all queues
+    public func jobCount(tag: String) -> Int {
+        assertNotEmptyString(tag)
+        var count = 0
+        for element in manage.values {
+            count += element.operationCount(tag: tag)
+        }
+        return count
+    }
+    
+    /// number of jobs with this uuid in all queues
+    public func jobCount(uuid: String) -> Int {
+        assertNotEmptyString(uuid)
+        var count = 0
+        for element in manage.values {
+            count += element.operationCount(uuid: uuid)
+        }
+        return count
+    }
+    
     /// number of queue
     public func queueCount() -> Int {
         return manage.values.count
