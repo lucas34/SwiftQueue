@@ -32,7 +32,7 @@ internal final class SqOperationQueue: OperationQueue {
     private let persister: JobPersister
     private let serializer: JobInfoSerializer
     private let logger: SwiftQueueLogger
-    private let listener: [JobListener]?
+    private let listener: JobListener?
 
     private let trigger: Operation = TriggerOperation()
 
