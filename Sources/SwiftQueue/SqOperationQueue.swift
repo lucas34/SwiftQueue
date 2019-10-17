@@ -81,6 +81,20 @@ internal final class SqOperationQueue: OperationQueue {
         super.addOperation(trigger)
     }
 
+    public func removePersistedJobs(){
+        persister.restore(queueName: self.queue.name).compactMap { string -> JobInfo? in
+            do {
+                let info = try serializer.deserialize(json: string)
+                return info
+            } catch let error {
+                logger.log(.error, jobId: "UNKNOWN", message: "Unable to deserialize job error=\(error.localizedDescription)")
+                return nil
+            }
+        }.forEach { info in
+            self.persister.remove(queueName: info.queueName, taskId: info.uuid)
+        }
+    }
+
     override func addOperation(_ ope: Operation) {
         self.addOperationInternal(ope, wait: true)
     }

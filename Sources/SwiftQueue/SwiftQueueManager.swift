@@ -75,6 +75,17 @@ public final class SwiftQueueManager {
         queue.addOperation(operation)
     }
 
+    public func removeAllPersistedOperations() {
+        for element in manage.values {
+            guard let queueName = element.name else {
+                continue
+            }
+
+            let queue = getQueue(queueName: queueName)
+            queue.removePersistedJobs()
+        }
+    }
+
     /// All operations in all queues will be removed
     public func cancelAllOperations() {
         for element in manage.values {
