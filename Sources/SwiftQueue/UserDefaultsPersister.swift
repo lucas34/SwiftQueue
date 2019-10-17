@@ -66,4 +66,9 @@ public class UserDefaultsPersister: JobPersister {
         store.setValue(values, forKey: key)
     }
 
+    /// Remove all tasks
+    public func clearAll() {
+        store.removeObject(forKey: key)
+    }
+
 }

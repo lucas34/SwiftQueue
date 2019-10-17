@@ -52,6 +52,9 @@ public protocol JobPersister {
     /// Remove a single job for a single queue
     func remove(queueName: String, taskId: String)
 
+    /// Remove all task
+    func clearAll()
+
 }
 
 /// Class to serialize and deserialize `JobInfo`
