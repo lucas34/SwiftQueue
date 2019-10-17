@@ -115,14 +115,14 @@ public final class SwiftQueueManager {
         return count
     }
     
-    /// number of jobs with this uuid in all queues
-    public func jobCount(uuid: String) -> Int {
-        assertNotEmptyString(uuid)
-        var count = 0
-        for element in manage.values {
-            count += element.operationCount(uuid: uuid)
+    /// check if there is jobs with this uuid in at least onel queues
+    public func containsJob(uuid: String) -> Bool {
+        for element: OperationQueue in manage.values {
+            for case let item as SqOperation in element.operations where item.info.uuid == uuid {
+                return true
+            }
         }
-        return count
+        return false
     }
     
     /// number of queue

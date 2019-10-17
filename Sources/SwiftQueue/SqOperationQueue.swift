@@ -140,10 +140,6 @@ internal final class SqOperationQueue: OperationQueue {
     func operationCount(tag: String) -> Int {
         return operations.compactMap({ $0 as? SqOperation }).filter({ $0.info.tags.contains(tag) }).count
     }
-    
-    func operationCount(uuid: String) -> Int {
-        return operations.compactMap({ $0 as? SqOperation }).filter({ $0.info.uuid == uuid }).count
-    }
 
     private func completed(_ job: SqOperation) {
         // Remove this operation from serialization
