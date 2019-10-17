@@ -81,6 +81,7 @@ internal final class SqOperationQueue: OperationQueue {
         super.addOperation(trigger)
     }
 
+    /// All operations persisted in will be removed
     public func removePersistedJobs(){
         persister.restore(queueName: self.queue.name).compactMap { string -> JobInfo? in
             do {
