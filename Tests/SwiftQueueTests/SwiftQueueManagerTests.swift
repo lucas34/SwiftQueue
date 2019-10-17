@@ -52,7 +52,7 @@ class SwiftQueueManagerTests: XCTestCase {
         let manager = SwiftQueueManagerBuilder(creator: creator)
                 .set(persister: NoSerializer.shared)
                 .set(isSuspended: true)
-                .set(listener: listener)
+                .append(listener: [listener])
                 .build()
 
         JobBuilder(type: type).schedule(manager: manager)

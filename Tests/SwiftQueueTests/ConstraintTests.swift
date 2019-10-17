@@ -55,7 +55,7 @@ class ConstraintTests: XCTestCase {
             if runCount == runLimit {
                 $0.done(.fail(JobError()))
             } else {
-                $0.done(.success)
+                $0.done(.success(nil))
             }
         }
 
@@ -118,7 +118,7 @@ class ConstraintTests: XCTestCase {
         let job = TestJob(retry: .retry(delay: 0)) {
             runCount += 1
             if runCount == runLimit {
-                $0.done(.success)
+                $0.done(.success(nil))
             } else {
                 $0.done(.fail(JobError()))
             }

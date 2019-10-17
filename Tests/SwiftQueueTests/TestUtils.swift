@@ -42,7 +42,7 @@ class TestJob: Job {
 
     private var lastError: Error?
 
-    init(retry: RetryConstraint = .retry(delay: 0), onRunCallback: @escaping (JobResult) -> Void = { $0.done(.success) }) {
+    init(retry: RetryConstraint = .retry(delay: 0), onRunCallback: @escaping (JobResult) -> Void = { $0.done(.success(nil)) }) {
         self.onRunCallback = onRunCallback
         self.withRetry = retry
     }
@@ -270,7 +270,7 @@ class MemorySerializer: JobInfoSerializer {
 
 extension JobBuilder {
 
-    internal func build(job: Job, logger: SwiftQueueLogger = NoLogger.shared, listener: JobListener? = nil) -> SqOperation {
+    internal func build(job: Job, logger: SwiftQueueLogger = NoLogger.shared, listener: [JobListener]? = nil) -> SqOperation {
         return SqOperation(job: job, info: build(), logger: logger, listener: listener, dispatchQueue: DispatchQueue.global(qos: DispatchQoS.QoSClass.utility))
     }
 
