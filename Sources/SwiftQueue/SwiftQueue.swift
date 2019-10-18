@@ -1,6 +1,6 @@
 // The MIT License (MIT)
 //
-// Copyright (c) 2017 Lucas Nelaupe
+// Copyright (c) 2019 Lucas Nelaupe
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -51,6 +51,9 @@ public protocol JobPersister {
 
     /// Remove a single job for a single queue
     func remove(queueName: String, taskId: String)
+
+    /// Remove all task
+    func clearAll()
 
 }
 

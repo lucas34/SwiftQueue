@@ -1,6 +1,6 @@
 // The MIT License (MIT)
 //
-// Copyright (c) 2017 Lucas Nelaupe
+// Copyright (c) 2019 Lucas Nelaupe
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -64,6 +64,11 @@ public class UserDefaultsPersister: JobPersister {
         var values: [String: [String: String]]? = store.value(forKey: key) as? [String: [String: String]]
         values?[queueName]?.removeValue(forKey: taskId)
         store.setValue(values, forKey: key)
+    }
+
+    /// Remove all tasks
+    public func clearAll() {
+        store.removeObject(forKey: key)
     }
 
 }

@@ -1,6 +1,6 @@
 // The MIT License (MIT)
 //
-// Copyright (c) 2017 Lucas Nelaupe
+// Copyright (c) 2019 Lucas Nelaupe
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,6 @@ class TestJob: Job {
     private var onCompletedCount = 0
     private var onCanceledCount = 0
 
-    private let onRunSemaphore = DispatchSemaphore(value: 0)
     private let onRemoveSemaphore = DispatchSemaphore(value: 0)
 
     private var runSemaphoreValue = 0
@@ -49,18 +48,12 @@ class TestJob: Job {
 
     func onRun(callback: JobResult) {
         XCTAssertFalse(Thread.isMainThread)
-
         onRunCount += 1
-        if runSemaphoreValue == onRunCount {
-            onRunSemaphore.signal()
-        }
-
         onRunCallback(callback)
     }
 
     func onRetry(error: Error) -> RetryConstraint {
         XCTAssertFalse(Thread.isMainThread)
-
         lastError = error
         onRetryCount += 1
         return withRetry
@@ -82,9 +75,8 @@ class TestJob: Job {
 
     // Wait
 
-    func awaitForRemoval(_ seconds: TimeInterval = TimeInterval(5)) {
-        let delta = DispatchTime.now() + Double(Int64(seconds) * Int64(NSEC_PER_SEC)) / Double(NSEC_PER_SEC)
-        _ = onRemoveSemaphore.wait(timeout: delta)
+    func awaitForRemoval() {
+        onRemoveSemaphore.wait()
     }
 
     // Assertion
@@ -252,6 +244,9 @@ class NoSerializer: JobPersister {
     func put(queueName: String, taskId: String, data: String) {}
 
     func remove(queueName: String, taskId: String) {}
+
+    func clearAll() {}
+
 }
 
 class MemorySerializer: JobInfoSerializer {

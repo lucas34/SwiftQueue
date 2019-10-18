@@ -1,6 +1,6 @@
 // The MIT License (MIT)
 //
-// Copyright (c) 2017 Lucas Nelaupe
+// Copyright (c) 2019 Lucas Nelaupe
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -41,7 +41,13 @@ internal final class NetworkConstraint: JobConstraint {
     var reachability: Reachability?
 
     func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {
-        self.reachability = operation.info.requireNetwork.rawValue > NetworkType.any.rawValue ? Reachability() : nil
+        if operation.info.requireNetwork.rawValue > NetworkType.any.rawValue {
+            do {
+                try self.reachability = Reachability(targetQueue: operation.dispatchQueue, notificationQueue: operation.dispatchQueue)
+            } catch {
+                operation.logger.log(.error, jobId: operation.info.uuid, message: error.localizedDescription)
+            }
+        }
     }
 
     func willRun(operation: SqOperation) throws {
@@ -76,7 +82,7 @@ internal final class NetworkConstraint: JobConstraint {
         case .any:
             return true
         case .cellular:
-            return reachability.connection != .none
+            return reachability.connection != .unavailable
         case .wifi:
             return reachability.connection == .wifi
         }
