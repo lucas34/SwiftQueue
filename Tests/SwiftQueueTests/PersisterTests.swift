@@ -266,11 +266,11 @@ class PersisterTests: XCTestCase {
     func testCustomSerializer() {
         let (type1, job1) = (UUID().uuidString, TestJob())
 
-        let persistance = PersisterTracker(key: UUID().uuidString)
+        let persister = PersisterTracker(key: UUID().uuidString)
         let serializer = MemorySerializer()
 
         let manager = SwiftQueueManagerBuilder(creator: TestCreator([type1: job1]))
-                .set(persister: persistance)
+                .set(persister: persister)
                 .set(serializer: serializer)
                 .set(isSuspended: true)
                 .build()
@@ -285,7 +285,7 @@ class PersisterTests: XCTestCase {
 
         // Re-create manager
         let manager2 = SwiftQueueManagerBuilder(creator: TestCreator([type1: job1]))
-                .set(persister: persistance)
+                .set(persister: persister)
                 .set(serializer: serializer)
                 .set(isSuspended: false)
                 .build()
@@ -294,6 +294,13 @@ class PersisterTests: XCTestCase {
 
         job1.awaitForRemoval()
         job1.assertSingleCompletion()
+    }
+
+    func testRemoveAllJob() {
+        let persister = PersisterTracker(key: UUID().uuidString)
+
+        // Nothing to assert since we don't rely on the actual one in test cases
+        persister.clearAll()
     }
 
 }
