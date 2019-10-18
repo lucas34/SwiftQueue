@@ -244,6 +244,9 @@ class NoSerializer: JobPersister {
     func put(queueName: String, taskId: String, data: String) {}
 
     func remove(queueName: String, taskId: String) {}
+
+    func clearAll() {}
+
 }
 
 class MemorySerializer: JobInfoSerializer {
