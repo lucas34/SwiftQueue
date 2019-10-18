@@ -75,9 +75,8 @@ class TestJob: Job {
 
     // Wait
 
-    func awaitForRemoval(_ seconds: TimeInterval = TimeInterval(5)) {
-        let delta = DispatchTime.now() + Double(Int64(seconds) * Int64(NSEC_PER_SEC)) / Double(NSEC_PER_SEC)
-        _ = onRemoveSemaphore.wait(timeout: delta)
+    func awaitForRemoval() {
+        onRemoveSemaphore.wait()
     }
 
     // Assertion
