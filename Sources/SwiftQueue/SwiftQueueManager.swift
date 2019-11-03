@@ -105,20 +105,39 @@ public final class SwiftQueueManager {
         }
     }
 
+
+}
+
+/// Extension to query Job Manager
+public extension SwiftQueueManager {
     /// number of queue
-    public func queueCount() -> Int {
+    func queueCount() -> Int {
         return manage.values.count
     }
 
     /// number of jobs for all queues
-    public func jobCount() -> Int {
+    func jobCount() -> Int {
         var count = 0
         for element in manage.values {
             count += element.operationCount
         }
         return count
     }
+
+    /// Return queues UUID with the list of Jobs inside
+    func getAll() -> [String: [JobInfo]] {
+        var result = [String: [JobInfo]]()
+        for (queueUuid, queue) in manage {
+            var infos = [JobInfo]()
+            for case let operation as SqOperation in queue.operations {
+                infos.append(operation.info)
+            }
+            result[queueUuid] = infos
+        }
+        return result
+    }
 }
+
 
 internal extension SwiftQueueManager {
 

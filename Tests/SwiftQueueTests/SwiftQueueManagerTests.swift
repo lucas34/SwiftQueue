@@ -260,4 +260,11 @@ class SwiftQueueManagerTests: XCTestCase {
         job.assertNoRun()
     }
 
+    public func testGetAll() {
+        let creator = TestCreator([:])
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
+
+        XCTAssertEqual(0, manager.getAll().count)
+    }
+
 }
