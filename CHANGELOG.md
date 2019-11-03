@@ -1,5 +1,22 @@
 # Change Log
 
+## [4.1.0](https://github.com/lucas34/SwiftQueue/tree/4.1.0)
+
+#### Chore
+Update Reachability to 5.0.0 (#273)
+
+#### New features
+Add Method to query all jobs (#277)
+Add method to remove all task (#275)
+
+#### Fix
+Fix Perf: Can only have 1 unique uuid per Queue
+
+#### Internal changes
+Remove timeout from tests (#274)
+Update Copyright (#270)
+Remove unused (#272)
+
 ## [4.0.1](https://github.com/lucas34/SwiftQueue/tree/4.0.1)
 
 #### Bug Fix
@@ -11,7 +28,6 @@
 
 #### Chore
 Update dependencies (#262)
-
 
 ## [4.0.0](https://github.com/lucas34/SwiftQueue/tree/4.0.0)
 
@@ -29,7 +45,6 @@ Update dependencies (#262)
 - Avoid object creation (#250)
 - Cleanup (#247)
 
-
 ## [3.2.0](https://github.com/lucas34/SwiftQueue/tree/3.2.0)
 
 #### New features
@@ -37,7 +52,6 @@ Update dependencies (#262)
 - Exponential backoff with max delay (#226)
 - Better threading configuration for Queue and Manager (#228) (#229) (230)
 - Jobs can be enqueue from manager with `.enqueue(JobInfo)` (#231)
-
 
 ## [3.1.0](https://github.com/lucas34/SwiftQueue/tree/3.1.0)
 
@@ -61,7 +75,6 @@ Update dependencies (#262)
 #### Chore
 - Swift 5 support. Source was already compatible 🙌 (#206)
 - Drop Linux support (#206)
-
 
 ## [2.4.0](https://github.com/lucas34/SwiftQueue/tree/2.4.0)
 
