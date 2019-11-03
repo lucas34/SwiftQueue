@@ -105,7 +105,6 @@ public final class SwiftQueueManager {
         }
     }
 
-
 }
 
 /// Extension to query Job Manager
@@ -137,7 +136,6 @@ public extension SwiftQueueManager {
         return result
     }
 }
-
 
 internal extension SwiftQueueManager {
 
