@@ -35,24 +35,11 @@ public class DecodableSerializer: JobInfoSerializer {
     }
 
     public func serialize(info: JobInfo) throws -> String {
-        let encoded = try encoder.encode(info)
-        guard let string = String(data: encoded, encoding: .utf8) else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(
-                    codingPath: [],
-                    debugDescription: "Unable to convert decoded data to utf-8")
-            )
-        }
-        return string
+        try String.fromUTF8(data: encoder.encode(info))
     }
 
     public func deserialize(json: String) throws -> JobInfo {
-        guard let data = json.data(using: .utf8) else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(
-                    codingPath: [],
-                    debugDescription: "Unable to convert decoded data to utf-8")
-            )
-        }
-        return try decoder.decode(JobInfo.self, from: data)
+        try decoder.decode(JobInfo.self, from: json.utf8Data())
     }
 
 }
@@ -165,19 +152,12 @@ extension JobInfo: Encodable {
 internal extension KeyedDecodingContainer {
 
     func decode(_ type: Data.Type, forKey key: KeyedDecodingContainer.Key) throws -> Data {
-        let json = try self.decode(String.self, forKey: key)
-        guard let data = json.data(using: .utf8) else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(
-                    codingPath: [key],
-                    debugDescription: "Unable to convert string to utf-8")
-            )
-        }
-        return data
+        try self.decode(String.self, forKey: key).utf8Data()
     }
 
     func decode(_ type: [String: Any].Type, forKey key: KeyedDecodingContainer.Key) throws -> [String: Any] {
         let data = try self.decode(Data.self, forKey: key)
-        guard let dict = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] else {
+        guard let dict = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
             throw DecodingError.dataCorrupted(DecodingError.Context(
                     codingPath: [key],
                     debugDescription: "Decoded value is not a dictionary")
@@ -191,14 +171,8 @@ internal extension KeyedDecodingContainer {
 internal extension KeyedEncodingContainer {
 
     mutating func encode(_ value: [String: Any], forKey key: KeyedEncodingContainer.Key) throws {
-        let jsonData = try JSONSerialization.data(withJSONObject: value)
-        guard let utf8 = String(data: jsonData, encoding: .utf8) else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(
-                    codingPath: [key],
-                    debugDescription: "The given data was not valid JSON.")
-            )
-        }
-        try self.encode(utf8, forKey: key)
+        let data = try JSONSerialization.data(withJSONObject: value)
+        try self.encode(String.fromUTF8(data: data, key: [key]), forKey: key)
     }
 
 }
