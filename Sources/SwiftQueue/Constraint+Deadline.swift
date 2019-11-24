@@ -24,6 +24,12 @@ import Foundation
 
 internal final class DeadlineConstraint: JobConstraint {
 
+    private let deadline: Date
+
+    init(deadline: Date) {
+        self.deadline = deadline
+    }
+
     func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {
         try check(operation: operation)
     }
@@ -33,11 +39,7 @@ internal final class DeadlineConstraint: JobConstraint {
     }
 
     func run(operation: SqOperation) -> Bool {
-        guard let delay = operation.info.deadline else {
-            return true
-        }
-
-        operation.dispatchQueue.runAfter(delay.timeIntervalSinceNow, callback: { [weak operation] in
+        operation.dispatchQueue.runAfter(deadline.timeIntervalSinceNow, callback: { [weak operation] in
             guard let ope = operation else { return }
             guard !ope.isFinished else { return }
 
@@ -47,7 +49,7 @@ internal final class DeadlineConstraint: JobConstraint {
     }
 
     private func check(operation: SqOperation) throws {
-        if let deadline = operation.info.deadline, deadline < Date() {
+        if deadline < Date() {
             throw SwiftQueueError.deadline
         }
     }

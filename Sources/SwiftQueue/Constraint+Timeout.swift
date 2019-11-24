@@ -24,6 +24,12 @@ import Foundation
 
 internal final class TimeoutConstraint: JobConstraint {
 
+    private let timeout: TimeInterval
+
+    init(timeout: TimeInterval) {
+        self.timeout = timeout
+    }
+
     func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {
         // Nothing to do
     }
@@ -33,10 +39,6 @@ internal final class TimeoutConstraint: JobConstraint {
     }
 
     func run(operation: SqOperation) -> Bool {
-        guard let timeout = operation.info.timeout else {
-            return true
-        }
-
         operation.dispatchQueue.runAfter(timeout) {
             if operation.isExecuting && !operation.isFinished {
                 operation.cancel(with: SwiftQueueError.timeout)
