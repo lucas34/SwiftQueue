@@ -54,10 +54,6 @@ internal final class BatteryChargingConstraint: JobConstraint {
     func willRun(operation: SqOperation) throws {}
 
     func run(operation: SqOperation) -> Bool {
-        guard operation.info.requireCharging else {
-            return true
-        }
-
         guard UIDevice.current.batteryState != .charging else {
             return true
         }

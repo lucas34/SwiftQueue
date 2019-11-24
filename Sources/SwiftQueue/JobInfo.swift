@@ -100,20 +100,20 @@ public struct JobInfo {
             constraints.append(BatteryChargingConstraint())
         }
 
-        if deadline != nil {
-            constraints.append(DeadlineConstraint())
+        if let deadline = deadline {
+            constraints.append(DeadlineConstraint(deadline: deadline))
         }
 
-        if delay != nil {
-            constraints.append(DelayConstraint())
+        if let delay = delay {
+            constraints.append(DelayConstraint(delay: delay))
         }
 
         if requireNetwork != NetworkType.any {
             constraints.append(NetworkConstraint())
         }
 
-        if timeout != nil {
-            constraints.append(TimeoutConstraint())
+        if let timeout = timeout {
+            constraints.append(TimeoutConstraint(timeout: timeout))
         }
 
         return constraints
