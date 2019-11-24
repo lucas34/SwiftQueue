@@ -150,3 +150,27 @@ extension Executor: Codable {
     }
 
 }
+
+internal extension String {
+
+    static func fromUTF8(data: Data, key: [CodingKey] = []) throws -> String {
+        guard let utf8 = String(data: data, encoding: .utf8) else {
+            throw DecodingError.dataCorrupted(DecodingError.Context(
+                    codingPath: key,
+                    debugDescription: "Unexpected error")
+            )
+        }
+        return utf8
+    }
+
+    func utf8Data() throws -> Data {
+        guard let data = self.data(using: .utf8) else {
+            throw DecodingError.dataCorrupted(DecodingError.Context(
+                    codingPath: [],
+                    debugDescription: "Unexpected error")
+            )
+        }
+        return data
+    }
+
+}

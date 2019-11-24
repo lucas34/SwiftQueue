@@ -31,31 +31,18 @@ public class V1Serializer: JobInfoSerializer {
         return formatter
     }()
 
-    func toJSON(_ obj: [String: Any]) throws -> String? {
+    func toJSON(_ obj: [String: Any]) throws -> String {
         assert(JSONSerialization.isValidJSONObject(obj))
-        let jsonData = try JSONSerialization.data(withJSONObject: obj)
-        return String(data: jsonData, encoding: .utf8)
+        let data = try JSONSerialization.data(withJSONObject: obj)
+        return try String.fromUTF8(data: data)
     }
 
     public func serialize(info: JobInfo) throws -> String {
-        guard let json = try toJSON(info.toDictionary(dateFormatter)) else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(
-                    codingPath: [],
-                    debugDescription: "The given data was not valid JSON.")
-            )
-        }
-        return json
+        try toJSON(info.toDictionary(dateFormatter))
     }
 
     func fromJSON(_ json: String) throws -> Any {
-        guard let data = json.data(using: .utf8) else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(
-                    codingPath: [],
-                    debugDescription: "Unable to convert string to utf-8")
-            )
-        }
-
-        return try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+        try JSONSerialization.jsonObject(with: json.utf8Data())
     }
 
     public func deserialize(json: String) throws -> JobInfo {
