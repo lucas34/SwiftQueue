@@ -21,9 +21,8 @@
 // SOFTWARE.
 
 import Foundation
-#if os(iOS) || os(macOS) || os(tvOS)
+
 import Reachability
-#endif
 
 /// Kind of connectivity required for the job to run
 public enum NetworkType: Int, Codable {
@@ -35,7 +34,7 @@ public enum NetworkType: Int, Codable {
     case wifi = 2
 }
 
-#if os(iOS) || os(macOS) || os(tvOS)
+
 internal final class NetworkConstraint: JobConstraint {
 
     var reachability: Reachability?
@@ -89,8 +88,3 @@ internal final class NetworkConstraint: JobConstraint {
     }
 
 }
-#else
-
-internal final class NetworkConstraint: DefaultNoConstraint {}
-
-#endif
