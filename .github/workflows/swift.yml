@@ -9,16 +9,23 @@ on:
     - master
 
 jobs:
-
   DANGER:
     runs-on: ubuntu-latest
-    name: "Run Danger"
     steps:
-      - uses: actions/checkout@v2.1.0
-      - name: Danger
-        uses: danger/swift@2.0.3
-        with:
-            args: --failOnErrors --no-publish-check
+    - uses: actions/checkout@v2.1.0
+    - name: Setup Ruby
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: 2.7
+    - name: Install blunder and install deps.
+      run: |
+        gem install bundler
+        bundle install --jobs 4 --retry 3
+    - name: Run danger
+      run: |
+        bundle exec danger
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   SPM:
 
