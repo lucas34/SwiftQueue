@@ -72,6 +72,16 @@ public final class JobBuilder {
     /// Limit of period to reproduce
     /// interval between each run. Does not affect the first iteration. Please add delay if so
     /// executor will make the job being scheduling to run in background with BackgroundTask API
+    public func periodic(limit: Limit = .unlimited, interval: TimeInterval = 0) -> Self {
+        assert(limit.validate)
+        assert(interval >= 0)
+        info.maxRun = limit
+        info.interval = interval
+        info.executor = .foreground
+        return self
+    }
+
+    @available(iOS 13.0, tvOS 13.0, macOS 10.15, *)
     public func periodic(limit: Limit = .unlimited, interval: TimeInterval = 0, executor: Executor = .foreground) -> Self {
         assert(limit.validate)
         assert(interval >= 0)
@@ -80,6 +90,7 @@ public final class JobBuilder {
         info.executor = executor
         return self
     }
+
 
     /// Connectivity constraint.
     public func internet(atLeast: NetworkType) -> Self {

@@ -108,22 +108,12 @@ class SwiftQueueBuilderTests: XCTestCase {
         for serializer in serializers {
             let type = UUID().uuidString
             let interval: Double = 12341
+            let executor = Executor.foreground
 
             let jobInfo = try toJobInfo(serializer, type: type, JobBuilder(type: type).periodic(limit: .unlimited, interval: interval))
             XCTAssertEqual(jobInfo?.maxRun, Limit.unlimited)
             XCTAssertEqual(jobInfo?.interval, interval)
-        }
-    }
-
-    public func testBuilderPeriodicLimited() throws {
-        for serializer in serializers {
-            let type = UUID().uuidString
-            let limited: Double = 123
-            let interval: Double = 12342
-
-            let jobInfo = try toJobInfo(serializer, type: type, JobBuilder(type: type).periodic(limit: .limited(limited), interval: interval))
-            XCTAssertEqual(jobInfo?.maxRun, Limit.limited(limited))
-            XCTAssertEqual(jobInfo?.interval, interval)
+            XCTAssertEqual(jobInfo?.executor, executor)
         }
     }
 
@@ -225,21 +215,6 @@ class SwiftQueueBuilderTests: XCTestCase {
             let jobInfo = try toJobInfo(serializer, type: type, JobBuilder(type: type).requireCharging(value: true))
             XCTAssertEqual(jobInfo?.requireCharging, true)
         }
-    }
-
-    private func toJobInfo(_ serializer: JobInfoSerializer, type: String, _ builder: JobBuilder) throws -> JobInfo? {
-        let creator = TestCreator([type: TestJob()])
-
-        let persister = PersisterTracker(key: UUID().uuidString)
-
-        let manager = SwiftQueueManagerBuilder(creator: creator)
-                .set(persister: persister)
-                .set(serializer: serializer)
-                .build()
-
-        builder.persist(required: true).schedule(manager: manager)
-
-        return try serializer.deserialize(json: persister.putData[0])
     }
 
     private func assertUnicode(_ serializer: JobInfoSerializer, expected: String, file: StaticString = #file, line: UInt = #line) throws {
