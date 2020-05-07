@@ -1,5 +1,17 @@
 # Change Log
 
+## [4.2.0](https://github.com/lucas34/SwiftQueue/tree/4.2.0)
+
+#### New features
+Make backgroundTask available for MacOS 10.15 (#299)
+
+#### Chore
+Update to Swift 5.1 (#280)
+
+#### Internal changes
+Refactor constraints (#282)
+Refactor encoding (#283)
+
 ## [4.1.0](https://github.com/lucas34/SwiftQueue/tree/4.1.0)
 
 #### Chore
