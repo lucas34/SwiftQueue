@@ -33,7 +33,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
         JobBuilder(type: type)
-                .internet(atLeast: .wifi)
+                .internet(atLeast: .any)
                 .priority(priority: .veryHigh)
                 .service(quality: .background)
 
@@ -197,34 +197,6 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertNotEqual(Limit.unlimited, Limit.limited(-1))
     }
 
-    public func testGetAllAllowBackgroundOperation() {
-        let (type, job) = (UUID().uuidString, TestJob())
-
-        let id = UUID().uuidString
-        let id2 = UUID().uuidString
-
-        let group = UUID().uuidString
-        let group2 = UUID().uuidString
-
-        let creator = TestCreator([type: job])
-
-        let persister = PersisterTracker(key: UUID().uuidString)
-
-        let manager = SwiftQueueManagerBuilder(creator: creator).set(isSuspended: true).set(persister: persister).build()
-
-        JobBuilder(type: type).periodic(executor: .foreground).parallel(queueName: group).schedule(manager: manager)
-        JobBuilder(type: type).periodic(executor: .foreground).parallel(queueName: group2).schedule(manager: manager)
-
-        JobBuilder(type: type).singleInstance(forId: id).periodic(executor: .background).parallel(queueName: group).schedule(manager: manager)
-        JobBuilder(type: type).singleInstance(forId: id2).periodic(executor: .any).parallel(queueName: group2).schedule(manager: manager)
-
-        let result = manager.getAllAllowBackgroundOperation()
-
-        XCTAssertEqual(2, result.count)
-        XCTAssertTrue([id, id2].contains(result[0].info.uuid))
-        XCTAssertTrue([id, id2].contains(result[1].info.uuid))
-    }
-
     public func testGetOperation() {
         let (type, job) = (UUID().uuidString, TestJob())
         let id = UUID().uuidString
@@ -242,22 +214,6 @@ class SwiftQueueManagerTests: XCTestCase {
 
         XCTAssertNotNil(operation)
         XCTAssertEqual(id, operation?.info.uuid)
-    }
-
-    public func testBackgroundOperationShouldNotRun() {
-        let (type, job) = (UUID().uuidString, TestJob())
-
-        let creator = TestCreator([type: job])
-
-        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
-        JobBuilder(type: type)
-                .periodic(executor: .background)
-                .internet(atLeast: .wifi)
-                .priority(priority: .veryHigh)
-                .service(quality: .background)
-                .schedule(manager: manager)
-
-        job.assertNoRun()
     }
 
     public func testGetAll() {
