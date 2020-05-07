@@ -51,8 +51,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2.1.0
-    - name: Bootstrap
-      run: carthage bootstrap --cache-builds
+    - uses: actions/cache@v1
+      id: carthage-cache
+      with:
+        path: Carthage
+        key: carthage-${{ hashFiles('**/Cartfile.resolved') }}
+    - name: Checkout
+      if: steps.carthage-cache.outputs.cache-hit != 'true'
+      run: |
+        carthage bootstrap --no-use-binaries --cache-builds
     - name: Build
       run: carthage build --no-skip-current --cache-builds;
 
@@ -62,8 +69,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2.1.0
+    - uses: actions/cache@v1
+      id: carthage-cache
+      with:
+        path: Carthage
+        key: carthage-${{ hashFiles('**/Cartfile.resolved') }}
     - name: Checkout
-      run: carthage bootstrap --platform mac --cache-builds
+      if: steps.carthage-cache.outputs.cache-hit != 'true'
+      run: |
+        carthage bootstrap --no-use-binaries --cache-builds
     - name: Build
       run: xcodebuild -project "SwiftQueue.xcodeproj" -scheme "SwiftQueue macOS" -destination "arch=x86_64" -configuration Debug ONLY_ACTIVE_ARCH=NO ENABLE_TESTABILITY=YES test -enableCodeCoverage YES | xcpretty
     - uses: codecov/codecov-action@v1
