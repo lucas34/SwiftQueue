@@ -3,7 +3,7 @@
 ## [4.2.0](https://github.com/lucas34/SwiftQueue/tree/4.2.0)
 
 #### New features
-Make backgroundTask available for MacOS 10.15 #(299)
+Make backgroundTask available for MacOS 10.15 (#299)
 
 #### Chore
 Update to Swift 5.1 (#280)
