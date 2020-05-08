@@ -4,7 +4,7 @@
 [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome)
 [![platform](https://img.shields.io/badge/platforms-iOS%20%7C%20macOS%20%7C%20tvOS%20%7C%20watchOS%20-333333.svg)](https://cocoapods.org/pods/SwiftQueue)
 [![swift](https://img.shields.io/badge/Swift-4.2%20%20%7C%205.0-orange.svg)](https://swift.org)
-[![travis](https://travis-ci.org/lucas34/SwiftQueue.svg?branch=master)](https://travis-ci.org/lucas34/SwiftQueue)
+![Swift](https://github.com/lucas34/SwiftQueue/workflows/Swift/badge.svg)
 [![codecov](https://codecov.io/gh/lucas34/SwiftQueue/branch/master/graph/badge.svg)](https://codecov.io/gh/lucas34/SwiftQueue)
 [![pod](https://img.shields.io/cocoapods/v/SwiftQueue.svg?style=flat)](https://cocoapods.org/pods/SwiftQueue)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
