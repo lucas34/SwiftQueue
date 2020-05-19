@@ -25,12 +25,17 @@ import Foundation
 /// Builder to create your job with behaviour
 public final class JobBuilder {
 
-    private var info: JobInfo
+    internal var info: JobInfo
 
     /// Type of your job that you will receive in JobCreator.create(type)
     public init(type: String) {
         assertNotEmptyString(type)
         self.info = JobInfo(type: type)
+    }
+
+    /// Create a copy of another job params
+    public init(jobBuilder: JobBuilder) {
+        self.info = jobBuilder.info
     }
 
     /// Allow only 1 job at the time with this ID scheduled or running if includeExecutingJob is true
@@ -98,14 +103,14 @@ public final class JobBuilder {
         return self
     }
 
-    /// Job should be persisted. 
+    /// Job should be persisted.
     public func persist(required: Bool) -> Self {
         info.isPersisted = required
         return self
     }
 
     /// Limit number of retry. Overall for the lifecycle of the SwiftQueueManager.
-    /// For a periodic job, the retry count will not be reset at each period. 
+    /// For a periodic job, the retry count will not be reset at each period.
     public func retry(limit: Limit) -> Self {
         assert(limit.validate)
         info.retries = limit
@@ -147,6 +152,11 @@ public final class JobBuilder {
     public func timeout(value: TimeInterval) -> Self {
         info.timeout = value
         return self
+    }
+
+    /// Create copy of current job builder
+    public func copy() -> JobBuilder {
+        return JobBuilder(jobBuilder: self)
     }
 
     /// Get the JobInfo built
