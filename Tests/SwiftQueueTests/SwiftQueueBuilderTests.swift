@@ -217,6 +217,17 @@ class SwiftQueueBuilderTests: XCTestCase {
         }
     }
 
+    func testCopyBuilder() {
+        var origin = JobBuilder(type: UUID().uuidString)
+        let builder = origin.copy()
+
+        origin = origin.addTag(tag: UUID().uuidString)
+        origin = origin.internet(atLeast: .wifi)
+
+        XCTAssertEqual(builder.info.requireNetwork, NetworkType.any)
+        XCTAssertTrue(builder.info.tags.isEmpty)
+    }
+
     private func assertUnicode(_ serializer: JobInfoSerializer, expected: String, file: StaticString = #file, line: UInt = #line) throws {
         let type = UUID().uuidString
 
