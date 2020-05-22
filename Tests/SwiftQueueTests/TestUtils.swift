@@ -285,4 +285,3 @@ func toJobInfo(_ serializer: JobInfoSerializer, type: String, _ builder: JobBuil
 
     return try serializer.deserialize(json: persister.putData[0])
 }
-
