@@ -96,7 +96,6 @@ public final class JobBuilder {
         return self
     }
 
-
     /// Connectivity constraint.
     public func internet(atLeast: NetworkType) -> Self {
         info.requireNetwork = atLeast
