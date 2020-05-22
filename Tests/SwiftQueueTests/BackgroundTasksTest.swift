@@ -49,7 +49,6 @@ class BackgroundTasksTest {
         job.assertNoRun()
     }
 
-
     @available(iOS 13.0, tvOS 13.0, macOS 10.15, *)
     public func testBuilderPeriodicLimited() throws {
         for serializer in serializers {
@@ -108,7 +107,5 @@ class BackgroundTasksTest {
         XCTAssertTrue([id, id2].contains(result[0].info.uuid))
         XCTAssertTrue([id, id2].contains(result[1].info.uuid))
     }
-
-
 
 }
