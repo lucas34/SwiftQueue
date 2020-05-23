@@ -70,7 +70,7 @@ internal final class SqOperation: Operation {
         self.logger = logger
         self.listener = listener
         self.dispatchQueue = dispatchQueue
-        self.constraints = info.buildConstraints()
+        self.constraints = info.buildConstraints(logger: logger, dispatchQueue: dispatchQueue)
 
         super.init()
     }

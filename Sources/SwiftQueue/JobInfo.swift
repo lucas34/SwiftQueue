@@ -90,7 +90,7 @@ public struct JobInfo {
 
     public var timeout: TimeInterval?
 
-    func buildConstraints() -> [JobConstraint] {
+    func buildConstraints(logger: SwiftQueueLogger, dispatchQueue: DispatchQueue) -> [JobConstraint] {
         var constraints = [JobConstraint]()
 
         constraints.append(UniqueUUIDConstraint())
@@ -109,7 +109,11 @@ public struct JobInfo {
         }
 
         if requireNetwork != NetworkType.any {
-            constraints.append(NetworkConstraint())
+            do {
+                try constraints.append(NetworkConstraint(dispatchQueue: dispatchQueue))
+            } catch {
+                logger.log(.error, jobId: uuid, message: error.localizedDescription)
+            }
         }
 
         if let timeout = timeout {

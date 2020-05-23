@@ -38,43 +38,41 @@ public enum NetworkType: Int, Codable {
 #if os(iOS) || os(macOS) || os(tvOS)
 internal final class NetworkConstraint: JobConstraint {
 
-    var reachability: Reachability?
+    let reachability: Reachability
+
+    init(dispatchQueue: DispatchQueue) throws {
+        reachability = try Reachability(targetQueue: dispatchQueue, notificationQueue: dispatchQueue)
+    }
 
     func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {
-        if operation.info.requireNetwork.rawValue > NetworkType.any.rawValue {
-            do {
-                try self.reachability = Reachability(targetQueue: operation.dispatchQueue, notificationQueue: operation.dispatchQueue)
-            } catch {
-                operation.logger.log(.error, jobId: operation.info.uuid, message: error.localizedDescription)
-            }
-        }
+        /// Nothing
     }
 
     func willRun(operation: SqOperation) throws {
-        guard let reachability = reachability else { return }
-        guard hasCorrectNetwork(reachability: reachability, required: operation.info.requireNetwork) else {
-            try reachability.startNotifier()
-            return
-        }
+        /// Nothing
     }
 
     func run(operation: SqOperation) -> Bool {
-        guard let reachability = reachability else {
-            return true
+        guard hasCorrectNetwork(reachability: reachability, required: operation.info.requireNetwork) else {
+            reachability.whenReachable = { reachability in
+                reachability.stopNotifier()
+                reachability.whenReachable = nil
+                operation.run()
+            }
+
+            operation.logger.log(.verbose, jobId: operation.info.uuid, message: "Unsatisfied network requirement")
+
+            do {
+                try reachability.startNotifier()
+            } catch {
+                operation.logger.log(.verbose, jobId: operation.info.uuid, message: "Unable to start network listener. Job will run.")
+                operation.logger.log(.error, jobId: operation.info.uuid, message: error.localizedDescription)
+            }
+
+            return false
         }
 
-        if hasCorrectNetwork(reachability: reachability, required: operation.info.requireNetwork) {
-            return true
-        }
-
-        reachability.whenReachable = { reachability in
-            reachability.stopNotifier()
-            reachability.whenReachable = nil
-            operation.run()
-        }
-
-        operation.logger.log(.verbose, jobId: operation.info.uuid, message: "Unsatisfied network requirement")
-        return false
+        return true
     }
 
     private func hasCorrectNetwork(reachability: Reachability, required: NetworkType) -> Bool {
