@@ -212,7 +212,7 @@ class SwiftQueueBuilderTests: XCTestCase {
 
             let type = UUID().uuidString
 
-            let jobInfo = try toJobInfo(serializer, type: type, JobBuilder(type: type).requireCharging(value: true))
+            let jobInfo = try toJobInfo(serializer, type: type, JobBuilder(type: type).requireCharging())
             XCTAssertEqual(jobInfo?.requireCharging, true)
         }
     }

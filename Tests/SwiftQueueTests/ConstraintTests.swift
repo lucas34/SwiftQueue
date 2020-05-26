@@ -293,7 +293,7 @@ class ConstraintTests: XCTestCase {
 
         let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
         JobBuilder(type: type)
-                .requireCharging(value: true)
+                .requireCharging()
                 .schedule(manager: manager)
 
         job.awaitForRemoval()
