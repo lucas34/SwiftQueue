@@ -91,6 +91,6 @@ internal final class NetworkConstraint: JobConstraint {
 }
 #else
 
-internal final class NetworkConstraint: DefaultNoConstraint {}
+internal final class NetworkConstraint: SimpleConstraint {}
 
 #endif

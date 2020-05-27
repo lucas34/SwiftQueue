@@ -56,7 +56,7 @@ public enum RetryConstraint {
     case exponentialWithLimit(initial: TimeInterval, maxDelay: TimeInterval)
 }
 
-internal class DefaultNoConstraint: JobConstraint {
+internal class SimpleConstraint: JobConstraint {
 
     func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {}
 

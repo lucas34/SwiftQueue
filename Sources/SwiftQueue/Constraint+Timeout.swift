@@ -22,7 +22,7 @@
 
 import Foundation
 
-internal final class TimeoutConstraint: JobConstraint {
+internal final class TimeoutConstraint: SimpleConstraint {
 
     private let timeout: TimeInterval
 
@@ -30,15 +30,7 @@ internal final class TimeoutConstraint: JobConstraint {
         self.timeout = timeout
     }
 
-    func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {
-        // Nothing to do
-    }
-
-    func willRun(operation: SqOperation) throws {
-        // Nothing to do
-    }
-
-    func run(operation: SqOperation) -> Bool {
+    override func run(operation: SqOperation) -> Bool {
         operation.dispatchQueue.runAfter(timeout) {
             if operation.isExecuting && !operation.isFinished {
                 operation.cancel(with: SwiftQueueError.timeout)
