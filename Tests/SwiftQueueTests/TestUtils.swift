@@ -281,7 +281,7 @@ func toJobInfo(_ serializer: JobInfoSerializer, type: String, _ builder: JobBuil
             .set(serializer: serializer)
             .build()
 
-    builder.persist(required: true).schedule(manager: manager)
+    builder.persist().schedule(manager: manager)
 
     return try serializer.deserialize(json: persister.putData[0])
 }

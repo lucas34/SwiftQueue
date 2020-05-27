@@ -103,8 +103,8 @@ public final class JobBuilder {
     }
 
     /// Job should be persisted.
-    public func persist(required: Bool) -> Self {
-        info.isPersisted = required
+    public func persist() -> Self {
+        info.isPersisted = true
         return self
     }
 

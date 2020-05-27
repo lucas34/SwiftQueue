@@ -90,14 +90,14 @@ class PersisterTests: XCTestCase {
                 .singleInstance(forId: job1Id)
                 .parallel(queueName: group)
                 .delay(time: 3600)
-                .persist(required: true)
+                .persist()
                 .schedule(manager: manager)
 
         JobBuilder(type: type2)
                 .singleInstance(forId: job2Id)
                 .parallel(queueName: group)
                 .delay(time: 3600)
-                .persist(required: true)
+                .persist()
                 .schedule(manager: manager)
 
         manager.cancelAllOperations()
@@ -125,7 +125,7 @@ class PersisterTests: XCTestCase {
         JobBuilder(type: type)
                 .singleInstance(forId: taskID)
                 .parallel(queueName: queueId)
-                .persist(required: true)
+                .persist()
                 .schedule(manager: manager)
 
         job.awaitForRemoval()
@@ -151,7 +151,7 @@ class PersisterTests: XCTestCase {
         JobBuilder(type: type)
                 .singleInstance(forId: taskID)
                 .parallel(queueName: queueId)
-                .persist(required: true)
+                .persist()
                 .schedule(manager: manager)
 
         job.awaitForRemoval()
@@ -204,7 +204,7 @@ class PersisterTests: XCTestCase {
                 .parallel(queueName: group)
                 .delay(time: 3600)
                 .addTag(tag: tag)
-                .persist(required: true)
+                .persist()
                 .schedule(manager: manager)
 
         manager.cancelOperations(tag: tag)
@@ -248,7 +248,7 @@ class PersisterTests: XCTestCase {
 //        JobBuilder(type: lastTaskType)
 //                .singleInstance(forId: lastTaskType)
 //                .parallel(queueName: queueId)
-//                .persist(required: true)
+//                .persist()
 //                .schedule(manager: manager)
 //
 //        lastJob.awaitForRemoval()
@@ -277,7 +277,7 @@ class PersisterTests: XCTestCase {
 
         JobBuilder(type: type1)
                 .parallel(queueName: UUID().uuidString)
-                .persist(required: true)
+                .persist()
                 .schedule(manager: manager)
 
         // at this point the job should have been serialised
