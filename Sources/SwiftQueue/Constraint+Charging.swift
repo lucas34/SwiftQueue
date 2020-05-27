@@ -26,7 +26,7 @@ import UIKit
 #endif
 
 #if os(iOS)
-internal final class BatteryChargingConstraint: JobConstraint {
+internal final class BatteryChargingConstraint: SimpleConstraint {
 
     // To avoid cyclic ref
     private weak var actual: SqOperation?
@@ -39,7 +39,7 @@ internal final class BatteryChargingConstraint: JobConstraint {
         }
     }
 
-    func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {
+    override func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {
         guard operation.info.requireCharging else { return }
 
         /// Start listening
@@ -51,9 +51,7 @@ internal final class BatteryChargingConstraint: JobConstraint {
         )
     }
 
-    func willRun(operation: SqOperation) throws {}
-
-    func run(operation: SqOperation) -> Bool {
+    override func run(operation: SqOperation) -> Bool {
         guard UIDevice.current.batteryState != .charging else {
             return true
         }
@@ -73,6 +71,6 @@ internal final class BatteryChargingConstraint: JobConstraint {
 
 #else
 
-internal final class BatteryChargingConstraint: DefaultNoConstraint {}
+internal final class BatteryChargingConstraint: SimpleConstraint {}
 
 #endif

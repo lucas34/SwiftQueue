@@ -22,7 +22,7 @@
 
 import Foundation
 
-internal final class DelayConstraint: JobConstraint {
+internal final class DelayConstraint: SimpleConstraint {
 
     private let delay: TimeInterval
 
@@ -30,15 +30,7 @@ internal final class DelayConstraint: JobConstraint {
         self.delay = delay
     }
 
-    func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {
-        // Nothing to do
-    }
-
-    func willRun(operation: SqOperation) throws {
-        // Nothing to do
-    }
-
-    func run(operation: SqOperation) -> Bool {
+    override func run(operation: SqOperation) -> Bool {
         let epoch = Date().timeIntervalSince(operation.info.createTime)
         guard epoch < delay else {
             // Epoch already greater than delay

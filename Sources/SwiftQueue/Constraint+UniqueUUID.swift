@@ -22,9 +22,9 @@
 
 import Foundation
 
-internal final class UniqueUUIDConstraint: JobConstraint {
+internal final class UniqueUUIDConstraint: SimpleConstraint {
 
-    func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {
+    override func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {
         for ope in queue.operations where ope.name == operation.info.uuid {
             if shouldAbort(ope: ope, operation: operation) {
                 if operation.info.override {
@@ -41,12 +41,4 @@ internal final class UniqueUUIDConstraint: JobConstraint {
         return (ope.isExecuting && operation.info.includeExecutingJob) || !ope.isExecuting
     }
 
-    func willRun(operation: SqOperation) throws {
-        // Nothing to check
-    }
-
-    func run(operation: SqOperation) -> Bool {
-        // Nothing to check
-        return true
-    }
 }
