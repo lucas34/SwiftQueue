@@ -270,18 +270,3 @@ extension JobBuilder {
     }
 
 }
-
-func toJobInfo(_ serializer: JobInfoSerializer, type: String, _ builder: JobBuilder) throws -> JobInfo? {
-    let creator = TestCreator([type: TestJob()])
-
-    let persister = PersisterTracker(key: UUID().uuidString)
-
-    let manager = SwiftQueueManagerBuilder(creator: creator)
-            .set(persister: persister)
-            .set(serializer: serializer)
-            .build()
-
-    builder.persist().schedule(manager: manager)
-
-    return try serializer.deserialize(json: persister.putData[0])
-}

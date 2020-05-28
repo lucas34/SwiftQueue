@@ -263,6 +263,17 @@ class PersisterTests: XCTestCase {
 //        }
 //    }
 
+//    public func testBuilderWith() throws {
+//        for serializer in serializers {
+//            try assertUnicode(serializer, expected: UUID().uuidString)
+//            try assertUnicode(serializer, expected: "Hello world")
+//            try assertUnicode(serializer, expected: "Powerلُلُصّبُلُلصّبُررً ॣ ॣh ॣ ॣ冗")
+//            try assertUnicode(serializer, expected: "🏳0🌈")
+//            try assertUnicode(serializer, expected: "🤪🤯🧐")
+//            try assertUnicode(serializer, expected: "జ్ఞ‌ా")
+//        }
+//    }
+
     func testCustomSerializer() {
         let (type1, job1) = (UUID().uuidString, TestJob())
 
