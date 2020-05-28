@@ -27,11 +27,6 @@ import Dispatch
 @available(iOS 13.0, tvOS 13.0, macOS 10.15, *)
 class BackgroundTasksTest {
 
-    let serializers: [JobInfoSerializer] = [
-        V1Serializer(),
-        DecodableSerializer()
-    ]
-
     @available(iOS 13.0, tvOS 13.0, macOS 10.15, *)
     public func testBackgroundOperationShouldNotRun() {
         let (type, job) = (UUID().uuidString, TestJob())
@@ -51,32 +46,28 @@ class BackgroundTasksTest {
 
     @available(iOS 13.0, tvOS 13.0, macOS 10.15, *)
     public func testBuilderPeriodicLimited() throws {
-        for serializer in serializers {
-            let type = UUID().uuidString
-            let limited: Double = 123
-            let interval: Double = 12342
-            let executor = Executor.any
+        let type = UUID().uuidString
+        let limited: Double = 123
+        let interval: Double = 12342
+        let executor = Executor.any
 
-            let jobInfo = try toJobInfo(serializer, type: type, JobBuilder(type: type).periodic(limit: .limited(limited), interval: interval, executor: .any))
-            XCTAssertEqual(jobInfo?.maxRun, Limit.limited(limited))
-            XCTAssertEqual(jobInfo?.interval, interval)
-            XCTAssertEqual(jobInfo?.executor, executor)
-        }
+        let jobInfo = JobBuilder(type: type).periodic(limit: .limited(limited), interval: interval, executor: .any).info
+        XCTAssertEqual(jobInfo.maxRun, Limit.limited(limited))
+        XCTAssertEqual(jobInfo.interval, interval)
+        XCTAssertEqual(jobInfo.executor, executor)
     }
 
     @available(iOS 13.0, tvOS 13.0, macOS 10.15, *)
     public func testBuilderPeriodicBackground() throws {
-        for serializer in serializers {
-            let type = UUID().uuidString
-            let limited: Double = 123
-            let interval: Double = 12342
-            let executor = Executor.background
+        let type = UUID().uuidString
+        let limited: Double = 123
+        let interval: Double = 12342
+        let executor = Executor.background
 
-            let jobInfo = try toJobInfo(serializer, type: type, JobBuilder(type: type).periodic(limit: .limited(limited), interval: interval, executor: .background))
-            XCTAssertEqual(jobInfo?.maxRun, Limit.limited(limited))
-            XCTAssertEqual(jobInfo?.interval, interval)
-            XCTAssertEqual(jobInfo?.executor, executor)
-        }
+        let jobInfo = JobBuilder(type: type).periodic(limit: .limited(limited), interval: interval, executor: .background).info
+        XCTAssertEqual(jobInfo.maxRun, Limit.limited(limited))
+        XCTAssertEqual(jobInfo.interval, interval)
+        XCTAssertEqual(jobInfo.executor, executor)
     }
 
     @available(iOS 13.0, tvOS 13.0, macOS 10.15, *)
