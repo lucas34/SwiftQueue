@@ -30,7 +30,7 @@ internal final class SqOperation: Operation {
 
     let constraints: [JobConstraint]
 
-    var lastError: Swift.Error?
+    var lastError: Error?
 
     let logger: SwiftQueueLogger
 
@@ -86,7 +86,7 @@ internal final class SqOperation: Operation {
         self.cancel(with: SwiftQueueError.canceled)
     }
 
-    func cancel(with: Swift.Error) {
+    func cancel(with: Error) {
         logger.log(.verbose, jobId: name, message: "Job has been canceled")
         lastError = with
         onTerminate()
@@ -101,7 +101,7 @@ internal final class SqOperation: Operation {
     }
 
     // cancel before schedule and serialize
-    internal func abort(error: Swift.Error) {
+    internal func abort(error: Error) {
         logger.log(.verbose, jobId: name, message: "Job has not been scheduled due to \(error.localizedDescription)")
         lastError = error
         // Need to be called manually since the task is actually not in the queue. So cannot call cancel()
@@ -162,7 +162,7 @@ extension SqOperation: JobResult {
         }
     }
 
-    private func completionFail(error: Swift.Error) {
+    private func completionFail(error: Error) {
         logger.log(.warning, jobId: name, message: "Job completed with error \(error.localizedDescription)")
         lastError = error
 

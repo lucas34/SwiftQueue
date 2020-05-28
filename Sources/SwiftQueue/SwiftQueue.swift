@@ -83,7 +83,7 @@ public enum JobCompletion {
     case success
 
     /// Job completed with error
-    case fail(Swift.Error)
+    case fail(Error)
 
 }
 
@@ -99,7 +99,7 @@ public protocol Job {
     /// Not applicable for 'ConstraintError'
     /// Not application if the retry(value) is less than 2 which is the case by default
     /// Will be called in background thread
-    func onRetry(error: Swift.Error) -> RetryConstraint
+    func onRetry(error: Error) -> RetryConstraint
 
     /// Job is removed from the queue and will never run again
     /// May be called in background or main thread
@@ -181,7 +181,7 @@ public enum Limit {
 }
 
 /// Generic class for any constraint violation
-public enum SwiftQueueError: Swift.Error {
+public enum SwiftQueueError: Error {
 
     /// Job has been canceled
     case canceled

@@ -144,7 +144,7 @@ class TestJob: Job {
 
 class TestJobFail: TestJob {
 
-    required init(retry: RetryConstraint = .retry(delay: 0), error: Swift.Error = JobError()) {
+    required init(retry: RetryConstraint = .retry(delay: 0), error: Error = JobError()) {
         super.init(retry: retry) { $0.done(.fail(error))}
     }
 
