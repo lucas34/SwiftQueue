@@ -24,7 +24,7 @@ import Foundation
 import XCTest
 @testable import SwiftQueue
 
-class ConstraintDeadlineTests: XCTestCase {
+class ConstraintTestDeadline: XCTestCase {
 
     func testDeadlineWhenSchedule() {
         let (type, job) = (UUID().uuidString, TestJob())
@@ -110,20 +110,6 @@ class ConstraintDeadlineTests: XCTestCase {
         job.assertRemovedBeforeRun(reason: .deadline)
     }
 
-    func testDelay() {
-        let (type, job) = (UUID().uuidString, TestJob())
 
-        let creator = TestCreator([type: job])
-
-        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
-        JobBuilder(type: type)
-                .delay(time: 0.1)
-                .schedule(manager: manager)
-
-        manager.waitUntilAllOperationsAreFinished()
-
-        job.awaitForRemoval()
-        job.assertSingleCompletion()
-    }
 
 }

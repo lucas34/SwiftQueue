@@ -223,4 +223,29 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertEqual(0, manager.getAll().count)
     }
 
+    func testCancelRunningOperation() {
+        var manager: SwiftQueueManager?
+
+        let (type, job) = (UUID().uuidString, TestJob {
+            manager?.cancelAllOperations()
+            $0.done(.fail(JobError()))
+        })
+
+        let creator = TestCreator([type: job])
+
+        manager = SwiftQueueManagerBuilder(creator: creator)
+                .set(persister: NoSerializer.shared)
+                .set(dispatchQueue: DispatchQueue.main)
+                .build()
+
+        manager?.enqueue(info: JobBuilder(type: type).build())
+
+        job.awaitForRemoval()
+        job.assertRunCount(expected: 1)
+        job.assertCompletedCount(expected: 0)
+        job.assertRetriedCount(expected: 0)
+        job.assertCanceledCount(expected: 1)
+        job.assertError(queueError: .canceled)
+    }
+
 }
