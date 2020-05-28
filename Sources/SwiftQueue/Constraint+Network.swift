@@ -45,7 +45,7 @@ internal final class NetworkConstraint: JobConstraint {
             do {
                 try self.reachability = Reachability(targetQueue: operation.dispatchQueue, notificationQueue: operation.dispatchQueue)
             } catch {
-                operation.logger.log(.error, jobId: operation.info.uuid, message: error.localizedDescription)
+                operation.logger.log(.error, jobId: operation.name, message: error.localizedDescription)
             }
         }
     }
@@ -73,7 +73,7 @@ internal final class NetworkConstraint: JobConstraint {
             operation.run()
         }
 
-        operation.logger.log(.verbose, jobId: operation.info.uuid, message: "Unsatisfied network requirement")
+        operation.logger.log(.verbose, jobId: operation.name, message: "Unsatisfied network requirement")
         return false
     }
 

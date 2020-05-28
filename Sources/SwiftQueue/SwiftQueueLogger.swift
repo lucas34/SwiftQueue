@@ -53,7 +53,7 @@ public extension LogLevel {
 public protocol SwiftQueueLogger {
 
     /// Function called by the library to log an event
-    func log(_ level: LogLevel, jobId: @autoclosure () -> String, message: @autoclosure () -> String)
+    func log(_ level: LogLevel, jobId: @autoclosure () -> String?, message: @autoclosure () -> String)
 
 }
 
@@ -68,9 +68,9 @@ open class ConsoleLogger: SwiftQueueLogger {
     }
 
     /// Check for log level and create the output message
-    public final func log(_ level: LogLevel, jobId: @autoclosure () -> String, message: @autoclosure () -> String) {
+    public final func log(_ level: LogLevel, jobId: @autoclosure () -> String?, message: @autoclosure () -> String) {
         if min.rawValue <= level.rawValue {
-            printComputed(output: "[SwiftQueue] level=\(level.description) jobId=\(jobId()) message=\(message())")
+            printComputed(output: "[SwiftQueue] level=\(level.description) jobId=\(jobId() ?? "nil") message=\(message())")
         }
     }
 
@@ -90,7 +90,7 @@ public class NoLogger: SwiftQueueLogger {
     private init() {}
 
     /// Default implementation that will not log anything
-    public func log(_ level: LogLevel, jobId: @autoclosure () -> String, message: @autoclosure () -> String) {
+    public func log(_ level: LogLevel, jobId: @autoclosure () -> String?, message: @autoclosure () -> String) {
         // Nothing to do
     }
 }

@@ -121,7 +121,7 @@ internal final class SqOperationQueue: OperationQueue {
             persister.put(queueName: queue.name, taskId: job.info.uuid, data: data)
         } catch let error {
             // In this case we still try to run the job
-            logger.log(.error, jobId: job.info.uuid, message: "Unable to serialize job error=\(error.localizedDescription)")
+            logger.log(.error, jobId: job.name, message: "Unable to serialize job error=\(error.localizedDescription)")
         }
     }
 

@@ -77,7 +77,7 @@ internal final class SqOperation: Operation {
 
     override func start() {
         super.start()
-        logger.log(.verbose, jobId: info.uuid, message: "Job has been started by the system")
+        logger.log(.verbose, jobId: name, message: "Job has been started by the system")
         isExecuting = true
         run()
     }
@@ -87,14 +87,14 @@ internal final class SqOperation: Operation {
     }
 
     func cancel(with: Swift.Error) {
-        logger.log(.verbose, jobId: info.uuid, message: "Job has been canceled")
+        logger.log(.verbose, jobId: name, message: "Job has been canceled")
         lastError = with
         onTerminate()
         super.cancel()
     }
 
     func onTerminate() {
-        logger.log(.verbose, jobId: info.uuid, message: "Job will not run anymore")
+        logger.log(.verbose, jobId: name, message: "Job will not run anymore")
         if isExecuting {
             isFinished = true
         }
@@ -102,7 +102,7 @@ internal final class SqOperation: Operation {
 
     // cancel before schedule and serialize
     internal func abort(error: Swift.Error) {
-        logger.log(.verbose, jobId: info.uuid, message: "Job has not been scheduled due to \(error.localizedDescription)")
+        logger.log(.verbose, jobId: name, message: "Job has not been scheduled due to \(error.localizedDescription)")
         lastError = error
         // Need to be called manually since the task is actually not in the queue. So cannot call cancel()
         handler.onRemove(result: .fail(error))
@@ -120,7 +120,7 @@ internal final class SqOperation: Operation {
         do {
             try self.willRunJob()
         } catch let error {
-            logger.log(.warning, jobId: info.uuid, message: "Job cannot run due to \(error.localizedDescription)")
+            logger.log(.warning, jobId: name, message: "Job cannot run due to \(error.localizedDescription)")
             // Will never run again
             cancel(with: error)
             return
@@ -129,18 +129,18 @@ internal final class SqOperation: Operation {
         guard self.checkIfJobCanRunNow() else {
             // Constraint fail.
             // Constraint will call run when it's ready
-            logger.log(.verbose, jobId: info.uuid, message: "Job cannot run now. Execution is postponed")
+            logger.log(.verbose, jobId: name, message: "Job cannot run now. Execution is postponed")
             return
         }
 
-        logger.log(.verbose, jobId: info.uuid, message: "Job is running")
+        logger.log(.verbose, jobId: name, message: "Job is running")
         listener?.onBeforeRun(job: info)
         handler.onRun(callback: self)
     }
 
     internal func remove() {
         let result = lastError.map(JobCompletion.fail) ?? JobCompletion.success
-        logger.log(.verbose, jobId: info.uuid, message: "Job is removed from the queue result=\(result)")
+        logger.log(.verbose, jobId: name, message: "Job is removed from the queue result=\(result)")
         handler.onRemove(result: result)
         listener?.onTerminated(job: info, result: result)
     }
@@ -163,7 +163,7 @@ extension SqOperation: JobResult {
     }
 
     private func completionFail(error: Swift.Error) {
-        logger.log(.warning, jobId: info.uuid, message: "Job completed with error \(error.localizedDescription)")
+        logger.log(.warning, jobId: name, message: "Job completed with error \(error.localizedDescription)")
         lastError = error
 
         switch info.retries {
@@ -207,7 +207,7 @@ extension SqOperation: JobResult {
     }
 
     private func completionSuccess() {
-        logger.log(.verbose, jobId: info.uuid, message: "Job completed successfully")
+        logger.log(.verbose, jobId: name, message: "Job completed successfully")
         lastError = nil
         info.currentRepetition = 0
 

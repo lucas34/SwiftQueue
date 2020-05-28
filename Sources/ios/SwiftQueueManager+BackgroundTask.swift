@@ -70,7 +70,7 @@ internal extension SqOperation {
         do {
             try BGTaskScheduler.shared.submit(request)
         } catch {
-            logger.log(.verbose, jobId: info.uuid, message: "Could not schedule BackgroundTask")
+            logger.log(.verbose, jobId: name, message: "Could not schedule BackgroundTask")
         }
     }
 }
