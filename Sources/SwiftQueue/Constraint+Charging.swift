@@ -56,7 +56,7 @@ internal final class BatteryChargingConstraint: SimpleConstraint {
             return true
         }
 
-        operation.logger.log(.verbose, jobId: operation.info.uuid, message: "Unsatisfied charging requirement")
+        operation.logger.log(.verbose, jobId: operation.name, message: "Unsatisfied charging requirement")
 
         /// Keep actual job
         actual = operation

@@ -47,7 +47,7 @@ internal final class DelayConstraint: SimpleConstraint {
             operation?.run()
         })
 
-        operation.logger.log(.verbose, jobId: operation.info.uuid, message: "Job delayed by \(time)s")
+        operation.logger.log(.verbose, jobId: operation.name, message: "Job delayed by \(time)s")
         return false
     }
 }
