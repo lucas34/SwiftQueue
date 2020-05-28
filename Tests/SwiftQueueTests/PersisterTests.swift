@@ -314,4 +314,13 @@ class PersisterTests: XCTestCase {
         persister.clearAll()
     }
 
+//    private func assertUnicode(_ serializer: JobInfoSerializer, expected: String, file: StaticString = #file, line: UInt = #line) throws {
+//        let type = UUID().uuidString
+//
+//        let params: [String: Any] = [UUID().uuidString: expected]
+//
+//        let jobInfo = JobBuilder(type: type).with(params: params).info
+//        XCTAssertTrue(NSDictionary(dictionary: params).isEqual(to: jobInfo.params), file: file, line: line)
+//    }
+
 }
