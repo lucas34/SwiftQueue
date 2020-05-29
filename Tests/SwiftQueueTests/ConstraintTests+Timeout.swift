@@ -26,7 +26,6 @@ import XCTest
 
 class ConstraintTestTimeout: XCTestCase {
 
-
     func testRunTimeoutConstraint() {
         let (type, job) = (UUID().uuidString, TestJob(onRunCallback: { _ in }) )
 
