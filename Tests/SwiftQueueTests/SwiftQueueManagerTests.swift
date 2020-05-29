@@ -33,7 +33,6 @@ class SwiftQueueManagerTests: XCTestCase {
 
         let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
         JobBuilder(type: type)
-                .internet(atLeast: .any)
                 .priority(priority: .veryHigh)
                 .service(quality: .background)
 

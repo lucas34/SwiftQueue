@@ -38,16 +38,19 @@ public enum NetworkType: Int, Codable {
 #if os(iOS) || os(macOS) || os(tvOS)
 internal final class NetworkConstraint: JobConstraint {
 
-    var reachability: Reachability?
+    /// Require a certain connectivity type
+    internal let networkType: NetworkType
+
+    private var reachability: Reachability?
+
+    required init(networkType: NetworkType) {
+        assert(networkType != .any)
+        self.networkType = networkType
+    }
 
     func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {
-        if operation.info.requireNetwork.rawValue > NetworkType.any.rawValue {
-            do {
-                try self.reachability = Reachability(targetQueue: operation.dispatchQueue, notificationQueue: operation.dispatchQueue)
-            } catch {
-                operation.logger.log(.error, jobId: operation.name, message: error.localizedDescription)
-            }
-        }
+        assert(operation.dispatchQueue != .main)
+        self.reachability = try Reachability(targetQueue: operation.dispatchQueue, notificationQueue: operation.dispatchQueue)
     }
 
     func willRun(operation: SqOperation) throws {
@@ -91,6 +94,10 @@ internal final class NetworkConstraint: JobConstraint {
 }
 #else
 
-internal final class NetworkConstraint: SimpleConstraint {}
+internal final class NetworkConstraint: SimpleConstraint {
+
+    init(networkType: NetworkType) {}
+
+}
 
 #endif

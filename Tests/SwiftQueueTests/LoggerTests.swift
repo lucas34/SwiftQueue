@@ -39,7 +39,6 @@ class LoggerTests: XCTestCase {
         let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).set(logger: debugLogger).build()
         JobBuilder(type: type)
                 .singleInstance(forId: id)
-                .internet(atLeast: .any)
                 .schedule(manager: manager)
 
         job.awaitForRemoval()

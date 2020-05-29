@@ -84,14 +84,6 @@ class SwiftQueueBuilderTests: XCTestCase {
         XCTAssertEqual(jobInfo.executor, executor)
     }
 
-    public func testBuilderInternetAny() throws {
-        let type = UUID().uuidString
-        let network: NetworkType = .any
-
-        let jobInfo = JobBuilder(type: type).internet(atLeast: network).info
-        XCTAssertEqual(jobInfo.requireNetwork, network)
-    }
-
     public func testBuilderInternetCellular() throws {
         let type = UUID().uuidString
         let network: NetworkType = .cellular

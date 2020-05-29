@@ -106,7 +106,7 @@ public struct JobInfo {
         }
 
         if requireNetwork != NetworkType.any {
-            constraints.append(NetworkConstraint())
+            constraints.append(NetworkConstraint(networkType: requireNetwork))
         }
 
         if let timeout = timeout {
