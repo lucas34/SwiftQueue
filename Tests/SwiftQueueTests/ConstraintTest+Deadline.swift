@@ -110,6 +110,4 @@ class ConstraintTestDeadline: XCTestCase {
         job.assertRemovedBeforeRun(reason: .deadline)
     }
 
-
-
 }

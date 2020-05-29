@@ -26,8 +26,6 @@ import XCTest
 
 class ConstraintTestRetry: XCTestCase {
 
-
-
     func testRetryUnlimitedShouldRetryManyTimes() {
         let runLimit = 100
         var runCount = 0
@@ -172,6 +170,5 @@ class ConstraintTestRetry: XCTestCase {
         job.assertCanceledCount(expected: 1)
         job.assertError()
     }
-
 
 }
