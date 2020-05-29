@@ -118,23 +118,6 @@ internal extension QualityOfService {
 
 }
 
-extension Executor: Codable {
-
-    private enum CodingKeys: String, CodingKey { case value }
-
-    public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        let value = try values.decode(Int.self, forKey: .value)
-        self = Executor.fromRawValue(value: value)
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(self.rawValue, forKey: .value)
-    }
-
-}
-
 internal extension String {
 
     static func fromUTF8(data: Data, key: [CodingKey] = []) throws -> String {

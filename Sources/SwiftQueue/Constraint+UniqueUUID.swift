@@ -24,10 +24,26 @@ import Foundation
 
 internal final class UniqueUUIDConstraint: SimpleConstraint {
 
+    /// Unique identifier for a job
+    internal let uuid: String
+
+    /// Override job when scheduling a job with same uuid
+    /// True = Override, False = Abort job with duplicate failure
+    internal let override: Bool
+
+    /// Including job that are executing when scheduling with same uuid
+    private let includeExecutingJob: Bool
+
+    required init(uuid: String, override: Bool, includeExecutingJob: Bool) {
+        self.uuid = uuid
+        self.override = override
+        self.includeExecutingJob = includeExecutingJob
+    }
+
     override func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {
-        for ope in queue.operations where ope.name == operation.info.uuid {
+        for ope in queue.operations where ope.name == uuid {
             if shouldAbort(ope: ope, operation: operation) {
-                if operation.info.override {
+                if override {
                     ope.cancel()
                     break
                 } else {
@@ -38,7 +54,7 @@ internal final class UniqueUUIDConstraint: SimpleConstraint {
     }
 
     private func shouldAbort(ope: Operation, operation: SqOperation) -> Bool {
-        return (ope.isExecuting && operation.info.includeExecutingJob) || !ope.isExecuting
+        return (ope.isExecuting && includeExecutingJob) || !ope.isExecuting
     }
 
 }
