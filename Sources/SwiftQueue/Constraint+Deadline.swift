@@ -25,7 +25,7 @@ import Foundation
 internal final class DeadlineConstraint: JobConstraint {
 
     /// Cancel the job after a certain date
-    private let deadline: Date
+    internal let deadline: Date
 
     required init(deadline: Date) {
         self.deadline = deadline

@@ -35,7 +35,6 @@ class SwiftQueueManagerTests: XCTestCase {
         JobBuilder(type: type)
                 .priority(priority: .veryHigh)
                 .service(quality: .background)
-
                 .schedule(manager: manager)
 
         job.awaitForRemoval()

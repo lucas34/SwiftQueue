@@ -55,7 +55,7 @@ internal final class NetworkConstraint: JobConstraint {
 
     func willRun(operation: SqOperation) throws {
         guard let reachability = reachability else { return }
-        guard hasCorrectNetwork(reachability: reachability, required: operation.info.requireNetwork) else {
+        guard hasCorrectNetwork(reachability: reachability) else {
             try reachability.startNotifier()
             return
         }
@@ -66,7 +66,7 @@ internal final class NetworkConstraint: JobConstraint {
             return true
         }
 
-        if hasCorrectNetwork(reachability: reachability, required: operation.info.requireNetwork) {
+        if hasCorrectNetwork(reachability: reachability) {
             return true
         }
 
@@ -80,8 +80,8 @@ internal final class NetworkConstraint: JobConstraint {
         return false
     }
 
-    private func hasCorrectNetwork(reachability: Reachability, required: NetworkType) -> Bool {
-        switch required {
+    private func hasCorrectNetwork(reachability: Reachability) -> Bool {
+        switch networkType {
         case .any:
             return true
         case .cellular:

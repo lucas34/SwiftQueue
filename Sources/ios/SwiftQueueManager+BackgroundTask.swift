@@ -61,7 +61,9 @@ public extension SwiftQueueManager {
 internal extension SqOperation {
 
     func scheduleBackgroundTask() {
-        let request = BGProcessingTaskRequest(identifier: info.uuid)
+        guard let name = name else { return }
+
+        let request = BGProcessingTaskRequest(identifier: name)
 
         request.requiresNetworkConnectivity = info.requireNetwork.rawValue > NetworkType.any.rawValue
         request.requiresExternalPower = info.requireCharging
