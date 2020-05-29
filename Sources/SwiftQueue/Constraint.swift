@@ -50,6 +50,6 @@ internal class SimpleConstraint: JobConstraint {
 
     func willRun(operation: SqOperation) throws {}
 
-    func run(operation: SqOperation) -> Bool { return true }
+    func run(operation: SqOperation) -> Bool { true }
 
 }

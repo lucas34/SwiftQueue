@@ -24,9 +24,10 @@ import Foundation
 
 internal final class DeadlineConstraint: JobConstraint {
 
+    /// Cancel the job after a certain date
     private let deadline: Date
 
-    init(deadline: Date) {
+    required init(deadline: Date) {
         self.deadline = deadline
     }
 
@@ -40,10 +41,9 @@ internal final class DeadlineConstraint: JobConstraint {
 
     func run(operation: SqOperation) -> Bool {
         operation.dispatchQueue.runAfter(deadline.timeIntervalSinceNow, callback: { [weak operation] in
-            guard let ope = operation else { return }
-            guard !ope.isFinished else { return }
-
-            ope.cancel(with: SwiftQueueError.deadline)
+            if operation?.isFinished != false {
+                operation?.cancel(with: SwiftQueueError.deadline)
+            }
         })
         return true
     }

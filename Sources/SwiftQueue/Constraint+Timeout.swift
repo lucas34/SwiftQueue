@@ -24,9 +24,10 @@ import Foundation
 
 internal final class TimeoutConstraint: SimpleConstraint {
 
-    private let timeout: TimeInterval
+    /// Auto cancel job if not completed after this time
+    internal let timeout: TimeInterval
 
-    init(timeout: TimeInterval) {
+    required init(timeout: TimeInterval) {
         self.timeout = timeout
     }
 

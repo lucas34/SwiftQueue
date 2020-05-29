@@ -90,7 +90,7 @@ public struct JobInfo {
     func buildConstraints() -> [JobConstraint] {
         var constraints = [JobConstraint]()
 
-        constraints.append(UniqueUUIDConstraint())
+        constraints.append(UniqueUUIDConstraint(uuid: uuid, override: override, includeExecutingJob: includeExecutingJob))
         constraints.append(ExecutorConstraint())
 
         if requireCharging {
