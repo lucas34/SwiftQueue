@@ -40,8 +40,6 @@ internal final class BatteryChargingConstraint: SimpleConstraint {
     }
 
     override func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {
-        guard operation.info.requireCharging else { return }
-
         /// Start listening
         NotificationCenter.default.addObserver(
                 self,
