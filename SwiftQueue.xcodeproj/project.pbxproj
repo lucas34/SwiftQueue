@@ -91,32 +91,40 @@
 		D0B7CC89D901F6C8AD2666D9 /* JobInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C4E41A1BF73329A7D03D /* JobInfo.swift */; };
 		D0B7CD1E797A69C89CB0ADE2 /* SqOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7CB571CECEEA34DD07398 /* SqOperationQueue.swift */; };
 		D0B7CFA2089DFF576E0D765B /* JobBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7CB3B79E039D3B11D8921 /* JobBuilder.swift */; };
-		FA56F077F3F1E318D31D3610 /* Constraint+Retry.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56FAFB4780356A52DD724F /* Constraint+Retry.swift */; };
+		FA56F077F3F1E318D31D3610 /* PBXBuildFile */ = {isa = PBXBuildFile; fileRef = FA56FAFB4780356A52DD724F /* Constraint+Retry.swift */; };
 		FA56F0F63528177774097254 /* ConstraintTest+Deadline.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56FAFCBF719BE42562C7B9 /* ConstraintTest+Deadline.swift */; };
-		FA56F1A18B5A19D05D873DF7 /* Constraint+Repeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56F05E8805E399F134F752 /* Constraint+Repeat.swift */; };
-		FA56F1DAF5371610184F448D /* Constraint+Persister.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56F5F64DB6D92CF36DCE56 /* Constraint+Persister.swift */; };
-		FA56F23F1035FDF4E4DCC050 /* Constraint+Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56F036668D4A0239EFA83E /* Constraint+Tag.swift */; };
-		FA56F3CC39FD19A729B44D93 /* Constraint+Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56F036668D4A0239EFA83E /* Constraint+Tag.swift */; };
-		FA56F3F3D4C529B3F0959959 /* Constraint+Repeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56F05E8805E399F134F752 /* Constraint+Repeat.swift */; };
+		FA56F1A18B5A19D05D873DF7 /* PBXBuildFile */ = {isa = PBXBuildFile; fileRef = FA56F05E8805E399F134F752 /* Constraint+Repeat.swift */; };
+		FA56F1DAF5371610184F448D /* PBXBuildFile */ = {isa = PBXBuildFile; fileRef = FA56F5F64DB6D92CF36DCE56 /* Constraint+Persister.swift */; };
+		FA56F23F1035FDF4E4DCC050 /* PBXBuildFile */ = {isa = PBXBuildFile; fileRef = FA56F036668D4A0239EFA83E /* Constraint+Tag.swift */; };
+		FA56F3CC39FD19A729B44D93 /* PBXBuildFile */ = {isa = PBXBuildFile; fileRef = FA56F036668D4A0239EFA83E /* Constraint+Tag.swift */; };
+		FA56F3F3D4C529B3F0959959 /* PBXBuildFile */ = {isa = PBXBuildFile; fileRef = FA56F05E8805E399F134F752 /* Constraint+Repeat.swift */; };
 		FA56F487C74F65E78DFB3E90 /* ConstraintTest+Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56F4FD493F5C1BAE7343A5 /* ConstraintTest+Network.swift */; };
+		FA56F5919615AB43E9E7BA92 /* Constraint+Repeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56FC0A482A04B6AAAFABE8 /* Constraint+Repeat.swift */; };
 		FA56F5D6F3971A231B065F92 /* ConstraintTest+Charging.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56F3AA5CDACA72626C2C35 /* ConstraintTest+Charging.swift */; };
-		FA56F5FA2137CE8A855A3E4C /* Constraint+Persister.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56F5F64DB6D92CF36DCE56 /* Constraint+Persister.swift */; };
+		FA56F5FA2137CE8A855A3E4C /* PBXBuildFile */ = {isa = PBXBuildFile; fileRef = FA56F5F64DB6D92CF36DCE56 /* Constraint+Persister.swift */; };
 		FA56F798BA513E48E5C686D4 /* BackgroundTasksTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56F261936CF36C1851C98F /* BackgroundTasksTest.swift */; };
 		FA56F7C0E3D727C9A66CCF29 /* ConstraintTest+Delay.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56F416033CDF0BBD61FDAA /* ConstraintTest+Delay.swift */; };
 		FA56F8AAA2E0C05A1AF58F03 /* ConstraintTests+Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56F87D9FD87C51DF16D4CA /* ConstraintTests+Tag.swift */; };
-		FA56F8E7DE53E05A37EE566B /* Constraint+Retry.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56FAFB4780356A52DD724F /* Constraint+Retry.swift */; };
-		FA56F914E099DE4C964201C6 /* Constraint+Repeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56F05E8805E399F134F752 /* Constraint+Repeat.swift */; };
-		FA56F927CB2234E96D269A06 /* Constraint+Repeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56F05E8805E399F134F752 /* Constraint+Repeat.swift */; };
-		FA56F99C6055A283C483CEE6 /* Constraint+Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56F036668D4A0239EFA83E /* Constraint+Tag.swift */; };
+		FA56F8BE268BE3AA86D1F130 /* Constraint+Retry.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56F6CCE12F58650BB3E292 /* Constraint+Retry.swift */; };
+		FA56F8E7DE53E05A37EE566B /* PBXBuildFile */ = {isa = PBXBuildFile; fileRef = FA56FAFB4780356A52DD724F /* Constraint+Retry.swift */; };
+		FA56F914E099DE4C964201C6 /* PBXBuildFile */ = {isa = PBXBuildFile; fileRef = FA56F05E8805E399F134F752 /* Constraint+Repeat.swift */; };
+		FA56F927CB2234E96D269A06 /* PBXBuildFile */ = {isa = PBXBuildFile; fileRef = FA56F05E8805E399F134F752 /* Constraint+Repeat.swift */; };
+		FA56F92EDF960200AE5052B7 /* Constraint+Repeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56FC0A482A04B6AAAFABE8 /* Constraint+Repeat.swift */; };
+		FA56F99C6055A283C483CEE6 /* PBXBuildFile */ = {isa = PBXBuildFile; fileRef = FA56F036668D4A0239EFA83E /* Constraint+Tag.swift */; };
 		FA56F9FBDE678BAF1332B9F1 /* ConstraintTest+Repeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56F65D45103434092B39D0 /* ConstraintTest+Repeat.swift */; };
-		FA56FA52179F400A6DDD8E0B /* Constraint+Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56F036668D4A0239EFA83E /* Constraint+Tag.swift */; };
-		FA56FB75895415DB41B5D8E1 /* Constraint+Retry.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56FAFB4780356A52DD724F /* Constraint+Retry.swift */; };
-		FA56FBD7B1D158A03ACA34A9 /* Constraint+Retry.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56FAFB4780356A52DD724F /* Constraint+Retry.swift */; };
+		FA56FA52179F400A6DDD8E0B /* PBXBuildFile */ = {isa = PBXBuildFile; fileRef = FA56F036668D4A0239EFA83E /* Constraint+Tag.swift */; };
+		FA56FA688D774B644275F9CA /* Constraint+Repeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56FC0A482A04B6AAAFABE8 /* Constraint+Repeat.swift */; };
+		FA56FB75895415DB41B5D8E1 /* PBXBuildFile */ = {isa = PBXBuildFile; fileRef = FA56FAFB4780356A52DD724F /* Constraint+Retry.swift */; };
+		FA56FBD7B1D158A03ACA34A9 /* PBXBuildFile */ = {isa = PBXBuildFile; fileRef = FA56FAFB4780356A52DD724F /* Constraint+Retry.swift */; };
 		FA56FC5FB80F2B1C4B0828AC /* ConstraintTest+Retry.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56FEB06791317BC26F7425 /* ConstraintTest+Retry.swift */; };
-		FA56FC84ED7C4E87A7632EDD /* Constraint+Persister.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56F5F64DB6D92CF36DCE56 /* Constraint+Persister.swift */; };
+		FA56FC84ED7C4E87A7632EDD /* PBXBuildFile */ = {isa = PBXBuildFile; fileRef = FA56F5F64DB6D92CF36DCE56 /* Constraint+Persister.swift */; };
 		FA56FD6078FD2EAF4AF82519 /* ConstraintTest+UniqueUUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56F3B12631D552CA8553BF /* ConstraintTest+UniqueUUID.swift */; };
+		FA56FD7A53FC58C305D69664 /* Constraint+Retry.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56F6CCE12F58650BB3E292 /* Constraint+Retry.swift */; };
+		FA56FDA63F614515591C584E /* Constraint+Retry.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56F6CCE12F58650BB3E292 /* Constraint+Retry.swift */; };
+		FA56FE2B3E288481461351A1 /* Constraint+Repeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56FC0A482A04B6AAAFABE8 /* Constraint+Repeat.swift */; };
+		FA56FEFAC8E42473AAD457D0 /* Constraint+Retry.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56F6CCE12F58650BB3E292 /* Constraint+Retry.swift */; };
 		FA56FF0EF53DA8E833154623 /* ConstraintTests+Timeout.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56F02306FFFB472A3393D3 /* ConstraintTests+Timeout.swift */; };
-		FA56FFCCFE420E8833894FA8 /* Constraint+Persister.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56F5F64DB6D92CF36DCE56 /* Constraint+Persister.swift */; };
+		FA56FFCCFE420E8833894FA8 /* PBXBuildFile */ = {isa = PBXBuildFile; fileRef = FA56F5F64DB6D92CF36DCE56 /* Constraint+Persister.swift */; };
 		OBJ_29 /* SwiftQueue.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* SwiftQueue.framework */; };
 /* End PBXBuildFile section */
 
@@ -172,9 +180,11 @@
 		FA56F4FD493F5C1BAE7343A5 /* ConstraintTest+Network.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ConstraintTest+Network.swift"; sourceTree = "<group>"; };
 		FA56F5F64DB6D92CF36DCE56 /* Constraint+Persister.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Constraint+Persister.swift"; path = "SwiftQueue/Constraint+Persister.swift"; sourceTree = "<group>"; };
 		FA56F65D45103434092B39D0 /* ConstraintTest+Repeat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ConstraintTest+Repeat.swift"; sourceTree = "<group>"; };
+		FA56F6CCE12F58650BB3E292 /* Constraint+Retry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Constraint+Retry.swift"; path = "SwiftQueue/Constraint+Retry.swift"; sourceTree = "<group>"; };
 		FA56F87D9FD87C51DF16D4CA /* ConstraintTests+Tag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ConstraintTests+Tag.swift"; sourceTree = "<group>"; };
 		FA56FAFB4780356A52DD724F /* Constraint+Retry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Constraint+Retry.swift"; path = "SwiftQueue/Constraint+Retry.swift"; sourceTree = "<group>"; };
 		FA56FAFCBF719BE42562C7B9 /* ConstraintTest+Deadline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ConstraintTest+Deadline.swift"; sourceTree = "<group>"; };
+		FA56FC0A482A04B6AAAFABE8 /* Constraint+Repeat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Constraint+Repeat.swift"; path = "SwiftQueue/Constraint+Repeat.swift"; sourceTree = "<group>"; };
 		FA56FEB06791317BC26F7425 /* ConstraintTest+Retry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ConstraintTest+Retry.swift"; sourceTree = "<group>"; };
 		OBJ_13 /* SwiftQueue.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftQueue.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_14 /* SwiftQueueTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = SwiftQueueTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -298,6 +308,8 @@
 				95A21C01EDB773B7F17134AF /* Constraint+Charging.swift */,
 				95A2169E6968B5F155D5B612 /* JobInfoSerializer+Decodable.swift */,
 				95A210DDE517DF37DE5A7EC1 /* JobInfoSerializer+V1.swift */,
+				FA56FC0A482A04B6AAAFABE8 /* Constraint+Repeat.swift */,
+				FA56F6CCE12F58650BB3E292 /* Constraint+Retry.swift */,
 			);
 			path = Sources;
 			sourceTree = SOURCE_ROOT;
@@ -466,6 +478,8 @@
 				618E9CE4230E1F1300856158 /* SwiftQueueManager+BackgroundTask.swift in Sources */,
 				95A21B7D3F013BAF87216CF0 /* JobInfoSerializer+Decodable.swift in Sources */,
 				95A215B786349300D06194AF /* JobInfoSerializer+V1.swift in Sources */,
+				FA56FE2B3E288481461351A1 /* Constraint+Repeat.swift in Sources */,
+				FA56FDA63F614515591C584E /* Constraint+Retry.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -492,6 +506,8 @@
 				95A21AA01272F46BD1A095A9 /* Constraint+Charging.swift in Sources */,
 				95A2171B6C37518D0DCD3D5D /* JobInfoSerializer+Decodable.swift in Sources */,
 				95A21C3EDEB17572B42263F9 /* JobInfoSerializer+V1.swift in Sources */,
+				FA56FA688D774B644275F9CA /* Constraint+Repeat.swift in Sources */,
+				FA56FD7A53FC58C305D69664 /* Constraint+Retry.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -519,6 +535,8 @@
 				95A2142AD4929198F8C2534D /* Constraint+Charging.swift in Sources */,
 				95A21D7F9EA08E843CB77B73 /* JobInfoSerializer+Decodable.swift in Sources */,
 				95A213CFEA10D6FD5672A64A /* JobInfoSerializer+V1.swift in Sources */,
+				FA56F5919615AB43E9E7BA92 /* Constraint+Repeat.swift in Sources */,
+				FA56F8BE268BE3AA86D1F130 /* Constraint+Retry.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -545,6 +563,8 @@
 				95A215E3804561CFBDE4EAB1 /* Constraint+Charging.swift in Sources */,
 				95A21CA23302F5A747C56040 /* JobInfoSerializer+Decodable.swift in Sources */,
 				95A2187C9276ED640CDADEEF /* JobInfoSerializer+V1.swift in Sources */,
+				FA56F92EDF960200AE5052B7 /* Constraint+Repeat.swift in Sources */,
+				FA56FEFAC8E42473AAD457D0 /* Constraint+Retry.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
