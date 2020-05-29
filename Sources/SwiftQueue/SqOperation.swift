@@ -73,7 +73,7 @@ internal final class SqOperation: Operation {
         self.logger = logger
         self.listener = listener
         self.dispatchQueue = dispatchQueue
-        self.constraints = info.buildConstraints()
+        self.constraints = self.info.buildConstraints()
 
         super.init()
     }
@@ -169,7 +169,11 @@ extension SqOperation: JobResult {
         logger.log(.warning, jobId: name, message: "Job completed with error \(error.localizedDescription)")
         lastError = error
 
-        JobRetryConstraint.onCompletionFail(sqOperation: self, error: error)
+        if let constraint = info.retryConstraint {
+            constraint.onCompletionFail(sqOperation: self, error: error)
+        } else {
+            onTerminate()
+        }
     }
 
     private func completionSuccess() {
@@ -177,7 +181,11 @@ extension SqOperation: JobResult {
         lastError = nil
         currentRepetition = 0
 
-        RepeatConstraint.completionSuccess(sqOperation: self)
+        if let constraint = info.repeatConstraint {
+            constraint.completionSuccess(sqOperation: self)
+        } else {
+            onTerminate()
+        }
     }
 
 }

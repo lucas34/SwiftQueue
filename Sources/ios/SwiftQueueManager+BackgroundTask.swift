@@ -52,7 +52,9 @@ public extension SwiftQueueManager {
     /// Cancel all possible background Task
     func cancelAllBackgroundTask() {
         for operation in getAllAllowBackgroundOperation() {
-            BGTaskScheduler.shared.cancel(taskRequestWithIdentifier: operation.info.uuid)
+            if let uuid = operation.name {
+                BGTaskScheduler.shared.cancel(taskRequestWithIdentifier: uuid)
+            }
         }
     }
 }

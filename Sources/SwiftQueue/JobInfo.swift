@@ -87,11 +87,21 @@ public struct JobInfo {
 
     public var timeout: TimeInterval?
 
-    func buildConstraints() -> [JobConstraint] {
+    internal var repeatConstraint: RepeatConstraint? = nil
+    internal var retryConstraint: JobRetryConstraint? = nil
+
+    mutating func buildConstraints() -> [JobConstraint] {
         var constraints = [JobConstraint]()
 
         constraints.append(UniqueUUIDConstraint(uuid: uuid, override: override, includeExecutingJob: includeExecutingJob))
-        constraints.append(ExecutorConstraint())
+
+        let repeatConstraint = RepeatConstraint(maxRun: maxRun, interval: interval, executor: executor)
+        constraints.append(repeatConstraint)
+        self.repeatConstraint = repeatConstraint
+
+        let retryConstraint = JobRetryConstraint(limit: retries)
+        constraints.append(retryConstraint)
+        self.retryConstraint = retryConstraint
 
         if requireCharging {
             constraints.append(BatteryChargingConstraint())
