@@ -118,22 +118,6 @@ internal extension QualityOfService {
 
 }
 
-internal extension Executor {
-
-    static func fromRawValue(value: Int) -> Executor {
-        assert(value == 0 || value == 1 || value == 2)
-        switch value {
-        case 1:
-            return Executor.background
-        case 2:
-            return Executor.any
-        default:
-            return Executor.foreground
-        }
-    }
-
-}
-
 extension Executor: Codable {
 
     private enum CodingKeys: String, CodingKey { case value }

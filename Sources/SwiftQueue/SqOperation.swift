@@ -40,6 +40,9 @@ internal final class SqOperation: Operation {
 
     var nextRunSchedule: Date?
 
+    /// Current number of repetition. Transient value
+    internal var currentRepetition: Int = 0
+
     override var name: String? { get { return info.uuid } set { } }
     override var queuePriority: QueuePriority { get { return info.priority } set { } }
     override var qualityOfService: QualityOfService { get { return info.qualityOfService } set { } }
@@ -166,72 +169,15 @@ extension SqOperation: JobResult {
         logger.log(.warning, jobId: name, message: "Job completed with error \(error.localizedDescription)")
         lastError = error
 
-        switch info.retries {
-        case .limited(let value):
-            if value > 0 {
-                retryJob(retry: handler.onRetry(error: error), origin: error)
-            } else {
-                onTerminate()
-            }
-        case .unlimited:
-            retryJob(retry: handler.onRetry(error: error), origin: error)
-        }
-    }
-
-    private func retryJob(retry: RetryConstraint, origin: Error) {
-
-        func exponentialBackoff(initial: TimeInterval) -> TimeInterval {
-            info.currentRepetition += 1
-            return info.currentRepetition == 1 ? initial : initial * pow(2, Double(info.currentRepetition - 1))
-        }
-
-        switch retry {
-        case .cancel:
-            lastError = SwiftQueueError.onRetryCancel(origin)
-            onTerminate()
-        case .retry(let after):
-            guard after > 0 else {
-                // Retry immediately
-                info.retries.decreaseValue(by: 1)
-                self.run()
-                return
-            }
-
-            // Retry after time in parameter
-            retryInBackgroundAfter(after)
-        case .exponential(let initial):
-            retryInBackgroundAfter(exponentialBackoff(initial: initial))
-        case .exponentialWithLimit(let initial, let maxDelay):
-            retryInBackgroundAfter(min(maxDelay, exponentialBackoff(initial: initial)))
-        }
+        JobRetryConstraint.onCompletionFail(sqOperation: self, error: error)
     }
 
     private func completionSuccess() {
         logger.log(.verbose, jobId: name, message: "Job completed successfully")
         lastError = nil
-        info.currentRepetition = 0
+        currentRepetition = 0
 
-        if case .limited(let limit) = info.maxRun {
-            // Reached run limit
-            guard info.runCount + 1 < limit else {
-                onTerminate()
-                return
-            }
-        }
-
-        guard info.interval > 0 else {
-            // Run immediately
-            info.runCount += 1
-            self.run()
-            return
-        }
-
-        // Schedule run after interval
-        nextRunSchedule = Date().addingTimeInterval(info.interval)
-        dispatchQueue.runAfter(info.interval, callback: { [weak self] in
-            self?.info.runCount += 1
-            self?.run()
-        })
+        RepeatConstraint.completionSuccess(sqOperation: self)
     }
 
 }
@@ -255,18 +201,6 @@ extension SqOperation {
             return false
         }
         return true
-    }
-
-}
-
-extension SqOperation {
-
-    fileprivate func retryInBackgroundAfter(_ delay: TimeInterval) {
-        nextRunSchedule = Date().addingTimeInterval(delay)
-        dispatchQueue.runAfter(delay) { [weak self] in
-            self?.info.retries.decreaseValue(by: 1)
-            self?.run()
-        }
     }
 
 }

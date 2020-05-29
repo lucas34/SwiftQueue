@@ -79,9 +79,6 @@ public struct JobInfo {
 
     public var requireCharging: Bool
 
-    /// Current number of repetition. Transient value
-    public var currentRepetition: Int
-
     /// This value is used to influence the order in which operations are dequeued and executed
     public var priority: Operation.QueuePriority
 
@@ -189,8 +186,5 @@ public struct JobInfo {
         self.priority = priority
         self.qualityOfService = qualityOfService
         self.timeout = timeout
-
-        /// Transient
-        self.currentRepetition = 0
     }
 }
