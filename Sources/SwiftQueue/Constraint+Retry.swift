@@ -22,18 +22,25 @@
 
 import Foundation
 
-class JobRetryConstraint {
+internal final class JobRetryConstraint: SimpleConstraint {
 
-    static func onCompletionFail(sqOperation: SqOperation, error: Error) {
-        switch sqOperation.info.retries {
+    /// Maximum number of authorised retried
+    internal var limit: Limit
+
+    required init(limit: Limit) {
+        self.limit = limit
+    }
+
+    func onCompletionFail(sqOperation: SqOperation, error: Error) {
+        switch limit {
         case .limited(let value):
             if value > 0 {
-                sqOperation.retryJob(retry: sqOperation.handler.onRetry(error: error), origin: error)
+                sqOperation.retryJob(actual: self, retry: sqOperation.handler.onRetry(error: error), origin: error)
             } else {
                 sqOperation.onTerminate()
             }
         case .unlimited:
-            sqOperation.retryJob(retry: sqOperation.handler.onRetry(error: error), origin: error)
+            sqOperation.retryJob(actual: self, retry: sqOperation.handler.onRetry(error: error), origin: error)
         }
     }
 
@@ -41,7 +48,7 @@ class JobRetryConstraint {
 
 fileprivate extension SqOperation {
 
-    func retryJob(retry: RetryConstraint, origin: Error) {
+    func retryJob(actual: JobRetryConstraint, retry: RetryConstraint, origin: Error) {
 
         func exponentialBackoff(initial: TimeInterval) -> TimeInterval {
             currentRepetition += 1
@@ -50,8 +57,8 @@ fileprivate extension SqOperation {
 
         func retryInBackgroundAfter(_ delay: TimeInterval) {
             nextRunSchedule = Date().addingTimeInterval(delay)
-            dispatchQueue.runAfter(delay) { [weak self] in
-                self?.info.retries.decreaseValue(by: 1)
+            dispatchQueue.runAfter(delay) { [weak actual, weak self] in
+                actual?.limit.decreaseValue(by: 1)
                 self?.run()
             }
         }
@@ -61,12 +68,14 @@ fileprivate extension SqOperation {
             lastError = SwiftQueueError.onRetryCancel(origin)
             onTerminate()
         case .retry(let after):
-            guard after > 0 else { // Retry immediately
-                info.retries.decreaseValue(by: 1)
+            guard after > 0 else {
+                // Retry immediately
+                actual.limit.decreaseValue(by: 1)
                 self.run()
                 return
             }
 
+            // Retry after time in parameter
             retryInBackgroundAfter(after)
         case .exponential(let initial):
             retryInBackgroundAfter(exponentialBackoff(initial: initial))

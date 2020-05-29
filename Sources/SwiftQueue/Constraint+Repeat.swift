@@ -22,10 +22,28 @@
 
 import Foundation
 
-internal final class RepeatConstraint {
+internal final class RepeatConstraint: SimpleConstraint {
 
-    static func run(operation: SqOperation) -> Bool {
-        switch operation.info.executor {
+    /// Number of run maximum
+    internal let maxRun: Limit
+
+    /// Time between each repetition of the job
+    internal let interval: TimeInterval
+
+    /// Executor to run job in foreground or background
+    internal let executor: Executor
+
+    /// Current number of run
+    private var runCount: Double = 0
+
+    required init(maxRun: Limit, interval: TimeInterval, executor: Executor) {
+        self.maxRun = maxRun
+        self.interval = interval
+        self.executor = executor
+    }
+
+    override func run(operation: SqOperation) -> Bool {
+        switch executor {
         case .background:
             return false
         case .foreground:
@@ -35,27 +53,26 @@ internal final class RepeatConstraint {
         }
     }
 
-    static func completionSuccess(sqOperation: SqOperation) {
-
-        if case .limited(let limit) = sqOperation.info.maxRun {
+    func completionSuccess(sqOperation: SqOperation) {
+        if case .limited(let limit) = maxRun {
             // Reached run limit
-            guard sqOperation.info.runCount + 1 < limit else {
+            guard runCount + 1 < limit else {
                 sqOperation.onTerminate()
                 return
             }
         }
 
-        guard sqOperation.info.interval > 0 else {
+        guard interval > 0 else {
             // Run immediately
-            sqOperation.info.runCount += 1
+            runCount += 1
             sqOperation.run()
             return
         }
 
         // Schedule run after interval
-        sqOperation.nextRunSchedule = Date().addingTimeInterval(sqOperation.info.interval)
-        sqOperation.dispatchQueue.runAfter(sqOperation.info.interval, callback: { [weak sqOperation] in
-            sqOperation?.info.runCount += 1
+        sqOperation.nextRunSchedule = Date().addingTimeInterval(interval)
+        sqOperation.dispatchQueue.runAfter(interval, callback: { [weak self, weak sqOperation] in
+            self?.runCount += 1
             sqOperation?.run()
         })
     }
