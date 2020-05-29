@@ -24,9 +24,10 @@ import Foundation
 
 internal final class DelayConstraint: SimpleConstraint {
 
-    private let delay: TimeInterval
+    /// Delay for the first execution of the job
+    internal let delay: TimeInterval
 
-    init(delay: TimeInterval) {
+    required init(delay: TimeInterval) {
         self.delay = delay
     }
 
