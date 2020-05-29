@@ -44,18 +44,6 @@ internal protocol JobConstraint {
 
 }
 
-/// Behaviour for retrying the job
-public enum RetryConstraint {
-    /// Retry after a certain time. If set to 0 it will retry immediately
-    case retry(delay: TimeInterval)
-    /// Will not retry, onRemoved will be called immediately
-    case cancel
-    /// Exponential back-off
-    case exponential(initial: TimeInterval)
-    /// Exponential back-off with max delay
-    case exponentialWithLimit(initial: TimeInterval, maxDelay: TimeInterval)
-}
-
 internal class SimpleConstraint: JobConstraint {
 
     func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {}

@@ -199,17 +199,3 @@ public enum SwiftQueueError: Error {
     case timeout
 
 }
-
-/// Enum to specify background and foreground restriction
-public enum Executor: Int {
-
-    /// Job will only run only when the app is in foreground
-    case foreground = 0
-
-    /// Job will only run only when the app is in background
-    case background = 1
-
-    /// Job can run in both background and foreground
-    case any = 2
-
-}
