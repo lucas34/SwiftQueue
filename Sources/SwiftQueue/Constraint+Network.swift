@@ -36,7 +36,7 @@ public enum NetworkType: Int, Codable {
 }
 
 #if os(iOS) || os(macOS) || os(tvOS)
-internal final class NetworkConstraint: SimpleConstraint {
+internal final class NetworkConstraint: SimpleConstraint, CodableConstraint {
 
     /// Require a certain connectivity type
     internal let networkType: NetworkType
@@ -46,6 +46,13 @@ internal final class NetworkConstraint: SimpleConstraint {
     required init(networkType: NetworkType) {
         assert(networkType != .any)
         self.networkType = networkType
+    }
+
+    convenience init?(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: NetworkConstraintKey.self)
+        if container.contains(.requireNetwork) {
+            try self.init(networkType: container.decode(NetworkType.self, forKey: .requireNetwork))
+        } else { return nil }
     }
 
     override func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {
@@ -89,12 +96,23 @@ internal final class NetworkConstraint: SimpleConstraint {
         }
     }
 
+    private enum NetworkConstraintKey: String, CodingKey {
+        case requireNetwork
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: NetworkConstraintKey.self)
+        try container.encode(networkType, forKey: .requireNetwork)
+    }
+
 }
 #else
 
-internal final class NetworkConstraint: SimpleConstraint {
+internal final class NetworkConstraint: SimpleConstraint, CodableConstraint {
 
     init(networkType: NetworkType) {}
+
+    convenience init?(from decoder: Decoder) throws { nil }
 
 }
 

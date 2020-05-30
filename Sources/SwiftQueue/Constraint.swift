@@ -44,6 +44,16 @@ internal protocol JobConstraint {
 
 }
 
+protocol CodableConstraint: Encodable {
+
+    /**
+        Build constraint when deserialize
+        Return nil if the constraint does not apply
+    */
+    init?(from decoder: Decoder) throws
+
+}
+
 internal class SimpleConstraint: JobConstraint {
 
     func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {}

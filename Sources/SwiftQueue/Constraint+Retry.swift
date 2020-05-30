@@ -22,13 +22,20 @@
 
 import Foundation
 
-internal final class JobRetryConstraint: SimpleConstraint {
+internal final class JobRetryConstraint: SimpleConstraint, CodableConstraint {
 
     /// Maximum number of authorised retried
     internal var limit: Limit
 
     required init(limit: Limit) {
         self.limit = limit
+    }
+
+    convenience init?(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: RetryConstraintKey.self)
+        if container.contains(.retryLimit) {
+            try self.init(limit: container.decode(Limit.self, forKey: .retryLimit))
+        } else { return nil }
     }
 
     func onCompletionFail(sqOperation: SqOperation, error: Error) {
@@ -44,6 +51,14 @@ internal final class JobRetryConstraint: SimpleConstraint {
         }
     }
 
+    private enum RetryConstraintKey: String, CodingKey {
+        case retryLimit
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: RetryConstraintKey.self)
+        try container.encode(limit, forKey: .retryLimit)
+    }
 }
 
 fileprivate extension SqOperation {

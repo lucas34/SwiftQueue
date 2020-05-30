@@ -22,7 +22,7 @@
 
 import Foundation
 
-internal final class RepeatConstraint: SimpleConstraint {
+internal final class RepeatConstraint: SimpleConstraint, CodableConstraint {
 
     /// Number of run maximum
     internal let maxRun: Limit
@@ -40,6 +40,17 @@ internal final class RepeatConstraint: SimpleConstraint {
         self.maxRun = maxRun
         self.interval = interval
         self.executor = executor
+    }
+
+    convenience init?(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: RepeatConstraintKey.self)
+        if container.contains(.maxRun) && container.contains(.interval) && container.contains(.executor) {
+            try self.init(
+                    maxRun: container.decode(Limit.self, forKey: .maxRun),
+                    interval: container.decode(TimeInterval.self, forKey: .interval),
+                    executor: container.decode(Executor.self, forKey: .executor)
+            )
+        } else { return nil }
     }
 
     override func run(operation: SqOperation) -> Bool {
@@ -75,6 +86,19 @@ internal final class RepeatConstraint: SimpleConstraint {
             self?.runCount += 1
             sqOperation?.run()
         })
+    }
+
+    private enum RepeatConstraintKey: String, CodingKey {
+        case maxRun
+        case interval
+        case executor
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: RepeatConstraintKey.self)
+        try container.encode(maxRun, forKey: .maxRun)
+        try container.encode(interval, forKey: .interval)
+        try container.encode(executor, forKey: .executor)
     }
 
 }

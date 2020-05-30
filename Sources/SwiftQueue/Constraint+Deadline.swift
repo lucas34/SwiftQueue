@@ -22,13 +22,20 @@
 
 import Foundation
 
-internal final class DeadlineConstraint: JobConstraint {
+internal final class DeadlineConstraint: JobConstraint, CodableConstraint {
 
     /// Cancel the job after a certain date
     internal let deadline: Date
 
     required init(deadline: Date) {
         self.deadline = deadline
+    }
+
+    convenience init?(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: DeadlineConstraintKey.self)
+        if container.contains(.deadline) {
+            try self.init(deadline: container.decode(Date.self, forKey: .deadline))
+        } else { return nil }
     }
 
     func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {
@@ -53,4 +60,14 @@ internal final class DeadlineConstraint: JobConstraint {
             throw SwiftQueueError.deadline
         }
     }
+
+    private enum DeadlineConstraintKey: String, CodingKey {
+        case deadline
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: DeadlineConstraintKey.self)
+        try container.encode(deadline, forKey: .deadline)
+    }
+
 }

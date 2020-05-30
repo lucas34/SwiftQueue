@@ -26,10 +26,17 @@ import UIKit
 #endif
 
 #if os(iOS)
-internal final class BatteryChargingConstraint: SimpleConstraint {
+internal final class BatteryChargingConstraint: SimpleConstraint, CodableConstraint {
 
     // To avoid cyclic ref
     private weak var actual: SqOperation?
+
+    convenience init?(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: ChargingConstraintKey.self)
+        if container.contains(.charging) {
+            self.init()
+        } else { return nil }
+    }
 
     func batteryStateDidChange(notification: NSNotification) {
         if let job = actual, UIDevice.current.batteryState == .charging {
@@ -65,10 +72,27 @@ internal final class BatteryChargingConstraint: SimpleConstraint {
         NotificationCenter.default.removeObserver(self)
     }
 
+    private enum ChargingConstraintKey: String, CodingKey {
+        case charging
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: ChargingConstraintKey.self)
+        try container.encode(true, forKey: .charging)
+    }
+
+    func unregister() {
+        NotificationCenter.default.removeObserver(self)
+    }
+
 }
 
 #else
 
-internal final class BatteryChargingConstraint: SimpleConstraint {}
+internal final class BatteryChargingConstraint: SimpleConstraint {
+
+    func unregister() {}
+
+}
 
 #endif
