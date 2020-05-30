@@ -22,13 +22,20 @@
 
 import Foundation
 
-internal final class DelayConstraint: SimpleConstraint {
+internal final class DelayConstraint: SimpleConstraint, CodableConstraint {
 
     /// Delay for the first execution of the job
     internal let delay: TimeInterval
 
     required init(delay: TimeInterval) {
         self.delay = delay
+    }
+
+    convenience init?(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: DelayConstraintKey.self)
+        if container.contains(.delay) {
+            try self.init(delay: container.decode(TimeInterval.self, forKey: .delay))
+        } else { return nil }
     }
 
     override func run(operation: SqOperation) -> Bool {
@@ -51,4 +58,14 @@ internal final class DelayConstraint: SimpleConstraint {
         operation.logger.log(.verbose, jobId: operation.name, message: "Job delayed by \(time)s")
         return false
     }
+
+    private enum DelayConstraintKey: String, CodingKey {
+        case delay
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: DelayConstraintKey.self)
+        try container.encode(delay, forKey: .delay)
+    }
+
 }

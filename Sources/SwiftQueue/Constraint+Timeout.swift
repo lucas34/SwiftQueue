@@ -22,13 +22,20 @@
 
 import Foundation
 
-internal final class TimeoutConstraint: SimpleConstraint {
+internal final class TimeoutConstraint: SimpleConstraint, CodableConstraint {
 
     /// Auto cancel job if not completed after this time
     internal let timeout: TimeInterval
 
     required init(timeout: TimeInterval) {
         self.timeout = timeout
+    }
+
+    convenience init?(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: TimeoutConstraintKey.self)
+        if container.contains(.timeout) {
+            try self.init(timeout: container.decode(TimeInterval.self, forKey: .timeout))
+        } else { return nil }
     }
 
     override func run(operation: SqOperation) -> Bool {
@@ -39,6 +46,15 @@ internal final class TimeoutConstraint: SimpleConstraint {
         }
 
         return true
+    }
+
+    private enum TimeoutConstraintKey: String, CodingKey {
+        case timeout
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: TimeoutConstraintKey.self)
+        try container.encode(timeout, forKey: .timeout)
     }
 
 }
