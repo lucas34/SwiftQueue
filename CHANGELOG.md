@@ -1,5 +1,31 @@
 # Change Log
 
+## [4.3.0](https://github.com/lucas34/SwiftQueue/tree/4.3.0)
+
+#### Breaking Changes
+
+- JobBuilder method requireCharging(value: Bool) was renamed .requireCharging() (#311)
+- JobBuilder method .persist(required: true) was renamed .persist() (#312)
+- JobBuilder method .internet(atLeast: .any) is forbidden. It's already default behaviour (#329)
+- Internet constraint cannot be used if Operation is running in main thread (#329)
+- Logger jobId parameter function can be nil (#318)
+- Remove V1 serialiser (#320)
+- Remove JobCount() method that is relying on a deprecated method (#337) (#336)
+
+#### New features
+- Add JobBuilder.copy() (#304)
+
+#### Chore
+- Update to Swift 5.2 (#306)
+
+#### Internal changes
+- Cleanup (#302) (#313) (#319) (#321) (#322) (#327) (#330)
+- Constrains refactoring (#326) (#328) (#331) (#332) (#333) (#335)
+
+## Build
+- Auto archive carthage build artifacts (#303) (#308)
+- Update dependencies (#301) (#307)
+
 ## [4.2.0](https://github.com/lucas34/SwiftQueue/tree/4.2.0)
 
 #### New features

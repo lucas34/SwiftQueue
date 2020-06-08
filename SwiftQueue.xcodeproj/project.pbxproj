@@ -39,18 +39,14 @@
 		61A65B7922ABD175009AC9B7 /* Constraint+Timeout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A65B7622ABD172009AC9B7 /* Constraint+Timeout.swift */; };
 		61A65B7A22ABD176009AC9B7 /* Constraint+Timeout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A65B7622ABD172009AC9B7 /* Constraint+Timeout.swift */; };
 		95A210264F99EAC94629D786 /* SwiftQueueLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A217FDB8197696002CE25C /* SwiftQueueLogger.swift */; };
-		95A213CFEA10D6FD5672A64A /* JobInfoSerializer+V1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A210DDE517DF37DE5A7EC1 /* JobInfoSerializer+V1.swift */; };
 		95A2142AD4929198F8C2534D /* Constraint+Charging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A21C01EDB773B7F17134AF /* Constraint+Charging.swift */; };
 		95A214C332FB7115C12F88D2 /* LoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A2193AF039008357A8D362 /* LoggerTests.swift */; };
 		95A21576964E9A1FE1EDC5DB /* SwiftQueueLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A217FDB8197696002CE25C /* SwiftQueueLogger.swift */; };
-		95A215B786349300D06194AF /* JobInfoSerializer+V1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A210DDE517DF37DE5A7EC1 /* JobInfoSerializer+V1.swift */; };
 		95A215E3804561CFBDE4EAB1 /* Constraint+Charging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A21C01EDB773B7F17134AF /* Constraint+Charging.swift */; };
 		95A2171B6C37518D0DCD3D5D /* JobInfoSerializer+Decodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A2169E6968B5F155D5B612 /* JobInfoSerializer+Decodable.swift */; };
-		95A2187C9276ED640CDADEEF /* JobInfoSerializer+V1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A210DDE517DF37DE5A7EC1 /* JobInfoSerializer+V1.swift */; };
 		95A21AA01272F46BD1A095A9 /* Constraint+Charging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A21C01EDB773B7F17134AF /* Constraint+Charging.swift */; };
 		95A21B708B2910C7CF8BD39D /* SwiftQueueLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A217FDB8197696002CE25C /* SwiftQueueLogger.swift */; };
 		95A21B7D3F013BAF87216CF0 /* JobInfoSerializer+Decodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A2169E6968B5F155D5B612 /* JobInfoSerializer+Decodable.swift */; };
-		95A21C3EDEB17572B42263F9 /* JobInfoSerializer+V1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A210DDE517DF37DE5A7EC1 /* JobInfoSerializer+V1.swift */; };
 		95A21CA23302F5A747C56040 /* JobInfoSerializer+Decodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A2169E6968B5F155D5B612 /* JobInfoSerializer+Decodable.swift */; };
 		95A21D7F9EA08E843CB77B73 /* JobInfoSerializer+Decodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A2169E6968B5F155D5B612 /* JobInfoSerializer+Decodable.swift */; };
 		95A21FA05AABFA4A59096E8E /* SwiftQueueLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A217FDB8197696002CE25C /* SwiftQueueLogger.swift */; };
@@ -151,7 +147,6 @@
 		1E68EF96F1DE038FFF94FCD8 /* Constraint+Deadline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Constraint+Deadline.swift"; path = "SwiftQueue/Constraint+Deadline.swift"; sourceTree = "<group>"; };
 		618E9CE2230E1F1000856158 /* SwiftQueueManager+BackgroundTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "SwiftQueueManager+BackgroundTask.swift"; path = "ios/SwiftQueueManager+BackgroundTask.swift"; sourceTree = "<group>"; };
 		61A65B7622ABD172009AC9B7 /* Constraint+Timeout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Constraint+Timeout.swift"; path = "SwiftQueue/Constraint+Timeout.swift"; sourceTree = "<group>"; };
-		95A210DDE517DF37DE5A7EC1 /* JobInfoSerializer+V1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "JobInfoSerializer+V1.swift"; path = "SwiftQueue/JobInfoSerializer+V1.swift"; sourceTree = "<group>"; };
 		95A2169E6968B5F155D5B612 /* JobInfoSerializer+Decodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "JobInfoSerializer+Decodable.swift"; path = "SwiftQueue/JobInfoSerializer+Decodable.swift"; sourceTree = "<group>"; };
 		95A217FDB8197696002CE25C /* SwiftQueueLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftQueueLogger.swift; path = SwiftQueue/SwiftQueueLogger.swift; sourceTree = "<group>"; };
 		95A2193AF039008357A8D362 /* LoggerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggerTests.swift; sourceTree = "<group>"; };
@@ -301,7 +296,6 @@
 				95A217FDB8197696002CE25C /* SwiftQueueLogger.swift */,
 				95A21C01EDB773B7F17134AF /* Constraint+Charging.swift */,
 				95A2169E6968B5F155D5B612 /* JobInfoSerializer+Decodable.swift */,
-				95A210DDE517DF37DE5A7EC1 /* JobInfoSerializer+V1.swift */,
 				FA56FC0A482A04B6AAAFABE8 /* Constraint+Repeat.swift */,
 				FA56F6CCE12F58650BB3E292 /* Constraint+Retry.swift */,
 			);
@@ -470,7 +464,6 @@
 				95A21FA0723161F6908B133B /* Constraint+Charging.swift in Sources */,
 				618E9CE4230E1F1300856158 /* SwiftQueueManager+BackgroundTask.swift in Sources */,
 				95A21B7D3F013BAF87216CF0 /* JobInfoSerializer+Decodable.swift in Sources */,
-				95A215B786349300D06194AF /* JobInfoSerializer+V1.swift in Sources */,
 				FA56FE2B3E288481461351A1 /* Constraint+Repeat.swift in Sources */,
 				FA56FDA63F614515591C584E /* Constraint+Retry.swift in Sources */,
 			);
@@ -497,7 +490,6 @@
 				95A21576964E9A1FE1EDC5DB /* SwiftQueueLogger.swift in Sources */,
 				95A21AA01272F46BD1A095A9 /* Constraint+Charging.swift in Sources */,
 				95A2171B6C37518D0DCD3D5D /* JobInfoSerializer+Decodable.swift in Sources */,
-				95A21C3EDEB17572B42263F9 /* JobInfoSerializer+V1.swift in Sources */,
 				FA56FA688D774B644275F9CA /* Constraint+Repeat.swift in Sources */,
 				FA56FD7A53FC58C305D69664 /* Constraint+Retry.swift in Sources */,
 			);
@@ -525,7 +517,6 @@
 				611C0BA7232A7E80004C5F92 /* SwiftQueueManager+BackgroundTask.swift in Sources */,
 				95A2142AD4929198F8C2534D /* Constraint+Charging.swift in Sources */,
 				95A21D7F9EA08E843CB77B73 /* JobInfoSerializer+Decodable.swift in Sources */,
-				95A213CFEA10D6FD5672A64A /* JobInfoSerializer+V1.swift in Sources */,
 				FA56F5919615AB43E9E7BA92 /* Constraint+Repeat.swift in Sources */,
 				FA56F8BE268BE3AA86D1F130 /* Constraint+Retry.swift in Sources */,
 			);
@@ -552,7 +543,6 @@
 				95A210264F99EAC94629D786 /* SwiftQueueLogger.swift in Sources */,
 				95A215E3804561CFBDE4EAB1 /* Constraint+Charging.swift in Sources */,
 				95A21CA23302F5A747C56040 /* JobInfoSerializer+Decodable.swift in Sources */,
-				95A2187C9276ED640CDADEEF /* JobInfoSerializer+V1.swift in Sources */,
 				FA56F92EDF960200AE5052B7 /* Constraint+Repeat.swift in Sources */,
 				FA56FEFAC8E42473AAD457D0 /* Constraint+Retry.swift in Sources */,
 			);
