@@ -112,16 +112,6 @@ public extension SwiftQueueManager {
         return manage.values.count
     }
 
-    /// number of jobs for all queues
-    /// TODO remove this method
-    func jobCount() -> Int {
-        var count = 0
-        for element in manage.values {
-            count += element.operationCount
-        }
-        return count
-    }
-
     /// Return queues UUID with the list of Jobs inside
     func getAll() -> [String: [JobInfo]] {
         var result = [String: [JobInfo]]()
