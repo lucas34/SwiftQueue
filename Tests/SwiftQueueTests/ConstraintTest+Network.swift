@@ -54,4 +54,33 @@ class ConstraintTestNetwork: XCTestCase {
         job.assertSingleCompletion()
     }
 
+    func testNetworkWhenDeserialize() {
+        let (type, job) = (UUID().uuidString, TestJob())
+
+        let creator = TestCreator([type: job])
+
+        let group = UUID().uuidString
+
+        let json = JobBuilder(type: type)
+                .parallel(queueName: group)
+                .internet(atLeast: .wifi)
+                .build(job: job)
+                .toJSONStringSafe()
+
+        let persister = PersisterTracker(key: UUID().uuidString)
+        persister.put(queueName: group, taskId: UUID().uuidString, data: json)
+
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: persister).build()
+
+        job.awaitForRemoval()
+
+        XCTAssertEqual(group, persister.restoreQueueName)
+
+        manager.waitUntilAllOperationsAreFinished()
+    }
+
+
+
+
+
 }
