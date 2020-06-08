@@ -22,7 +22,7 @@
 
 import Foundation
 
-internal protocol JobConstraint {
+public protocol JobConstraint {
 
     /**
         - Operation will be added to the queue
@@ -54,12 +54,12 @@ protocol CodableConstraint: Encodable {
 
 }
 
-internal class SimpleConstraint: JobConstraint {
+public class SimpleConstraint: JobConstraint {
 
-    func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {}
+    public func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {}
 
-    func willRun(operation: SqOperation) throws {}
+    public func willRun(operation: SqOperation) throws {}
 
-    func run(operation: SqOperation) -> Bool { true }
+    public func run(operation: SqOperation) -> Bool { true }
 
 }

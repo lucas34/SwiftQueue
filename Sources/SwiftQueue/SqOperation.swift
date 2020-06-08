@@ -22,34 +22,32 @@
 
 import Foundation
 
-internal final class SqOperation: Operation {
+public final class SqOperation: Operation {
 
-    let handler: Job
+    public let info: JobInfo
+    public let logger: SwiftQueueLogger
+    public let dispatchQueue: DispatchQueue
 
-    var info: JobInfo
+    public var nextRunSchedule: Date? = nil
 
-    let constraints: [JobConstraint]
+    internal let handler: Job
+    internal var lastError: Error?
 
-    var lastError: Error?
-
-    let logger: SwiftQueueLogger
-
-    let listener: JobListener?
-
-    let dispatchQueue: DispatchQueue
-
-    var nextRunSchedule: Date?
+    private let constraints: [JobConstraint]
+    private let listener: JobListener?
 
     /// Current number of repetition. Transient value
     internal var currentRepetition: Int = 0
 
-    override var name: String? { get { return info.uuid } set { } }
-    override var queuePriority: QueuePriority { get { return info.priority } set { } }
-    override var qualityOfService: QualityOfService { get { return info.qualityOfService } set { } }
+    public override var name: String? { get { info.uuid } set { } }
+    public override var queuePriority: QueuePriority { get { info.priority } set { } }
+
+    @available(iOS 8.0, macCatalyst 13.0, *)
+    public override var qualityOfService: QualityOfService { get { info.qualityOfService } set { } }
 
     private var jobIsExecuting: Bool = false
-    override var isExecuting: Bool {
-        get { return jobIsExecuting }
+    public override var isExecuting: Bool {
+        get { jobIsExecuting }
         set {
             willChangeValue(forKey: "isExecuting")
             jobIsExecuting = newValue
@@ -58,8 +56,8 @@ internal final class SqOperation: Operation {
     }
 
     private var jobIsFinished: Bool = false
-    override var isFinished: Bool {
-        get { return jobIsFinished }
+    public override var isFinished: Bool {
+        get { jobIsFinished }
         set {
             willChangeValue(forKey: "isFinished")
             jobIsFinished = newValue
@@ -67,25 +65,31 @@ internal final class SqOperation: Operation {
         }
     }
 
-    internal init(job: Job, info: JobInfo, logger: SwiftQueueLogger, listener: JobListener?, dispatchQueue: DispatchQueue) {
+    internal init(_ job: Job,
+                  _ info: JobInfo,
+                  _ logger: SwiftQueueLogger,
+                  _ listener: JobListener?,
+                  _ dispatchQueue: DispatchQueue,
+                  _ constraints: [JobConstraint]
+    ) {
         self.handler = job
         self.info = info
         self.logger = logger
         self.listener = listener
         self.dispatchQueue = dispatchQueue
-        self.constraints = self.info.buildConstraints()
+        self.constraints = constraints
 
         super.init()
     }
 
-    override func start() {
+    public override func start() {
         super.start()
         logger.log(.verbose, jobId: name, message: "Job has been started by the system")
         isExecuting = true
         run()
     }
 
-    override func cancel() {
+    public override func cancel() {
         self.cancel(with: SwiftQueueError.canceled)
     }
 
@@ -112,7 +116,7 @@ internal final class SqOperation: Operation {
         listener?.onTerminated(job: info, result: .fail(error))
     }
 
-    internal func run() {
+    public func run() {
         if isCancelled && !isFinished {
             isFinished = true
         }
@@ -152,7 +156,7 @@ internal final class SqOperation: Operation {
 
 extension SqOperation: JobResult {
 
-    func done(_ result: JobCompletion) {
+    public func done(_ result: JobCompletion) {
         guard !isFinished else { return }
 
         listener?.onAfterRun(job: info, result: result)

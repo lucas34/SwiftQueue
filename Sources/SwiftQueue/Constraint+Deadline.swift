@@ -39,11 +39,11 @@ internal final class DeadlineConstraint: JobConstraint, CodableConstraint {
     }
 
     func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {
-        try check(operation: operation)
+        try check()
     }
 
     func willRun(operation: SqOperation) throws {
-        try check(operation: operation)
+        try check()
     }
 
     func run(operation: SqOperation) -> Bool {
@@ -55,7 +55,7 @@ internal final class DeadlineConstraint: JobConstraint, CodableConstraint {
         return true
     }
 
-    private func check(operation: SqOperation) throws {
+    private func check() throws {
         if deadline < Date() {
             throw SwiftQueueError.deadline
         }

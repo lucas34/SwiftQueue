@@ -22,13 +22,12 @@
 
 import Foundation
 
-internal final class SqOperationQueue: OperationQueue {
-
-    private let params: SqManagerParams
+public final class SqOperationQueue: OperationQueue {
 
     private let creator: JobCreator
     private let queue: Queue
 
+    private let dispatchQueue: DispatchQueue
     private let persister: JobPersister
     private let serializer: JobInfoSerializer
     private let logger: SwiftQueueLogger
@@ -37,9 +36,9 @@ internal final class SqOperationQueue: OperationQueue {
     private let trigger: Operation = TriggerOperation()
 
     init(_ params: SqManagerParams, _ queue: Queue, _ isSuspended: Bool) {
-        self.params = params
         self.queue = queue
         self.creator = params.jobCreator
+        self.dispatchQueue = params.dispatchQueue
 
         self.persister = params.persister
         self.serializer = params.serializer
@@ -65,10 +64,11 @@ internal final class SqOperationQueue: OperationQueue {
     private func loadSerializedTasks(name: String) {
         persister.restore(queueName: name).compactMap { string -> SqOperation? in
             do {
-                let info = try serializer.deserialize(json: string)
+                var info = try serializer.deserialize(json: string)
                 let job = creator.create(type: info.type, params: info.params)
+                let constraints = info.buildConstraints()
 
-                return SqOperation(job: job, info: info, logger: logger, listener: listener, dispatchQueue: params.dispatchQueue)
+                return SqOperation(job, info, logger, listener, dispatchQueue, constraints)
             } catch let error {
                 logger.log(.error, jobId: "UNKNOWN", message: "Unable to deserialize job error=\(error.localizedDescription)")
                 return nil
@@ -81,7 +81,7 @@ internal final class SqOperationQueue: OperationQueue {
         super.addOperation(trigger)
     }
 
-    override func addOperation(_ ope: Operation) {
+    public override func addOperation(_ ope: Operation) {
         self.addOperationInternal(ope, wait: true)
     }
 

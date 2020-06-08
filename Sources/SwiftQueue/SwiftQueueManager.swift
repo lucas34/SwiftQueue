@@ -61,16 +61,14 @@ public final class SwiftQueueManager {
     }
 
     /// Schedule a job to the queue
+    /// TODO Need to remove this method
     public func enqueue(info: JobInfo) {
         let queue = getQueue(queueName: info.queueName)
         let job = queue.createHandler(type: info.type, params: info.params)
+        var info = info
+        let constraints = info.buildConstraints()
 
-        let operation = SqOperation(job: job,
-                info: info,
-                logger: params.logger,
-                listener: params.listener,
-                dispatchQueue: params.dispatchQueue
-        )
+        let operation = SqOperation(job, info, params.logger, params.listener, params.dispatchQueue, constraints)
 
         queue.addOperation(operation)
     }
@@ -115,6 +113,7 @@ public extension SwiftQueueManager {
     }
 
     /// number of jobs for all queues
+    /// TODO remove this method
     func jobCount() -> Int {
         var count = 0
         for element in manage.values {
