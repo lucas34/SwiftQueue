@@ -141,3 +141,15 @@ internal extension String {
     }
 
 }
+
+internal func getConstraint<T: JobConstraint>(_ operation: JobInfo?) -> T? {
+    guard let constraints = operation?.constraints else { return nil }
+    return getConstraint(constraints)
+}
+
+internal func getConstraint<T: JobConstraint>(_ constraints: [JobConstraint]) -> T? {
+    for case let constraint as T in constraints {
+        return constraint
+    }
+    return nil
+}

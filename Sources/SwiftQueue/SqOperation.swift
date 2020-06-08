@@ -39,7 +39,12 @@ public final class SqOperation: Operation {
     /// Current number of repetition. Transient value
     internal var currentRepetition: Int = 0
 
-    public override var name: String? { get { info.uuid } set { } }
+    public override var name: String? {
+        get {
+            let constraint: UniqueUUIDConstraint? = getConstraint(info)
+            return constraint?.uuid
+        } set { }
+    }
     public override var queuePriority: QueuePriority { get { info.priority } set { } }
 
     @available(iOS 8.0, macCatalyst 13.0, *)
@@ -173,7 +178,7 @@ extension SqOperation: JobResult {
         logger.log(.warning, jobId: name, message: "Job completed with error \(error.localizedDescription)")
         lastError = error
 
-        if let constraint = info.retryConstraint {
+        if let constraint: JobRetryConstraint = getConstraint(info) {
             constraint.onCompletionFail(sqOperation: self, error: error)
         } else {
             onTerminate()
@@ -185,7 +190,7 @@ extension SqOperation: JobResult {
         lastError = nil
         currentRepetition = 0
 
-        if let constraint = info.repeatConstraint {
+        if let constraint: RepeatConstraint = getConstraint(info) {
             constraint.completionSuccess(sqOperation: self)
         } else {
             onTerminate()
@@ -197,19 +202,19 @@ extension SqOperation: JobResult {
 extension SqOperation {
 
     func willScheduleJob(queue: SqOperationQueue) throws {
-        for constraint in self.constraints {
+        for constraint in info.constraints {
             try constraint.willSchedule(queue: queue, operation: self)
         }
     }
 
     func willRunJob() throws {
-        for constraint in self.constraints {
+        for constraint in info.constraints {
             try constraint.willRun(operation: self)
         }
     }
 
     func checkIfJobCanRunNow() -> Bool {
-        for constraint in self.constraints where constraint.run(operation: self) == false {
+        for constraint in info.constraints where constraint.run(operation: self) == false {
             return false
         }
         return true

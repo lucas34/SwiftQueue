@@ -52,9 +52,14 @@ class BackgroundTasksTest {
         let executor = Executor.any
 
         let jobInfo = JobBuilder(type: type).periodic(limit: .limited(limited), interval: interval, executor: .any).info
-        XCTAssertEqual(jobInfo.maxRun, Limit.limited(limited))
-        XCTAssertEqual(jobInfo.interval, interval)
-        XCTAssertEqual(jobInfo.executor, executor)
+
+        let constraint: RepeatConstraint? = getConstraint(jobInfo)
+        XCTAssertNotNil(constraint)
+
+        XCTAssertEqual(constraint?.maxRun, Limit.limited(limited))
+        XCTAssertEqual(constraint?.interval, interval)
+        XCTAssertEqual(constraint?.executor, executor)
+
     }
 
     @available(iOS 13.0, tvOS 13.0, macOS 10.15, *)
@@ -65,9 +70,13 @@ class BackgroundTasksTest {
         let executor = Executor.background
 
         let jobInfo = JobBuilder(type: type).periodic(limit: .limited(limited), interval: interval, executor: .background).info
-        XCTAssertEqual(jobInfo.maxRun, Limit.limited(limited))
-        XCTAssertEqual(jobInfo.interval, interval)
-        XCTAssertEqual(jobInfo.executor, executor)
+
+        let constraint: RepeatConstraint? = getConstraint(jobInfo)
+        XCTAssertNotNil(constraint)
+
+        XCTAssertEqual(constraint?.maxRun, Limit.limited(limited))
+        XCTAssertEqual(constraint?.interval, interval)
+        XCTAssertEqual(constraint?.executor, executor)
     }
 
     @available(iOS 13.0, tvOS 13.0, macOS 10.15, *)
@@ -95,8 +104,6 @@ class BackgroundTasksTest {
         let result = manager.getAllAllowBackgroundOperation()
 
         XCTAssertEqual(2, result.count)
-        XCTAssertTrue([id, id2].contains(result[0].info.uuid))
-        XCTAssertTrue([id, id2].contains(result[1].info.uuid))
     }
 
 }

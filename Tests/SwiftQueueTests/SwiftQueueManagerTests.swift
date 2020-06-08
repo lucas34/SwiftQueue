@@ -173,7 +173,7 @@ class SwiftQueueManagerTests: XCTestCase {
                 jobCreator: TestCreator([:]),
                 queueCreator: BasicQueueCreator(),
                 persister: UserDefaultsPersister(),
-                serializer: DecodableSerializer(),
+                serializer: DecodableSerializer(maker: DefaultConstraintMaker()),
                 logger: NoLogger.shared,
                 listener: nil,
                 initInBackground: false
@@ -208,10 +208,10 @@ class SwiftQueueManagerTests: XCTestCase {
 
         JobBuilder(type: type).singleInstance(forId: id).parallel(queueName: UUID().uuidString).schedule(manager: manager)
 
-        let operation = manager.getOperation(forUUID: id)
+        let operation = manager.getOperation(forUUID: id)?.info.constraints ?? []
 
-        XCTAssertNotNil(operation)
-        XCTAssertEqual(id, operation?.info.uuid)
+        let constraint: UniqueUUIDConstraint? = getConstraint(operation)
+        XCTAssertTrue(constraint?.uuid == id)
     }
 
     public func testGetAll() {

@@ -44,7 +44,7 @@ public protocol JobConstraint {
 
 }
 
-protocol CodableConstraint: Encodable {
+public protocol CodableConstraint: Encodable {
 
     /**
         Build constraint when deserialize
