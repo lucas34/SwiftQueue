@@ -84,6 +84,7 @@
 		D0B7CD1E797A69C89CB0ADE2 /* SqOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7CB571CECEEA34DD07398 /* SqOperationQueue.swift */; };
 		D0B7CFA2089DFF576E0D765B /* JobBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7CB3B79E039D3B11D8921 /* JobBuilder.swift */; };
 		FA56F077F3F1E318D31D3610 /* Constraint+Retry.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56FAFB4780356A52DD724F /* Constraint+Retry.swift */; };
+		FA56F0F16EEDB4C66F6D864F /* ConstraintTest+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56FA3C56C12E83AF2C9CA4 /* ConstraintTest+Custom.swift */; };
 		FA56F0F63528177774097254 /* ConstraintTest+Deadline.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56FAFCBF719BE42562C7B9 /* ConstraintTest+Deadline.swift */; };
 		FA56F1A18B5A19D05D873DF7 /* Constraint+Repeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56F05E8805E399F134F752 /* Constraint+Repeat.swift */; };
 		FA56F1DAF5371610184F448D /* Constraint+Persister.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56F5F64DB6D92CF36DCE56 /* Constraint+Persister.swift */; };
@@ -167,6 +168,7 @@
 		FA56F5F64DB6D92CF36DCE56 /* Constraint+Persister.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Constraint+Persister.swift"; path = "SwiftQueue/Constraint+Persister.swift"; sourceTree = "<group>"; };
 		FA56F65D45103434092B39D0 /* ConstraintTest+Repeat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ConstraintTest+Repeat.swift"; sourceTree = "<group>"; };
 		FA56F87D9FD87C51DF16D4CA /* ConstraintTest+Tag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ConstraintTest+Tag.swift"; sourceTree = "<group>"; };
+		FA56FA3C56C12E83AF2C9CA4 /* ConstraintTest+Custom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ConstraintTest+Custom.swift"; sourceTree = "<group>"; };
 		FA56FAFB4780356A52DD724F /* Constraint+Retry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Constraint+Retry.swift"; path = "SwiftQueue/Constraint+Retry.swift"; sourceTree = "<group>"; };
 		FA56FAFCBF719BE42562C7B9 /* ConstraintTest+Deadline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ConstraintTest+Deadline.swift"; sourceTree = "<group>"; };
 		FA56FB2D2ED0CF3565BDA5A9 /* ConstraintMaker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConstraintMaker.swift; path = SwiftQueue/ConstraintMaker.swift; sourceTree = "<group>"; };
@@ -243,6 +245,7 @@
 				FA56F02306FFFB472A3393D3 /* ConstraintTest+Timeout.swift */,
 				FA56F3AA5CDACA72626C2C35 /* ConstraintTest+Charging.swift */,
 				FA56F3B12631D552CA8553BF /* ConstraintTest+UniqueUUID.swift */,
+				FA56FA3C56C12E83AF2C9CA4 /* ConstraintTest+Custom.swift */,
 			);
 			name = SwiftQueueTests;
 			path = Tests/SwiftQueueTests;
@@ -578,6 +581,7 @@
 				FA56FF0EF53DA8E833154623 /* ConstraintTest+Timeout.swift in Sources */,
 				FA56F5D6F3971A231B065F92 /* ConstraintTest+Charging.swift in Sources */,
 				FA56FD6078FD2EAF4AF82519 /* ConstraintTest+UniqueUUID.swift in Sources */,
+				FA56F0F16EEDB4C66F6D864F /* ConstraintTest+Custom.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
