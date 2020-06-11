@@ -231,9 +231,9 @@ extension SqOperation {
 
 }
 
-class NoSerializer: JobPersister {
+class NoPersister: JobPersister {
 
-    public static let shared = NoSerializer()
+    public static let shared = NoPersister()
 
     private init() {}
 
