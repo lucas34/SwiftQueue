@@ -157,6 +157,13 @@ public final class JobBuilder {
         return self
     }
 
+    /// Add custom constraint. If your job is persisted, your constraint may extend CodableConstraint
+    /// and should be registered with ConstraintMaker
+    public func add(constraint: JobConstraint) -> Self {
+        info.constraints.append(constraint)
+        return self
+    }
+
     /// Create copy of current job builder
     public func copy() -> JobBuilder {
         return JobBuilder(jobBuilder: self)
