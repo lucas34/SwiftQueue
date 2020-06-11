@@ -34,7 +34,7 @@ class ConstraintTestUniqueUUID: XCTestCase {
 
         let creator = TestCreator([type1: job1, type2: job2])
 
-        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoPersister.shared).build()
         JobBuilder(type: type1)
                 .singleInstance(forId: id)
                 .delay(time: 3600)
@@ -57,7 +57,7 @@ class ConstraintTestUniqueUUID: XCTestCase {
 
         let creator = TestCreator([type1: job1, type2: job2])
 
-        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoPersister.shared).build()
         JobBuilder(type: type1)
                 .singleInstance(forId: id)
                 .delay(time: 3600)

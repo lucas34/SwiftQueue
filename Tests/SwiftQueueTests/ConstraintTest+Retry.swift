@@ -43,7 +43,7 @@ class ConstraintTestRetry: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoPersister.shared).build()
         JobBuilder(type: type)
                 .retry(limit: .unlimited)
                 .schedule(manager: manager)
@@ -63,7 +63,7 @@ class ConstraintTestRetry: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoPersister.shared).build()
         JobBuilder(type: type)
                 .retry(limit: .limited(2))
                 .schedule(manager: manager)
@@ -82,7 +82,7 @@ class ConstraintTestRetry: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoPersister.shared).build()
         JobBuilder(type: type)
                 .retry(limit: .limited(2))
                 .schedule(manager: manager)
@@ -101,7 +101,7 @@ class ConstraintTestRetry: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoPersister.shared).build()
         JobBuilder(type: type)
                 .retry(limit: .limited(2))
                 .schedule(manager: manager)
@@ -120,7 +120,7 @@ class ConstraintTestRetry: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoPersister.shared).build()
         JobBuilder(type: type)
                 .retry(limit: .limited(1))
                 .periodic()
@@ -139,7 +139,7 @@ class ConstraintTestRetry: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoPersister.shared).build()
         JobBuilder(type: type)
                 .retry(limit: .limited(2))
                 .schedule(manager: manager)
@@ -158,7 +158,7 @@ class ConstraintTestRetry: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoPersister.shared).build()
         JobBuilder(type: type)
                 .retry(limit: .limited(2))
                 .schedule(manager: manager)

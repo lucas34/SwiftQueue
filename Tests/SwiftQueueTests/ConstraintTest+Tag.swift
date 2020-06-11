@@ -38,7 +38,7 @@ class ConstraintTestTag: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
+        manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoPersister.shared).build()
 
         manager?.enqueue(info: JobBuilder(type: type).addTag(tag: tag).build())
 

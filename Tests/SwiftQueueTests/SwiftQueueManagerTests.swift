@@ -31,7 +31,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoPersister.shared).build()
         JobBuilder(type: type)
                 .priority(priority: .veryHigh)
                 .service(quality: .background)
@@ -48,7 +48,7 @@ class SwiftQueueManagerTests: XCTestCase {
         let listener = JobListenerTest()
 
         let manager = SwiftQueueManagerBuilder(creator: creator)
-                .set(persister: NoSerializer.shared)
+                .set(persister: NoPersister.shared)
                 .set(isSuspended: true)
                 .set(listener: listener)
                 .build()
@@ -172,7 +172,7 @@ class SwiftQueueManagerTests: XCTestCase {
         let params = SqManagerParams(
                 jobCreator: TestCreator([:]),
                 queueCreator: BasicQueueCreator(),
-                persister: UserDefaultsPersister(),
+                persister: NoPersister.shared,
                 serializer: DecodableSerializer(maker: DefaultConstraintMaker()),
                 logger: NoLogger.shared,
                 listener: nil,
@@ -216,7 +216,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
     public func testGetAll() {
         let creator = TestCreator([:])
-        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoPersister.shared).build()
 
         XCTAssertEqual(0, manager.getAll().count)
     }
@@ -232,7 +232,7 @@ class SwiftQueueManagerTests: XCTestCase {
         let creator = TestCreator([type: job])
 
         manager = SwiftQueueManagerBuilder(creator: creator)
-                .set(persister: NoSerializer.shared)
+                .set(persister: NoPersister.shared)
                 .set(dispatchQueue: DispatchQueue.main)
                 .build()
 

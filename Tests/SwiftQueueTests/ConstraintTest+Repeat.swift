@@ -31,7 +31,7 @@ class ConstraintTestRepeat: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoPersister.shared).build()
         JobBuilder(type: type)
                 .periodic(limit: .limited(5))
                 .schedule(manager: manager)
@@ -61,7 +61,7 @@ class ConstraintTestRepeat: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoPersister.shared).build()
         JobBuilder(type: type)
                 .periodic(limit: .unlimited)
                 .schedule(manager: manager)
@@ -79,7 +79,7 @@ class ConstraintTestRepeat: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoPersister.shared).build()
         JobBuilder(type: type)
                 .periodic(limit: .limited(2), interval: Double.leastNonzeroMagnitude)
                 .schedule(manager: manager)
