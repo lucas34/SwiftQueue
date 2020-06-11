@@ -31,7 +31,7 @@ class ConstraintTestTimeout: XCTestCase {
 
         let creator = TestCreator([type: job])
 
-        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoSerializer.shared).build()
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoPersister.shared).build()
 
         JobBuilder(type: type)
                 .timeout(value: 0)

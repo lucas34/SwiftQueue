@@ -131,7 +131,7 @@ class SwiftQueueBuilderTests: XCTestCase {
 
         let creator = TestCreator([type: TestJob()])
         let manager = SwiftQueueManagerBuilder(creator: creator)
-                .set(persister: NoSerializer.shared)
+                .set(persister: NoPersister.shared)
                 .build()
 
         // No assert expected
