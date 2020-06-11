@@ -41,9 +41,11 @@ class SwiftQueueBuilderTests: XCTestCase {
         let uuid = UUID().uuidString
 
         let jobInfo = JobBuilder(type: type).singleInstance(forId: uuid).info
-        XCTAssertEqual(jobInfo.uuid, uuid)
-        XCTAssertEqual(jobInfo.override, false)
 
+        let constraint: UniqueUUIDConstraint? = getConstraint(jobInfo)
+        XCTAssertNotNil(constraint)
+        XCTAssertEqual(constraint?.uuid, uuid)
+        XCTAssertFalse(constraint?.override ?? false)
     }
 
     public func testBuilderSingleInstanceOverride() throws {
@@ -51,9 +53,11 @@ class SwiftQueueBuilderTests: XCTestCase {
         let uuid = UUID().uuidString
 
         let jobInfo = JobBuilder(type: type).singleInstance(forId: uuid, override: true).info
-        XCTAssertEqual(jobInfo.uuid, uuid)
-        XCTAssertEqual(jobInfo.override, true)
 
+        let constraint: UniqueUUIDConstraint? = getConstraint(jobInfo)
+        XCTAssertNotNil(constraint)
+        XCTAssertEqual(constraint?.uuid, uuid)
+        XCTAssertTrue(constraint?.override ?? false)
     }
 
     public func testBuilderGroup() throws {
@@ -69,8 +73,19 @@ class SwiftQueueBuilderTests: XCTestCase {
         let delay: Double = 1234
 
         let jobInfo = JobBuilder(type: type).delay(time: delay).info
-        XCTAssertEqual(jobInfo.delay, delay)
+        let constraint: DelayConstraint? = getConstraint(jobInfo)
+        XCTAssertNotNil(constraint)
+        XCTAssertEqual(constraint?.delay, delay)
+    }
 
+    public func testBuilderDeadlineCodable() throws {
+        let type = UUID().uuidString
+        let deadline = Date(timeIntervalSinceNow: TimeInterval(30))
+        let jobInfo = JobBuilder(type: type).deadline(date: deadline).info
+
+        let constraint: DeadlineConstraint? = getConstraint(jobInfo)
+        XCTAssertNotNil(constraint)
+        XCTAssertEqual(constraint?.deadline, deadline)
     }
 
     public func testBuilderPeriodicUnlimited() throws {
@@ -79,9 +94,13 @@ class SwiftQueueBuilderTests: XCTestCase {
         let executor = Executor.foreground
 
         let jobInfo = JobBuilder(type: type).periodic(limit: .unlimited, interval: interval).info
-        XCTAssertEqual(jobInfo.maxRun, Limit.unlimited)
-        XCTAssertEqual(jobInfo.interval, interval)
-        XCTAssertEqual(jobInfo.executor, executor)
+
+        let constraint: RepeatConstraint? = getConstraint(jobInfo)
+        XCTAssertNotNil(constraint)
+
+        XCTAssertEqual(constraint?.maxRun, Limit.unlimited)
+        XCTAssertEqual(constraint?.interval, interval)
+        XCTAssertEqual(constraint?.executor, executor)
     }
 
     public func testBuilderInternetCellular() throws {
@@ -89,7 +108,10 @@ class SwiftQueueBuilderTests: XCTestCase {
         let network: NetworkType = .cellular
 
         let jobInfo = JobBuilder(type: type).internet(atLeast: network).info
-        XCTAssertEqual(jobInfo.requireNetwork, network)
+
+        let constraint: NetworkConstraint? = getConstraint(jobInfo)
+        XCTAssertNotNil(constraint)
+        XCTAssertEqual(constraint?.networkType, NetworkType.cellular)
     }
 
     public func testBuilderInternetWifi() throws {
@@ -97,14 +119,20 @@ class SwiftQueueBuilderTests: XCTestCase {
         let network: NetworkType = .wifi
 
         let jobInfo = JobBuilder(type: type).internet(atLeast: network).info
-        XCTAssertEqual(jobInfo.requireNetwork, network)
+
+        let constraint: NetworkConstraint? = getConstraint(jobInfo)
+        XCTAssertNotNil(constraint)
+        XCTAssertEqual(constraint?.networkType, NetworkType.wifi)
     }
 
     public func testBuilderRetryUnlimited() throws {
         let type = UUID().uuidString
 
         let jobInfo = JobBuilder(type: type).retry(limit: .unlimited).info
-        XCTAssertEqual(jobInfo.retries, Limit.unlimited)
+
+        let constraint: JobRetryConstraint? = getConstraint(jobInfo)
+        XCTAssertNotNil(constraint)
+        XCTAssertEqual(constraint?.limit, Limit.unlimited)
     }
 
     public func testBuilderRetryLimited() throws {
@@ -112,7 +140,10 @@ class SwiftQueueBuilderTests: XCTestCase {
         let limited: Double = 123
 
         let jobInfo = JobBuilder(type: type).retry(limit: .limited(limited)).info
-        XCTAssertEqual(jobInfo.retries, Limit.limited(limited))
+
+        let constraint: JobRetryConstraint? = getConstraint(jobInfo)
+        XCTAssertNotNil(constraint)
+        XCTAssertEqual(constraint?.limit, Limit.limited(limited))
     }
 
     public func testBuilderAddTag() throws {
@@ -121,8 +152,11 @@ class SwiftQueueBuilderTests: XCTestCase {
         let tag2 = UUID().uuidString
 
         let jobInfo = JobBuilder(type: type).addTag(tag: tag1).addTag(tag: tag2).info
-        XCTAssertEqual(jobInfo.tags.contains(tag1), true)
-        XCTAssertEqual(jobInfo.tags.contains(tag2), true)
+
+        let constraint: TagConstraint? = getConstraint(jobInfo)
+        XCTAssertNotNil(constraint)
+        XCTAssertEqual(constraint?.tags.contains(tag1), true)
+        XCTAssertEqual(constraint?.tags.contains(tag2), true)
     }
 
     public func testBuilderWithFreeArgs() {
@@ -143,18 +177,19 @@ class SwiftQueueBuilderTests: XCTestCase {
         let type = UUID().uuidString
 
         let jobInfo = JobBuilder(type: type).requireCharging().info
-        XCTAssertEqual(jobInfo.requireCharging, true)
+
+        let constraint: BatteryChargingConstraint? = getConstraint(jobInfo)
+        XCTAssertNotNil(constraint)
     }
 
     func testCopyBuilder() {
         var origin = JobBuilder(type: UUID().uuidString)
         let builder = origin.copy()
 
-        origin = origin.addTag(tag: UUID().uuidString)
         origin = origin.internet(atLeast: .wifi)
 
-        XCTAssertEqual(builder.info.requireNetwork, NetworkType.any)
-        XCTAssertTrue(builder.info.tags.isEmpty)
+        let constraint: NetworkConstraint? = getConstraint(builder.info)
+        XCTAssertNil(constraint)
     }
 
 }

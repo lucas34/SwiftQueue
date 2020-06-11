@@ -43,9 +43,7 @@ public final class JobBuilder {
     /// If override = true the previous job will be canceled and the new job will be scheduled
     public func singleInstance(forId: String, override: Bool = false, includeExecutingJob: Bool = true) -> Self {
         assertNotEmptyString(forId)
-        info.uuid = forId
-        info.override = override
-        info.includeExecutingJob = includeExecutingJob
+        info.constraints.append(UniqueUUIDConstraint(uuid: forId, override: override, includeExecutingJob: includeExecutingJob))
         return self
     }
 
@@ -62,14 +60,14 @@ public final class JobBuilder {
     /// Otherwise it will wait for the remaining time
     public func delay(time: TimeInterval) -> Self {
         assert(time >= 0)
-        info.delay = time
+        info.constraints.append(DelayConstraint(delay: time))
         return self
     }
 
     /// If the job hasn't run after the date, It will be removed
     /// will call onRemove(SwiftQueueError.deadline)
     public func deadline(date: Date) -> Self {
-        info.deadline = date
+        info.constraints.append(DeadlineConstraint(deadline: date))
         return self
     }
 
@@ -80,9 +78,7 @@ public final class JobBuilder {
     public func periodic(limit: Limit = .unlimited, interval: TimeInterval = 0) -> Self {
         assert(limit.validate)
         assert(interval >= 0)
-        info.maxRun = limit
-        info.interval = interval
-        info.executor = .foreground
+        info.constraints.append(RepeatConstraint(maxRun: limit, interval: interval, executor: .foreground))
         return self
     }
 
@@ -90,22 +86,22 @@ public final class JobBuilder {
     public func periodic(limit: Limit = .unlimited, interval: TimeInterval = 0, executor: Executor = .foreground) -> Self {
         assert(limit.validate)
         assert(interval >= 0)
-        info.maxRun = limit
-        info.interval = interval
-        info.executor = executor
+        info.constraints.append(RepeatConstraint(maxRun: limit, interval: interval, executor: executor))
         return self
     }
 
     /// Connectivity constraint.
     public func internet(atLeast: NetworkType) -> Self {
         assert(atLeast != .any)
-        info.requireNetwork = atLeast
+        info.constraints.append(NetworkConstraint(networkType: atLeast))
         return self
     }
 
+    private var requirePersist = false
+
     /// Job should be persisted.
     public func persist() -> Self {
-        info.isPersisted = true
+        requirePersist = true
         return self
     }
 
@@ -113,14 +109,21 @@ public final class JobBuilder {
     /// For a periodic job, the retry count will not be reset at each period.
     public func retry(limit: Limit) -> Self {
         assert(limit.validate)
-        info.retries = limit
+        info.constraints.append(JobRetryConstraint(limit: limit))
         return self
     }
 
     /// Custom tag to mark the job
     public func addTag(tag: String) -> Self {
-        assertNotEmptyString(tag)
-        info.tags.insert(tag)
+        if let constraint: TagConstraint = getConstraint(info.constraints) {
+            constraint.insert(tag: tag)
+            return self
+        }
+
+        var set = Set<String>()
+        set.insert(tag)
+
+        info.constraints.append(TagConstraint(tags: set))
         return self
     }
 
@@ -142,15 +145,15 @@ public final class JobBuilder {
         return self
     }
 
-    /// Call if the job can only run when the device is charging
+    /// Call if job can only run when the device is charging
     public func requireCharging() -> Self {
-        info.requireCharging = true
+        info.constraints.append(BatteryChargingConstraint())
         return self
     }
 
     /// Maximum time in second that the job is allowed to run
     public func timeout(value: TimeInterval) -> Self {
-        info.timeout = value
+        info.constraints.append(TimeoutConstraint(timeout: value))
         return self
     }
 
@@ -166,11 +169,16 @@ public final class JobBuilder {
 
     /// Add job to the JobQueue
     public func schedule(manager: SwiftQueueManager) {
-        if info.isPersisted {
-            // Check if we will be able to serialize args
+        if requirePersist {
+            let constraint: UniqueUUIDConstraint? = getConstraint(info)
+            if constraint == nil {
+                info.constraints.append(UniqueUUIDConstraint(uuid: UUID().uuidString, override: false, includeExecutingJob: false))
+            }
             assert(JSONSerialization.isValidJSONObject(info.params))
+            info.constraints.append(PersisterConstraint(serializer: manager.params.serializer, persister: manager.params.persister))
         }
 
         manager.enqueue(info: info)
     }
+
 }

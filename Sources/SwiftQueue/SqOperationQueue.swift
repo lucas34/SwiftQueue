@@ -64,9 +64,9 @@ public final class SqOperationQueue: OperationQueue {
     private func loadSerializedTasks(name: String) {
         persister.restore(queueName: name).compactMap { string -> SqOperation? in
             do {
-                var info = try serializer.deserialize(json: string)
+                let info = try serializer.deserialize(json: string)
                 let job = creator.create(type: info.type, params: info.params)
-                let constraints = info.buildConstraints()
+                let constraints = info.constraints
 
                 return SqOperation(job, info, logger, listener, dispatchQueue, constraints)
             } catch let error {
@@ -105,44 +105,38 @@ public final class SqOperationQueue: OperationQueue {
             return
         }
 
-        // Serialize this operation
-        if job.info.isPersisted {
-            persistJob(job: job)
-        }
         job.completionBlock = { [weak self] in
             self?.completed(job)
         }
         super.addOperation(job)
     }
 
-    func persistJob(job: SqOperation) {
-        do {
-            let data = try serializer.serialize(info: job.info)
-            persister.put(queueName: queue.name, taskId: job.info.uuid, data: data)
-        } catch let error {
-            // In this case we still try to run the job
-            logger.log(.error, jobId: job.name, message: "Unable to serialize job error=\(error.localizedDescription)")
-        }
-    }
-
     func cancelOperations(tag: String) {
-        for case let operation as SqOperation in operations where operation.info.tags.contains(tag) {
-            operation.cancel()
+        for case let operation as SqOperation in operations {
+            for case let constraint as TagConstraint in operation.info.constraints where constraint.contains(tag: tag) {
+                operation.cancel()
+            }
         }
     }
 
     func cancelOperations(uuid: String) {
-        for case let operation as SqOperation in operations where operation.info.uuid == uuid {
-            operation.cancel()
-            return
+        for case let operation as SqOperation in operations {
+            for case let constraint as UniqueUUIDConstraint in operation.info.constraints where constraint.uuid == uuid {
+                operation.cancel()
+                return
+            }
         }
     }
 
     private func completed(_ job: SqOperation) {
         // Remove this operation from serialization
-        if job.info.isPersisted {
-            persister.remove(queueName: queue.name, taskId: job.info.uuid)
+        if let taskId = job.name {
+            let persisterConstraint: PersisterConstraint? = getConstraint(job.info)
+            persisterConstraint?.remove(queueName: queue.name, taskId: taskId)
         }
+
+        let chargingConstraint: BatteryChargingConstraint? = getConstraint(job.info)
+        chargingConstraint?.unregister()
 
         job.remove()
     }

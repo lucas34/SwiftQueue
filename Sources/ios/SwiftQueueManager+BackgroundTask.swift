@@ -67,8 +67,14 @@ internal extension SqOperation {
 
         let request = BGProcessingTaskRequest(identifier: name)
 
-        request.requiresNetworkConnectivity = info.requireNetwork.rawValue > NetworkType.any.rawValue
-        request.requiresExternalPower = info.requireCharging
+        if let _ : NetworkConstraint = getConstraint(info) {
+            request.requiresNetworkConnectivity = true
+        }
+
+        if let _ : BatteryChargingConstraint = getConstraint(info) {
+            request.requiresExternalPower = true
+        }
+
         request.earliestBeginDate = nextRunSchedule
 
         do {

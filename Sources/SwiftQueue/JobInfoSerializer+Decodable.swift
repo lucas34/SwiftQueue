@@ -29,9 +29,11 @@ public class DecodableSerializer: JobInfoSerializer {
     private let decoder: JSONDecoder
 
     /// Init decodable with custom `JSONEncoder` and `JSONDecoder`
-    public init(encoder: JSONEncoder = JSONEncoder(), decoder: JSONDecoder = JSONDecoder()) {
+    public init(maker: ConstraintMaker, encoder: JSONEncoder = JSONEncoder(), decoder: JSONDecoder = JSONDecoder()) {
         self.encoder = encoder
         self.decoder = decoder
+        self.encoder.userInfo[.constraintMaker] = maker
+        self.decoder.userInfo[.constraintMaker] = maker
     }
 
     public func serialize(info: JobInfo) throws -> String {
@@ -42,111 +44,6 @@ public class DecodableSerializer: JobInfoSerializer {
         try decoder.decode(JobInfo.self, from: json.utf8Data())
     }
 
-}
-
-extension JobInfo: Decodable {
-
-    enum JobInfoKeys: String, CodingKey {
-        case type = "type"
-        case uuid = "uuid"
-        case override = "override"
-        case includeExecutingJob = "includeExecutingJob"
-        case queueName = "group"
-        case tags = "tags"
-        case delay = "delay"
-        case deadline = "deadline"
-        case requireNetwork = "requireNetwork"
-        case isPersisted = "isPersisted"
-        case params = "params"
-        case createTime = "createTime"
-        case interval = "runCount"
-        case maxRun = "maxRun"
-        case executor = "executor"
-        case retries = "retries"
-        case runCount = "interval"
-        case requireCharging = "requireCharging"
-        case priority = "priority"
-        case qualityOfService = "qualityOfService"
-        case timeout = "timeout"
-    }
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: JobInfoKeys.self)
-
-        let type: String = try container.decode(String.self, forKey: .type)
-        let uuid: String = try container.decode(String.self, forKey: .uuid)
-        let override: Bool = try container.decode(Bool.self, forKey: .override)
-        let includeExecutingJob: Bool = try container.decode(Bool.self, forKey: .includeExecutingJob)
-        let queueName: String = try container.decode(String.self, forKey: .queueName)
-        let tags: Set<String> = try container.decode(Set.self, forKey: .tags)
-        let delay: TimeInterval? = try container.decodeIfPresent(TimeInterval.self, forKey: .delay)
-        let deadline: Date? = try container.decodeIfPresent(Date.self, forKey: .deadline)
-        let requireNetwork: NetworkType = try container.decode(NetworkType.self, forKey: .requireNetwork)
-        let isPersisted: Bool = try container.decode(Bool.self, forKey: .isPersisted)
-        let params: [String: Any] = try container.decode([String: Any].self, forKey: .params)
-        let createTime: Date = try container.decode(Date.self, forKey: .createTime)
-        let interval: TimeInterval = try container.decode(TimeInterval.self, forKey: .interval)
-        let maxRun: Limit = try container.decode(Limit.self, forKey: .maxRun)
-        let executor: Executor = try container.decode(Executor.self, forKey: .executor)
-        let retries: Limit = try container.decode(Limit.self, forKey: .retries)
-        let runCount: Double = try container.decode(Double.self, forKey: .runCount)
-        let requireCharging: Bool = try container.decode(Bool.self, forKey: .requireCharging)
-        let priority: Int? = try container.decode(Int?.self, forKey: .priority)
-        let qualityOfService: Int? = try container.decode(Int?.self, forKey: .qualityOfService)
-        let timeout: TimeInterval? = try container.decode(TimeInterval?.self, forKey: .timeout)
-
-        self.init(
-                type: type,
-                queueName: queueName,
-                uuid: uuid,
-                override: override,
-                includeExecutingJob: includeExecutingJob,
-                tags: tags,
-                delay: delay,
-                deadline: deadline,
-                requireNetwork: requireNetwork,
-                isPersisted: isPersisted,
-                params: params,
-                createTime: createTime,
-                interval: interval,
-                maxRun: maxRun,
-                executor: executor,
-                retries: retries,
-                runCount: runCount,
-                requireCharging: requireCharging,
-                priority: Operation.QueuePriority(fromValue: priority),
-                qualityOfService: QualityOfService(fromValue: qualityOfService),
-                timeout: timeout
-        )
-    }
-}
-
-extension JobInfo: Encodable {
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: JobInfoKeys.self)
-        try container.encode(type, forKey: .type)
-        try container.encode(uuid, forKey: .uuid)
-        try container.encode(override, forKey: .override)
-        try container.encode(includeExecutingJob, forKey: .includeExecutingJob)
-        try container.encode(queueName, forKey: .queueName)
-        try container.encode(tags, forKey: .tags)
-        try container.encode(delay, forKey: .delay)
-        try container.encode(deadline, forKey: .deadline)
-        try container.encode(requireNetwork, forKey: .requireNetwork)
-        try container.encode(isPersisted, forKey: .isPersisted)
-        try container.encode(params, forKey: .params)
-        try container.encode(createTime, forKey: .createTime)
-        try container.encode(interval, forKey: .interval)
-        try container.encode(maxRun, forKey: .maxRun)
-        try container.encode(executor, forKey: .executor)
-        try container.encode(retries, forKey: .retries)
-        try container.encode(runCount, forKey: .runCount)
-        try container.encode(requireCharging, forKey: .requireCharging)
-        try container.encode(priority.rawValue, forKey: .priority)
-        try container.encode(qualityOfService.rawValue, forKey: .qualityOfService)
-        try container.encode(timeout, forKey: .timeout)
-    }
 }
 
 internal extension KeyedDecodingContainer {
@@ -175,4 +72,8 @@ internal extension KeyedEncodingContainer {
         try self.encode(String.fromUTF8(data: data, key: [key]), forKey: key)
     }
 
+}
+
+extension CodingUserInfoKey {
+    internal static let constraintMaker: CodingUserInfoKey = CodingUserInfoKey(rawValue: "constraints")!
 }

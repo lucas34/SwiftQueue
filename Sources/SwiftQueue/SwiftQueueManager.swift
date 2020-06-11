@@ -65,8 +65,7 @@ public final class SwiftQueueManager {
     public func enqueue(info: JobInfo) {
         let queue = getQueue(queueName: info.queueName)
         let job = queue.createHandler(type: info.type, params: info.params)
-        var info = info
-        let constraints = info.buildConstraints()
+        let constraints = info.constraints
 
         let operation = SqOperation(job, info, params.logger, params.listener, params.dispatchQueue, constraints)
 
@@ -132,7 +131,12 @@ internal extension SwiftQueueManager {
         return manage.values
                 .flatMap { $0.operations }
                 .compactMap { $0 as? SqOperation }
-                .filter { $0.info.executor.rawValue > 0 }
+                .filter {
+                    if let constraint: RepeatConstraint = getConstraint($0.info) {
+                        return constraint.executor.rawValue > Executor.foreground.rawValue
+                    }
+                    return false
+                }
     }
 
     func getOperation(forUUID: String) -> SqOperation? {
@@ -166,7 +170,7 @@ internal struct SqManagerParams {
     init(jobCreator: JobCreator,
          queueCreator: QueueCreator,
          persister: JobPersister = UserDefaultsPersister(),
-         serializer: JobInfoSerializer = DecodableSerializer(),
+         serializer: JobInfoSerializer = DecodableSerializer(maker: DefaultConstraintMaker()),
          logger: SwiftQueueLogger = NoLogger.shared,
          listener: JobListener? = nil,
          initInBackground: Bool = false,

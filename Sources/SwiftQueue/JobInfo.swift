@@ -32,52 +32,8 @@ public struct JobInfo {
     /// Queue name
     public var queueName: String
 
-    /// Unique identifier for a job
-    public var uuid: String
-
-    /// Override job when scheduling a job with same uuid
-    public var override: Bool
-
-    /// Including job that are executing when scheduling with same uuid
-    public var includeExecutingJob: Bool
-
-    /// Set of identifiers
-    public var tags: Set<String>
-
-    /// Delay for the first execution of the job
-    public var delay: TimeInterval?
-
-    /// Cancel the job after a certain date
-    public var deadline: Date?
-
-    /// Require a certain connectivity type
-    public var requireNetwork: NetworkType
-
-    /// Indicates if the job should be persisted inside a database
-    public var isPersisted: Bool
-
     /// Custom params set by the user
     public var params: [String: Any]
-
-    /// Date of the job's creation
-    public var createTime: Date
-
-    /// Time between each repetition of the job
-    public var interval: TimeInterval
-
-    /// Executor to run job in foreground or background
-    public var executor: Executor
-
-    /// Number of run maximum
-    public var maxRun: Limit
-
-    /// Maximum number of authorised retried
-    public var retries: Limit
-
-    /// Current number of run
-    public var runCount: Double
-
-    public var requireCharging: Bool
 
     /// This value is used to influence the order in which operations are dequeued and executed
     public var priority: Operation.QueuePriority
@@ -85,116 +41,91 @@ public struct JobInfo {
     /// The relative amount of importance for granting system resources to the operation.
     public var qualityOfService: QualityOfService
 
-    public var timeout: TimeInterval?
+    /// Date of the job's creation
+    public let createTime: Date
 
-    internal var repeatConstraint: RepeatConstraint? = nil
-    internal var retryConstraint: JobRetryConstraint? = nil
+    internal var constraints: [JobConstraint]
 
-    mutating func buildConstraints() -> [JobConstraint] {
-        var constraints = [JobConstraint]()
-
-        constraints.append(UniqueUUIDConstraint(uuid: uuid, override: override, includeExecutingJob: includeExecutingJob))
-
-        let repeatConstraint = RepeatConstraint(maxRun: maxRun, interval: interval, executor: executor)
-        constraints.append(repeatConstraint)
-        self.repeatConstraint = repeatConstraint
-
-        let retryConstraint = JobRetryConstraint(limit: retries)
-        constraints.append(retryConstraint)
-        self.retryConstraint = retryConstraint
-
-        if requireCharging {
-            constraints.append(BatteryChargingConstraint())
-        }
-
-        if let deadline = deadline {
-            constraints.append(DeadlineConstraint(deadline: deadline))
-        }
-
-        if let delay = delay {
-            constraints.append(DelayConstraint(delay: delay))
-        }
-
-        if requireNetwork != NetworkType.any {
-            constraints.append(NetworkConstraint(networkType: requireNetwork))
-        }
-
-        if let timeout = timeout {
-            constraints.append(TimeoutConstraint(timeout: timeout))
-        }
-
-        return constraints
+    mutating func setupConstraints(_ maker: ConstraintMaker, from decoder: Decoder) throws {
+        constraints = try maker.make(from: decoder)
     }
 
     init(type: String) {
         self.init(
                 type: type,
                 queueName: "GLOBAL",
-                uuid: UUID().uuidString,
-                override: false,
-                includeExecutingJob: true,
-                tags: Set<String>(),
-                delay: nil,
-                deadline: nil,
-                requireNetwork: NetworkType.any,
-                isPersisted: false,
-                params: [:],
                 createTime: Date(),
-                interval: -1.0,
-                maxRun: .limited(0),
-                executor: .foreground,
-                retries: .limited(0),
-                runCount: 0,
-                requireCharging: false,
                 priority: .normal,
                 qualityOfService: .utility,
-                timeout: nil
+                params: [:],
+                constraints: []
         )
     }
 
-    internal init(type: String,
-                  queueName: String,
-                  uuid: String,
-                  override: Bool,
-                  includeExecutingJob: Bool,
-                  tags: Set<String>,
-                  delay: TimeInterval?,
-                  deadline: Date?,
-                  requireNetwork: NetworkType,
-                  isPersisted: Bool,
-                  params: [String: Any],
-                  createTime: Date,
-                  interval: TimeInterval,
-                  maxRun: Limit,
-                  executor: Executor,
-                  retries: Limit,
-                  runCount: Double,
-                  requireCharging: Bool,
-                  priority: Operation.QueuePriority,
-                  qualityOfService: QualityOfService,
-                  timeout: TimeInterval?
+    init(type: String,
+         queueName: String,
+         createTime: Date,
+         priority: Operation.QueuePriority,
+         qualityOfService: QualityOfService,
+         params: [String: Any],
+         constraints: [JobConstraint]
     ) {
-
         self.type = type
         self.queueName = queueName
-        self.uuid = uuid
-        self.override = override
-        self.includeExecutingJob = includeExecutingJob
-        self.tags = tags
-        self.delay = delay
-        self.deadline = deadline
-        self.requireNetwork = requireNetwork
-        self.isPersisted = isPersisted
-        self.params = params
         self.createTime = createTime
-        self.interval = interval
-        self.maxRun = maxRun
-        self.executor = executor
-        self.retries = retries
-        self.runCount = runCount
-        self.requireCharging = requireCharging
         self.priority = priority
         self.qualityOfService = qualityOfService
-        self.timeout = timeout
+        self.params = params
+        self.constraints = constraints
     }
 }
+
+extension JobInfo: Codable {
+
+    internal enum JobInfoKeys: String, CodingKey {
+        case type
+        case queueName
+        case params
+        case priority
+        case qualityOfService
+        case createTime
+        case constraints
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: JobInfoKeys.self)
+
+        let type = try container.decode(String.self, forKey: .type)
+        let queueName = try container.decode(String.self, forKey: .queueName)
+        let params: [String: Any] = try container.decode([String: Any].self, forKey: .params)
+        let priority: Int = try container.decode(Int.self, forKey: .priority)
+        let qualityOfService: Int = try container.decode(Int.self, forKey: .qualityOfService)
+        let createTime = try container.decode(Date.self, forKey: .createTime)
+        let constraintMaker = decoder.userInfo[.constraintMaker] as? ConstraintMaker ?? DefaultConstraintMaker()
+
+        try self.init(
+                type: type,
+                queueName: queueName,
+                createTime: createTime,
+                priority: Operation.QueuePriority(fromValue: priority),
+                qualityOfService: QualityOfService(fromValue: qualityOfService),
+                params: params,
+                constraints: constraintMaker.make(from: decoder)
+        )
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: JobInfoKeys.self)
+
+        try container.encode(type, forKey: .type)
+        try container.encode(queueName, forKey: .queueName)
+        try container.encode(params, forKey: .params)
+        try container.encode(priority.rawValue, forKey: .priority)
+        try container.encode(qualityOfService.rawValue, forKey: .qualityOfService)
+        try container.encode(createTime, forKey: .createTime)
+        for case let constraint as CodableConstraint in constraints {
+            try constraint.encode(to: encoder)
+        }
+    }
+}
+

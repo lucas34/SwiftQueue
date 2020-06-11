@@ -226,7 +226,7 @@ extension JobError: Equatable {
 extension SqOperation {
 
     func toJSONStringSafe() -> String {
-        return (try? DecodableSerializer().serialize(info: self.info)) ?? "{}"
+        (try? DecodableSerializer(maker: DefaultConstraintMaker()).serialize(info: self.info)) ?? "{}"
     }
 
 }
@@ -254,8 +254,11 @@ class MemorySerializer: JobInfoSerializer {
     private var data: [String: JobInfo] = [:]
 
     func serialize(info: JobInfo) throws -> String {
-        data[info.uuid] = info
-        return info.uuid
+        let constraint: UniqueUUIDConstraint? = getConstraint(info)
+        let uuid = constraint?.uuid ?? ""
+        assertNotEmptyString(uuid)
+        data[uuid] = info
+        return uuid
     }
 
     func deserialize(json: String) throws -> JobInfo {
@@ -266,8 +269,8 @@ class MemorySerializer: JobInfoSerializer {
 extension JobBuilder {
 
     internal func build(job: Job, logger: SwiftQueueLogger = NoLogger.shared, listener: JobListener? = nil) -> SqOperation {
-        var info = build()
-        let constraints = info.buildConstraints()
+        let info = build()
+        let constraints = info.constraints
         return SqOperation(job, info, logger, listener, DispatchQueue.global(qos: DispatchQoS.QoSClass.utility), constraints)
     }
 
