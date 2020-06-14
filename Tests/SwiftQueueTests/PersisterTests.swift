@@ -216,64 +216,6 @@ class PersisterTests: XCTestCase {
         XCTAssertEqual([group], persister.removeQueueName)
     }
 
-//    func testScheduleWhileDeserialize() {
-//        let queueId = UUID().uuidString
-//
-//        let persister = PersisterTracker(key: UUID().uuidString)
-//
-//        var tasks = [String: TestJob]()
-//
-//        for i in 0..<100 {
-//            let (type, job) = (UUID().uuidString, TestJob())
-//
-//            let task = JobBuilder(type: type)
-//                    .singleInstance(forId: "\(i)")
-//                    .parallel(queueName: queueId)
-//                    .build(job: job)
-//                    .toJSONStringSafe()
-//
-//            persister.put(queueName: queueId, taskId: "\(i)", data: task)
-//
-//            tasks[type] = job
-//        }
-//
-//        let lastTaskType = UUID().uuidString
-//        let lastJob = TestJob()
-//
-//        tasks[lastTaskType] = lastJob
-//
-//        let creator = TestCreator(tasks)
-//        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: persister).set(initInBackground: true).build()
-//
-//        JobBuilder(type: lastTaskType)
-//                .singleInstance(forId: lastTaskType)
-//                .parallel(queueName: queueId)
-//                .persist()
-//                .schedule(manager: manager)
-//
-//        lastJob.awaitForRemoval()
-//
-//        // At this point all the other jobs should be completed
-//        manager.cancelAllOperations()
-//
-//        lastJob.assertSingleCompletion()
-//
-//        for (_, task) in tasks {
-//            task.assertSingleCompletion()
-//        }
-//    }
-
-//    public func testBuilderWith() throws {
-//        for serializer in serializers {
-//            try assertUnicode(serializer, expected: UUID().uuidString)
-//            try assertUnicode(serializer, expected: "Hello world")
-//            try assertUnicode(serializer, expected: "Powerلُلُصّبُلُلصّبُررً ॣ ॣh ॣ ॣ冗")
-//            try assertUnicode(serializer, expected: "🏳0🌈")
-//            try assertUnicode(serializer, expected: "🤪🤯🧐")
-//            try assertUnicode(serializer, expected: "జ్ఞ‌ా")
-//        }
-//    }
-
     func testCustomSerializer() {
         let (type1, job1) = (UUID().uuidString, TestJob())
 
@@ -313,14 +255,5 @@ class PersisterTests: XCTestCase {
         // Nothing to assert since we don't rely on the actual one in test cases
         persister.clearAll()
     }
-
-//    private func assertUnicode(_ serializer: JobInfoSerializer, expected: String, file: StaticString = #file, line: UInt = #line) throws {
-//        let type = UUID().uuidString
-//
-//        let params: [String: Any] = [UUID().uuidString: expected]
-//
-//        let jobInfo = JobBuilder(type: type).with(params: params).info
-//        XCTAssertTrue(NSDictionary(dictionary: params).isEqual(to: jobInfo.params), file: file, line: line)
-//    }
 
 }

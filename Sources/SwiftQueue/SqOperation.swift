@@ -28,7 +28,7 @@ public final class SqOperation: Operation {
     public let logger: SwiftQueueLogger
     public let dispatchQueue: DispatchQueue
 
-    public var nextRunSchedule: Date? = nil
+    public var nextRunSchedule: Date?
 
     internal let handler: Job
     internal var lastError: Error?

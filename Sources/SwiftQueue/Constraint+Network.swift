@@ -63,7 +63,7 @@ internal final class NetworkConstraint: SimpleConstraint, CodableConstraint {
     override func run(operation: SqOperation) -> Bool {
         guard let reachability = reachability else { return true }
 
-        if (hasCorrectNetwork(reachability: reachability)) {
+        if hasCorrectNetwork(reachability: reachability) {
             return true
         }
 
