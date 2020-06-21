@@ -24,7 +24,6 @@ import Foundation
 import XCTest
 @testable import SwiftQueue
 
-
 class CustomConstraintTest: XCTestCase {
 
     func testCustomConstraint() {
