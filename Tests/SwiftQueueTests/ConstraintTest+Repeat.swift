@@ -92,4 +92,37 @@ class ConstraintTestRepeat: XCTestCase {
         job.assertNoError()
     }
 
+    func testRepeatSerialisation() {
+        let (type, job, jobId) = (UUID().uuidString, TestJob(), UUID().uuidString)
+        let queueId = UUID().uuidString
+        let creator = TestCreator([type: job])
+
+        let task = JobBuilder(type: type)
+                .singleInstance(forId: jobId)
+                .periodic(limit: .limited(2), interval: Double.leastNonzeroMagnitude)
+                .build(job: job)
+                .toJSONStringSafe()
+
+        // Should invert when deserialize
+        let persister = PersisterTracker(key: UUID().uuidString)
+        persister.put(queueName: queueId, taskId: jobId, data: task)
+
+        let restore = persister.restore()
+        XCTAssertEqual(restore.count, 1)
+        XCTAssertEqual(restore[0], queueId)
+
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: persister).build()
+
+        XCTAssertEqual(queueId, persister.restoreQueueName)
+
+        job.awaitForRemoval()
+        job.assertRunCount(expected: 2)
+        job.assertCompletedCount(expected: 1)
+        job.assertRetriedCount(expected: 0)
+        job.assertCanceledCount(expected: 0)
+        job.assertNoError()
+
+        manager.waitUntilAllOperationsAreFinished()
+    }
+
 }
