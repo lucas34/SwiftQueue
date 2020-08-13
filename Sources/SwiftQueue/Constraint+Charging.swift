@@ -51,7 +51,7 @@ internal final class BatteryChargingConstraint: SimpleConstraint, CodableConstra
         NotificationCenter.default.addObserver(
                 self,
                 selector: Selector(("batteryStateDidChange:")),
-                name: UIDevice.batteryStateDidChangeNotification,
+                name: NSNotification.Name.UIDeviceBatteryStateDidChange,
                 object: nil
         )
     }
