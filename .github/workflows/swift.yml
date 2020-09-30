@@ -12,7 +12,7 @@ jobs:
   DANGER:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2.1.0
+    - uses: actions/checkout@v2.3.3
     - name: Setup Ruby
       uses: actions/setup-ruby@v1
       with:
@@ -32,7 +32,7 @@ jobs:
     runs-on: macOS-latest
 
     steps:
-    - uses: actions/checkout@v2.1.0
+    - uses: actions/checkout@v2.3.3
     - name: Test
       run: swift test
   
@@ -41,7 +41,7 @@ jobs:
     runs-on: macOS-latest
 
     steps:
-    - uses: actions/checkout@v2.1.0
+    - uses: actions/checkout@v2.3.3
     - name: Lint
       run: pod lib lint
   
@@ -50,8 +50,8 @@ jobs:
     runs-on: macOS-latest
 
     steps:
-    - uses: actions/checkout@v2.1.0
-    - uses: actions/cache@v1
+    - uses: actions/checkout@v2.3.3
+    - uses: actions/cache@v2.1.1
       id: carthage-cache
       with:
         path: Carthage
@@ -74,8 +74,8 @@ jobs:
     runs-on: macOS-latest
 
     steps:
-    - uses: actions/checkout@v2.1.0
-    - uses: actions/cache@v1
+    - uses: actions/checkout@v2.3.3
+    - uses: actions/cache@v2.1.1
       id: carthage-cache
       with:
         path: Carthage
