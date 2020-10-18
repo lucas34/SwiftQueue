@@ -1,9 +1,29 @@
 # Change Log
 
+# [5.0.0](https://github.com/lucas34/SwiftQueue/tree/5.0.0)
+
+### Warning: This version is incompatible with 4.X
+If you are using serialised task. After updating, the library will not be able to deserialised the task saved with version 4.X 
+
+#### New features
+You can now add your own constraint dynamically
+
+- Dynamic constraint feature (#310)
+- Add custom constraint (#343)
+
+#### Breaking Changes
+- Rename NoSerialiser to NoPersister (#341)
+
+#### Chore
+- Bump Reachability (#354)
+
+#### Internal changes
+- Cleanup (#342) (#347) (#353) (#356) (#357)
+- Dynamic constraint feature (#310)
+
 ## [4.3.0](https://github.com/lucas34/SwiftQueue/tree/4.3.0)
 
 #### Breaking Changes
-
 - JobBuilder method requireCharging(value: Bool) was renamed .requireCharging() (#311)
 - JobBuilder method .persist(required: true) was renamed .persist() (#312)
 - JobBuilder method .internet(atLeast: .any) is forbidden. It's already default behaviour (#329)
