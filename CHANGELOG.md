@@ -1,5 +1,15 @@
 # Change Log
 
+# [5.0.1](https://github.com/lucas34/SwiftQueue/tree/5.0.1)
+
+#### Bug Fix
+- Important Fix for deserialise tasks (#363)
+
+#### Chore
+- Update to Swift 5.3 (#352)
+- Bump (#364) (#365)
+- Fix copyright (#359)
+
 # [5.0.0](https://github.com/lucas34/SwiftQueue/tree/5.0.0)
 
 ### Warning: This version is incompatible with 4.X
