@@ -50,6 +50,9 @@ jobs:
     runs-on: macOS-latest
 
     steps:
+    - uses: maxim-lobanov/setup-xcode@v1.2.1
+      with:
+        xcode-version: '11.7'
     - uses: actions/checkout@v2.3.3
     - uses: actions/cache@v2.1.1
       id: carthage-cache
@@ -74,6 +77,9 @@ jobs:
     runs-on: macOS-latest
 
     steps:
+    - uses: maxim-lobanov/setup-xcode@v1.2.1
+      with:
+        xcode-version: '11.7'
     - uses: actions/checkout@v2.3.3
     - uses: actions/cache@v2.1.1
       id: carthage-cache
