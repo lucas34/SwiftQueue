@@ -12,9 +12,9 @@ jobs:
   DANGER:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2.3.3
+    - uses: actions/checkout@v2.3.4
     - name: Setup Ruby
-      uses: actions/setup-ruby@v1
+      uses: actions/setup-ruby@v1.1.2
       with:
         ruby-version: 2.7
     - name: Install blunder and install deps.
@@ -32,7 +32,7 @@ jobs:
     runs-on: macOS-latest
 
     steps:
-    - uses: actions/checkout@v2.3.3
+    - uses: actions/checkout@v2.3.4
     - name: Test
       run: swift test
   
@@ -41,7 +41,7 @@ jobs:
     runs-on: macOS-latest
 
     steps:
-    - uses: actions/checkout@v2.3.3
+    - uses: actions/checkout@v2.3.4
     - name: Lint
       run: pod lib lint
   
@@ -50,8 +50,11 @@ jobs:
     runs-on: macOS-latest
 
     steps:
-    - uses: actions/checkout@v2.3.3
-    - uses: actions/cache@v2.1.1
+    - uses: maxim-lobanov/setup-xcode@v1.2.1
+      with:
+        xcode-version: '11.7'
+    - uses: actions/checkout@v2.3.4
+    - uses: actions/cache@v2.1.3
       id: carthage-cache
       with:
         path: Carthage
@@ -74,8 +77,11 @@ jobs:
     runs-on: macOS-latest
 
     steps:
-    - uses: actions/checkout@v2.3.3
-    - uses: actions/cache@v2.1.1
+    - uses: maxim-lobanov/setup-xcode@v1.2.1
+      with:
+        xcode-version: '11.7'
+    - uses: actions/checkout@v2.3.4
+    - uses: actions/cache@v2.1.3
       id: carthage-cache
       with:
         path: Carthage
@@ -86,4 +92,4 @@ jobs:
         carthage bootstrap --no-use-binaries --cache-builds
     - name: Build
       run: xcodebuild -project "SwiftQueue.xcodeproj" -scheme "SwiftQueue macOS" -destination "arch=x86_64" -configuration Debug ONLY_ACTIVE_ARCH=NO ENABLE_TESTABILITY=YES test -enableCodeCoverage YES | xcpretty
-    - uses: codecov/codecov-action@v1
+    - uses: codecov/codecov-action@v1.0.15
