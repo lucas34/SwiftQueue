@@ -66,7 +66,8 @@ public final class SqOperationQueue: OperationQueue {
             do {
                 let info = try serializer.deserialize(json: string)
                 let job = creator.create(type: info.type, params: info.params)
-                let constraints = info.constraints
+                var constraints = info.constraints
+                constraints.append(PersisterConstraint(serializer: serializer, persister: persister))
 
                 return SqOperation(job, info, logger, listener, dispatchQueue, constraints)
             } catch let error {
