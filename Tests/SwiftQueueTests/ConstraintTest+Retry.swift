@@ -33,9 +33,9 @@ class ConstraintTestRetry: XCTestCase {
         let job = TestJob(retry: .retry(delay: 0)) {
             runCount += 1
             if runCount == runLimit {
-                $0.done(.success)
+                $0.done(.success(true))
             } else {
-                $0.done(.fail(JobError()))
+                $0.done(.failure(JobError()))
             }
         }
 

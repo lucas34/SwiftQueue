@@ -32,6 +32,7 @@ public final class SqOperation: Operation {
 
     internal let handler: Job
     internal var lastError: Error?
+    internal var lastSuccess: Any?
 
     private let constraints: [JobConstraint]
     private let listener: JobListener?
@@ -101,6 +102,7 @@ public final class SqOperation: Operation {
     func cancel(with: Error) {
         logger.log(.verbose, jobId: name, message: "Job has been canceled")
         lastError = with
+        lastSuccess = nil
         onTerminate()
         super.cancel()
     }
@@ -116,9 +118,10 @@ public final class SqOperation: Operation {
     internal func abort(error: Error) {
         logger.log(.verbose, jobId: name, message: "Job has not been scheduled due to \(error.localizedDescription)")
         lastError = error
+        lastSuccess = nil
         // Need to be called manually since the task is actually not in the queue. So cannot call cancel()
-        handler.onRemove(result: .fail(error))
-        listener?.onTerminated(job: info, result: .fail(error))
+        handler.onRemove(result: .failure(error))
+        listener?.onTerminated(job: info, result: .failure(error))
     }
 
     public func run() {
@@ -151,7 +154,7 @@ public final class SqOperation: Operation {
     }
 
     internal func remove() {
-        let result = lastError.map(JobCompletion.fail) ?? JobCompletion.success
+        let result = lastError.map(JobCompletion.failure) ?? lastSuccess.map(JobCompletion.success) ?? JobCompletion.failure(SwiftQueueError.mapping)
         logger.log(.verbose, jobId: name, message: "Job is removed from the queue result=\(result)")
         handler.onRemove(result: result)
         listener?.onTerminated(job: info, result: result)
@@ -167,9 +170,9 @@ extension SqOperation: JobResult {
         listener?.onAfterRun(job: info, result: result)
 
         switch result {
-        case .success:
-            completionSuccess()
-        case .fail(let error):
+        case .success(let value):
+            completionSuccess(value: value)
+        case .failure(let error):
             completionFail(error: error)
         }
     }
@@ -177,6 +180,7 @@ extension SqOperation: JobResult {
     private func completionFail(error: Error) {
         logger.log(.warning, jobId: name, message: "Job completed with error \(error.localizedDescription)")
         lastError = error
+        lastSuccess = nil
 
         if let constraint: JobRetryConstraint = getConstraint(info) {
             constraint.onCompletionFail(sqOperation: self, error: error)
@@ -185,9 +189,10 @@ extension SqOperation: JobResult {
         }
     }
 
-    private func completionSuccess() {
+    private func completionSuccess(value: Any) {
         logger.log(.verbose, jobId: name, message: "Job completed successfully")
         lastError = nil
+        lastSuccess = value
         currentRepetition = 0
 
         if let constraint: RepeatConstraint = getConstraint(info) {

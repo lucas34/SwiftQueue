@@ -41,7 +41,7 @@ class TestJob: Job {
 
     private var lastError: Error?
 
-    init(retry: RetryConstraint = .retry(delay: 0), onRunCallback: @escaping (JobResult) -> Void = { $0.done(.success) }) {
+    init(retry: RetryConstraint = .retry(delay: 0), onRunCallback: @escaping (JobResult) -> Void = { $0.done(.success(true)) }) {
         self.onRunCallback = onRunCallback
         self.withRetry = retry
     }
@@ -66,7 +66,7 @@ class TestJob: Job {
             onCompletedCount += 1
             onRemoveSemaphore.signal()
 
-        case .fail(let error):
+        case .failure(let error):
             lastError = error
             onCanceledCount += 1
             onRemoveSemaphore.signal()
@@ -145,7 +145,7 @@ class TestJob: Job {
 class TestJobFail: TestJob {
 
     required init(retry: RetryConstraint = .retry(delay: 0), error: Error = JobError()) {
-        super.init(retry: retry) { $0.done(.fail(error))}
+        super.init(retry: retry) { $0.done(.failure(error))}
     }
 
 }

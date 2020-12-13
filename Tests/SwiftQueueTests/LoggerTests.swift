@@ -51,7 +51,7 @@ class LoggerTests: XCTestCase {
         XCTAssertEqual(outputs[1], "[SwiftQueue] level=verbose jobId=\(id) message=Job is running")
         XCTAssertEqual(outputs[2], "[SwiftQueue] level=verbose jobId=\(id) message=Job completed successfully")
         XCTAssertEqual(outputs[3], "[SwiftQueue] level=verbose jobId=\(id) message=Job will not run anymore")
-        XCTAssertEqual(outputs[4], "[SwiftQueue] level=verbose jobId=\(id) message=Job is removed from the queue result=success")
+        XCTAssertEqual(outputs[4], "[SwiftQueue] level=verbose jobId=\(id) message=Job is removed from the queue result=success(true)")
     }
 
     func testLoggerLevel() {

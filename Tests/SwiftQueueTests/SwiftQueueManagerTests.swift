@@ -226,7 +226,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         let (type, job) = (UUID().uuidString, TestJob {
             manager?.cancelAllOperations()
-            $0.done(.fail(JobError()))
+            $0.done(.failure(JobError()))
         })
 
         let creator = TestCreator([type: job])

@@ -71,21 +71,13 @@ public protocol JobInfoSerializer {
 /// Callback to give result in synchronous or asynchronous job
 public protocol JobResult {
 
-    /// Method callback to notify the completion of your 
+    /// Method callback to notify the completion of your
     func done(_ result: JobCompletion)
 
 }
 
-/// Enum to define possible Job completion values
-public enum JobCompletion {
-
-    /// Job completed successfully
-    case success
-
-    /// Job completed with error
-    case fail(Error)
-
-}
+/// Typealias to define possible Job completion values
+public typealias JobCompletion = Result<Any, Error>
 
 /// Protocol to implement to run a job
 public protocol Job {
@@ -94,7 +86,7 @@ public protocol Job {
     /// Will be called in background thread
     func onRun(callback: JobResult)
 
-    /// Fail has failed with the 
+    /// Fail has failed with the
     /// Will only gets called if the job can be retried
     /// Not applicable for 'ConstraintError'
     /// Not application if the retry(value) is less than 2 which is the case by default
@@ -197,5 +189,7 @@ public enum SwiftQueueError: Error {
 
     /// Job took too long to run
     case timeout
-
+    
+    /// Job couldn't map JobCompletion result
+    case mapping
 }
