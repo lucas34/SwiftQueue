@@ -1,5 +1,10 @@
 # Change Log
 
+# [5.0.2](https://github.com/lucas34/SwiftQueue/tree/5.0.2)
+
+#### Bug Fix
+- Important Fix for deserialise tasks (#363) Thanks @arthurdapaz for the contribution
+
 # [5.0.1](https://github.com/lucas34/SwiftQueue/tree/5.0.1)
 
 #### Bug Fix
