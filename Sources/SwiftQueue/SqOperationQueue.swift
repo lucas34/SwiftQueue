@@ -64,12 +64,11 @@ public final class SqOperationQueue: OperationQueue {
     private func loadSerializedTasks(name: String) {
         persister.restore(queueName: name).compactMap { string -> SqOperation? in
             do {
-                let info = try serializer.deserialize(json: string)
+                var info = try serializer.deserialize(json: string)
                 let job = creator.create(type: info.type, params: info.params)
-                var constraints = info.constraints
-                constraints.append(PersisterConstraint(serializer: serializer, persister: persister))
+                info.constraints.append(PersisterConstraint(serializer: serializer, persister: persister))
 
-                return SqOperation(job, info, logger, listener, dispatchQueue, constraints)
+                return SqOperation(job, info, logger, listener, dispatchQueue, info.constraints)
             } catch let error {
                 logger.log(.error, jobId: "UNKNOWN", message: "Unable to deserialize job error=\(error.localizedDescription)")
                 return nil
