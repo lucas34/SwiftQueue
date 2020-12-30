@@ -168,6 +168,38 @@ class SwiftQueueManagerTests: XCTestCase {
         XCTAssertEqual(0, persister.removeQueueName.count)
     }
 
+    func testCancelAllRepeatJob() {
+        let (type, job) = (UUID().uuidString, TestJob())
+
+        let id = UUID().uuidString
+        let tag = UUID().uuidString
+        let group = UUID().uuidString
+
+        let creator = TestCreator([type: job])
+
+        let persister = PersisterTracker(key: UUID().uuidString)
+
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: persister).build()
+
+        JobBuilder(type: type)
+                .singleInstance(forId: UUID().uuidString)
+                .periodic(limit: .unlimited, interval: Double.leastNonzeroMagnitude)
+                .schedule(manager: manager)
+
+
+        manager.cancelAllOperations()
+
+        job.awaitForRemoval()
+        job.assertRemovedBeforeRun(reason: .canceled)
+
+        XCTAssertEqual(0, persister.putQueueName.count)
+        XCTAssertEqual(0, persister.putJobUUID.count)
+        XCTAssertEqual(0, persister.putData.count)
+
+        XCTAssertEqual(0, persister.removeJobUUID.count)
+        XCTAssertEqual(0, persister.removeQueueName.count)
+    }
+
     func testAddOperationNotJobTask() {
         let params = SqManagerParams(
                 jobCreator: TestCreator([:]),
