@@ -151,9 +151,9 @@ class TestJobFail: TestJob {
 }
 
 class TestCreator: JobCreator {
-    private let job: [String: TestJob]
+    private let job: [String: Job]
 
-    public init(_ job: [String: TestJob]) {
+    public init(_ job: [String: Job]) {
         self.job = job
     }
 
