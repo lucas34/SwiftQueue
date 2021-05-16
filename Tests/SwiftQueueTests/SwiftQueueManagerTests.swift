@@ -41,6 +41,31 @@ class SwiftQueueManagerTests: XCTestCase {
         job.assertSingleCompletion()
     }
 
+    func testRunSuccessJobLambda() {
+        var onRunCount = 0
+        let onRemoveSemaphore = DispatchSemaphore(value: 0)
+
+        let (type, job) = (UUID().uuidString, LambdaJob {
+            onRunCount += 1
+            onRemoveSemaphore.signal()
+        })
+
+        let creator = TestCreator([type: job])
+
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoPersister.shared).set(isSuspended: true).build()
+        JobBuilder(type: type)
+                .priority(priority: .veryHigh)
+                .service(quality: .background)
+                .schedule(manager: manager)
+
+        XCTAssertEqual(0, onRunCount)
+
+        manager.isSuspended = false
+
+        onRemoveSemaphore.wait()
+        XCTAssertEqual(1, onRunCount)
+    }
+
     func testJobListener() {
         let (type, job) = (UUID().uuidString, TestJob())
 
