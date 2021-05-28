@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2.3.4
     - name: Setup Ruby
-      uses: actions/setup-ruby@v1.1.2
+      uses: actions/setup-ruby@v1.71.0
       with:
         ruby-version: 2.7
     - name: Install blunder and install deps.
@@ -54,7 +54,7 @@ jobs:
       with:
         xcode-version: '11.7'
     - uses: actions/checkout@v2.3.4
-    - uses: actions/cache@v2.1.3
+    - uses: actions/cache@v2.1.6
       id: carthage-cache
       with:
         path: Carthage
@@ -81,7 +81,7 @@ jobs:
       with:
         xcode-version: '11.7'
     - uses: actions/checkout@v2.3.4
-    - uses: actions/cache@v2.1.3
+    - uses: actions/cache@v2.1.6
       id: carthage-cache
       with:
         path: Carthage
