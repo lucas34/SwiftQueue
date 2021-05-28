@@ -52,7 +52,7 @@ jobs:
     steps:
     - uses: maxim-lobanov/setup-xcode@v1.2.3
       with:
-        xcode-version: '11.7'
+        xcode-version: '12.5'
     - uses: actions/checkout@v2.3.4
     - uses: actions/cache@v2.1.6
       id: carthage-cache
