@@ -86,6 +86,10 @@ public final class SqOperationQueue: OperationQueue {
     }
 
     private func addOperationInternal(_ ope: Operation, wait: Bool) {
+        if let sqOperation = ope as? SqOperation {
+            listener?.onJobScheduled(job: sqOperation.info)
+        }
+
         guard !ope.isFinished else { return }
 
         if wait {

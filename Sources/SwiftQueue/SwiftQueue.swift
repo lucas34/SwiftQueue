@@ -187,6 +187,9 @@ extension BasicQueue: Queue {
 /// Listen from job status
 public protocol JobListener {
 
+    /// Job is added to the queue
+    func onJobScheduled(job: JobInfo)
+
     /// Job will start executing
     func onBeforeRun(job: JobInfo)
 

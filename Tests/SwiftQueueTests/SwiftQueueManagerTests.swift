@@ -82,6 +82,7 @@ class SwiftQueueManagerTests: XCTestCase {
 
         // No run
         job.assertNoRun()
+        XCTAssertEqual(1, listener.onJobScheduled.count)
         XCTAssertEqual(0, listener.onBeforeRun.count)
         XCTAssertEqual(0, listener.onAfterRun.count)
         XCTAssertEqual(0, listener.onTerminated.count)
@@ -91,6 +92,7 @@ class SwiftQueueManagerTests: XCTestCase {
         job.awaitForRemoval()
         job.assertSingleCompletion()
 
+        XCTAssertEqual(1, listener.onJobScheduled.count)
         XCTAssertEqual(1, listener.onBeforeRun.count)
         XCTAssertEqual(1, listener.onAfterRun.count)
         XCTAssertEqual(1, listener.onTerminated.count)
