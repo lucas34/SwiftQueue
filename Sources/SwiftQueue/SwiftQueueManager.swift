@@ -63,6 +63,16 @@ public final class SwiftQueueManager {
     /// Schedule a job to the queue
     /// TODO Need to remove this method
     public func enqueue(info: JobInfo) {
+        if let thread = params.enqueueThread {
+            thread.sync(flags: .barrier) {
+                enqueueInMainThread(info: info)
+            }
+        } else {
+            enqueueInMainThread(info: info)
+        }
+    }
+
+    private func enqueueInMainThread(info: JobInfo) {
         let queue = getQueue(queueName: info.queueName)
         let job = queue.createHandler(type: info.type, params: info.params)
         let constraints = info.constraints
@@ -167,6 +177,8 @@ internal struct SqManagerParams {
 
     var initInBackground: Bool
 
+    var enqueueThread: DispatchQueue?
+
     init(jobCreator: JobCreator,
          queueCreator: QueueCreator,
          persister: JobPersister = UserDefaultsPersister(),
@@ -174,7 +186,8 @@ internal struct SqManagerParams {
          logger: SwiftQueueLogger = NoLogger.shared,
          listener: JobListener? = nil,
          initInBackground: Bool = false,
-         dispatchQueue: DispatchQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.utility)
+         dispatchQueue: DispatchQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.utility),
+         enqueueThread: DispatchQueue? = nil
     ) {
         self.jobCreator = jobCreator
         self.queueCreator = queueCreator
@@ -184,6 +197,7 @@ internal struct SqManagerParams {
         self.listener = listener
         self.initInBackground = initInBackground
         self.dispatchQueue = dispatchQueue
+        self.enqueueThread = enqueueThread
     }
 
 }
@@ -241,6 +255,14 @@ public final class SwiftQueueManagerBuilder {
         params.dispatchQueue = dispatchQueue
         return self
     }
+
+    /// Use a single DispatchQueue to enqueue jobs
+    /// This can solve crashes when calling 'enqueue' in a multi-thread environment
+    public func set(enqueueDispatcher: DispatchQueue) -> Self {
+        params.enqueueThread = enqueueDispatcher
+        return self
+    }
+
 
     /// Get an instance of `SwiftQueueManager`
     public func build() -> SwiftQueueManager {
