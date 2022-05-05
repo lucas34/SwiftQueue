@@ -184,7 +184,6 @@ public final class JobBuilder {
             assert(JSONSerialization.isValidJSONObject(info.params))
             info.constraints.append(PersisterConstraint(serializer: manager.params.serializer, persister: manager.params.persister))
         }
-
         manager.enqueue(info: info)
     }
 

@@ -305,4 +305,29 @@ class SwiftQueueManagerTests: XCTestCase {
         job.assertError(queueError: .canceled)
     }
 
+    func testConcurrentScheduling() {
+        let (type, job) = (UUID().uuidString, TestJob())
+        let creator = TestCreator([type: job])
+        let persister = PersisterTracker(key: UUID().uuidString)
+        let manager = SwiftQueueManagerBuilder(creator: creator)
+                .set(isSuspended: true)
+                .set(enqueueDispatcher: .main)
+                .set(persister: persister).build()
+
+
+        let concurrentQueue = DispatchQueue(label: "com.test.concurrent", attributes: .concurrent)
+        for _ in 0..<10 {
+            concurrentQueue.async {
+                JobBuilder(type: type).parallel(queueName: UUID().uuidString).schedule(manager: manager)
+            }
+        }
+
+        for _ in 0..<10 {
+            DispatchQueue(label: "com.test.concurrent", attributes: .concurrent).async {
+                JobBuilder(type: type).parallel(queueName: UUID().uuidString).schedule(manager: manager)
+            }
+        }
+
+    }
+
 }
