@@ -1,5 +1,28 @@
 # Change Log
 
+# [5.1.0](https://github.com/lucas34/SwiftQueue/tree/5.1.0)
+
+#### Bug fix
+
+Allow user to specify enqueue DispatchQueue to fix multi-thread enqueue crash
+
+```swift
+SwiftQueueManagerBuilder(creator: creator)
+        .set(enqueueDispatcher: .main)
+```
+
+#### Breaking Changes
+- 'JobListener' now has 'onJobScheduled' callback (#384)
+
+#### New features
+- Add Lambda Job (#382)
+
+For simple job, instead of creating your own implementation of 'Job', you can use LambdaJob {}
+
+#### Chore
+- Update Swift (#397)
+
+
 # [5.0.2](https://github.com/lucas34/SwiftQueue/tree/5.0.2)
 
 #### Bug Fix
