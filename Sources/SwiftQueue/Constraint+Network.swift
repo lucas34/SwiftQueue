@@ -21,9 +21,7 @@
 // SOFTWARE.
 
 import Foundation
-#if os(iOS) || os(macOS) || os(tvOS)
-import Reachability
-#endif
+import Network
 
 /// Kind of connectivity required for the job to run
 public enum NetworkType: Int, Codable {
@@ -35,13 +33,12 @@ public enum NetworkType: Int, Codable {
     case wifi = 2
 }
 
-#if os(iOS) || os(macOS) || os(tvOS)
 internal final class NetworkConstraint: SimpleConstraint, CodableConstraint {
 
     /// Require a certain connectivity type
     internal let networkType: NetworkType
 
-    private var reachability: Reachability?
+    private var monitor: NWPathMonitor?
 
     required init(networkType: NetworkType) {
         assert(networkType != .any)
@@ -57,42 +54,37 @@ internal final class NetworkConstraint: SimpleConstraint, CodableConstraint {
 
     override func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {
         assert(operation.dispatchQueue != .main)
-        self.reachability = try Reachability(targetQueue: operation.dispatchQueue, notificationQueue: operation.dispatchQueue)
+        self.monitor = getMonitor(for: networkType)
     }
 
     override func run(operation: SqOperation) -> Bool {
-        guard let reachability = reachability else { return true }
+        guard let monitor = monitor else { return true }
 
-        if hasCorrectNetwork(reachability: reachability) {
+        if monitor.currentPath.status == .satisfied {
             return true
         }
 
-        operation.logger.log(.verbose, jobId: operation.name, message: "Unsatisfied network requirement")
+        monitor.pathUpdateHandler = { [monitor, operation] path in
+            guard path.status == .satisfied else {
+                operation.logger.log(.verbose, jobId: operation.name, message: "Unsatisfied network requirement")
+                return
+            }
 
-        reachability.whenReachable = { reachability in
-            reachability.stopNotifier()
-            reachability.whenReachable = nil
+            monitor.cancel()
+            monitor.pathUpdateHandler = nil
             operation.run()
         }
 
-        do {
-            try reachability.startNotifier()
-            return false
-        } catch {
-            operation.logger.log(.verbose, jobId: operation.name, message: "Unable to start network listener. Job will run.")
-            operation.logger.log(.error, jobId: operation.name, message: error.localizedDescription)
-            return true
-        }
+        monitor.start(queue: operation.dispatchQueue)
+        return false
     }
 
-    private func hasCorrectNetwork(reachability: Reachability) -> Bool {
+    func getMonitor(for networkType: NetworkType) -> NWPathMonitor {
         switch networkType {
-        case .any:
-            return true
-        case .cellular:
-            return reachability.connection != .unavailable
+        case .any, .cellular:
+            return NWPathMonitor()
         case .wifi:
-            return reachability.connection == .wifi
+            return NWPathMonitor(requiredInterfaceType: .wifi)
         }
     }
 
@@ -106,14 +98,3 @@ internal final class NetworkConstraint: SimpleConstraint, CodableConstraint {
     }
 
 }
-#else
-
-internal final class NetworkConstraint: SimpleConstraint, CodableConstraint {
-
-    init(networkType: NetworkType) {}
-
-    convenience init?(from decoder: Decoder) throws { nil }
-
-}
-
-#endif
