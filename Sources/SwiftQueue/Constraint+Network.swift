@@ -54,7 +54,7 @@ internal final class NetworkConstraint: SimpleConstraint, CodableConstraint {
 
     override func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {
         assert(operation.dispatchQueue != .main)
-        self.monitor = getMonitor(for: networkType)
+        self.monitor = NWPathMonitor()
     }
 
     override func run(operation: SqOperation) -> Bool {
@@ -64,8 +64,15 @@ internal final class NetworkConstraint: SimpleConstraint, CodableConstraint {
             return true
         }
 
-        monitor.pathUpdateHandler = { [monitor, operation] path in
+        monitor.pathUpdateHandler = { [monitor, operation, networkType] path in
             guard path.status == .satisfied else {
+                operation.logger.log(.verbose, jobId: operation.name, message: "Unsatisfied network requirement")
+                return
+            }
+
+            /// If network type is wifi, make sure the path is not using cellular, otherwise wait
+            if networkType == .wifi,
+               path.usesInterfaceType(.cellular) {
                 operation.logger.log(.verbose, jobId: operation.name, message: "Unsatisfied network requirement")
                 return
             }
@@ -77,15 +84,6 @@ internal final class NetworkConstraint: SimpleConstraint, CodableConstraint {
 
         monitor.start(queue: operation.dispatchQueue)
         return false
-    }
-
-    func getMonitor(for networkType: NetworkType) -> NWPathMonitor {
-        switch networkType {
-        case .any, .cellular:
-            return NWPathMonitor()
-        case .wifi:
-            return NWPathMonitor(requiredInterfaceType: .wifi)
-        }
     }
 
     private enum NetworkConstraintKey: String, CodingKey {
