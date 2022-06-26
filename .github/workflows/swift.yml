@@ -54,17 +54,8 @@ jobs:
       with:
         xcode-version: '11.7'
     - uses: actions/checkout@v3.0.0
-    - uses: actions/cache@v2.1.7
-      id: carthage-cache
-      with:
-        path: Carthage
-        key: carthage-11-7-${{ hashFiles('**/Cartfile.resolved') }}
-    - name: Checkout
-      if: steps.carthage-cache.outputs.cache-hit != 'true'
-      run: |
-        carthage bootstrap --no-use-binaries --cache-builds
     - name: Build
-      run: carthage build --no-skip-current --cache-builds
+      run: carthage build --no-skip-current
     - name: Archive
       run: carthage archive
     - uses: actions/upload-artifact@v3.0.0
@@ -81,15 +72,6 @@ jobs:
       with:
         xcode-version: '11.7'
     - uses: actions/checkout@v3.0.0
-    - uses: actions/cache@v2.1.7
-      id: carthage-cache
-      with:
-        path: Carthage
-        key: carthage-11-7-${{ hashFiles('**/Cartfile.resolved') }}
-    - name: Checkout
-      if: steps.carthage-cache.outputs.cache-hit != 'true'
-      run: |
-        carthage bootstrap --no-use-binaries --cache-builds
     - name: Build
       run: xcodebuild -project "SwiftQueue.xcodeproj" -scheme "SwiftQueue macOS" -destination "arch=x86_64" -configuration Debug ONLY_ACTIVE_ARCH=NO ENABLE_TESTABILITY=YES test -enableCodeCoverage YES | xcpretty
     - uses: codecov/codecov-action@v2.1.0
