@@ -24,14 +24,14 @@ import Foundation
 
 public protocol ConstraintMaker {
 
-    func make(from decoder: Decoder) throws -> [JobConstraint]
+    func make(from decoder: Decoder) throws -> [CodableConstraint]
 
 }
 
-class DefaultConstraintMaker: ConstraintMaker {
+open class DefaultConstraintMaker: ConstraintMaker {
 
-    func make(from decoder: Decoder) throws -> [JobConstraint] {
-        var constraints: [JobConstraint] = []
+    public func make(from decoder: Decoder) throws -> [CodableConstraint] {
+        var constraints: [CodableConstraint] = []
 
         #if os(iOS)
         if let deadline = try BatteryChargingConstraint(from: decoder) { constraints.append(deadline) }

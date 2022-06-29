@@ -44,7 +44,7 @@ public protocol JobConstraint {
 
 }
 
-public protocol CodableConstraint: Encodable {
+public protocol CodableConstraint: Encodable, JobConstraint {
 
     /**
         Build constraint when deserialize
@@ -54,7 +54,7 @@ public protocol CodableConstraint: Encodable {
 
 }
 
-public class SimpleConstraint: JobConstraint {
+open class SimpleConstraint: JobConstraint {
 
     public func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {}
 
