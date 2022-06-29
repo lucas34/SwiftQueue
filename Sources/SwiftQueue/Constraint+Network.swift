@@ -33,37 +33,28 @@ public enum NetworkType: Int, Codable {
     case wifi = 2
 }
 
-internal final class NetworkConstraint: SimpleConstraint, CodableConstraint {
+internal protocol NetworkMonitor {
 
-    /// Require a certain connectivity type
-    internal let networkType: NetworkType
+    func hasCorrectNetworkType(require: NetworkType) -> Bool
 
-    private var monitor: NWPathMonitor?
+    func startMonitoring(networkType: NetworkType, operation: SqOperation)
 
-    required init(networkType: NetworkType) {
-        assert(networkType != .any)
-        self.networkType = networkType
-    }
+}
 
-    convenience init?(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: NetworkConstraintKey.self)
-        if container.contains(.requireNetwork) {
-            try self.init(networkType: container.decode(NetworkType.self, forKey: .requireNetwork))
-        } else { return nil }
-    }
+internal class NWPathMonitorNetworkMonitor: NetworkMonitor {
 
-    override func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {
-        assert(operation.dispatchQueue != .main)
-        self.monitor = NWPathMonitor()
-    }
+    private let monitor = NWPathMonitor()
 
-    override func run(operation: SqOperation) -> Bool {
-        guard let monitor = monitor else { return true }
-
+    func hasCorrectNetworkType(require: NetworkType) -> Bool {
         if monitor.currentPath.status == .satisfied {
+            monitor.pathUpdateHandler = nil
             return true
+        } else {
+            return false
         }
+    }
 
+    func startMonitoring(networkType: NetworkType, operation: SqOperation) {
         monitor.pathUpdateHandler = { [monitor, operation, networkType] path in
             guard path.status == .satisfied else {
                 operation.logger.log(.verbose, jobId: operation.name, message: "Unsatisfied network requirement")
@@ -81,8 +72,47 @@ internal final class NetworkConstraint: SimpleConstraint, CodableConstraint {
             monitor.pathUpdateHandler = nil
             operation.run()
         }
-
         monitor.start(queue: operation.dispatchQueue)
+    }
+
+
+}
+
+
+internal final class NetworkConstraint: SimpleConstraint, CodableConstraint {
+
+    /// Require a certain connectivity type
+    internal let networkType: NetworkType
+
+    private let monitor: NetworkMonitor
+
+    required init(networkType: NetworkType, monitor: NetworkMonitor) {
+        assert(networkType != .any)
+        self.networkType = networkType
+        self.monitor = monitor
+    }
+
+    convenience init(networkType: NetworkType) {
+        self.init(networkType: networkType, monitor: NWPathMonitorNetworkMonitor())
+    }
+
+    convenience init?(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: NetworkConstraintKey.self)
+        if container.contains(.requireNetwork) {
+            try self.init(networkType: container.decode(NetworkType.self, forKey: .requireNetwork))
+        } else { return nil }
+    }
+
+    override func willSchedule(queue: SqOperationQueue, operation: SqOperation) throws {
+        assert(operation.dispatchQueue != .main)
+    }
+
+    override func run(operation: SqOperation) -> Bool {
+        if monitor.hasCorrectNetworkType(require: networkType) {
+            return true
+        }
+
+        monitor.startMonitoring(networkType: networkType, operation: operation)
         return false
     }
 
