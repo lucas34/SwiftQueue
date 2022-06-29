@@ -1,5 +1,32 @@
 # Change Log
 
+# [6.0.0](https://github.com/lucas34/SwiftQueue/tree/6.0.0)
+
+#### Breaking Changes
+
+##### Replace Reachability framework with NWPathMonitor (#406)
+
+Minimum version required has been updated
+```asm
+platforms: [
+    .macOS(.v10_14),
+    .iOS(.v12),
+    .macCatalyst(.v13),
+    .tvOS(.v12),
+    .watchOS(.v5),
+]
+```
+
+- Dependency over `Reachability` has been removed and replaced with `NWPathMonitor`
+- WatchOS can now use `NetworkConstraint`
+
+Thanks, @GianniCarlo for the contribution 🎉
+
+#### Core
+- Remove empty files (#408)
+- Update copyright (#410)
+- Add test for network listener (#411)
+
 # [5.1.0](https://github.com/lucas34/SwiftQueue/tree/5.1.0)
 
 #### Bug fix
