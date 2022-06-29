@@ -54,4 +54,46 @@ class ConstraintTestNetwork: XCTestCase {
         job.assertSingleCompletion()
     }
 
+    func testNetworkWaitUntilAvailable() {
+        let (type, job) = (UUID().uuidString, TestJob())
+
+        let creator = TestCreator([type: job])
+        let semaphore = DispatchSemaphore(value: 0)
+
+        let manager = SwiftQueueManagerBuilder(creator: creator).set(persister: NoPersister.shared).build()
+        JobBuilder(type: type)
+                .add(constraint: NetworkConstraint(networkType: .wifi, monitor: TestNetworkMonitor(semaphore: semaphore)))
+                .schedule(manager: manager)
+
+        job.assertNoRun()
+
+        semaphore.signal()
+
+        job.awaitForRemoval()
+        job.assertSingleCompletion()
+    }
+
+}
+
+internal class TestNetworkMonitor: NetworkMonitor {
+
+    private let semaphore: DispatchSemaphore
+
+    private var hasNetworkChanged = false
+
+    required init(semaphore: DispatchSemaphore) {
+        self.semaphore = semaphore
+    }
+
+    func hasCorrectNetworkType(require: NetworkType) -> Bool {
+        hasNetworkChanged
+    }
+
+    func startMonitoring(networkType: NetworkType, operation: SqOperation) {
+        operation.dispatchQueue.async { [weak self] in
+            self?.semaphore.wait()
+            self?.hasNetworkChanged = true
+            operation.run()
+        }
+    }
 }
