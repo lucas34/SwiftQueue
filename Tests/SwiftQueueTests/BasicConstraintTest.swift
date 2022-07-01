@@ -128,8 +128,7 @@ class BasicConstraint: CustomConstraint {
     }
 
     override func run(operation: SqOperation) -> Bool {
-        super.run(operation: operation)
-        return onRun(operation)
+        super.run(operation: operation) && onRun(operation)
     }
 
 }
