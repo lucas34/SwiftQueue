@@ -30,6 +30,9 @@ public protocol ConstraintMaker {
 
 open class DefaultConstraintMaker: ConstraintMaker {
 
+    //accessible for extension
+    public init() {}
+  
     public func make(from decoder: Decoder) throws -> [CodableConstraint] {
         var constraints: [CodableConstraint] = []
 
