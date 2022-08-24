@@ -33,7 +33,7 @@ open class DefaultConstraintMaker: ConstraintMaker {
     //accessible for extension
     public init() {}
   
-    public func make(from decoder: Decoder) throws -> [CodableConstraint] {
+    open func make(from decoder: Decoder) throws -> [CodableConstraint] {
         var constraints: [CodableConstraint] = []
 
         #if os(iOS)
