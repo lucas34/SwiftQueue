@@ -8,7 +8,7 @@ extension BasicConstraintTest {
     static let __allTests__BasicConstraintTest = [
         ("testContraintThrowExceptionShouldCancelOperation", testContraintThrowExceptionShouldCancelOperation),
         ("testJobShouldBeCancelIfThrowExceptionInConstraintOnWillRun", testJobShouldBeCancelIfThrowExceptionInConstraintOnWillRun),
-        ("testOperationRunWhenConstraintTrigger", testOperationRunWhenConstraintTrigger),
+        ("testOperationRunWhenConstraintTrigger", testOperationRunWhenConstraintTrigger)
     ]
 }
 
@@ -17,7 +17,7 @@ extension ConstraintTestCharging {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__ConstraintTestCharging = [
-        ("testChargingConstraintShouldRunNow", testChargingConstraintShouldRunNow),
+        ("testChargingConstraintShouldRunNow", testChargingConstraintShouldRunNow)
     ]
 }
 
@@ -29,7 +29,7 @@ extension ConstraintTestDeadline {
         ("testDeadlineAfterSchedule", testDeadlineAfterSchedule),
         ("testDeadlineWhenDeserialize", testDeadlineWhenDeserialize),
         ("testDeadlineWhenRun", testDeadlineWhenRun),
-        ("testDeadlineWhenSchedule", testDeadlineWhenSchedule),
+        ("testDeadlineWhenSchedule", testDeadlineWhenSchedule)
     ]
 }
 
@@ -38,7 +38,7 @@ extension ConstraintTestDelay {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__ConstraintTestDelay = [
-        ("testDelay", testDelay),
+        ("testDelay", testDelay)
     ]
 }
 
@@ -48,7 +48,7 @@ extension ConstraintTestNetwork {
     // to regenerate.
     static let __allTests__ConstraintTestNetwork = [
         ("testNetworkConstraint", testNetworkConstraint),
-        ("testNetworkConstraintWifi", testNetworkConstraintWifi),
+        ("testNetworkConstraintWifi", testNetworkConstraintWifi)
     ]
 }
 
@@ -60,7 +60,7 @@ extension ConstraintTestRepeat {
         ("testPeriodicJob", testPeriodicJob),
         ("testPeriodicJobUnlimited", testPeriodicJobUnlimited),
         ("testRepeatableJobWithDelay", testRepeatableJobWithDelay),
-        ("testRepeatSerialisation", testRepeatSerialisation),
+        ("testRepeatSerialisation", testRepeatSerialisation)
     ]
 }
 
@@ -75,7 +75,7 @@ extension ConstraintTestRetry {
         ("testRetryFailJobWithExponentialMaxDelayConstraint", testRetryFailJobWithExponentialMaxDelayConstraint),
         ("testRetryFailJobWithRetryConstraint", testRetryFailJobWithRetryConstraint),
         ("testRetryFailJobWithRetryDelayConstraint", testRetryFailJobWithRetryDelayConstraint),
-        ("testRetryUnlimitedShouldRetryManyTimes", testRetryUnlimitedShouldRetryManyTimes),
+        ("testRetryUnlimitedShouldRetryManyTimes", testRetryUnlimitedShouldRetryManyTimes)
     ]
 }
 
@@ -84,7 +84,7 @@ extension ConstraintTestTag {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__ConstraintTestTag = [
-        ("testCancelRunningOperationByTag", testCancelRunningOperationByTag),
+        ("testCancelRunningOperationByTag", testCancelRunningOperationByTag)
     ]
 }
 
@@ -93,7 +93,7 @@ extension ConstraintTestTimeout {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__ConstraintTestTimeout = [
-        ("testRunTimeoutConstraint", testRunTimeoutConstraint),
+        ("testRunTimeoutConstraint", testRunTimeoutConstraint)
     ]
 }
 
@@ -103,7 +103,7 @@ extension ConstraintTestUniqueUUID {
     // to regenerate.
     static let __allTests__ConstraintTestUniqueUUID = [
         ("testUniqueIdConstraintShouldCancelTheFirst", testUniqueIdConstraintShouldCancelTheFirst),
-        ("testUniqueIdConstraintShouldCancelTheSecond", testUniqueIdConstraintShouldCancelTheSecond),
+        ("testUniqueIdConstraintShouldCancelTheSecond", testUniqueIdConstraintShouldCancelTheSecond)
     ]
 }
 
@@ -112,7 +112,7 @@ extension CustomConstraintTest {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__CustomConstraintTest = [
-        ("testCustomConstraint", testCustomConstraint),
+        ("testCustomConstraint", testCustomConstraint)
     ]
 }
 
@@ -122,7 +122,7 @@ extension LoggerTests {
     // to regenerate.
     static let __allTests__LoggerTests = [
         ("testLoggerLevel", testLoggerLevel),
-        ("testRunSuccessJobLogger", testRunSuccessJobLogger),
+        ("testRunSuccessJobLogger", testRunSuccessJobLogger)
     ]
 }
 
@@ -138,7 +138,7 @@ extension PersisterTests {
         ("testCustomSerializer", testCustomSerializer),
         ("testLoadSerializedSortedJobShouldRunSuccess", testLoadSerializedSortedJobShouldRunSuccess),
         ("testNonPersistedJobShouldNotBePersisted", testNonPersistedJobShouldNotBePersisted),
-        ("testRemoveAllJob", testRemoveAllJob),
+        ("testRemoveAllJob", testRemoveAllJob)
     ]
 }
 
@@ -148,7 +148,7 @@ extension SqOperationTest {
     // to regenerate.
     static let __allTests__SqOperationTest = [
         ("testQualityOfService", testQualityOfService),
-        ("testQueuePriority", testQueuePriority),
+        ("testQueuePriority", testQueuePriority)
     ]
 }
 
@@ -158,7 +158,7 @@ extension StartStopTests {
     // to regenerate.
     static let __allTests__StartStopTests = [
         ("testSchedulePeriodicJobThenStart", testSchedulePeriodicJobThenStart),
-        ("testScheduleWhenQueueStop", testScheduleWhenQueueStop),
+        ("testScheduleWhenQueueStop", testScheduleWhenQueueStop)
     ]
 }
 
@@ -181,7 +181,7 @@ extension SwiftQueueBuilderTests {
         ("testBuilderSingleInstance", testBuilderSingleInstance),
         ("testBuilderSingleInstanceOverride", testBuilderSingleInstanceOverride),
         ("testBuilderWithFreeArgs", testBuilderWithFreeArgs),
-        ("testCopyBuilder", testCopyBuilder),
+        ("testCopyBuilder", testCopyBuilder)
     ]
 }
 
@@ -199,7 +199,7 @@ extension SwiftQueueManagerTests {
         ("testGetOperation", testGetOperation),
         ("testJobListener", testJobListener),
         ("testLimitEquatable", testLimitEquatable),
-        ("testRunSuccessJob", testRunSuccessJob),
+        ("testRunSuccessJob", testRunSuccessJob)
     ]
 }
 
@@ -221,7 +221,7 @@ public func __allTests() -> [XCTestCaseEntry] {
         testCase(SqOperationTest.__allTests__SqOperationTest),
         testCase(StartStopTests.__allTests__StartStopTests),
         testCase(SwiftQueueBuilderTests.__allTests__SwiftQueueBuilderTests),
-        testCase(SwiftQueueManagerTests.__allTests__SwiftQueueManagerTests),
+        testCase(SwiftQueueManagerTests.__allTests__SwiftQueueManagerTests)
     ]
 }
 #endif

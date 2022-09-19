@@ -263,7 +263,6 @@ public final class SwiftQueueManagerBuilder {
         return self
     }
 
-
     /// Get an instance of `SwiftQueueManager`
     public func build() -> SwiftQueueManager {
         return SwiftQueueManager(params: params, isSuspended: isSuspended)
