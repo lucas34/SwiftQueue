@@ -67,11 +67,11 @@ internal extension SqOperation {
 
         let request = BGProcessingTaskRequest(identifier: name)
 
-        if let _ : NetworkConstraint = getConstraint(info) {
+        if let _: NetworkConstraint = getConstraint(info) {
             request.requiresNetworkConnectivity = true
         }
 
-        if let _ : BatteryChargingConstraint = getConstraint(info) {
+        if let _: BatteryChargingConstraint = getConstraint(info) {
             request.requiresExternalPower = true
         }
 

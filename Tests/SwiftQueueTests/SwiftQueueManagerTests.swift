@@ -213,7 +213,6 @@ class SwiftQueueManagerTests: XCTestCase {
                 .periodic(limit: .unlimited, interval: Double.leastNonzeroMagnitude)
                 .schedule(manager: manager)
 
-
         manager.cancelAllOperations()
 
         job.awaitForRemoval()
@@ -313,7 +312,6 @@ class SwiftQueueManagerTests: XCTestCase {
                 .set(isSuspended: true)
                 .set(enqueueDispatcher: .main)
                 .set(persister: persister).build()
-
 
         let concurrentQueue = DispatchQueue(label: "com.test.concurrent", attributes: .concurrent)
         for _ in 0..<10 {
