@@ -75,9 +75,7 @@ internal class NWPathMonitorNetworkMonitor: NetworkMonitor {
         monitor.start(queue: operation.dispatchQueue)
     }
 
-
 }
-
 
 internal final class NetworkConstraint: SimpleConstraint, CodableConstraint {
 
