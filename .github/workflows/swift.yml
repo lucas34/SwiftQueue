@@ -55,7 +55,7 @@ jobs:
         xcode-version: latest-stable
     - uses: actions/checkout@v3.0.2
     - name: Build
-      run: carthage build --no-skip-current
+      run: carthage build --no-skip-current --use-xcframeworks
     - name: Archive
       run: carthage archive
     - uses: actions/upload-artifact@v3.1.0
