@@ -32,6 +32,10 @@ jobs:
     runs-on: macOS-latest
 
     steps:
+    - uses: maxim-lobanov/setup-xcode@v1.4.1
+      with:
+        xcode-version: latest-stable
+    steps:
     - uses: actions/checkout@v3.0.2
     - name: Test
       run: swift test
