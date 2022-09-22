@@ -1,5 +1,16 @@
 # Change Log
 
+#### Improvement
+
+- Allow instantiation and override of DefaultConstraintMaker to deserialize constraints (#414) (#416)
+
+#### Chore
+- Update Swift to 5.7.0 (#419)
+- Update Xcode Version in Github Actions (#420)
+- Update Actions dependencies (#421)
+- Update Bundle (#418)
+- Lint correct (#417)
+
 # [6.0.0](https://github.com/lucas34/SwiftQueue/tree/6.0.0)
 
 #### Breaking Changes
