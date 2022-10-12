@@ -81,6 +81,8 @@
 		D0B7CC89D901F6C8AD2666D9 /* JobInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7C4E41A1BF73329A7D03D /* JobInfo.swift */; };
 		D0B7CD1E797A69C89CB0ADE2 /* SqOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7CB571CECEEA34DD07398 /* SqOperationQueue.swift */; };
 		D0B7CFA2089DFF576E0D765B /* JobBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7CB3B79E039D3B11D8921 /* JobBuilder.swift */; };
+		DD22368D28F6CBBC00A93732 /* SwiftQueueManager+BackgroundTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF01A9D28F6C5D6004C4187 /* SwiftQueueManager+BackgroundTask.swift */; };
+		DD22368E28F6CBBD00A93732 /* SwiftQueueManager+BackgroundTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF01A9D28F6C5D6004C4187 /* SwiftQueueManager+BackgroundTask.swift */; };
 		DDF01A9E28F6C5D6004C4187 /* SwiftQueueManager+BackgroundTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF01A9D28F6C5D6004C4187 /* SwiftQueueManager+BackgroundTask.swift */; };
 		DDF01A9F28F6C5D6004C4187 /* SwiftQueueManager+BackgroundTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF01A9D28F6C5D6004C4187 /* SwiftQueueManager+BackgroundTask.swift */; };
 		FA56F077F3F1E318D31D3610 /* Constraint+Retry.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA56FAFB4780356A52DD724F /* Constraint+Retry.swift */; };
@@ -488,6 +490,7 @@
 				61A65B7922ABD175009AC9B7 /* Constraint+Timeout.swift in Sources */,
 				B06405151FA04AAC00086C69 /* Constraint.swift in Sources */,
 				B06405161FA04AAC00086C69 /* Utils.swift in Sources */,
+				DD22368E28F6CBBD00A93732 /* SwiftQueueManager+BackgroundTask.swift in Sources */,
 				B06405171FA04AAC00086C69 /* SqOperation.swift in Sources */,
 				B06405181FA04AAC00086C69 /* SwiftQueueManager.swift in Sources */,
 				1E68EA78A2D5CF807765CF75 /* Constraint+Deadline.swift in Sources */,
@@ -547,6 +550,7 @@
 				61A65B7722ABD172009AC9B7 /* Constraint+Timeout.swift in Sources */,
 				1D8479AD1F82A84B00B3BBFB /* Constraint.swift in Sources */,
 				1D8479AA1F82A84B00B3BBFB /* Utils.swift in Sources */,
+				DD22368D28F6CBBC00A93732 /* SwiftQueueManager+BackgroundTask.swift in Sources */,
 				1D8479AB1F82A84B00B3BBFB /* SqOperation.swift in Sources */,
 				1D8479AC1F82A84B00B3BBFB /* SwiftQueueManager.swift in Sources */,
 				1E68EB2E5C2B18444083FC37 /* Constraint+Deadline.swift in Sources */,
