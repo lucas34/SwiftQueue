@@ -15,7 +15,6 @@ Pod::Spec.new do |s|
   s.watchos.deployment_target = "5.0"
   s.osx.deployment_target= "10.14"
 
-  s.source_files = 'Sources/SwiftQueue/**.swift'
-  s.ios.source_files   = 'Sources/ios/*.swift', 'Sources/SwiftQueue/**.swift'
+  s.source_files = 'Sources/**.swift'
   
 end
