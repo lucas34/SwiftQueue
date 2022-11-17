@@ -41,7 +41,7 @@ jobs:
   
   POD:
 
-    runs-on: macos-12
+    runs-on: macos-11
 
     steps:
     - uses: actions/checkout@v3.0.2
