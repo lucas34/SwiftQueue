@@ -24,6 +24,8 @@ import Foundation
 import XCTest
 @testable import SwiftQueue
 
+
+
 class ConstraintTestCharging: XCTestCase {
 
     func testChargingConstraintShouldRunNow() {
