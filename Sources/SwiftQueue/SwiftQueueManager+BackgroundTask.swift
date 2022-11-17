@@ -20,11 +20,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#if os(iOS) || os(tvOS)
+
 #if canImport(BackgroundTasks)
 import BackgroundTasks
 #endif
 
-@available(iOS 13.0, tvOS 13.0, macOS 10.15, *)
+@available(iOS 13.0, tvOS 13.0, *)
 /// Extension of SwiftQueueManager to support BackgroundTask API from iOS 13.
 public extension SwiftQueueManager {
 
@@ -59,7 +61,7 @@ public extension SwiftQueueManager {
     }
 }
 
-@available(iOS 13.0, tvOS 13.0, macOS 10.15, *)
+@available(iOS 13.0, tvOS 13.0, *)
 internal extension SqOperation {
 
     func scheduleBackgroundTask() {
@@ -85,7 +87,7 @@ internal extension SqOperation {
     }
 }
 
-@available(iOS 13.0, tvOS 13.0, macOS 10.15, *)
+@available(iOS 13.0, tvOS 13.0, *)
 private class TaskJobResult: JobResult {
 
     private let task: BGTask
@@ -107,3 +109,5 @@ private class TaskJobResult: JobResult {
         }
     }
 }
+
+#endif
