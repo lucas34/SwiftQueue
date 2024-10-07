@@ -55,7 +55,8 @@ internal class NWPathMonitorNetworkMonitor: NetworkMonitor {
     }
 
     func startMonitoring(networkType: NetworkType, operation: SqOperation) {
-        monitor.pathUpdateHandler = { [monitor, operation, networkType] path in
+        monitor.pathUpdateHandler = { [weak monitor, weak operation, networkType] path in
+            guard let monitor, let operation else { return }
             guard path.status == .satisfied else {
                 operation.logger.log(.verbose, jobId: operation.name, message: "Unsatisfied network requirement")
                 return
@@ -69,8 +70,13 @@ internal class NWPathMonitorNetworkMonitor: NetworkMonitor {
             }
 
             monitor.cancel()
-            monitor.pathUpdateHandler = nil
-            operation.run()
+            if (monitor.pathUpdateHandler != nil) {
+                monitor.pathUpdateHandler = nil
+                operation.logger.log(.verbose, jobId: operation.name, message: "Satisfied network requirement")
+                operation.dispatchQueue.async {
+                    operation.run()
+                }
+            }
         }
         monitor.start(queue: operation.dispatchQueue)
     }
