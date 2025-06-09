@@ -39,7 +39,8 @@ internal final class TimeoutConstraint: SimpleConstraint, CodableConstraint {
     }
 
     override func run(operation: SqOperation) -> Bool {
-        operation.dispatchQueue.runAfter(timeout) {
+        operation.dispatchQueue.runAfter(timeout) { [weak operation] in
+            guard let operation else { return }
             if operation.isExecuting && !operation.isFinished {
                 operation.cancel(with: SwiftQueueError.timeout)
             }
